@@ -1,0 +1,16 @@
+name: hello_world_function
+publish_to: none
+
+environment:
+  sdk: ">=2.10.0 <3.0.0"
+
+dependencies:
+  functions_framework_dart: any
+  http_server: ^0.9.8
+
+dev_dependencies:
+  build_runner: ^1.10.2
+
+dependency_overrides:
+  functions_framework_dart:
+    path: ../../
