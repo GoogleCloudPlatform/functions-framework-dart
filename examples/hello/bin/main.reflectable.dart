@@ -21,7 +21,7 @@ final _data = <r.Reflectable, r.ReflectorData>{
   const prefix0.FunctionLibrary(): r.ReflectorData(
       <m.TypeMirror>[],
       <m.DeclarationMirror>[
-        r.MethodMirrorImpl(r'handleGet', 5373976, 0, -1, -1, -1, null,
+        r.MethodMirrorImpl(r'handleGet', 1179672, 0, -1, -1, -1, null,
             const <int>[0], const prefix0.FunctionLibrary(), null)
       ],
       <m.ParameterMirror>[

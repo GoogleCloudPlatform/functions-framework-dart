@@ -1,12 +1,7 @@
 @function
 library app;
 
-import 'dart:io';
 import 'package:functions_framework_dart/functions_framework.dart';
+import 'package:shelf/shelf.dart';
 
-Future<void> handleGet(HttpRequest request) async {
-  final response = request.response
-    ..statusCode = HttpStatus.ok
-    ..writeln('Hello, World!');
-  await response.close();
-}
+Response handleGet(Request request) => Response.ok('Hello, World!');

@@ -1,6 +1,9 @@
-import 'dart:io';
+import 'dart:async';
+import 'dart:io' show ProcessSignal, exit, InternetAddress;
 
 import 'package:reflectable/reflectable.dart';
+import 'package:shelf/shelf.dart';
+import 'package:shelf/shelf_io.dart' as shelf_io;
 
 import 'configuration.dart';
 
@@ -8,23 +11,23 @@ Future<void> serve(
   FunctionConfig functionConfig,
   LibraryMirror functionLibrary,
 ) async {
-  handleSignals();
+  _handleSignals();
 
-  final handler = getHandler(functionConfig, functionLibrary);
+  final handler = _getHandler(functionConfig, functionLibrary);
 
-  final server = await HttpServer.bind(
+  final server = await shelf_io.serve(
+    (request) {
+      return handler(functionLibrary, functionConfig.target, request);
+    },
     InternetAddress.anyIPv4,
     functionConfig.port,
   );
   print('App listening on :${server.port}');
-
-  await for (var request in server) {
-    await handler(functionLibrary, functionConfig.target, request);
-  }
 }
 
-Function(LibraryMirror functionLibrary, String target, HttpRequest request)
-    getHandler(FunctionConfig functionConfig, LibraryMirror functionLibrary) {
+FutureOr<Response> Function(
+        LibraryMirror functionLibrary, String target, Request request)
+    _getHandler(FunctionConfig functionConfig, LibraryMirror functionLibrary) {
   if (!functionLibrary.declarations.containsKey(functionConfig.target)) {
     throw ArgumentError('Function target not found: ${functionConfig.target}.');
   }
@@ -33,11 +36,11 @@ Function(LibraryMirror functionLibrary, String target, HttpRequest request)
   return handler;
 }
 
-Future<void> Function(LibraryMirror, String, HttpRequest) _handler(
+FutureOr<Response> Function(LibraryMirror, String, Request) _handler(
     FunctionType functionType) {
   switch (functionType) {
     case FunctionType.http:
-      return handleRequest;
+      return _handleRequest;
     case FunctionType.event:
     // TODO
     default:
@@ -47,25 +50,17 @@ Future<void> Function(LibraryMirror, String, HttpRequest) _handler(
   }
 }
 
-Future<void> handleRequest(
+FutureOr<Response> _handleRequest(
   LibraryMirror functionLibrary,
   String target,
-  HttpRequest request,
+  Request request,
 ) async {
-  print('Handling request: ${request.requestedUri.path}');
-  try {
-    if (request.method == 'GET') {
-      // TODO: must 404 for /robots.txt and /favicon.ico
-      await functionLibrary.invoke(target, <dynamic>[request]);
-      print('Request handled');
-    } else {
-      request.response
-        ..statusCode = HttpStatus.methodNotAllowed
-        ..write('Unsupported request: ${request.method}.');
-      await request.response.close();
-    }
-  } catch (e) {
-    print('Exception handling request: $e');
+  if (request.method == 'GET') {
+    // TODO: must 404 for /robots.txt and /favicon.ico
+    final response = await functionLibrary.invoke(target, <dynamic>[request]);
+    return response as Response;
+  } else {
+    return Response(405, body: 'Unsupported request: ${request.method}.');
   }
 }
 
@@ -82,7 +77,7 @@ class FunctionLibrary extends Reflectable {
 // annotation for the function app
 const function = FunctionLibrary();
 
-void handleSignals() {
+void _handleSignals() {
   ProcessSignal.sigint.watch().listen((signal) {
     exit(0);
   });
