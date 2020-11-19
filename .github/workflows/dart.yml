@@ -54,3 +54,57 @@ jobs:
           PKGS: examples/hello functions_framework functions_framework_builder
           TRAVIS_OS_NAME: linux
         run: tool/ci.sh dartanalyzer_1
+  job_004:
+    name: "OS: linux; SDK: 2.10.0; PKG: examples/hello; TASKS: `pub run test -x presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: stable
+          version: "2.10.0"
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - env:
+          PKGS: examples/hello
+          TRAVIS_OS_NAME: linux
+        run: tool/ci.sh test_0
+  job_005:
+    name: "OS: linux; SDK: dev; PKG: examples/hello; TASKS: `pub run test -x presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: dev
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - env:
+          PKGS: examples/hello
+          TRAVIS_OS_NAME: linux
+        run: tool/ci.sh test_0
+  job_006:
+    name: "OS: linux; SDK: 2.10.0; PKG: examples/hello; TASKS: `pub run test --run-skipped -t presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: stable
+          version: "2.10.0"
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - env:
+          PKGS: examples/hello
+          TRAVIS_OS_NAME: linux
+        run: tool/ci.sh test_1
+  job_007:
+    name: "OS: linux; SDK: dev; PKG: examples/hello; TASKS: `pub run test --run-skipped -t presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: dev
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - env:
+          PKGS: examples/hello
+          TRAVIS_OS_NAME: linux
+        run: tool/ci.sh test_1

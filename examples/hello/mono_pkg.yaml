@@ -12,3 +12,6 @@ stages:
   - group:
     - dartanalyzer: .
     dart: 2.10.0
+- unit_test:
+  - test: -x presubmit-only
+  - test: --run-skipped -t presubmit-only

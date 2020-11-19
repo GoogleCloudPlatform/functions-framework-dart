@@ -10,30 +10,45 @@ Future<void> serve(
   List<String> args,
   Map<String, Handler> handlers,
 ) async {
-  _handleSignals();
-
   final functionConfig = FunctionConfig.fromEnv();
 
   final handler = handlers[functionConfig.target];
+
+  if (handler == null) {
+    throw StateError(
+      'There is no handler configured for '
+      'FUNCTION_TARGET `${functionConfig.target}`.',
+    );
+  }
 
   // TODO: handle case where `handler` is null
 
   final pipeline =
       const Pipeline().addMiddleware(logRequests()).addHandler(handler);
 
-  final server = await shelf_io.serve(
+  var server = await shelf_io.serve(
     pipeline,
     InternetAddress.anyIPv4,
     functionConfig.port,
   );
   print('App listening on :${server.port}');
-}
 
-void _handleSignals() {
-  ProcessSignal.sigint.watch().listen((signal) {
-    exit(0);
-  });
-  ProcessSignal.sigterm.watch().listen((signal) {
-    exit(0);
-  });
+  StreamSubscription sigIntSub, sigTermSub;
+
+  Future<void> signalHandler(ProcessSignal signal) async {
+    print('Got signal $signal - closing');
+
+    final serverCopy = server;
+    if (serverCopy != null) {
+      server = null;
+      await serverCopy.close(force: true);
+      await sigIntSub.cancel();
+      sigIntSub = null;
+      await sigTermSub.cancel();
+      sigTermSub = null;
+    }
+  }
+
+  sigIntSub = ProcessSignal.sigint.watch().listen(signalHandler);
+  sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
 }
