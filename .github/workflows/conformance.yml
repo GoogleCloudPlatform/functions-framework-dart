@@ -1,0 +1,15 @@
+name: Dart Conformance CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: "0 0 * * 0"
+defaults:
+  run:
+    shell: bash
+env:
+  PUB_ENVIRONMENT: bot.github
+
+jobs:

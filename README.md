@@ -1,5 +1,9 @@
 # Functions Framework for Dart
 
+|Functions Framework|Unit Tests|Lint Test|Conformance Tests|
+|---|---|---|---|
+[Dart][ff_dart]| [![][ff_dart_unit_img]][ff_dart_unit_link] | [![][ff_dart_lint_img]][ff_dart_lint_link] | [![][ff_dart_conformance_img]][ff_dart_conformance_link] |
+
 An open source FaaS (Function as a Service) framework for writing portable Dart functions,
 brought to you by the Google Dart and Cloud Functions teams.
 
@@ -34,7 +38,9 @@ handling logic.
 
 ## Features
 
-*   Build your Function in the same container environment used by Cloud Functions using [buildpacks](https://github.com/GoogleCloudPlatform/buildpacks).
+*   Build your Function in the same container environment used by Cloud
+    Functions using [buildpacks](https://github.
+    com/GoogleCloudPlatform/buildpacks).
 *   Invoke a function in response to a request
 *   Automatically unmarshal events conforming to the
     [CloudEvents](https://cloudevents.io/) spec
@@ -60,3 +66,18 @@ $ curl localhost:8080
 Hello, World!
 
 ```
+
+<!-- Repo links -->
+[ff_dart]: https://github.com/subfuzion/functions-framework-dart
+
+<!-- Unit Test links -->
+[ff_dart_unit_img]: https://github.com/subfuzion/functions-framework-dart/workflows/Dart%20Unit%20CI/badge.svg
+[ff_dart_unit_link]:  https://github.com/subfuzion/functions-framework-dart/actions?query=workflow%3A"Dart+Unit+CI"
+
+<!-- Lint Test links -->
+[ff_dart_lint_img]: https://github.com/subfuzion/functions-framework-dart/workflows/Dart%20Lint%20CI/badge.svg
+[ff_dart_lint_link]:  https://github.com/subfuzion/functions-framework-dart/actions?query=workflow%3A"Dart+Lint+CI"
+
+<!-- Conformance Test links -->
+[ff_dart_conformance_img]: https://github.com/subfuzion/functions-framework-dart/workflows/Dart%20Conformance%20CI/badge.svg
+[ff_dart_conformance_link]:  https://github.com/subfuzion/functions-framework-dart/actions?query=workflow%3A"Dart+Conformance+CI"

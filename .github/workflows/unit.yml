@@ -1,0 +1,81 @@
+name: Dart Unit CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: "0 0 * * 0"
+defaults:
+  run:
+    shell: bash
+env:
+  PUB_ENVIRONMENT: bot.github
+
+jobs:
+  job_001:
+    name: mono_repo self validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: stable
+          version: latest
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - run: dart pub global activate mono_repo 3.1.0-beta.3
+      - run: dart pub global run mono_repo generate --validate
+  job_004:
+    name: "OS: linux; SDK: 2.10.0; PKG: examples/hello; TASKS: `dart pub run test -x presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: stable
+          version: "2.10.0"
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - env:
+          PKGS: examples/hello
+          TRAVIS_OS_NAME: linux
+        run: tool/ci.sh test_0
+  job_005:
+    name: "OS: linux; SDK: dev; PKG: examples/hello; TASKS: `dart pub run test -x presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: dev
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - env:
+          PKGS: examples/hello
+          TRAVIS_OS_NAME: linux
+        run: tool/ci.sh test_0
+  job_006:
+    name: "OS: linux; SDK: 2.10.0; PKG: examples/hello; TASKS: `dart pub run test --run-skipped -t presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: stable
+          version: "2.10.0"
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - env:
+          PKGS: examples/hello
+          TRAVIS_OS_NAME: linux
+        run: tool/ci.sh test_1
+  job_007:
+    name: "OS: linux; SDK: dev; PKG: examples/hello; TASKS: `pub run test --run-skipped -t presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: dev
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - env:
+          PKGS: examples/hello
+          TRAVIS_OS_NAME: linux
+        run: tool/ci.sh test_1

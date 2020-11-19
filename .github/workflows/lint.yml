@@ -1,0 +1,42 @@
+name: Dart Lint CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: "0 0 * * 0"
+defaults:
+  run:
+    shell: bash
+env:
+  PUB_ENVIRONMENT: bot.github
+
+jobs:
+  job_002:
+    name: "OS: linux; SDK: dev; PKGS: examples/hello, functions_framework, functions_framework_builder; TASKS: [`dartfmt -n --set-exit-if-changed .`, `dartanalyzer --fatal-infos .`]"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: dev
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - env:
+          PKGS: examples/hello functions_framework functions_framework_builder
+          TRAVIS_OS_NAME: linux
+        run: tool/ci.sh dartfmt dartanalyzer_0
+  job_003:
+    name: "OS: linux; SDK: 2.10.0; PKGS: examples/hello, functions_framework, functions_framework_builder; TASKS: `dartanalyzer .`"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: stable
+          version: "2.10.0"
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - env:
+          PKGS: examples/hello functions_framework functions_framework_builder
+          TRAVIS_OS_NAME: linux
+        run: tool/ci.sh dartanalyzer_1
