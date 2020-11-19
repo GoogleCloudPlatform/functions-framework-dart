@@ -15,12 +15,10 @@ different environments, including:
 The framework allows you to go from:
 
 ```dart
-@function
-library app;
-
 import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
+@CloudFunction()
 Response handleGet(Request request) => Response.ok('Hello, World!');
 ```
 
