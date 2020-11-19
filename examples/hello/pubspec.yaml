@@ -5,12 +5,15 @@ environment:
   sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
-  functions_framework_dart: any
+  functions_framework: any
   shelf: ^0.7.9
 
 dev_dependencies:
   build_runner: ^1.10.2
+  functions_framework_builder: any
 
 dependency_overrides:
-  functions_framework_dart:
-    path: ../../
+  functions_framework:
+    path: ../../functions_framework
+  functions_framework_builder:
+    path: ../../functions_framework_builder

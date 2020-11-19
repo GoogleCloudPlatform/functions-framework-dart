@@ -1,13 +1,10 @@
 builders:
-  function_framework:
-    import: package:functions_framework_dart/builder.dart
+  function_framework_builder:
+    import: package:functions_framework_builder/builder.dart
     builder_factories:
       - functionsFrameworkBuilder
     build_extensions:
       $package$:
         - bin/main.dart
-        - bin/reflectable.build.yaml
     auto_apply: dependents
     build_to: source
-    runs_before:
-      - reflectable|reflectable

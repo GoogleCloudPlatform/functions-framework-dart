@@ -1,12 +1,12 @@
-import 'package:functions_framework_dart/configuration.dart';
-import 'package:functions_framework_dart/functions_framework.dart';
+import 'package:functions_framework/serve.dart';
+import 'package:shelf/shelf.dart';
 
-import 'package:hello_world_function/app.dart' as app;
+import 'package:hello_world_function/app.dart' as prefix00;
 
-import 'main.reflectable.dart' as reflectable;
-
-Future main(List<String> args) async {
-  reflectable.initializeReflectable();
-  final functionConfig = FunctionConfig.fromEnv();
-  await serve(functionConfig, function.findLibrary('app'));
+Future<void> main(List<String> args) async {
+  await serve(args, _functions);
 }
+
+const _functions = <String, Handler>{
+  'function': prefix00.handleGet,
+};
