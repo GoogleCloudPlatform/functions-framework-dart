@@ -1,10 +1,26 @@
 # https://github.com/google/mono_repo.dart
 
-self_validate: true
+self_validate: analyze_format
 
 merge_stages:
 - analyze_format
 
 github:
-  # Setting just `cron` keeps the defaults for `push` and `pull_request`
-  cron: '0 0 * * 0' # “At 00:00 (UTC) on Sunday.”
+  on:
+    push:
+      branches:
+      - main
+    pull_request:
+    schedule:
+    # Setting just `cron` keeps the defaults for `push` and `pull_request`
+    - cron: '0 0 * * 0' # “At 00:00 (UTC) on Sunday.”
+
+  workflows:
+    lint:
+      name: Dart Lint CI
+      stages:
+      - analyze_format
+    unit:
+      name: Dart Unit CI
+      stages:
+      - unit_test

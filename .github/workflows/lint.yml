@@ -1,3 +1,4 @@
+# Created with package:mono_repo v3.1.0-beta.4
 name: Dart Lint CI
 on:
   push:
@@ -13,6 +14,18 @@ env:
   PUB_ENVIRONMENT: bot.github
 
 jobs:
+  job_001:
+    name: mono_repo self validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: stable
+          version: latest
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - run: pub global activate mono_repo 3.1.0-beta.4
+      - run: pub global run mono_repo generate --validate
   job_002:
     name: "OS: linux; SDK: dev; PKGS: examples/hello, functions_framework, functions_framework_builder; TASKS: [`dartfmt -n --set-exit-if-changed .`, `dartanalyzer --fatal-infos .`]"
     runs-on: ubuntu-latest
