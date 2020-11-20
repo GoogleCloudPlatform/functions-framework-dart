@@ -10,7 +10,8 @@ Future<void> serve(
   List<String> args,
   Map<String, Handler> handlers,
 ) async {
-  final functionConfig = FunctionConfig.fromEnv();
+  final functionConfig =
+      FunctionConfig.fromArgs(args, defaults: FunctionConfig.fromEnv());
 
   final handler = handlers[functionConfig.target];
 
