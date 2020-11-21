@@ -1,5 +1,9 @@
 # Functions Framework for Dart
 
+> DISCLAIMER: this is not ready for production, doen't support
+> [cloudevents](https://github.com/googleapis/google-cloudevents) yet, and
+> doesn't have tests yet for [Functions Framework Conformance](https://github.com/GoogleCloudPlatform/functions-framework-conformance).
+
 |Functions Framework|Unit Tests|Lint Test|Conformance Tests|
 |---|---|---|---|
 [Dart][ff_dart]| [![][ff_dart_unit_img]][ff_dart_unit_link] | [![][ff_dart_lint_img]][ff_dart_lint_link] | [![][ff_dart_conformance_img]][ff_dart_conformance_link] |
@@ -47,9 +51,6 @@ handling logic.
 *   Portable between serverless platforms
 
 ## Quickstart: Hello, World on your local machine
-...
-
-*Dev quickstart - not for production*
 
 ```shell
 $ docker build -t app .
@@ -68,16 +69,16 @@ Hello, World!
 ```
 
 <!-- Repo links -->
-[ff_dart]: https://github.com/subfuzion/functions-framework-dart
+[ff_dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
 <!-- Unit Test links -->
-[ff_dart_unit_img]: https://github.com/subfuzion/functions-framework-dart/workflows/Dart%20Unit%20CI/badge.svg
-[ff_dart_unit_link]:  https://github.com/subfuzion/functions-framework-dart/actions?query=workflow%3A"Dart+Unit+CI"
+[ff_dart_unit_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Unit%20CI/badge.svg
+[ff_dart_unit_link]:  https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Unit+CI"
 
 <!-- Lint Test links -->
-[ff_dart_lint_img]: https://github.com/subfuzion/functions-framework-dart/workflows/Dart%20Lint%20CI/badge.svg
-[ff_dart_lint_link]:  https://github.com/subfuzion/functions-framework-dart/actions?query=workflow%3A"Dart+Lint+CI"
+[ff_dart_lint_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Lint%20CI/badge.svg
+[ff_dart_lint_link]:  https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Lint+CI"
 
 <!-- Conformance Test links -->
-[ff_dart_conformance_img]: https://github.com/subfuzion/functions-framework-dart/workflows/Dart%20Conformance%20CI/badge.svg
-[ff_dart_conformance_link]:  https://github.com/subfuzion/functions-framework-dart/actions?query=workflow%3A"Dart+Conformance+CI"
+[ff_dart_conformance_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Conformance%20CI/badge.svg
+[ff_dart_conformance_link]:  https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Conformance+CI"

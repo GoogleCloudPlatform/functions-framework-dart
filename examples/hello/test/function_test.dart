@@ -75,7 +75,7 @@ void main() {
     final proc = await TestProcess.start('dart', [
       'bin/main.dart',
       '--port',
-      '$port',
+      port,
       '--target',
       'function',
       '--signature-type',
@@ -146,11 +146,8 @@ void main() {
   }, timeout: const Timeout(Duration(seconds: 2)));
 
   test('bad options', () async {
-    final proc = await TestProcess.start('dart', [
-      'bin/main.dart',
-      '--signature-type',
-      'foo'
-    ]);
+    final proc = await TestProcess.start(
+        'dart', ['bin/main.dart', '--signature-type', 'foo']);
 
     await expectLater(
       proc.stderr,
