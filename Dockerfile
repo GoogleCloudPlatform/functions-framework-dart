@@ -2,7 +2,7 @@
 FROM google/dart
 
 WORKDIR /app
-RUN pub global activate mono_repo 3.1.0-beta.4
+RUN dart pub global activate mono_repo 3.1.0-beta.4
 COPY mono_repo.yaml /app/mono_repo.yaml
 COPY functions_framework/mono_pkg.yaml /app/functions_framework/mono_pkg.yaml
 COPY functions_framework/pubspec.yaml /app/functions_framework/pubspec.yaml
