@@ -15,7 +15,7 @@ env:
 
 jobs:
   job_001:
-    name: "OS: linux; SDK: 2.10.0; PKG: examples/hello; TASKS: `pub run test -x presubmit-only`"
+    name: "OS: linux; SDK: 2.10.0; PKG: test/hello; TASKS: `pub run test -x presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - uses: cedx/setup-dart@v2
@@ -25,11 +25,11 @@ jobs:
       - run: dart --version
       - uses: actions/checkout@v2
       - env:
-          PKGS: examples/hello
+          PKGS: test/hello
           TRAVIS_OS_NAME: linux
         run: tool/ci.sh test_0
   job_002:
-    name: "OS: linux; SDK: dev; PKG: examples/hello; TASKS: `pub run test -x presubmit-only`"
+    name: "OS: linux; SDK: dev; PKG: test/hello; TASKS: `pub run test -x presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - uses: cedx/setup-dart@v2
@@ -38,11 +38,11 @@ jobs:
       - run: dart --version
       - uses: actions/checkout@v2
       - env:
-          PKGS: examples/hello
+          PKGS: test/hello
           TRAVIS_OS_NAME: linux
         run: tool/ci.sh test_0
   job_003:
-    name: "OS: linux; SDK: 2.10.0; PKG: examples/hello; TASKS: `pub run test --run-skipped -t presubmit-only`"
+    name: "OS: linux; SDK: 2.10.0; PKG: test/hello; TASKS: `pub run test --run-skipped -t presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - uses: cedx/setup-dart@v2
@@ -52,11 +52,11 @@ jobs:
       - run: dart --version
       - uses: actions/checkout@v2
       - env:
-          PKGS: examples/hello
+          PKGS: test/hello
           TRAVIS_OS_NAME: linux
         run: tool/ci.sh test_1
   job_004:
-    name: "OS: linux; SDK: dev; PKG: examples/hello; TASKS: `pub run test --run-skipped -t presubmit-only`"
+    name: "OS: linux; SDK: dev; PKG: test/hello; TASKS: `pub run test --run-skipped -t presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - uses: cedx/setup-dart@v2
@@ -65,6 +65,6 @@ jobs:
       - run: dart --version
       - uses: actions/checkout@v2
       - env:
-          PKGS: examples/hello
+          PKGS: test/hello
           TRAVIS_OS_NAME: linux
         run: tool/ci.sh test_1

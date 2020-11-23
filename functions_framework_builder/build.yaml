@@ -1,6 +1,6 @@
 builders:
   function_framework_builder:
-    import: package:functions_framework_builder/builder.dart
+    import: package:functions_framework_builder/functions_framework_builder.dart
     builder_factories:
       - functionsFrameworkBuilder
     build_extensions:

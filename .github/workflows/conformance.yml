@@ -1,4 +1,5 @@
 name: Dart Conformance CI
+
 on:
   push:
     branches:
@@ -13,3 +14,4 @@ env:
   PUB_ENVIRONMENT: bot.github
 
 jobs:
+  - run: true

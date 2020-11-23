@@ -40,9 +40,6 @@ curl http://my-url
 All without needing to worry about writing an HTTP server or request
 handling logic.
 
-See the [Hello, World!](examples/hello/lib/app.dart) demo in the 
-`examples/hello` directory.
-
 ## Features
 
 *   Build your Function in the same container environment used by Cloud
