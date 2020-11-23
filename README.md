@@ -76,7 +76,7 @@ properly format your code.
 
 ## Licensing
 
-Apache 2.0; see [`LICENSE`](LICENSE) for details.
+BSD 3-Clause License. See [`LICENSE`](LICENSE) for details.
 
 <!-- Repo links -->
 [ff_dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart
