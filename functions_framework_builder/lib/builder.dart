@@ -62,6 +62,7 @@ class FunctionsFrameworkGenerator implements Builder {
       path.join('bin', 'main.dart'),
     );
     await buildStep.writeAsString(mainDart, '''
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2020 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
