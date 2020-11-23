@@ -18,6 +18,8 @@ import 'package:http/http.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
+const defaultTimeout = Timeout(Duration(seconds: 3));
+
 void main() {
   group('http function tests', () {
     test('defaults', () async {
@@ -29,7 +31,7 @@ void main() {
       expect(response.body, 'Hello, World!');
 
       await finish(proc);
-    }, timeout: const Timeout(Duration(seconds: 2)));
+    }, timeout: defaultTimeout);
 
     test('good environment', () async {
       const port = '8888';
@@ -42,7 +44,7 @@ void main() {
       expect(response.body, 'Hello, World!');
 
       await finish(proc);
-    }, timeout: const Timeout(Duration(seconds: 2)));
+    }, timeout: defaultTimeout);
 
     test('good options', () async {
       const port = '9000';
@@ -57,7 +59,7 @@ void main() {
         // make sure args have precedence over environment
         'FUNCTION_TARGET': 'foo', // overridden by --target
         'FUNCTION_SIGNATURE_TYPE':
-        'cloudevent', // overridden by --signature-type
+            'cloudevent', // overridden by --signature-type
       });
 
       final response = await get('http://localhost:$port');
@@ -65,22 +67,22 @@ void main() {
       expect(response.body, 'Hello, World!');
 
       await finish(proc);
-    }, timeout: const Timeout(Duration(seconds: 2)));
+    }, timeout: defaultTimeout);
 
     test('bad environment', () async {
       final proc =
-      await start(shouldFail: true, env: {'FUNCTION_TARGET': 'bob'});
+          await start(shouldFail: true, env: {'FUNCTION_TARGET': 'bob'});
 
       await expectLater(
         proc.stderr,
         emitsThrough(
           'Bad state: There is no handler configured for '
-              'FUNCTION_TARGET `bob`.',
+          'FUNCTION_TARGET `bob`.',
         ),
       );
 
       await proc.shouldExit(255);
-    }, timeout: const Timeout(Duration(seconds: 2)));
+    }, timeout: defaultTimeout);
 
     test('bad options', () async {
       final proc = await start(shouldFail: true, arguments: [
@@ -92,27 +94,27 @@ void main() {
         proc.stderr,
         emitsThrough(
           'Bad state: There is no handler configured for '
-              'FUNCTION_TARGET `bob`.',
+          'FUNCTION_TARGET `bob`.',
         ),
       );
 
       await proc.shouldExit(255);
-    }, timeout: const Timeout(Duration(seconds: 2)));
+    }, timeout: defaultTimeout);
 
     test('bad options', () async {
       final proc =
-      await start(shouldFail: true, arguments: ['--signature-type', 'foo']);
+          await start(shouldFail: true, arguments: ['--signature-type', 'foo']);
 
       await expectLater(
         proc.stderr,
         emitsThrough(
           'Unsupported operation: FUNCTION_SIGNATURE_TYPE environment variable '
-              '"foo" is not a valid option (must be "http" or "cloudevent")',
+          '"foo" is not a valid option (must be "http" or "cloudevent")',
         ),
       );
 
       await proc.shouldExit(255);
-    }, timeout: const Timeout(Duration(seconds: 2)));
+    }, timeout: defaultTimeout);
   });
 
   group('cloudevent function tests', () {});
@@ -120,9 +122,9 @@ void main() {
 
 Future<TestProcess> start(
     {bool shouldFail = false,
-      String port = '8080',
-      Map<String, String> env,
-      Iterable<String> arguments = const <String>[]}) async {
+    String port = '8080',
+    Map<String, String> env,
+    Iterable<String> arguments = const <String>[]}) async {
   final args = ['bin/main.dart'] + List<String>.from(arguments);
   final proc = await TestProcess.start('dart', args, environment: env);
 
