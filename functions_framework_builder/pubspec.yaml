@@ -1,6 +1,7 @@
 name: functions_framework_builder
+version: 0.1.0
 description: Builder for package:functions_framework
-publish_to: none
+repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
 environment:
   sdk: ">=2.10.0 <3.0.0"
@@ -9,7 +10,7 @@ dependencies:
   build: ^1.3.0
   # Because this package has a build.yaml file
   build_config: ^0.4.3
-  functions_framework: any
+  functions_framework: ^0.1.0
   glob: ^1.2.0
   path: ^1.7.0
   source_gen: ^0.9.8
