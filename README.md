@@ -46,8 +46,7 @@ See the [Hello, World!](examples/hello/lib/app.dart) demo in the
 ## Features
 
 *   Build your Function in the same container environment used by Cloud
-    Functions using [buildpacks](https://github.
-    com/GoogleCloudPlatform/buildpacks).
+    Functions using [buildpacks](https://github.com/GoogleCloudPlatform/buildpacks).
 *   Invoke a function in response to a request
 *   Automatically unmarshal events conforming to the
     [CloudEvents](https://cloudevents.io/) spec
