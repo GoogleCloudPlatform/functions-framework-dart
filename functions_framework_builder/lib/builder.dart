@@ -2,19 +2,31 @@
 // Please see the AUTHORS file or details. Use of this source code is
 // governed by a BSD-style license that can be found in the LICENSE file.
 
+/// Configuration for using `package:build`-compatible build systems.
+///
+/// See:
+/// * [build_runner](https://pub.dev/packages/build_runner)
+///
+/// This library is **not** intended to be imported by typical end-users unless
+/// you are creating a custom compilation pipeline. See documentation for
+/// details, and `build.yaml` for how this builder is configured by default.
+library functions_framework_builder.builder;
+
 import 'package:build/build.dart';
 import 'package:functions_framework/functions_framework.dart';
 import 'package:glob/glob.dart';
 import 'package:path/path.dart' as path;
 import 'package:source_gen/source_gen.dart';
 
-Builder functionsFrameworkBuilder(BuilderOptions options) =>
-    FunctionsFrameworkGenerator();
+Builder functionsFrameworkBuilder([BuilderOptions options]) =>
+    const _FunctionsFrameworkBuilder();
 
 const _checker = TypeChecker.fromRuntime(CloudFunction);
 
-class FunctionsFrameworkGenerator implements Builder {
+class _FunctionsFrameworkBuilder implements Builder {
   static final _libFiles = Glob('lib/**');
+
+  const _FunctionsFrameworkBuilder();
 
   @override
   Map<String, List<String>> get buildExtensions => const {

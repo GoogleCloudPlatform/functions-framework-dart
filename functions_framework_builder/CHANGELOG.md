@@ -1,3 +1,11 @@
+# 0.1.1-dev
+
+* Renamed the builder library from `functions_framework_builder.dart` to
+  `builder.dart`. This is the convention for builders. This is potentially
+  breaking for anyone why imports this library – but that's not expected.
+* Hid the `FunctionsFrameworkGenerator` class. Not meant for external
+  consumption.
+
 # 0.1.0 - 2020-11-23
 
 This is a preview release of the Functions Framework Builder package for Dart to
