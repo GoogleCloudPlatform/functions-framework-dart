@@ -88,11 +88,9 @@ jobs:
       - job_003
     name: Notify failure
     runs-on: ubuntu-latest
-    if: "failure()"
+    if: "(github.event_name == 'push' || github.event_name == 'schedule') && failure()"
     steps:
       - run: |
           curl -H "Content-Type: application/json" -X POST -d \
             "{'text':'Build failed! ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}'}" \
-            "${CHAT_WEBHOOK_URL}"
-        env:
-          CHAT_WEBHOOK_URL: "${{ secrets.CHAT_WEBHOOK_URL }}"
+            "$${{ secrets.CHAT_WEBHOOK_URL }}"
