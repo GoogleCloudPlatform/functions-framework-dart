@@ -38,18 +38,21 @@ class FunctionConfig {
         target:
             Platform.environment['FUNCTION_TARGET'] ?? defaultFunctionTarget,
         functionType: _parseFunctionType(
-            Platform.environment['FUNCTION_SIGNATURE_TYPE'] ??
-                _enumValue(FunctionType.http)),
+          Platform.environment['FUNCTION_SIGNATURE_TYPE'] ??
+              _enumValue(FunctionType.http),
+        ),
       );
 
   // Optional per spec:
   // https://github.com/GoogleCloudPlatform/functions-framework#specification-summary
-  factory FunctionConfig.fromArgs(List<String> args,
-      {FunctionConfig defaults}) {
+  factory FunctionConfig.fromArgs(
+    List<String> args, {
+    FunctionConfig defaults,
+  }) {
     final parser = ArgParser()
-      ..addOption('port')
-      ..addOption('target')
-      ..addOption('signature-type');
+      ..addOption(_portOpt)
+      ..addOption(_targetOpt)
+      ..addOption(_functionTypeOpt);
 
     final options = parser.parse(args);
 
