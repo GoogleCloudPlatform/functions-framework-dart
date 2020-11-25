@@ -14,4 +14,4 @@ env:
   PUB_ENVIRONMENT: bot.github
 
 jobs:
-  - run: true
+  - run: false
