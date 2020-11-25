@@ -2,6 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:build_test/build_test.dart';
@@ -92,6 +93,36 @@ package:$_pkgName/test_lib.dart:8:10
   ╵''',
       ),
     );
+  });
+
+  group('invalid function shapes are not allowed', () {
+    final invalidShapes = {
+      // TODO: GoogleCloudPlatform/functions-framework-dart#21
+      // 'int handleGet(Request request) => null;': null,
+      'class AClass{}': startsWith('Only top-level functions are supported.'),
+      'int field = 5;': startsWith('Only top-level functions are supported.'),
+      'int get getter => 5;':
+          startsWith('Only top-level functions are supported.'),
+    };
+
+    for (var shape in invalidShapes.entries) {
+      test('"${shape.key}"', () async {
+        await _generateThrows(
+          '''
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
+
+@CloudFunction()
+${shape.key}
+''',
+          isA<InvalidGenerationSourceError>().having(
+            (e) => e.toString(),
+            'toString()',
+            shape.value,
+          ),
+        );
+      });
+    }
   });
 }
 

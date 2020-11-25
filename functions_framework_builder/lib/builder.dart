@@ -18,6 +18,8 @@ import 'package:glob/glob.dart';
 import 'package:path/path.dart' as path;
 import 'package:source_gen/source_gen.dart';
 
+import 'src/utils.dart';
+
 Builder functionsFrameworkBuilder([BuilderOptions options]) =>
     const _FunctionsFrameworkBuilder();
 
@@ -44,7 +46,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
       final reader = LibraryReader(element);
       for (var annotatedElement in reader.annotatedWithExact(_checker)) {
-        // TODO: validate that annotatedElement is "shape" of a shelf handler
+        validateHandlerShape(annotatedElement.element);
         final target = annotatedElement.annotation.read('target').stringValue;
 
         if (files.any((element) => element.target == target)) {
