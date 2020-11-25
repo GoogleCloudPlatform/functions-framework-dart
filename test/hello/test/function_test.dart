@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@Timeout(Duration(seconds: 3))
 import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
-
-const defaultTimeout = Timeout(Duration(seconds: 3));
 
 void main() {
   group('http function tests', () {
@@ -31,7 +30,7 @@ void main() {
       expect(response.body, 'Hello, World!');
 
       await finish(proc);
-    }, timeout: defaultTimeout);
+    });
 
     test('good environment', () async {
       const port = '8888';
@@ -44,7 +43,7 @@ void main() {
       expect(response.body, 'Hello, World!');
 
       await finish(proc);
-    }, timeout: defaultTimeout);
+    });
 
     test('good options', () async {
       const port = '9000';
@@ -67,7 +66,7 @@ void main() {
       expect(response.body, 'Hello, World!');
 
       await finish(proc);
-    }, timeout: defaultTimeout);
+    });
 
     test('bad environment', () async {
       final proc =
@@ -82,7 +81,7 @@ void main() {
       );
 
       await proc.shouldExit(255);
-    }, timeout: defaultTimeout);
+    });
 
     test('bad options', () async {
       final proc = await start(shouldFail: true, arguments: [
@@ -99,7 +98,7 @@ void main() {
       );
 
       await proc.shouldExit(255);
-    }, timeout: defaultTimeout);
+    });
 
     test('bad options', () async {
       final proc =
@@ -114,7 +113,7 @@ void main() {
       );
 
       await proc.shouldExit(255);
-    }, timeout: defaultTimeout);
+    });
   });
 
   group('cloudevent function tests', () {});
