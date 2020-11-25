@@ -8,11 +8,16 @@ import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
 @CloudFunction('sync')
-Response handleGet(Request request) => Response.ok('Hello, World!');
+Response handleGet(Request request) => throw UnimplementedError();
 
 @CloudFunction('async')
-Future<Response> handleGet2(Request request) async =>
-    Response.ok('Hello, World!');
+Future<Response> handleGet2(Request request) => throw UnimplementedError();
 
 @CloudFunction('futureOr')
-FutureOr<Response> handleGet3(Request request) => Response.ok('Hello, World!');
+FutureOr<Response> handleGet3(Request request) => throw UnimplementedError();
+
+@CloudFunction('extra params')
+Response handleGet4(Request request, [int other]) => throw UnimplementedError();
+
+@CloudFunction('optional positional')
+Response handleGet5([Request request, int other]) => throw UnimplementedError();

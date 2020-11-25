@@ -64,6 +64,8 @@ const _functions = <String, Handler>{
   'sync': prefix00.handleGet,
   'async': prefix00.handleGet2,
   'futureOr': prefix00.handleGet3,
+  'extra params': prefix00.handleGet4,
+  'optional positional': prefix00.handleGet5,
 };
 ''',
     );
