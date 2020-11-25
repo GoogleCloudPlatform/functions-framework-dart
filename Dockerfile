@@ -15,7 +15,7 @@ COPY . .
 RUN mono_repo pub get --offline
 
 WORKDIR /app/test/hello
-RUN dart pub run build_runner build
+RUN dart pub run build_runner build --delete-conflicting-outputs
 RUN dart compile exe bin/main.dart -o bin/server
 
 ########################
