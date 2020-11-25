@@ -13,7 +13,9 @@ dependencies:
   build_config: ^0.4.3
   functions_framework: ^0.1.0
   glob: ^1.2.0
+  meta: ^1.2.4
   path: ^1.7.0
+  shelf: ^0.7.9
   source_gen: ^0.9.8
 
 dev_dependencies:

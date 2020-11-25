@@ -98,13 +98,29 @@ package:$_pkgName/test_lib.dart:8:10
   });
 
   group('invalid function shapes are not allowed', () {
+    final onlyFunctionMatcher =
+        startsWith('Only top-level functions are supported.');
+    final notCompaitbleMatcher =
+        startsWith('Not compatible with package:shelf handler');
     final invalidShapes = {
-      // TODO: GoogleCloudPlatform/functions-framework-dart#21
-      // 'int handleGet(Request request) => null;': null,
-      'class AClass{}': startsWith('Only top-level functions are supported.'),
-      'int field = 5;': startsWith('Only top-level functions are supported.'),
-      'int get getter => 5;':
-          startsWith('Only top-level functions are supported.'),
+      'class AClass{}': onlyFunctionMatcher,
+      'int field = 5;': onlyFunctionMatcher,
+      'int get getter => 5;': onlyFunctionMatcher,
+      // Not enough params
+      'Responose handleGet() => null;': notCompaitbleMatcher,
+      // First param is not positional
+      'Responose handleGet({Request reques}) => null;': notCompaitbleMatcher,
+      // Too many required params
+      'Responose handleGet(Request request, int other) => null;':
+          notCompaitbleMatcher,
+      // Param is wrong type
+      'Responose handleGet(int request) => null;': notCompaitbleMatcher,
+      // Return type is wrong
+      'int handleGet(Request request) => null;': notCompaitbleMatcher,
+      // Return type is wrong
+      'Future<int> handleGet(Request request) => null;': notCompaitbleMatcher,
+      // Return type is wrong
+      'FutureOr<int> handleGet(Request request) => null;': notCompaitbleMatcher,
     };
 
     for (var shape in invalidShapes.entries) {
@@ -130,7 +146,7 @@ ${shape.key}
 
 Future<void> _generateThrows(String inputLibrary, Object matcher) async {
   await expectLater(
-    () => _generateTest(inputLibrary, '', validateLog: false),
+    () => _generateTest(inputLibrary, null, validateLog: false),
     throwsA(matcher),
   );
 }
@@ -149,9 +165,11 @@ Future<void> _generateTest(
       ...srcs.keys,
       '$_pkgName|\$package\$',
     },
-    outputs: {
-      '$_pkgName|bin/main.dart': decodedMatches(expectedContent),
-    },
+    outputs: expectedContent == null
+        ? null
+        : {
+            '$_pkgName|bin/main.dart': decodedMatches(expectedContent),
+          },
     onLog: (log) {
       if (!validateLog) {
         return;
