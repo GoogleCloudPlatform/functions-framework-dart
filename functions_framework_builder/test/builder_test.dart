@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:io';
+
 import 'package:build_test/build_test.dart';
 import 'package:functions_framework_builder/builder.dart';
 import 'package:source_gen/source_gen.dart';
@@ -46,6 +48,21 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 $_outputHeader
 const _functions = <String, Handler>{
   'some function': prefix00.handleGet,
+};
+''',
+    );
+  });
+
+  test('All valid function shapes are supported', () async {
+    final file = File('test/test_examples/all_valid_shapes.dart');
+    await _generateTest(
+      file.readAsStringSync(),
+      '''
+$_outputHeader
+const _functions = <String, Handler>{
+  'sync': prefix00.handleGet,
+  'async': prefix00.handleGet2,
+  'futureOr': prefix00.handleGet3,
 };
 ''',
     );
