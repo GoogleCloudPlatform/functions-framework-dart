@@ -90,6 +90,9 @@ jobs:
     runs-on: ubuntu-latest
     if: failure()
     steps:
-      - run: "curl -H \"Content-Type: application/json\" -X POST -d  \"{'text':'Build failed! ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}'}\" \"${CHAT_WEBHOOK_URL}\"\n"
-        env:
+      - env:
           CHAT_WEBHOOK_URL: "${{ secrets.CHAT_WEBHOOK_URL }}"
+        run: |
+          export
+          echo "${CHAT_WEBHOOK_URL}"
+          curl -H "Content-Type: application/json" -X POST -d  "{'text':'Build failed! ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}'}" "${CHAT_WEBHOOK_URL}"
