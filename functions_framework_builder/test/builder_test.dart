@@ -2,9 +2,9 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:build/build.dart';
 import 'package:build_test/build_test.dart';
 import 'package:functions_framework_builder/builder.dart';
+import 'package:source_gen/source_gen.dart';
 import 'package:test/test.dart';
 
 import 'test_package_asset_reader.dart';
@@ -17,7 +17,6 @@ void main() {
 
   test('Simple Generator test', () async {
     await _generateTest(
-      functionsFrameworkBuilder(),
       r'''
 import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
@@ -36,7 +35,6 @@ const _functions = <String, Handler>{
 
   test('Populate the target param', () async {
     await _generateTest(
-      functionsFrameworkBuilder(),
       r'''
 import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
@@ -52,17 +50,50 @@ const _functions = <String, Handler>{
 ''',
     );
   });
+
+  test('duplicate target names fails', () async {
+    await _generateThrows(
+      r'''
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
+
+@CloudFunction()
+Response handleGet(Request request) => Response.ok('Hello, World!');
+
+@CloudFunction()
+Response handleGet(Request request) => Response.ok('Hello, World!');
+''',
+      isA<InvalidGenerationSourceError>().having(
+        (e) => e.toString(),
+        'toString()',
+        '''
+A function has already been annotated with target "function".
+package:$_pkgName/test_lib.dart:8:10
+  ╷
+8 │ Response handleGet(Request request) => Response.ok('Hello, World!');
+  │          ^^^^^^^^^
+  ╵''',
+      ),
+    );
+  });
+}
+
+Future<void> _generateThrows(String inputLibrary, Object matcher) async {
+  await expectLater(
+    () => _generateTest(inputLibrary, '', validateLog: false),
+    throwsA(matcher),
+  );
 }
 
 Future<void> _generateTest(
-  Builder builder,
   String inputLibrary,
-  String expectedContent,
-) async {
+  String expectedContent, {
+  bool validateLog = true,
+}) async {
   final srcs = {'$_pkgName|lib/test_lib.dart': inputLibrary};
 
   await testBuilder(
-    builder,
+    functionsFrameworkBuilder(),
     srcs,
     generateFor: {
       ...srcs.keys,
@@ -72,6 +103,9 @@ Future<void> _generateTest(
       '$_pkgName|bin/main.dart': decodedMatches(expectedContent),
     },
     onLog: (log) {
+      if (!validateLog) {
+        return;
+      }
       if (_ignoredLogMessages.any(log.message.contains)) {
         return;
       }

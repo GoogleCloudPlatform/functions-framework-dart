@@ -46,7 +46,13 @@ class _FunctionsFrameworkBuilder implements Builder {
       for (var annotatedElement in reader.annotatedWithExact(_checker)) {
         // TODO: validate that annotatedElement is "shape" of a shelf handler
         final target = annotatedElement.annotation.read('target').stringValue;
-        // TODO: validate target is a valid name, and not a duplicate!
+
+        if (files.any((element) => element.target == target)) {
+          throw InvalidGenerationSourceError(
+            'A function has already been annotated with target "$target".',
+            element: annotatedElement.element,
+          );
+        }
 
         libs.putIfAbsent(input.uri, () => _prefixFromIndex(libs.length));
 
