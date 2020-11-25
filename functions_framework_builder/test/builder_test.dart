@@ -100,27 +100,27 @@ package:$_pkgName/test_lib.dart:8:10
   group('invalid function shapes are not allowed', () {
     final onlyFunctionMatcher =
         startsWith('Only top-level functions are supported.');
-    final notCompaitbleMatcher =
+    final notCompatibleMatcher =
         startsWith('Not compatible with package:shelf handler');
     final invalidShapes = {
       'class AClass{}': onlyFunctionMatcher,
       'int field = 5;': onlyFunctionMatcher,
       'int get getter => 5;': onlyFunctionMatcher,
       // Not enough params
-      'Responose handleGet() => null;': notCompaitbleMatcher,
+      'Response handleGet() => null;': notCompatibleMatcher,
       // First param is not positional
-      'Responose handleGet({Request reques}) => null;': notCompaitbleMatcher,
+      'Response handleGet({Request reques}) => null;': notCompatibleMatcher,
       // Too many required params
-      'Responose handleGet(Request request, int other) => null;':
-          notCompaitbleMatcher,
+      'Response handleGet(Request request, int other) => null;':
+          notCompatibleMatcher,
       // Param is wrong type
-      'Responose handleGet(int request) => null;': notCompaitbleMatcher,
+      'Response handleGet(int request) => null;': notCompatibleMatcher,
       // Return type is wrong
-      'int handleGet(Request request) => null;': notCompaitbleMatcher,
+      'int handleGet(Request request) => null;': notCompatibleMatcher,
       // Return type is wrong
-      'Future<int> handleGet(Request request) => null;': notCompaitbleMatcher,
+      'Future<int> handleGet(Request request) => null;': notCompatibleMatcher,
       // Return type is wrong
-      'FutureOr<int> handleGet(Request request) => null;': notCompaitbleMatcher,
+      'FutureOr<int> handleGet(Request request) => null;': notCompatibleMatcher,
     };
 
     for (var shape in invalidShapes.entries) {
