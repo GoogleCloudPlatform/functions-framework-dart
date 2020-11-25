@@ -14,11 +14,42 @@ void main() {
     // Increment this after each test so the next test has it's own package
     _pkgCacheCount++;
   });
+
   test('Simple Generator test', () async {
     await _generateTest(
       functionsFrameworkBuilder(),
-      _testLibContent,
-      _testGenPartContent,
+      r'''
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
+
+@CloudFunction()
+Response handleGet(Request request) => Response.ok('Hello, World!');
+''',
+      '''
+$_outputHeader
+const _functions = <String, Handler>{
+  'function': prefix00.handleGet,
+};
+''',
+    );
+  });
+
+  test('Populate the target param', () async {
+    await _generateTest(
+      functionsFrameworkBuilder(),
+      r'''
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
+
+@CloudFunction('some function')
+Response handleGet(Request request) => Response.ok('Hello, World!');
+''',
+      '''
+$_outputHeader
+const _functions = <String, Handler>{
+  'some function': prefix00.handleGet,
+};
+''',
     );
   });
 }
@@ -28,7 +59,7 @@ Future<void> _generateTest(
   String inputLibrary,
   String expectedContent,
 ) async {
-  final srcs = _createPackageStub(inputLibrary);
+  final srcs = {'$_pkgName|lib/test_lib.dart': inputLibrary};
 
   await testBuilder(
     builder,
@@ -62,24 +93,11 @@ const _ignoredLogMessages = {
       'SDK version.',
 };
 
-Map<String, String> _createPackageStub(
-  String testLibContent,
-) =>
-    {'$_pkgName|lib/test_lib.dart': testLibContent};
-
 // Ensure every test gets its own unique package name
 String get _pkgName => 'pkg$_pkgCacheCount';
 int _pkgCacheCount = 1;
 
-const _testLibContent = r'''
-import 'package:functions_framework/functions_framework.dart';
-import 'package:shelf/shelf.dart';
-
-@CloudFunction()
-Response handleGet(Request request) => Response.ok('Hello, World!');
-''';
-
-const _testGenPartContent = r'''
+String get _outputHeader => '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright (c) 2020, the Dart project authors.
 // Please see the AUTHORS file or details. Use of this source code is
@@ -88,13 +106,9 @@ const _testGenPartContent = r'''
 import 'package:functions_framework/serve.dart';
 import 'package:shelf/shelf.dart';
 
-import 'package:pkg1/test_lib.dart' as prefix00;
+import 'package:$_pkgName/test_lib.dart' as prefix00;
 
 Future<void> main(List<String> args) async {
   await serve(args, _functions);
 }
-
-const _functions = <String, Handler>{
-  'function': prefix00.handleGet,
-};
 ''';
