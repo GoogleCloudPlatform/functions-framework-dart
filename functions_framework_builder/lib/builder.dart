@@ -18,6 +18,8 @@ import 'package:glob/glob.dart';
 import 'package:path/path.dart' as path;
 import 'package:source_gen/source_gen.dart';
 
+import 'src/utils.dart';
+
 Builder functionsFrameworkBuilder([BuilderOptions options]) =>
     const _FunctionsFrameworkBuilder();
 
@@ -44,9 +46,15 @@ class _FunctionsFrameworkBuilder implements Builder {
 
       final reader = LibraryReader(element);
       for (var annotatedElement in reader.annotatedWithExact(_checker)) {
-        // TODO: validate that annotatedElement is "shape" of a shelf handler
+        validateHandlerShape(annotatedElement.element);
         final target = annotatedElement.annotation.read('target').stringValue;
-        // TODO: validate target is a valid name, and not a duplicate!
+
+        if (files.any((element) => element.target == target)) {
+          throw InvalidGenerationSourceError(
+            'A function has already been annotated with target "$target".',
+            element: annotatedElement.element,
+          );
+        }
 
         libs.putIfAbsent(input.uri, () => _prefixFromIndex(libs.length));
 

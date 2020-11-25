@@ -2,9 +2,12 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:build/build.dart';
+import 'dart:async';
+import 'dart:io';
+
 import 'package:build_test/build_test.dart';
 import 'package:functions_framework_builder/builder.dart';
+import 'package:source_gen/source_gen.dart';
 import 'package:test/test.dart';
 
 import 'test_package_asset_reader.dart';
@@ -14,33 +17,163 @@ void main() {
     // Increment this after each test so the next test has it's own package
     _pkgCacheCount++;
   });
+
   test('Simple Generator test', () async {
     await _generateTest(
-      functionsFrameworkBuilder(),
-      _testLibContent,
-      _testGenPartContent,
+      r'''
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
+
+@CloudFunction()
+Response handleGet(Request request) => Response.ok('Hello, World!');
+''',
+      '''
+$_outputHeader
+const _functions = <String, Handler>{
+  'function': prefix00.handleGet,
+};
+''',
     );
+  });
+
+  test('Populate the target param', () async {
+    await _generateTest(
+      r'''
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
+
+@CloudFunction('some function')
+Response handleGet(Request request) => Response.ok('Hello, World!');
+''',
+      '''
+$_outputHeader
+const _functions = <String, Handler>{
+  'some function': prefix00.handleGet,
+};
+''',
+    );
+  });
+
+  test('All valid function shapes are supported', () async {
+    final file = File('test/test_examples/all_valid_shapes.dart');
+    await _generateTest(
+      file.readAsStringSync(),
+      '''
+$_outputHeader
+const _functions = <String, Handler>{
+  'sync': prefix00.handleGet,
+  'async': prefix00.handleGet2,
+  'futureOr': prefix00.handleGet3,
+  'extra params': prefix00.handleGet4,
+  'optional positional': prefix00.handleGet5,
+};
+''',
+    );
+  });
+
+  test('duplicate target names fails', () async {
+    await _generateThrows(
+      r'''
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
+
+@CloudFunction()
+Response handleGet(Request request) => Response.ok('Hello, World!');
+
+@CloudFunction()
+Response handleGet(Request request) => Response.ok('Hello, World!');
+''',
+      isA<InvalidGenerationSourceError>().having(
+        (e) => e.toString(),
+        'toString()',
+        '''
+A function has already been annotated with target "function".
+package:$_pkgName/test_lib.dart:8:10
+  ╷
+8 │ Response handleGet(Request request) => Response.ok('Hello, World!');
+  │          ^^^^^^^^^
+  ╵''',
+      ),
+    );
+  });
+
+  group('invalid function shapes are not allowed', () {
+    final onlyFunctionMatcher =
+        startsWith('Only top-level functions are supported.');
+    final notCompatibleMatcher =
+        startsWith('Not compatible with package:shelf handler');
+    final invalidShapes = {
+      'class AClass{}': onlyFunctionMatcher,
+      'int field = 5;': onlyFunctionMatcher,
+      'int get getter => 5;': onlyFunctionMatcher,
+      // Not enough params
+      'Response handleGet() => null;': notCompatibleMatcher,
+      // First param is not positional
+      'Response handleGet({Request reques}) => null;': notCompatibleMatcher,
+      // Too many required params
+      'Response handleGet(Request request, int other) => null;':
+          notCompatibleMatcher,
+      // Param is wrong type
+      'Response handleGet(int request) => null;': notCompatibleMatcher,
+      // Return type is wrong
+      'int handleGet(Request request) => null;': notCompatibleMatcher,
+      // Return type is wrong
+      'Future<int> handleGet(Request request) => null;': notCompatibleMatcher,
+      // Return type is wrong
+      'FutureOr<int> handleGet(Request request) => null;': notCompatibleMatcher,
+    };
+
+    for (var shape in invalidShapes.entries) {
+      test('"${shape.key}"', () async {
+        await _generateThrows(
+          '''
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
+
+@CloudFunction()
+${shape.key}
+''',
+          isA<InvalidGenerationSourceError>().having(
+            (e) => e.toString(),
+            'toString()',
+            shape.value,
+          ),
+        );
+      });
+    }
   });
 }
 
+Future<void> _generateThrows(String inputLibrary, Object matcher) async {
+  await expectLater(
+    () => _generateTest(inputLibrary, null, validateLog: false),
+    throwsA(matcher),
+  );
+}
+
 Future<void> _generateTest(
-  Builder builder,
   String inputLibrary,
-  String expectedContent,
-) async {
-  final srcs = _createPackageStub(inputLibrary);
+  String expectedContent, {
+  bool validateLog = true,
+}) async {
+  final srcs = {'$_pkgName|lib/test_lib.dart': inputLibrary};
 
   await testBuilder(
-    builder,
+    functionsFrameworkBuilder(),
     srcs,
     generateFor: {
       ...srcs.keys,
       '$_pkgName|\$package\$',
     },
-    outputs: {
-      '$_pkgName|bin/main.dart': decodedMatches(expectedContent),
-    },
+    outputs: expectedContent == null
+        ? null
+        : {
+            '$_pkgName|bin/main.dart': decodedMatches(expectedContent),
+          },
     onLog: (log) {
+      if (!validateLog) {
+        return;
+      }
       if (_ignoredLogMessages.any(log.message.contains)) {
         return;
       }
@@ -62,24 +195,11 @@ const _ignoredLogMessages = {
       'SDK version.',
 };
 
-Map<String, String> _createPackageStub(
-  String testLibContent,
-) =>
-    {'$_pkgName|lib/test_lib.dart': testLibContent};
-
 // Ensure every test gets its own unique package name
 String get _pkgName => 'pkg$_pkgCacheCount';
 int _pkgCacheCount = 1;
 
-const _testLibContent = r'''
-import 'package:functions_framework/functions_framework.dart';
-import 'package:shelf/shelf.dart';
-
-@CloudFunction()
-Response handleGet(Request request) => Response.ok('Hello, World!');
-''';
-
-const _testGenPartContent = r'''
+String get _outputHeader => '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright (c) 2020, the Dart project authors.
 // Please see the AUTHORS file or details. Use of this source code is
@@ -88,13 +208,9 @@ const _testGenPartContent = r'''
 import 'package:functions_framework/serve.dart';
 import 'package:shelf/shelf.dart';
 
-import 'package:pkg1/test_lib.dart' as prefix00;
+import 'package:$_pkgName/test_lib.dart' as prefix00;
 
 Future<void> main(List<String> args) async {
   await serve(args, _functions);
 }
-
-const _functions = <String, Handler>{
-  'function': prefix00.handleGet,
-};
 ''';
