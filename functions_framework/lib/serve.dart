@@ -5,53 +5,48 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:io/ansi.dart';
+import 'package:io/io.dart';
 import 'package:shelf/shelf.dart';
-import 'package:shelf/shelf_io.dart' as shelf_io;
 
+import 'src/bad_configuration.dart';
 import 'src/function_config.dart';
+import 'src/run.dart';
 
-Future<void> serve(
-  List<String> args,
-  Map<String, Handler> handlers,
-) async {
-  final functionConfig =
-      FunctionConfig.fromArgs(args, defaults: FunctionConfig.fromEnv());
+/// If there is an invalid configuration, [BadConfigurationException] will be
+/// thrown.
+///
+/// If there are no configuration errors, this function will not return until
+/// the process has received signal [ProcessSignal.sigterm] or
+/// [ProcessSignal.sigint].
+Future<void> serve(List<String> args, Map<String, Handler> handlers) async {
+  try {
+    await _serve(args, handlers);
+  } on BadConfigurationException catch (e) {
+    stderr.writeln(red.wrap(e.message));
+    if (e.details != null) {
+      stderr.writeln(e.details);
+    }
+    exitCode = ExitCode.usage.code;
+  }
+}
 
-  final handler = handlers[functionConfig.target];
+Future<void> _serve(List<String> args, Map<String, Handler> handlers) async {
+  final configFromEnvironment = FunctionConfig.fromEnv();
+
+  final config = FunctionConfig.fromArgs(
+    args,
+    defaults: configFromEnvironment,
+  );
+
+  final handler = handlers[config.target];
 
   if (handler == null) {
-    throw StateError(
+    throw BadConfigurationException(
       'There is no handler configured for '
-      'FUNCTION_TARGET `${functionConfig.target}`.',
+      'FUNCTION_TARGET `${config.target}`.',
     );
   }
 
-  final pipeline =
-      const Pipeline().addMiddleware(logRequests()).addHandler(handler);
-
-  var server = await shelf_io.serve(
-    pipeline,
-    InternetAddress.anyIPv4,
-    functionConfig.port,
-  );
-  print('App listening on :${server.port}');
-
-  StreamSubscription sigIntSub, sigTermSub;
-
-  Future<void> signalHandler(ProcessSignal signal) async {
-    print('Got signal $signal - closing');
-
-    final serverCopy = server;
-    if (serverCopy != null) {
-      server = null;
-      await serverCopy.close(force: true);
-      await sigIntSub.cancel();
-      sigIntSub = null;
-      await sigTermSub.cancel();
-      sigTermSub = null;
-    }
-  }
-
-  sigIntSub = ProcessSignal.sigint.watch().listen(signalHandler);
-  sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
+  await run(config.port, handler);
 }

@@ -6,6 +6,8 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 
+import 'bad_configuration.dart';
+
 const defaultPort = 8080;
 const defaultFunctionType = FunctionType.http;
 const defaultFunctionTarget = 'function';
@@ -32,16 +34,31 @@ class FunctionConfig {
 
   // Required per spec:
   // https://github.com/GoogleCloudPlatform/functions-framework#specification-summary
-  factory FunctionConfig.fromEnv() => FunctionConfig(
-        port: int.tryParse(
-            Platform.environment['PORT'] ?? defaultPort.toString()),
-        target:
-            Platform.environment['FUNCTION_TARGET'] ?? defaultFunctionTarget,
-        functionType: _parseFunctionType(
-          Platform.environment['FUNCTION_SIGNATURE_TYPE'] ??
-              _enumValue(FunctionType.http),
-        ),
-      );
+  factory FunctionConfig.fromEnv() {
+    int port;
+
+    if (Platform.environment.containsKey('PORT')) {
+      try {
+        port = int.parse(Platform.environment['PORT']);
+      } on FormatException catch (e) {
+        throw BadConfigurationException(
+          'Bad value for environment variable "PORT" – '
+          '"${Platform.environment['PORT']}" – ${e.message}.',
+        );
+      }
+    } else {
+      port = defaultPort;
+    }
+
+    return FunctionConfig(
+      port: port,
+      target: Platform.environment['FUNCTION_TARGET'] ?? defaultFunctionTarget,
+      functionType: _parseFunctionType(
+        Platform.environment['FUNCTION_SIGNATURE_TYPE'] ??
+            _enumValue(FunctionType.http),
+      ),
+    );
+  }
 
   // Optional per spec:
   // https://github.com/GoogleCloudPlatform/functions-framework#specification-summary
@@ -49,17 +66,52 @@ class FunctionConfig {
     List<String> args, {
     FunctionConfig defaults,
   }) {
-    final parser = ArgParser()
-      ..addOption(_portOpt)
-      ..addOption(_targetOpt)
-      ..addOption(_functionTypeOpt);
+    final parser = ArgParser(usageLineLength: 80)
+      ..addOption(
+        _portOpt,
+        help:
+            'The port on which the Functions Framework listens for requests.\n'
+            'Overrides the PORT environment variable.',
+      )
+      ..addOption(
+        _targetOpt,
+        help: 'The name of the exported function to be invoked in response to '
+            'requests.\n'
+            'Overrides the FUNCTION_TARGET environment variable.',
+      )
+      ..addOption(
+        _functionTypeOpt,
+        allowed: FunctionType.values.map(_enumValue),
+        help: 'The signature used when writing your function. '
+            'Controls unmarshalling rules and determines which arguments are '
+            'used to invoke your function.\n'
+            'Overrides the FUNCTION_SIGNATURE_TYPE environment variable.',
+      );
 
-    final options = parser.parse(args);
+    ArgResults options;
+    try {
+      options = parser.parse(args);
+    } on FormatException catch (e) {
+      throw BadConfigurationException(e.message, details: parser.usage);
+    }
+
+    int port;
+
+    if (options.wasParsed(_portOpt)) {
+      try {
+        port = int.parse(options[_portOpt] as String);
+      } on FormatException catch (e) {
+        throw BadConfigurationException(
+          'Bad value for "$_portOpt" – "${options[_portOpt]}" – ${e.message}.',
+          details: parser.usage,
+        );
+      }
+    } else {
+      port = defaults?.port ?? defaultPort;
+    }
 
     return FunctionConfig(
-      port: (options[_portOpt] != null)
-          ? int.tryParse(options[_portOpt] as String)
-          : defaults?.port ?? defaultPort,
+      port: port,
       target: options[_targetOpt] as String ??
           defaults?.target ??
           defaultFunctionTarget,
@@ -80,7 +132,7 @@ FunctionType _parseFunctionType(String type) {
     case 'cloudevent':
       return FunctionType.cloudEvent;
     default:
-      throw UnsupportedError(
+      throw BadConfigurationException(
         'FUNCTION_SIGNATURE_TYPE environment variable "$type" is not a valid '
         'option (must be "http" or "cloudevent")',
       );
