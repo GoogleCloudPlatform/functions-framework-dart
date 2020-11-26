@@ -26,8 +26,6 @@ Future<void> serve(
     );
   }
 
-  // TODO: handle case where `handler` is null
-
   final pipeline =
       const Pipeline().addMiddleware(logRequests()).addHandler(handler);
 
