@@ -1,20 +1,20 @@
 ################
 FROM google/dart
 
+# cache deps
 WORKDIR /app
-RUN dart pub global activate mono_repo 3.2.0
-COPY mono_repo.yaml /app/mono_repo.yaml
-COPY functions_framework/mono_pkg.yaml /app/functions_framework/mono_pkg.yaml
-COPY functions_framework/pubspec.yaml /app/functions_framework/pubspec.yaml
-COPY functions_framework_builder/mono_pkg.yaml /app/functions_framework_builder/mono_pkg.yaml
-COPY functions_framework_builder/pubspec.yaml /app/functions_framework_builder/pubspec.yaml
-COPY test/hello/mono_pkg.yaml /app/test/hello/mono_pkg.yaml
-COPY test/hello/pubspec.yaml /app/test/hello/pubspec.yaml
-RUN mono_repo pub get
-COPY . .
-RUN mono_repo pub get --offline
+COPY ./functions_framework/pubspec.yaml /app/functions_framework/
+COPY ./functions_framework_builder/pubspec.yaml /app/functions_framework_builder/
+COPY ./test/hello/pubspec.yaml /app/test/hello/
 
 WORKDIR /app/test/hello
+RUN dart pub get
+
+# As long as pubspecs haven't changed, all deps should be cached and only
+# new image layers from here on need to get rebuild for modified sources.
+COPY . ../..
+RUN dart pub get --offline
+
 RUN dart pub run build_runner build --delete-conflicting-outputs
 RUN dart compile exe bin/main.dart -o bin/server
 
