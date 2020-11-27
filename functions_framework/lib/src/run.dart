@@ -5,8 +5,10 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 
 Future<void> run(int port, Handler handler) async {
-  final pipeline =
-      const Pipeline().addMiddleware(logRequests()).addHandler(handler);
+  final pipeline = const Pipeline()
+      .addMiddleware(logRequests())
+      .addMiddleware(_forbiddenAssetMiddleware)
+      .addHandler(handler);
 
   var server = await shelf_io.serve(
     pipeline,
@@ -39,3 +41,12 @@ Future<void> run(int port, Handler handler) async {
 
   await completer.future;
 }
+
+const _forbiddenAssets = {'robots.txt', 'favicon.ico'};
+
+Handler _forbiddenAssetMiddleware(Handler innerHandler) => (Request request) {
+      if (_forbiddenAssets.contains(request.url.path)) {
+        return Response.notFound('Not found.');
+      }
+      return innerHandler(request);
+    };

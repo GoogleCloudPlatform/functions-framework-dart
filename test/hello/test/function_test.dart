@@ -209,6 +209,20 @@ void main() {
     });
   });
 
+  group('not found assets', () {
+    for (var item in const {'robots.txt', 'favicon.ico'}) {
+      test('404 for $item', () async {
+        final proc = await _start();
+
+        final response = await get('http://localhost:$defaultPort/$item');
+        expect(response.statusCode, 404);
+        expect(response.body, 'Not found.');
+
+        await _finish(proc, requestOutput: endsWith('GET     [404] /$item'));
+      });
+    }
+  });
+
   group('cloudevent function tests', () {});
 }
 
@@ -237,10 +251,12 @@ Future<TestProcess> _start({
 Future<void> _finish(
   TestProcess proc, {
   ProcessSignal signal = ProcessSignal.sigterm,
+  Object requestOutput,
 }) async {
+  requestOutput ??= endsWith('GET     [200] /');
   await expectLater(
     proc.stdout,
-    emitsThrough(endsWith('GET     [200] /')),
+    emitsThrough(requestOutput),
   );
   proc.signal(signal);
   await proc.shouldExit(0);
