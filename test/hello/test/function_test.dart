@@ -241,7 +241,7 @@ Future<TestProcess> _start({
   if (!shouldFail) {
     await expectLater(
       proc.stdout,
-      emitsThrough('App listening on :$port'),
+      emitsThrough('Listening on :$port'),
     );
   }
 
@@ -262,7 +262,7 @@ Future<void> _finish(
   await proc.shouldExit(0);
   await expectLater(
     proc.stdout,
-    emitsThrough('Got signal $signal - closing'),
+    emitsThrough('Received signal $signal - closing'),
   );
 }
 
