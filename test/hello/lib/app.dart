@@ -12,8 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
 @CloudFunction()
-Response handleGet(Request request) => Response.ok('Hello, World!');
+Response handleGet(Request request) {
+  final urlPath = request.url.path;
+
+  if (urlPath.startsWith('info')) {
+    final output = {
+      'request': request.requestedUri.toString(),
+      'headers': request.headers,
+      'environment': Platform.environment,
+    };
+
+    return Response.ok(
+      JsonUtf8Encoder('  ').convert(output),
+      headers: _jsonHeaders,
+    );
+  }
+
+  if (urlPath.startsWith('error')) {
+    throw Exception('An error with forced by requesting "$urlPath"');
+  }
+
+  return Response.ok('Hello, World!');
+}
+
+const _jsonHeaders = {'Content-Type': 'application/json'};

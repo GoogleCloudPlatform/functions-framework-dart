@@ -21,14 +21,14 @@ import 'package:io/io.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
-const defaultPort = '8080';
+const _defaultPort = '8080';
 
 void main() {
   group('http function tests', () {
     test('defaults', () async {
       final proc = await _start();
 
-      final response = await get('http://localhost:$defaultPort');
+      final response = await get('http://localhost:$_defaultPort');
       expect(response.statusCode, 200);
       expect(response.body, 'Hello, World!');
 
@@ -38,7 +38,7 @@ void main() {
     test('SIGINT also terminates the server', () async {
       final proc = await _start();
 
-      final response = await get('http://localhost:$defaultPort');
+      final response = await get('http://localhost:$_defaultPort');
       expect(response.statusCode, 200);
       expect(response.body, 'Hello, World!');
 
@@ -214,7 +214,7 @@ void main() {
       test('404 for $item', () async {
         final proc = await _start();
 
-        final response = await get('http://localhost:$defaultPort/$item');
+        final response = await get('http://localhost:$_defaultPort/$item');
         expect(response.statusCode, 404);
         expect(response.body, 'Not found.');
 
@@ -223,12 +223,48 @@ void main() {
     }
   });
 
+  group('special handlers', () {
+    test('info', () async {
+      final proc = await _start();
+
+      const requestUrl = 'http://localhost:$_defaultPort/info';
+      final response = await get(requestUrl);
+      expect(response.statusCode, 200);
+      final responseBody = response.body;
+      final jsonBody = jsonDecode(responseBody) as Map<String, dynamic>;
+      expect(jsonBody, containsPair('request', requestUrl));
+      expect(jsonBody, contains('headers'));
+      expect(jsonBody, contains('environment'));
+
+      await _finish(proc, requestOutput: endsWith('GET     [200] /info'));
+    });
+
+    test('error', () async {
+      final proc = await _start();
+
+      final response = await get('http://localhost:$_defaultPort/error');
+      expect(response.statusCode, 500);
+      expect(response.body, 'Internal Server Error');
+
+      await expectLater(
+          proc.stderr,
+          emitsInOrder([
+            startsWith('ERROR -'),
+            'GET /error',
+            'Error thrown by handler.',
+            'Exception: An error with forced by requesting "error"',
+          ]));
+
+      await _finish(proc, requestOutput: isEmpty);
+    });
+  });
+
   group('cloudevent function tests', () {});
 }
 
 Future<TestProcess> _start({
   bool shouldFail = false,
-  String port = defaultPort,
+  String port = _defaultPort,
   Map<String, String> env,
   Iterable<String> arguments = const <String>[],
 }) async {
