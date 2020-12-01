@@ -252,7 +252,7 @@ void main() {
             startsWith('ERROR -'),
             'GET /error',
             'Error thrown by handler.',
-            'Exception: An error with forced by requesting "error"',
+            'Exception: An error was forced by requesting "error"',
           ]));
 
       await _finish(proc, requestOutput: isEmpty);
