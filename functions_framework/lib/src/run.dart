@@ -3,11 +3,13 @@
 // governed by a BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 
+import 'cloud_metadata.dart';
 import 'logging.dart';
 
 Future<void> run(int port, Handler handler) async {
@@ -15,6 +17,14 @@ Future<void> run(int port, Handler handler) async {
       .addMiddleware(loggingMiddleware())
       .addMiddleware(_forbiddenAssetMiddleware)
       .addHandler(handler);
+
+  final metadataThing = CloudMetadata();
+  try {
+    final recursive = await metadataThing.recursive();
+    print(const JsonEncoder.withIndent('  ').convert(recursive));
+  } finally {
+    metadataThing.close();
+  }
 
   var server = await shelf_io.serve(
     pipeline,
