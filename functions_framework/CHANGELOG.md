@@ -1,5 +1,6 @@
-# 0.1.0-dev
+# 0.1.1-dev
 
+- Detect if running on Google Cloud and generate logs appropriately.
 - Improved the error messages and exit codes for failures.
 - Correctly respond with `404` with requests for `robots.txt` and `favicon.ico`.
 
