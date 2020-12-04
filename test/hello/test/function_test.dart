@@ -281,6 +281,31 @@ void main() {
 
       await _finish(proc, requestOutput: isEmpty);
     });
+
+    test('async error', () async {
+      final proc = await _start();
+
+      final response = await get('http://localhost:$_defaultPort/error/async');
+      expect(response.statusCode, 500);
+      expect(response.body, 'Internal Server Error');
+
+      await expectLater(
+          proc.stderr,
+          emitsInOrder([
+            startsWith('ERROR -'),
+            'GET /error/async',
+            'Error thrown by handler.',
+            'Exception: An error was forced by requesting "error/async"',
+            startsWith('package:shelf/src/'),
+            '',
+            startsWith('ERROR -'),
+            'Asynchronous error',
+            'Bad state: async error',
+            startsWith('package:hello_world_function_test/app.dart'),
+          ]));
+
+      await _finish(proc, requestOutput: isEmpty);
+    });
   });
 
   group('cloudevent function tests', () {});

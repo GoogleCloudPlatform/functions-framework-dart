@@ -20,58 +20,73 @@ Middleware cloudLoggingMiddleware(String projectid) {
         String traceValue() =>
             'projects/$projectid/traces/${traceHeader.split('/')[0]}';
 
-        try {
-          // TODO: GoogleCloudPlatform/functions-framework-dart#41 look into
-          // using zone error handling, too. Need to debug this.
-          final response = await Zone.current.fork(
-            specification: ZoneSpecification(
-              print: (self, parent, zone, line) {
-                final logContent = {
-                  'message': line,
-                  'severity': 'INFO',
-                  // 'logging.googleapis.com/labels': { }
-                  if (traceHeader != null)
-                    'logging.googleapis.com/trace': traceValue(),
-                };
+        final completer = Completer<Response>.sync();
 
-                // Serialize to a JSON string and output to parent zone.
-                parent.print(self, jsonEncode(logContent));
-              },
-            ),
-          ).runUnary(innerHandler, request);
+        Zone.current
+            .fork(
+          specification: ZoneSpecification(
+            handleUncaughtError: (self, parent, zone, error, stackTrace) {
+              if (error is HijackException) {
+                completer.completeError(error, stackTrace);
+              }
 
-          return response;
-        } catch (error, stackTrace) {
-          if (error is HijackException) rethrow;
+              // Collect and format error information as described here
+              // https://cloud.google.com/functions/docs/monitoring/logging#writing_structured_logs
 
-          // Collect and format error information as described here
-          // https://cloud.google.com/functions/docs/monitoring/logging#writing_structured_logs
+              final chain = stackTrace == null
+                  ? Chain.current()
+                  : Chain.forTrace(stackTrace).foldFrames(
+                      (f) =>
+                          f.package == 'functions_framework' ||
+                          f.package == 'shelf',
+                      terse: true,
+                    );
 
-          final chain = stackTrace == null
-              ? Chain.current()
-              : Chain.forTrace(stackTrace)
-                  .foldFrames((frame) => frame.isCore)
-                  .terse;
+              final stackFrame = _frameFromChain(chain);
 
-          final stackFrame = _frameFromChain(chain);
+              // https://cloud.google.com/logging/docs/agent/configuration#special-fields
+              final logContent = {
+                'message': '$error\n$chain',
+                'severity': 'ERROR',
+                // 'logging.googleapis.com/labels': { }
+                if (traceHeader != null)
+                  'logging.googleapis.com/trace': traceValue(),
+                if (stackFrame != null)
+                  'logging.googleapis.com/sourceLocation':
+                      _sourceLocation(stackFrame),
+              };
 
-          // https://cloud.google.com/logging/docs/agent/configuration#special-fields
-          final logContent = {
-            'message': '$error\n$chain',
-            'severity': 'ERROR',
-            // 'logging.googleapis.com/labels': { }
-            if (traceHeader != null)
-              'logging.googleapis.com/trace': traceValue(),
-            if (stackFrame != null)
-              'logging.googleapis.com/sourceLocation':
-                  _sourceLocation(stackFrame),
-          };
+              // Serialize to a JSON string and output.
+              parent.print(self, jsonEncode(logContent));
 
-          // Serialize to a JSON string and output.
-          print(jsonEncode(logContent));
+              if (!completer.isCompleted) {
+                completer.complete(Response.internalServerError());
+              }
+            },
+            print: (self, parent, zone, line) {
+              final logContent = {
+                'message': line,
+                'severity': 'INFO',
+                // 'logging.googleapis.com/labels': { }
+                if (traceHeader != null)
+                  'logging.googleapis.com/trace': traceValue(),
+              };
 
-          return Response.internalServerError();
-        }
+              // Serialize to a JSON string and output to parent zone.
+              parent.print(self, jsonEncode(logContent));
+            },
+          ),
+        )
+            .runGuarded(
+          () async {
+            final response = await innerHandler(request);
+            if (!completer.isCompleted) {
+              completer.complete(response);
+            }
+          },
+        );
+
+        return completer.future;
       };
 
   return hostedLoggingMiddleware;
@@ -89,6 +104,8 @@ Frame _frameFromChain(Chain chain) {
 
 // https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#LogEntrySourceLocation
 Map<String, dynamic> _sourceLocation(Frame frame) => {
+      // TODO: Will need to fix `package:` URIs to file paths when possible
+      // GoogleCloudPlatform/functions-framework-dart#40
       'file': frame.library,
       if (frame.line != null) 'line': frame.line.toString(),
       'function': frame.member,

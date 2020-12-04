@@ -165,4 +165,64 @@ void main() {
 
     lines.clear();
   });
+
+  test('async error', () async {
+    void expectLine(String entry) {
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+
+      expect(map, hasLength(4));
+      expect(map, containsPair('severity', 'ERROR'));
+      expect(
+        map,
+        containsPair(
+          'message',
+          anyOf(
+            startsWith(
+              'Exception: An error was forced by requesting "error/async"',
+            ),
+            startsWith('Bad state: async error'),
+          ),
+        ),
+      );
+
+      expect(
+        map,
+        containsPair(
+          'logging.googleapis.com/trace',
+          'projects/$_projectId/traces/$traceStart',
+        ),
+      );
+
+      final sourceLocation =
+          map['logging.googleapis.com/sourceLocation'] as Map<String, dynamic>;
+
+      expect(
+        sourceLocation,
+        containsPair('file', 'package:hello_world_function_test/app.dart'),
+      );
+      expect(
+        sourceLocation,
+        containsPair(
+          'line',
+          isA<String>(), // spec says this should be a String
+        ),
+      );
+      expect(
+        sourceLocation,
+        containsPair(
+          'function',
+          startsWith('handleGet'),
+        ),
+      );
+    }
+
+    await _get('error/async', expectedStatusCode: 500);
+
+    expect(lines, hasLength(2));
+
+    expectLine(lines[0]);
+    expectLine(lines[1]);
+
+    lines.clear();
+  });
 }

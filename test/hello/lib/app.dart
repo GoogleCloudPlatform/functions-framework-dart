@@ -16,6 +16,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:functions_framework/functions_framework.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:shelf/shelf.dart';
 
 @CloudFunction()
@@ -36,6 +37,13 @@ Future<Response> handleGet(Request request) async {
   }
 
   if (urlPath.startsWith('error')) {
+    if (urlPath.contains('async')) {
+      // Add a pause to the result
+      await Future.value();
+      unawaited(
+        Future.value().then((value) => throw StateError('async error')),
+      );
+    }
     throw Exception('An error was forced by requesting "$urlPath"');
   }
 
