@@ -296,7 +296,7 @@ void main() {
             'GET /error/async',
             'Error thrown by handler.',
             'Exception: An error was forced by requesting "error/async"',
-            startsWith('package:shelf/src/'),
+            startsWith('package:'),
             '',
             startsWith('ERROR -'),
             'Asynchronous error',
