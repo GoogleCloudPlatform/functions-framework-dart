@@ -2,6 +2,7 @@
 // Please see the AUTHORS file or details. Use of this source code is
 // governed by a BSD-style license that can be found in the LICENSE file.
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:shelf/shelf.dart';
@@ -9,20 +10,36 @@ import 'package:stack_trace/stack_trace.dart';
 
 import 'constants.dart';
 
-/// If [projectid] is provided, assume we're running on Google Cloud and return
-/// [Middleware] that logs errors using Google Cloud structured logs.
-///
-/// Otherwise, returns [Middleware] that prints requests and errors to `stdout`.
-Middleware loggingMiddleware({String projectid}) {
-  if (projectid == null) {
-    return logRequests();
-  }
-
+/// Return [Middleware] that logs errors using Google Cloud structured logs.
+Middleware cloudLoggingMiddleware(String projectid) {
   Handler hostedLoggingMiddleware(Handler innerHandler) => (request) async {
+        // Add log correlation to nest all log messages beneath request log in
+        // Log Viewer.
+        final traceHeader = request.headers[cloudTraceContextHeader];
+
+        String traceValue() =>
+            'projects/$projectid/traces/${traceHeader.split('/')[0]}';
+
         try {
-          // including the extra `await` and assignment here to make sure async
-          // errors are caught within this try block
-          final response = await innerHandler(request);
+          // TODO: GoogleCloudPlatform/functions-framework-dart#41 look into
+          // using zone error handling, too. Need to debug this.
+          final response = await Zone.current.fork(
+            specification: ZoneSpecification(
+              print: (self, parent, zone, line) {
+                final logContent = {
+                  'message': line,
+                  'severity': 'INFO',
+                  // 'logging.googleapis.com/labels': { }
+                  if (traceHeader != null)
+                    'logging.googleapis.com/trace': traceValue(),
+                };
+
+                // Serialize to a JSON string and output to parent zone.
+                parent.print(self, jsonEncode(logContent));
+              },
+            ),
+          ).runUnary(innerHandler, request);
+
           return response;
         } catch (error, stackTrace) {
           if (error is HijackException) rethrow;
@@ -33,15 +50,10 @@ Middleware loggingMiddleware({String projectid}) {
           final chain = stackTrace == null
               ? Chain.current()
               : Chain.forTrace(stackTrace)
-                  .foldFrames(
-                      (frame) => frame.isCore || frame.package == 'shelf')
+                  .foldFrames((frame) => frame.isCore)
                   .terse;
 
           final stackFrame = _frameFromChain(chain);
-
-          // Add log correlation to nest all log messages beneath request log in
-          // Log Viewer.
-          final traceHeader = request.headers[cloudTraceContextHeader];
 
           // https://cloud.google.com/logging/docs/agent/configuration#special-fields
           final logContent = {
@@ -49,8 +61,7 @@ Middleware loggingMiddleware({String projectid}) {
             'severity': 'ERROR',
             // 'logging.googleapis.com/labels': { }
             if (traceHeader != null)
-              'logging.googleapis.com/trace':
-                  'projects/$projectid/traces/${traceHeader.split('/')[0]}',
+              'logging.googleapis.com/trace': traceValue(),
             if (stackFrame != null)
               'logging.googleapis.com/sourceLocation':
                   _sourceLocation(stackFrame),

@@ -10,7 +10,9 @@ import 'package:io/io.dart';
 import 'package:shelf/shelf.dart';
 
 import 'src/bad_configuration.dart';
+import 'src/cloud_metadata.dart';
 import 'src/function_config.dart';
+import 'src/logging.dart';
 import 'src/run.dart';
 
 /// If there is an invalid configuration, [BadConfigurationException] will be
@@ -48,5 +50,32 @@ Future<void> _serve(List<String> args, Map<String, Handler> handlers) async {
     );
   }
 
-  await run(config.port, handler);
+  final projectId = await CloudMetadata.projectId();
+  final loggingMiddleware =
+      projectId == null ? logRequests() : cloudLoggingMiddleware(projectId);
+
+  final completer = Completer<bool>.sync();
+
+  // sigIntSub is copied below to avoid a race condition - ignoring this lint
+  // ignore: cancel_subscriptions
+  StreamSubscription sigIntSub, sigTermSub;
+
+  Future<void> signalHandler(ProcessSignal signal) async {
+    print('Received signal $signal - closing');
+
+    final subCopy = sigIntSub;
+    if (subCopy != null) {
+      sigIntSub = null;
+      await subCopy.cancel();
+      sigIntSub = null;
+      await sigTermSub.cancel();
+      sigTermSub = null;
+      completer.complete(true);
+    }
+  }
+
+  sigIntSub = ProcessSignal.sigint.watch().listen(signalHandler);
+  sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
+
+  await run(config.port, handler, completer.future, loggingMiddleware);
 }

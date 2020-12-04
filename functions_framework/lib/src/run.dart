@@ -8,47 +8,26 @@ import 'dart:io';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 
-import 'cloud_metadata.dart';
-import 'logging.dart';
-
-Future<void> run(int port, Handler handler) async {
-  final projectId = await CloudMetadata.projectId();
-
+Future<void> run(
+  int port,
+  Handler handler,
+  Future<bool> shutdownSignal,
+  Middleware loggingMiddleware,
+) async {
   final pipeline = const Pipeline()
-      .addMiddleware(loggingMiddleware(projectid: projectId))
+      .addMiddleware(loggingMiddleware)
       .addMiddleware(_forbiddenAssetMiddleware)
       .addHandler(handler);
 
-  var server = await shelf_io.serve(
+  final server = await shelf_io.serve(
     pipeline,
     InternetAddress.anyIPv4,
     port,
   );
   print('Listening on :${server.port}');
 
-  final completer = Completer<void>.sync();
-
-  StreamSubscription sigIntSub, sigTermSub;
-
-  Future<void> signalHandler(ProcessSignal signal) async {
-    print('Received signal $signal - closing');
-
-    final serverCopy = server;
-    if (serverCopy != null) {
-      server = null;
-      await serverCopy.close(force: true);
-      await sigIntSub.cancel();
-      sigIntSub = null;
-      await sigTermSub.cancel();
-      sigTermSub = null;
-      completer.complete();
-    }
-  }
-
-  sigIntSub = ProcessSignal.sigint.watch().listen(signalHandler);
-  sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
-
-  await completer.future;
+  final force = await shutdownSignal;
+  await server.close(force: force);
 }
 
 const _forbiddenAssets = {'robots.txt', 'favicon.ico'};
