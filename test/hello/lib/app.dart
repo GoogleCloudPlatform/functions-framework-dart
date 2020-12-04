@@ -39,6 +39,13 @@ Future<Response> handleGet(Request request) async {
     throw Exception('An error was forced by requesting "$urlPath"');
   }
 
+  if (urlPath.startsWith('print')) {
+    for (var segment in request.url.pathSegments) {
+      print(segment);
+    }
+    return Response.ok('Printing: $urlPath');
+  }
+
   return Response.ok('Hello, World!');
 }
 

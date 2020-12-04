@@ -239,6 +239,30 @@ void main() {
       await _finish(proc, requestOutput: endsWith('GET     [200] /info'));
     });
 
+    test('print', () async {
+      final proc = await _start();
+
+      const requestedPath = 'print/something/here';
+      const requestUrl = 'http://localhost:$_defaultPort/$requestedPath';
+      final response = await get(requestUrl);
+      expect(response.statusCode, 200);
+
+      const expectedOutput = 'Printing: $requestedPath';
+      expect(response.body, expectedOutput);
+
+      await _finish(
+        proc,
+        requestOutput: emitsInOrder(
+          [
+            'print',
+            'something',
+            'here',
+            endsWith('GET     [200] /$requestedPath'),
+          ],
+        ),
+      );
+    });
+
     test('error', () async {
       final proc = await _start();
 
@@ -292,7 +316,9 @@ Future<void> _finish(
   requestOutput ??= endsWith('GET     [200] /');
   await expectLater(
     proc.stdout,
-    emitsThrough(requestOutput),
+    requestOutput is StreamMatcher
+        ? requestOutput
+        : emitsThrough(requestOutput),
   );
   proc.signal(signal);
   await proc.shouldExit(0);
