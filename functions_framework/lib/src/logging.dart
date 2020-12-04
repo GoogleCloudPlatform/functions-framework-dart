@@ -46,7 +46,7 @@ Middleware cloudLoggingMiddleware(String projectid) {
 
               // https://cloud.google.com/logging/docs/agent/configuration#special-fields
               final logContent = {
-                'message': '$error\n$chain',
+                'message': '$error\n$chain'.trim(),
                 'severity': 'ERROR',
                 // 'logging.googleapis.com/labels': { }
                 if (traceHeader != null)
