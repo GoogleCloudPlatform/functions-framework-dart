@@ -12,6 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/cloud_event.dart';
-export 'src/cloud_event_wrapper.dart';
-export 'src/cloud_function.dart';
+import 'package:meta/meta_meta.dart';
+import 'package:shelf/shelf.dart';
+
+/// Use as an annotation on [Function]s that will be exposed as endpoints.
+///
+/// Can only be used on public, top-level functions that are compatible with
+/// [Handler] from `package:shelf`.
+@Target({TargetKind.function})
+class CloudFunction {
+  /// The name used to register the function in the function framework.
+  ///
+  /// If `null`, the name of the [Function] is used.
+  final String target;
+
+  const CloudFunction({this.target});
+}

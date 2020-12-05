@@ -1,5 +1,5 @@
 name: functions_framework
-version: 0.2.0
+version: 0.2.1-dev
 description: >-
   FaaS (Function as a service) framework for writing portable Dart functions
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
@@ -10,7 +10,17 @@ environment:
 dependencies:
   args: ^1.6.0
   http: ^0.12.2
+  http_parser: ^3.1.4
   io: ^0.3.4
+  json_annotation: ^3.1.1
   meta: ^1.2.3
   shelf: ^0.7.9
   stack_trace: ^1.9.6
+
+dev_dependencies:
+  build_runner: ^1.10.7
+  build_verify: ^1.1.1
+  json_serializable: ^3.5.1
+  # Because we use the ignore_for_file build.yaml config
+  source_gen: ^0.9.5
+  test: ^1.15.7

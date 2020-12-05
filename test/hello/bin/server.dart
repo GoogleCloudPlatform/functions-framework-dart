@@ -22,6 +22,9 @@ Future<void> main(List<String> args) async {
   await serve(args, _functions);
 }
 
-const _functions = <String, Handler>{
+final _functions = <String, Handler>{
   'function': function_library.function,
+  'conformanceHttp': function_library.conformanceHttp,
+  'conformanceCloudEvent':
+      wrapCloudEventHandler(function_library.conformanceCloudEvent),
 };

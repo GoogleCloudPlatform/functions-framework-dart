@@ -25,6 +25,8 @@ import 'src/function_config.dart';
 import 'src/logging.dart';
 import 'src/run.dart';
 
+export 'src/cloud_event_wrapper.dart' show wrapCloudEventHandler;
+
 /// If there is an invalid configuration, [BadConfigurationException] will be
 /// thrown.
 ///
