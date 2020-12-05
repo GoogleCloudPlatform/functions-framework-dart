@@ -14,4 +14,5 @@ Future<void> main(List<String> args) async {
 
 const _functions = <String, Handler>{
   'function': function_library.handleGet,
+  'conformance': function_library.conformance,
 };

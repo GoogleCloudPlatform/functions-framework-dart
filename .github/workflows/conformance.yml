@@ -1,0 +1,50 @@
+name: Dart Conformance CI
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+  schedule:
+  - cron: "0 0 * * 0"
+defaults:
+  run:
+    shell: bash
+env:
+  PUB_ENVIRONMENT: bot.github
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Cache Pub hosted dependencies
+      uses: actions/cache@v2
+      with:
+        path: "~/.pub-cache/hosted"
+        key: "os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;"
+        restore-keys: |
+          os:ubuntu-latest;pub-cache-hosted
+          os:ubuntu-latest
+
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.13'
+
+    - uses: cedx/setup-dart@v2
+      with:
+        release-channel: stable
+        version: "2.10.0"
+    - run: dart --version
+
+    - uses: actions/checkout@v2
+    - run: pub upgrade
+      working-directory: test/hello
+
+    - name: Run HTTP conformance tests
+      uses: GoogleCloudPlatform/functions-framework-conformance/action@v0.3.5
+      with:
+        functionType: 'http'
+        useBuildpacks: false
+        # Coordinate changes here with the documentation in `CONTRIBUTING.MD`
+        cmd: '"dart test/hello/bin/server.dart --target conformance"'
+        startDelay: 3

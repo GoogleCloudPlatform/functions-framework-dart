@@ -32,6 +32,7 @@ Future<Response> handleGet(Request request) async {
   if (_activeRequests > _maxActiveRequests) {
     _maxActiveRequests = _activeRequests;
   }
+
   final urlPath = request.url.path;
 
   if (urlPath.contains('slow')) {
@@ -65,7 +66,7 @@ Future<Response> handleGet(Request request) async {
       };
 
       return Response.ok(
-        JsonUtf8Encoder('  ').convert(output),
+        _encoder.convert(output),
         headers: _jsonHeaders,
       );
     }
@@ -98,6 +99,27 @@ Future<Response> handleGet(Request request) async {
   }
 }
 
+@CloudFunction('conformance')
+Future<Response> conformance(Request request) async {
+  final content = await request.readAsString();
+  File('function_output.json').writeAsStringSync(
+    content,
+  );
+
+  final buffer = StringBuffer()
+    ..writeln('Hello, conformance test!')
+    ..writeln('HEADERS')
+    ..writeln(_encoder.convert(request.headers))
+    ..writeln('BODY')
+    ..writeln(_encoder.convert(jsonDecode(content)));
+
+  final output = buffer.toString();
+  print(output);
+  return Response.ok(output);
+}
+
 final _helloWorldBytes = utf8.encode('Hello, World!');
 
 const _jsonHeaders = {'Content-Type': 'application/json'};
+
+const _encoder = JsonEncoder.withIndent(' ');
