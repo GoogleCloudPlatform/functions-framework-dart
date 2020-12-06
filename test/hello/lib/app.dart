@@ -19,42 +19,85 @@ import 'package:functions_framework/functions_framework.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:shelf/shelf.dart';
 
+int _activeRequests = 0;
+int _maxActiveRequests = 0;
+int _requestCount = 0;
+final _watch = Stopwatch();
+
 @CloudFunction()
 Future<Response> handleGet(Request request) async {
+  _watch.start();
+  _requestCount++;
+  _activeRequests++;
+  if (_activeRequests > _maxActiveRequests) {
+    _maxActiveRequests = _activeRequests;
+  }
   final urlPath = request.url.path;
 
-  if (urlPath.startsWith('info')) {
-    final output = {
-      'request': request.requestedUri.toString(),
-      'headers': request.headers,
-      'environment': Platform.environment,
-    };
-
-    return Response.ok(
-      JsonUtf8Encoder('  ').convert(output),
-      headers: _jsonHeaders,
-    );
+  if (urlPath.contains('slow')) {
+    // Adds a one-second pause to matching requests.
+    // Good for testing concurrency
+    await Future.delayed(const Duration(seconds: 1));
   }
 
-  if (urlPath.startsWith('error')) {
-    if (urlPath.contains('async')) {
-      // Add a pause to the result
-      await Future.value();
-      unawaited(
-        Future.value().then((value) => throw StateError('async error')),
+  try {
+    if (urlPath.startsWith('info')) {
+      final output = {
+        'request': request.requestedUri.toString(),
+        'thisInstance': {
+          'activeRequests': _activeRequests,
+          'maxActiveRequests': _maxActiveRequests,
+          'totalRequests': _requestCount,
+          'upTime': _watch.elapsed.toString(),
+        },
+        'platform': {
+          'numberOfProcessors': Platform.numberOfProcessors,
+          'operatingSystem': Platform.operatingSystem,
+          'operatingSystemVersion': Platform.operatingSystemVersion,
+          'version': Platform.version,
+        },
+        'process': {
+          'currentRss': ProcessInfo.currentRss,
+          'maxRss': ProcessInfo.maxRss,
+        },
+        'headers': request.headers,
+        'environment': Platform.environment,
+      };
+
+      return Response.ok(
+        JsonUtf8Encoder('  ').convert(output),
+        headers: _jsonHeaders,
       );
     }
-    throw Exception('An error was forced by requesting "$urlPath"');
-  }
 
-  if (urlPath.startsWith('print')) {
-    for (var segment in request.url.pathSegments) {
-      print(segment);
+    if (urlPath.startsWith('error')) {
+      if (urlPath.contains('async')) {
+        // Add a pause to the result
+        await Future.value();
+        unawaited(
+          Future.value().then((value) => throw StateError('async error')),
+        );
+      }
+      throw Exception('An error was forced by requesting "$urlPath"');
     }
-    return Response.ok('Printing: $urlPath');
-  }
 
-  return Response.ok('Hello, World!');
+    if (urlPath.startsWith('print')) {
+      for (var segment in request.url.pathSegments) {
+        print(segment);
+      }
+      return Response.ok('Printing: $urlPath');
+    }
+
+    if (urlPath.startsWith('binary')) {
+      return Response.ok(_helloWorldBytes);
+    }
+
+    return Response.ok('Hello, World!');
+  } finally {
+    _activeRequests--;
+  }
 }
+
+final _helloWorldBytes = utf8.encode('Hello, World!');
 
 const _jsonHeaders = {'Content-Type': 'application/json'};
