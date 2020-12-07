@@ -30,7 +30,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
       '''
 $_outputHeader
 const _functions = <String, Handler>{
-  'function': prefix00.handleGet,
+  'function': function_library.handleGet,
 };
 ''',
     );
@@ -48,7 +48,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
       '''
 $_outputHeader
 const _functions = <String, Handler>{
-  'some function': prefix00.handleGet,
+  'some function': function_library.handleGet,
 };
 ''',
     );
@@ -61,11 +61,11 @@ const _functions = <String, Handler>{
       '''
 $_outputHeader
 const _functions = <String, Handler>{
-  'sync': prefix00.handleGet,
-  'async': prefix00.handleGet2,
-  'futureOr': prefix00.handleGet3,
-  'extra params': prefix00.handleGet4,
-  'optional positional': prefix00.handleGet5,
+  'sync': function_library.handleGet,
+  'async': function_library.handleGet2,
+  'futureOr': function_library.handleGet3,
+  'extra params': function_library.handleGet4,
+  'optional positional': function_library.handleGet5,
 };
 ''',
     );
@@ -88,7 +88,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
         'toString()',
         '''
 A function has already been annotated with target "function".
-package:$_pkgName/test_lib.dart:8:10
+package:$_pkgName/library.dart:8:10
   ╷
 8 │ Response handleGet(Request request) => Response.ok('Hello, World!');
   │          ^^^^^^^^^
@@ -100,8 +100,10 @@ package:$_pkgName/test_lib.dart:8:10
   group('invalid function shapes are not allowed', () {
     final onlyFunctionMatcher =
         startsWith('Only top-level functions are supported.');
-    final notCompatibleMatcher =
-        startsWith('Not compatible with package:shelf handler');
+    final notCompatibleMatcher = startsWith(
+      'Not compatible with package:shelf Handler '
+      '`FutureOr<Response> Function(Request)`.',
+    );
     final invalidShapes = {
       'class AClass{}': onlyFunctionMatcher,
       'int field = 5;': onlyFunctionMatcher,
@@ -156,7 +158,7 @@ Future<void> _generateTest(
   String expectedContent, {
   bool validateLog = true,
 }) async {
-  final srcs = {'$_pkgName|lib/test_lib.dart': inputLibrary};
+  final srcs = {'$_pkgName|lib/library.dart': inputLibrary};
 
   await testBuilder(
     functionsFrameworkBuilder(),
@@ -208,7 +210,7 @@ String get _outputHeader => '''
 import 'package:functions_framework/serve.dart';
 import 'package:shelf/shelf.dart';
 
-import 'package:$_pkgName/test_lib.dart' as prefix00;
+import 'package:$_pkgName/library.dart' as function_library;
 
 Future<void> main(List<String> args) async {
   await serve(args, _functions);

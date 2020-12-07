@@ -19,7 +19,7 @@ import 'dart:convert';
 import 'package:functions_framework/src/constants.dart';
 import 'package:functions_framework/src/logging.dart';
 import 'package:functions_framework/src/run.dart';
-import 'package:hello_world_function_test/app.dart';
+import 'package:hello_world_function_test/library.dart';
 import 'package:http/http.dart';
 import 'package:test/test.dart';
 
