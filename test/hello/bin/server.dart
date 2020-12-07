@@ -6,12 +6,12 @@
 import 'package:functions_framework/serve.dart';
 import 'package:shelf/shelf.dart';
 
-import 'package:hello_world_function_test/app.dart' as prefix00;
+import 'package:hello_world_function_test/library.dart' as function_library;
 
 Future<void> main(List<String> args) async {
   await serve(args, _functions);
 }
 
 const _functions = <String, Handler>{
-  'function': prefix00.handleGet,
+  'function': function_library.handleGet,
 };

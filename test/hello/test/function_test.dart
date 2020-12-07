@@ -301,7 +301,7 @@ void main() {
             startsWith('ERROR -'),
             'Asynchronous error',
             'Bad state: async error',
-            startsWith('package:hello_world_function_test/app.dart'),
+            startsWith('package:hello_world_function_test/library.dart'),
           ]));
 
       await _finish(proc, requestOutput: isEmpty);
@@ -318,7 +318,7 @@ Future<TestProcess> _start({
   Iterable<String> arguments = const <String>[],
 }) async {
   final args = [
-    'bin/main.dart',
+    'bin/server.dart',
     ...arguments,
   ];
   final proc = await TestProcess.start('dart', args, environment: env);

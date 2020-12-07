@@ -12,13 +12,13 @@
 /// details, and `build.yaml` for how this builder is configured by default.
 library functions_framework_builder.builder;
 
+import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/nullability_suffix.dart';
+import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:functions_framework/functions_framework.dart';
-import 'package:glob/glob.dart';
 import 'package:path/path.dart' as path;
 import 'package:source_gen/source_gen.dart';
-
-import 'src/utils.dart';
 
 Builder functionsFrameworkBuilder([BuilderOptions options]) =>
     const _FunctionsFrameworkBuilder();
@@ -26,52 +26,46 @@ Builder functionsFrameworkBuilder([BuilderOptions options]) =>
 const _checker = TypeChecker.fromRuntime(CloudFunction);
 
 class _FunctionsFrameworkBuilder implements Builder {
-  static final _libFiles = Glob('lib/**');
-
   const _FunctionsFrameworkBuilder();
 
   @override
   Map<String, List<String>> get buildExtensions => const {
-        r'$package$': ['bin/main.dart'],
+        r'lib/library.dart': ['bin/server.dart'],
       };
 
   @override
   Future<void> build(BuildStep buildStep) async {
-    final files = <_Entry>[];
+    final entries = <String, String>{};
 
-    final libs = <Uri, String>{};
+    final input = buildStep.inputId;
 
-    await for (final input in buildStep.findAssets(_libFiles)) {
-      final element = await buildStep.resolver.libraryFor(input);
+    final element = await buildStep.resolver.libraryFor(input);
 
-      final reader = LibraryReader(element);
-      for (var annotatedElement in reader.annotatedWithExact(_checker)) {
-        validateHandlerShape(annotatedElement.element);
-        final target = annotatedElement.annotation.read('target').stringValue;
+    final reader = LibraryReader(element);
 
-        if (files.any((element) => element.target == target)) {
-          throw InvalidGenerationSourceError(
-            'A function has already been annotated with target "$target".',
-            element: annotatedElement.element,
-          );
-        }
+    final handlerFunctionType = await _shelfHandler(buildStep.resolver);
 
-        libs.putIfAbsent(input.uri, () => _prefixFromIndex(libs.length));
+    for (var annotatedElement in reader.annotatedWithExact(_checker)) {
+      await _validateHandlerShape(
+          annotatedElement.element, handlerFunctionType);
+      final target = annotatedElement.annotation.read('target').stringValue;
 
-        files.add(_Entry(
-          input.uri,
-          target,
-          annotatedElement.element.name,
-        ));
+      if (entries.containsKey(target)) {
+        throw InvalidGenerationSourceError(
+          'A function has already been annotated with target "$target".',
+          element: annotatedElement.element,
+        );
       }
+
+      entries[target] = annotatedElement.element.name;
     }
 
-    // bin/main.dart
-    final mainDart = AssetId(
+    // bin/server.dart
+    final serverDart = AssetId(
       buildStep.inputId.package,
-      path.join('bin', 'main.dart'),
+      path.join('bin', 'server.dart'),
     );
-    await buildStep.writeAsString(mainDart, '''
+    await buildStep.writeAsString(serverDart, '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright (c) 2020, the Dart project authors.
 // Please see the AUTHORS file or details. Use of this source code is
@@ -80,30 +74,55 @@ class _FunctionsFrameworkBuilder implements Builder {
 import 'package:functions_framework/serve.dart';
 import 'package:shelf/shelf.dart';
 
-${libs.entries.map((e) => "import '${e.key}' as ${e.value};").join('\n')}
+import '${input.uri}' as function_library;
 
 Future<void> main(List<String> args) async {
   await serve(args, _functions);
 }
 
 const _functions = <String, Handler>{
-${files.map((e) => "  '${e.target}': ${libs[e.uri]}.${e.functionName},").join('\n')}
+${entries.entries.map((e) => "  '${e.key}': function_library.${e.value},").join('\n')}
 };
 ''');
   }
 }
 
-class _Entry {
-  final Uri uri;
-  final String target;
-  final String functionName;
+Future<FunctionType> _shelfHandler(Resolver resolver) async {
+  final shelfLib = await resolver.libraryFor(
+    AssetId.resolve('package:shelf/shelf.dart'),
+  );
 
-  _Entry(
-    this.uri,
-    this.target,
-    this.functionName,
+  final handlerTypeAlias =
+      shelfLib.exportNamespace.get('Handler') as FunctionTypeAliasElement;
+
+  return handlerTypeAlias.instantiate(
+    typeArguments: [],
+    nullabilitySuffix: NullabilitySuffix.none,
   );
 }
 
-String _prefixFromIndex(int index) =>
-    'prefix${index.toString().padLeft(2, '0')}';
+Future<void> _validateHandlerShape(
+  Element element,
+  FunctionType handlerFunctionType,
+) async {
+  if (element is! FunctionElement) {
+    throw InvalidGenerationSourceError(
+      'Only top-level functions are supported.',
+      element: element,
+    );
+  }
+  final func = element as FunctionElement;
+
+  final compatible = func.library.typeSystem.isSubtypeOf(
+    func.type,
+    handlerFunctionType,
+  );
+
+  if (!compatible) {
+    final str = handlerFunctionType.getDisplayString(withNullability: false);
+    throw InvalidGenerationSourceError(
+      'Not compatible with package:shelf Handler `$str`.',
+      element: element,
+    );
+  }
+}
