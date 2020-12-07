@@ -1,4 +1,4 @@
-# Created with package:mono_repo v3.2.0
+# Created with package:mono_repo v3.4.0
 name: Dart Unit CI
 on:
   push:
@@ -15,7 +15,7 @@ env:
 
 jobs:
   job_001:
-    name: "OS: linux; SDK: 2.10.0; PKG: functions_framework_builder; TASKS: `pub run test`"
+    name: "unit_test; Dart 2.10.0; PKG: functions_framework_builder; `pub run test`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -34,12 +34,16 @@ jobs:
           version: "2.10.0"
       - run: dart --version
       - uses: actions/checkout@v2
-      - env:
-          PKGS: functions_framework_builder
-          TRAVIS_OS_NAME: linux
-        run: tool/ci.sh test_0
+      - id: functions_framework_builder_pub_upgrade
+        name: "functions_framework_builder; pub upgrade --no-precompile"
+        working-directory: functions_framework_builder
+        run: pub upgrade --no-precompile
+      - name: functions_framework_builder; pub run test
+        if: "steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
+        working-directory: functions_framework_builder
+        run: pub run test
   job_002:
-    name: "OS: linux; SDK: dev; PKG: functions_framework_builder; TASKS: `pub run test`"
+    name: "unit_test; Dart dev; PKG: functions_framework_builder; `pub run test`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -57,12 +61,16 @@ jobs:
           release-channel: dev
       - run: dart --version
       - uses: actions/checkout@v2
-      - env:
-          PKGS: functions_framework_builder
-          TRAVIS_OS_NAME: linux
-        run: tool/ci.sh test_0
+      - id: functions_framework_builder_pub_upgrade
+        name: "functions_framework_builder; pub upgrade --no-precompile"
+        working-directory: functions_framework_builder
+        run: pub upgrade --no-precompile
+      - name: functions_framework_builder; pub run test
+        if: "steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
+        working-directory: functions_framework_builder
+        run: pub run test
   job_003:
-    name: "OS: linux; SDK: 2.10.0; PKG: test/hello; TASKS: `pub run test -x presubmit-only`"
+    name: "unit_test; Dart 2.10.0; PKG: test/hello; `pub run test -x presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -81,12 +89,16 @@ jobs:
           version: "2.10.0"
       - run: dart --version
       - uses: actions/checkout@v2
-      - env:
-          PKGS: test/hello
-          TRAVIS_OS_NAME: linux
-        run: tool/ci.sh test_1
+      - id: test_hello_pub_upgrade
+        name: "test/hello; pub upgrade --no-precompile"
+        working-directory: test/hello
+        run: pub upgrade --no-precompile
+      - name: "test/hello; pub run test -x presubmit-only"
+        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
+        working-directory: test/hello
+        run: pub run test -x presubmit-only
   job_004:
-    name: "OS: linux; SDK: dev; PKG: test/hello; TASKS: `pub run test -x presubmit-only`"
+    name: "unit_test; Dart dev; PKG: test/hello; `pub run test -x presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -104,12 +116,16 @@ jobs:
           release-channel: dev
       - run: dart --version
       - uses: actions/checkout@v2
-      - env:
-          PKGS: test/hello
-          TRAVIS_OS_NAME: linux
-        run: tool/ci.sh test_1
+      - id: test_hello_pub_upgrade
+        name: "test/hello; pub upgrade --no-precompile"
+        working-directory: test/hello
+        run: pub upgrade --no-precompile
+      - name: "test/hello; pub run test -x presubmit-only"
+        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
+        working-directory: test/hello
+        run: pub run test -x presubmit-only
   job_005:
-    name: "OS: linux; SDK: 2.10.0; PKG: test/hello; TASKS: `pub run test --run-skipped -t presubmit-only`"
+    name: "unit_test; Dart 2.10.0; PKG: test/hello; `pub run test --run-skipped -t presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -128,12 +144,16 @@ jobs:
           version: "2.10.0"
       - run: dart --version
       - uses: actions/checkout@v2
-      - env:
-          PKGS: test/hello
-          TRAVIS_OS_NAME: linux
-        run: tool/ci.sh test_2
+      - id: test_hello_pub_upgrade
+        name: "test/hello; pub upgrade --no-precompile"
+        working-directory: test/hello
+        run: pub upgrade --no-precompile
+      - name: "test/hello; pub run test --run-skipped -t presubmit-only"
+        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
+        working-directory: test/hello
+        run: pub run test --run-skipped -t presubmit-only
   job_006:
-    name: "OS: linux; SDK: dev; PKG: test/hello; TASKS: `pub run test --run-skipped -t presubmit-only`"
+    name: "unit_test; Dart dev; PKG: test/hello; `pub run test --run-skipped -t presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -151,18 +171,15 @@ jobs:
           release-channel: dev
       - run: dart --version
       - uses: actions/checkout@v2
-      - env:
-          PKGS: test/hello
-          TRAVIS_OS_NAME: linux
-        run: tool/ci.sh test_2
+      - id: test_hello_pub_upgrade
+        name: "test/hello; pub upgrade --no-precompile"
+        working-directory: test/hello
+        run: pub upgrade --no-precompile
+      - name: "test/hello; pub run test --run-skipped -t presubmit-only"
+        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
+        working-directory: test/hello
+        run: pub run test --run-skipped -t presubmit-only
   job_007:
-    needs:
-      - job_001
-      - job_002
-      - job_003
-      - job_004
-      - job_005
-      - job_006
     name: Notify failure
     runs-on: ubuntu-latest
     if: "(github.event_name == 'push' || github.event_name == 'schedule') && failure()"
@@ -173,3 +190,10 @@ jobs:
             "${CHAT_WEBHOOK_URL}"
         env:
           CHAT_WEBHOOK_URL: "${{ secrets.CHAT_WEBHOOK_URL }}"
+    needs:
+      - job_001
+      - job_002
+      - job_003
+      - job_004
+      - job_005
+      - job_006
