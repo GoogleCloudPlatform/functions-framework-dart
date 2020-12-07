@@ -88,6 +88,8 @@ ${entries.entries.map((e) => "  '${e.key}': function_library.${e.value},").join(
 }
 
 Future<FunctionType> _shelfHandler(Resolver resolver) async {
+  // TODO: should be able to use resolver.libraryFor
+  // https://github.com/dart-lang/build/issues/2936
   final shelfLib = await resolver.libraries.singleWhere(
     (element) => element.source.uri == Uri.parse('package:shelf/shelf.dart'),
   );
