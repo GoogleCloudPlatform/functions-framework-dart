@@ -88,7 +88,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
         'toString()',
         '''
 A function has already been annotated with target "function".
-package:$_pkgName/library.dart:8:10
+package:$_pkgName/functions.dart:8:10
   ╷
 8 │ Response handleGet(Request request) => Response.ok('Hello, World!');
   │          ^^^^^^^^^
@@ -158,7 +158,7 @@ Future<void> _generateTest(
   String expectedContent, {
   bool validateLog = true,
 }) async {
-  final srcs = {'$_pkgName|lib/library.dart': inputLibrary};
+  final srcs = {'$_pkgName|lib/functions.dart': inputLibrary};
 
   await testBuilder(
     functionsFrameworkBuilder(),
@@ -210,7 +210,7 @@ String get _outputHeader => '''
 import 'package:functions_framework/serve.dart';
 import 'package:shelf/shelf.dart';
 
-import 'package:$_pkgName/library.dart' as function_library;
+import 'package:$_pkgName/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
   await serve(args, _functions);

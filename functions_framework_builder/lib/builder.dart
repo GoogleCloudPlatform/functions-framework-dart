@@ -30,7 +30,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
   @override
   Map<String, List<String>> get buildExtensions => const {
-        r'lib/library.dart': ['bin/server.dart'],
+        r'lib/functions.dart': ['bin/server.dart'],
       };
 
   @override
