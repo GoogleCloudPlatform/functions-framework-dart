@@ -198,7 +198,8 @@ void main() {
 
       expect(
         sourceLocation,
-        containsPair('file', 'package:hello_world_function_test/functions.dart'),
+        containsPair(
+            'file', 'package:hello_world_function_test/functions.dart'),
       );
       expect(
         sourceLocation,
