@@ -318,7 +318,7 @@ Future<TestProcess> _start({
   Iterable<String> arguments = const <String>[],
 }) async {
   final args = [
-    'bin/main.dart',
+    'bin/server.dart',
     ...arguments,
   ];
   final proc = await TestProcess.start('dart', args, environment: env);

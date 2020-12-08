@@ -5,6 +5,6 @@ builders:
       - functionsFrameworkBuilder
     build_extensions:
       'lib/library.dart':
-        - bin/main.dart
+        - bin/server.dart
     auto_apply: dependents
     build_to: source

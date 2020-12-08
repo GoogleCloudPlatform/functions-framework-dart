@@ -1,6 +1,8 @@
 # 0.2.0-dev
 
 * **BREAKING** Function definitions now must be in `lib/function.dart`.
+* **BREAKING** Generated server binary is now `bin/server.dart` instead of
+  `bin/main.dart`.
 * Add a number of checks to the builder to make sure the annotations are used
   on the correct type of functions.
 * Renamed the builder library from `functions_framework_builder.dart` to

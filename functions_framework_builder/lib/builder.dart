@@ -30,7 +30,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
   @override
   Map<String, List<String>> get buildExtensions => const {
-        r'lib/library.dart': ['bin/main.dart'],
+        r'lib/library.dart': ['bin/server.dart'],
       };
 
   @override
@@ -60,12 +60,12 @@ class _FunctionsFrameworkBuilder implements Builder {
       entries[target] = annotatedElement.element.name;
     }
 
-    // bin/main.dart
-    final mainDart = AssetId(
+    // bin/server.dart
+    final serverDart = AssetId(
       buildStep.inputId.package,
-      path.join('bin', 'main.dart'),
+      path.join('bin', 'server.dart'),
     );
-    await buildStep.writeAsString(mainDart, '''
+    await buildStep.writeAsString(serverDart, '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright (c) 2020, the Dart project authors.
 // Please see the AUTHORS file or details. Use of this source code is

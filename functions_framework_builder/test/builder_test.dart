@@ -170,7 +170,7 @@ Future<void> _generateTest(
     outputs: expectedContent == null
         ? null
         : {
-            '$_pkgName|bin/main.dart': decodedMatches(expectedContent),
+            '$_pkgName|bin/server.dart': decodedMatches(expectedContent),
           },
     onLog: (log) {
       if (!validateLog) {
