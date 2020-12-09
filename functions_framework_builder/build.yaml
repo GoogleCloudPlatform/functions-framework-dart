@@ -4,7 +4,7 @@ builders:
     builder_factories:
       - functionsFrameworkBuilder
     build_extensions:
-      'lib/library.dart':
+      'lib/functions.dart':
         - bin/server.dart
     auto_apply: dependents
     build_to: source

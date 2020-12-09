@@ -6,7 +6,7 @@
 import 'package:functions_framework/serve.dart';
 import 'package:shelf/shelf.dart';
 
-import 'package:hello_world_function_test/library.dart' as function_library;
+import 'package:hello_world_function_test/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
   await serve(args, _functions);
