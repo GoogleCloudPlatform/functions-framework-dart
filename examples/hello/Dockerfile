@@ -7,7 +7,7 @@ RUN dart pub get
 COPY . .
 RUN dart pub get --offline
 
-RUN dart pub run build_runner build
+RUN dart pub run build_runner build --delete-conflicting-outputs
 RUN dart compile exe bin/main.dart -o bin/server
 
 ########################
