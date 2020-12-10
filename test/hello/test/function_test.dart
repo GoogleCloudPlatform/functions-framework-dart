@@ -309,6 +309,12 @@ void main() {
   });
 
   group('cloudevent function tests', () {
+    // TODO: non-JSON body
+    // TODO: JSON-body, but not a Map
+    // TODO: JSON-body is a map, but wrong/missing keys/values
+    // TODO: invalid header value encoding (bad date time, for instance)
+    // TODO: proper error logging when hosted on cloud
+
     test('binary-mode message', () async {
       final proc = await _start(arguments: [
         '--target',
@@ -340,6 +346,7 @@ void main() {
           'ce-type': 'google.cloud.pubsub.topic.publish',
           'ce-time': '2020-09-05T03:56:24Z',
           'ce-id': '1234-1234-1234',
+          'ce-source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
         },
       );
       expect(response.statusCode, 200);
@@ -362,9 +369,68 @@ void main() {
           'type': 'google.cloud.pubsub.topic.publish',
           'datacontenttype': 'application/json; charset=utf-8',
           'time': '2020-09-05T03:56:24.000Z',
+          'source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
           'data': jsonDecode(body),
         },
       );
+    });
+
+    test('structured-mode message', () async {
+      final proc = await _start(arguments: [
+        '--target',
+        'basicCloudEventHandler',
+        '--signature-type',
+        'cloudevent',
+      ]);
+
+      const requestUrl = 'http://localhost:$_defaultPort/';
+
+      const body = r'''
+{
+  "specversion": "1.0",
+  "type": "google.cloud.pubsub.topic.publish",
+  "time": "2020-09-05T03:56:24.000Z",
+  "id": "1234-1234-1234",
+  "data": {
+    "subscription": "projects/my-project/subscriptions/my-subscription",
+    "message": {
+      "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+      "attributes": {
+        "attr1":"attr1-value"
+      },
+      "data": "dGVzdCBtZXNzYWdlIDM="
+    }
+  }
+}''';
+
+      final response = await post(
+        requestUrl,
+        body: body,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+      );
+      expect(response.statusCode, 200);
+      expect(response.body, isEmpty);
+
+      await _finish(
+        proc,
+        requestOutput: endsWith('POST    [200] /'),
+      );
+
+      final stderrOutput = await proc.stderrStream().join('\n');
+
+      addTearDown(() {
+        final json = jsonDecode(stderrOutput) as Map<String, dynamic>;
+
+        expect(
+          json,
+          {
+            ...jsonDecode(body) as Map<String, dynamic>,
+            'datacontenttype': 'application/json; charset=utf-8',
+          },
+        );
+      });
     });
   });
 }

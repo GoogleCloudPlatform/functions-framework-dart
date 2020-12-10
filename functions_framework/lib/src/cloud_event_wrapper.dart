@@ -14,38 +14,143 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http_parser/http_parser.dart';
 import 'package:shelf/shelf.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import 'cloud_event.dart';
 
 typedef CloudEventHandler = FutureOr<void> Function(CloudEvent request);
 
 Handler wrapCloudEventHandler(CloudEventHandler handler) => (request) async {
-      final map = Map<String, dynamic>.fromEntries(request.headers.entries
-          .where((element) => element.key.startsWith('ce-'))
-          .map((e) => MapEntry(e.key.substring(3), e.value)));
+      CloudEvent event;
 
-      // TODO: if we're missing the needed headers, then...
-      // TODO: see if this is a structured message
-      // TODO: if not, throw a 4xx
-
-      final type = MediaType.parse(request.headers[_contentTypeHeader]);
-      if (type.mimeType == _jsonContentType) {
-        map['datacontenttype'] = type.toString();
-        map['data'] = jsonDecode(await request.readAsString()) as Object;
-      } else {
-        // TODO: not sure exactly what to do here...
-        throw UnimplementedError();
+      try {
+        event = _requiredBinaryHeader.every(request.headers.containsKey)
+            ? await _decodeBinary(request)
+            : await _decodeStuctured(request);
+      } on _BadRequestException catch (e, stack) {
+        // TODO: use this in middleware to properly log exception
+        stderr.writeln(e);
+        stderr.writeln(Chain.forTrace(stack));
+        return Response(
+          e.statusCode,
+          body: e.message,
+          // TODO: use this in middleware to properly log exception
+          context: {
+            'bad_request_exception': e,
+            'bad_request_exception_stack': stack,
+          },
+        );
       }
-
-      final event = CloudEvent.fromJson(map);
-
+      // TODO: Sholud we catch other errors here, too? Hrm...
       await handler(event);
 
       return Response.ok('');
     };
 
+Future<CloudEvent> _decodeStuctured(Request request) async {
+  final type = _mediaTypeFromRequest(request);
+
+  _mustBeJson(type);
+  var jsonObject = await _decodeJson(request) as Map<String, dynamic>;
+
+  if (!jsonObject.containsKey('datacontenttype')) {
+    jsonObject = {
+      ...jsonObject,
+      'datacontenttype': type.toString(),
+    };
+  }
+
+  return CloudEvent.fromJson(jsonObject);
+}
+
+Future<CloudEvent> _decodeBinary(Request request) async {
+  final map = Map<String, dynamic>.fromEntries(request.headers.entries
+      .where((element) => element.key.startsWith('ce-'))
+      .map((e) => MapEntry(e.key.substring(3), e.value)));
+
+  final type = _mediaTypeFromRequest(request);
+
+  _mustBeJson(type);
+  map['datacontenttype'] = type.toString();
+  map['data'] = await _decodeJson(request);
+
+  return CloudEvent.fromJson(map);
+}
+
+void _mustBeJson(MediaType type) {
+  if (type.mimeType != _jsonContentType) {
+    // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
+    throw _BadRequestException(
+      400,
+      'Unsupported encoding "${type.toString()}". '
+      'Only "$_jsonContentType" is supported.',
+    );
+  }
+}
+
+Future<Object> _decodeJson(Request request) async {
+  try {
+    final content = await request.readAsString();
+    final value = jsonDecode(content);
+    return value;
+  } on FormatException catch (e, stackTrace) {
+    // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
+    throw _BadRequestException(
+      400,
+      'Could not parse the request body as JSON.',
+      innerError: e,
+      innerStack: stackTrace,
+    );
+  }
+}
+
+MediaType _mediaTypeFromRequest(Request request) =>
+    MediaType.parse(request.headers[_contentTypeHeader]);
+
+const _requiredBinaryHeader = {
+  'ce-type',
+  'ce-specversion',
+  'ce-source',
+  'ce-id',
+};
+
 const _contentTypeHeader = 'Content-Type';
 const _jsonContentType = 'application/json';
+
+class _BadRequestException implements Exception {
+  final int statusCode;
+  final String message;
+  final Object innerError;
+  final StackTrace innerStack;
+
+  _BadRequestException(
+    this.statusCode,
+    this.message, {
+    this.innerError,
+    this.innerStack,
+  }) {
+    if (statusCode < 400 || statusCode > 499) {
+      throw ArgumentError.value(
+        statusCode,
+        'statusCode',
+        'Must be between 400 and 499',
+      );
+    }
+  }
+
+  @override
+  String toString() {
+    final buffer = StringBuffer('$message ($statusCode)');
+    if (innerError != null) {
+      buffer.write('\n$innerError');
+    }
+    if (innerStack != null) {
+      buffer.write('\n${Chain.forTrace(innerStack)}');
+    }
+    return buffer.toString();
+  }
+}
