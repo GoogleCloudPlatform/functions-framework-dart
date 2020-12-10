@@ -23,5 +23,5 @@ Future<void> main(List<String> args) async {
 }
 
 const _functions = <String, Handler>{
-  'function': function_library.function,
+  'handleGet': function_library.handleGet,
 };

@@ -17,3 +17,9 @@ import 'package:shelf/shelf.dart';
 
 @CloudFunction()
 Response function(Request request) => Response.ok('Hello, World!');
+
+// Overriding the default 'function' also works, but you will need
+// to ensure to set the FUNCTION_TARGET environment variable for the
+// process to 'handleGet' as well.
+//@CloudFunction()
+//Response handleGet(Request request) => Response.ok('Hello, World!');
