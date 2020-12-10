@@ -1,4 +1,4 @@
-# 0.2.0-dev
+# 0.2.0
 
 - **BREAKING** `CloudFunction` constructor paramaters `target` is now named and
   optional. If not specified, it defaults to the name of the annotated function.

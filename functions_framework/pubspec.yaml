@@ -1,5 +1,5 @@
 name: functions_framework
-version: 0.2.0-dev
+version: 0.2.0
 description: >-
   FaaS (Function as a service) framework for writing portable Dart functions
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
