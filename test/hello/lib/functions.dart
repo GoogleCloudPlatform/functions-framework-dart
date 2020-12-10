@@ -22,10 +22,11 @@ import 'package:shelf/shelf.dart';
 int _activeRequests = 0;
 int _maxActiveRequests = 0;
 int _requestCount = 0;
+
 final _watch = Stopwatch();
 
 @CloudFunction()
-Future<Response> handleGet(Request request) async {
+Future<Response> function(Request request) async {
   _watch.start();
   _requestCount++;
   _activeRequests++;
@@ -65,7 +66,7 @@ Future<Response> handleGet(Request request) async {
       };
 
       return Response.ok(
-        JsonUtf8Encoder('  ').convert(output),
+        _encoder.convert(output),
         headers: _jsonHeaders,
       );
     }
@@ -100,4 +101,8 @@ Future<Response> handleGet(Request request) async {
 
 final _helloWorldBytes = utf8.encode('Hello, World!');
 
-const _jsonHeaders = {'Content-Type': 'application/json'};
+const _contentTypeHeader = 'Content-Type';
+const _jsonContentType = 'application/json';
+const _jsonHeaders = {_contentTypeHeader: _jsonContentType};
+
+const _encoder = JsonEncoder.withIndent(' ');

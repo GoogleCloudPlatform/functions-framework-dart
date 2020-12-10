@@ -50,7 +50,7 @@ void main() {
     runFuture = runZoned(
       () => run(
         0,
-        handleGet,
+        function,
         completionSignal.future,
         cloudLoggingMiddleware(_projectId),
       ),
