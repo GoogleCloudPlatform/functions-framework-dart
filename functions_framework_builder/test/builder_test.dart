@@ -39,7 +39,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-const _functions = <String, Handler>{
+final _functions = <String, Handler>{
   'handleGet': function_library.handleGet,
 };
 ''',
@@ -57,15 +57,15 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-const _functions = <String, Handler>{
+final _functions = <String, Handler>{
   'some function': function_library.handleGet,
 };
 ''',
     );
   });
 
-  test('All valid function shapes are supported', () async {
-    final file = File('test/test_examples/all_valid_shapes.dart');
+  test('Valid shelf function shapes are supported', () async {
+    final file = File('test/test_examples/valid_shelf_handlers.dart');
 
     final lines = [
       'syncFunction',
@@ -82,7 +82,30 @@ const _functions = <String, Handler>{
       file.readAsStringSync(),
       '''
 $_outputHeader
-const _functions = <String, Handler>{
+final _functions = <String, Handler>{
+$lines
+};
+''',
+    );
+  });
+
+  test('Valid CloudEvent function shapes are supported', () async {
+    final file = File('test/test_examples/valid_cloud_event_handlers.dart');
+
+    final lines = [
+      'syncFunction',
+      'asyncFunction',
+      'futureOrFunction',
+      'optionalParam',
+      'objectParam',
+    ]
+        .map((e) => "  '$e': wrapCloudEventHandler(function_library.$e),")
+        .join('\n');
+    await _generateTest(
+      file.readAsStringSync(),
+      '''
+$_outputHeader
+final _functions = <String, Handler>{
 $lines
 };
 ''',
@@ -119,8 +142,7 @@ package:$_pkgName/functions.dart:8:10
     final onlyFunctionMatcher =
         startsWith('Only top-level, public functions are supported.');
     final notCompatibleMatcher = startsWith(
-      'Not compatible with package:shelf Handler '
-      '`FutureOr<Response> Function(Request)`.',
+      'Not compatible with a supported function shape:',
     );
     final invalidShapes = {
       'class AClass{}': onlyFunctionMatcher,

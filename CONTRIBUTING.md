@@ -45,3 +45,27 @@ formatting, and lint issues before you submit your code. These tests are also
 run automatically as continuous integration (CI) builds, but your pull requests
 won't get attention until these pass anyway, so addressing these early as part
 of presubmit is more expeditious as well as more professional.
+
+### Conformance tests
+
+We're just starting on passing conformance tests.
+
+First, sync and build this repository locally.
+
+https://github.com/GoogleCloudPlatform/functions-framework-conformance
+
+To run the tests locally:
+
+#### HTTP
+
+```console
+$ $FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-delay 3 -type=http -cmd="dart test/hello/bin/server.dart --target conformanceHttp"
+```
+
+#### Cloud events
+
+```console
+$ $FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-delay 3 -type=cloudevent -cmd="dart test/hello/bin/server.dart --target conformanceCloudEvent" --validate-mapping=false
+```
+
+This corespondes to the configuration in `.github/workflows/conformance.yml`.

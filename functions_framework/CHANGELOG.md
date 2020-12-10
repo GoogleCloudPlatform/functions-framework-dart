@@ -1,3 +1,10 @@
+# 0.2.1-dev
+
+- Added support for basic Cloud Events.
+  - Added `CloudEvent` type.
+  - Added `typedef CloudEventHandler` and `wrapCloudEventHandler` function.
+  - Added support for serving requests for Cloud Events using the binary format.
+
 # 0.2.0
 
 - **BREAKING** `CloudFunction` constructor paramaters `target` is now named and

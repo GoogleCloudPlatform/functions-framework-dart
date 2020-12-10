@@ -1,3 +1,7 @@
+# 0.2.1-dev
+
+- Added support for connecting functions that handle the `CloudEvent` type.
+
 # 0.2.0
 
 * **BREAKING** Function definitions now must be in `lib/functions.dart`.

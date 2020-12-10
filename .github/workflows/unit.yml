@@ -1,4 +1,4 @@
-# Created with package:mono_repo v3.4.0
+# Created with package:mono_repo v3.4.1
 name: Dart Unit CI
 on:
   push:
@@ -15,6 +15,60 @@ env:
 
 jobs:
   job_001:
+    name: "unit_test; Dart dev; PKG: functions_framework; `pub run test --run-skipped -t presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:functions_framework;commands:test_0"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:functions_framework
+            os:ubuntu-latest;pub-cache-hosted;dart:dev
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: dev
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - id: functions_framework_pub_upgrade
+        name: "functions_framework; pub upgrade --no-precompile"
+        working-directory: functions_framework
+        run: pub upgrade --no-precompile
+      - name: "functions_framework; pub run test --run-skipped -t presubmit-only"
+        if: "steps.functions_framework_pub_upgrade.conclusion == 'success'"
+        working-directory: functions_framework
+        run: pub run test --run-skipped -t presubmit-only
+  job_002:
+    name: "unit_test; Dart dev; PKG: test/hello; `pub run test --run-skipped -t presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:test/hello;commands:test_0"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:test/hello
+            os:ubuntu-latest;pub-cache-hosted;dart:dev
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: dev
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - id: test_hello_pub_upgrade
+        name: "test/hello; pub upgrade --no-precompile"
+        working-directory: test/hello
+        run: pub upgrade --no-precompile
+      - name: "test/hello; pub run test --run-skipped -t presubmit-only"
+        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
+        working-directory: test/hello
+        run: pub run test --run-skipped -t presubmit-only
+  job_003:
     name: "unit_test; Dart 2.10.0; PKG: functions_framework_builder; `pub run test`"
     runs-on: ubuntu-latest
     steps:
@@ -22,7 +76,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:functions_framework_builder;commands:test_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:functions_framework_builder;commands:test_1"
           restore-keys: |
             os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:functions_framework_builder
             os:ubuntu-latest;pub-cache-hosted;dart:2.10.0
@@ -42,7 +96,7 @@ jobs:
         if: "steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: pub run test
-  job_002:
+  job_004:
     name: "unit_test; Dart dev; PKG: functions_framework_builder; `pub run test`"
     runs-on: ubuntu-latest
     steps:
@@ -50,7 +104,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:functions_framework_builder;commands:test_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:functions_framework_builder;commands:test_1"
           restore-keys: |
             os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:functions_framework_builder
             os:ubuntu-latest;pub-cache-hosted;dart:dev
@@ -69,63 +123,8 @@ jobs:
         if: "steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: pub run test
-  job_003:
-    name: "unit_test; Dart 2.10.0; PKG: test/hello; `pub run test -x presubmit-only`"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2
-        with:
-          path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:test/hello;commands:test_1"
-          restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:test/hello
-            os:ubuntu-latest;pub-cache-hosted;dart:2.10.0
-            os:ubuntu-latest;pub-cache-hosted
-            os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
-        with:
-          release-channel: stable
-          version: "2.10.0"
-      - run: dart --version
-      - uses: actions/checkout@v2
-      - id: test_hello_pub_upgrade
-        name: "test/hello; pub upgrade --no-precompile"
-        working-directory: test/hello
-        run: pub upgrade --no-precompile
-      - name: "test/hello; pub run test -x presubmit-only"
-        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
-        working-directory: test/hello
-        run: pub run test -x presubmit-only
-  job_004:
-    name: "unit_test; Dart dev; PKG: test/hello; `pub run test -x presubmit-only`"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2
-        with:
-          path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:test/hello;commands:test_1"
-          restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:test/hello
-            os:ubuntu-latest;pub-cache-hosted;dart:dev
-            os:ubuntu-latest;pub-cache-hosted
-            os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
-        with:
-          release-channel: dev
-      - run: dart --version
-      - uses: actions/checkout@v2
-      - id: test_hello_pub_upgrade
-        name: "test/hello; pub upgrade --no-precompile"
-        working-directory: test/hello
-        run: pub upgrade --no-precompile
-      - name: "test/hello; pub run test -x presubmit-only"
-        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
-        working-directory: test/hello
-        run: pub run test -x presubmit-only
   job_005:
-    name: "unit_test; Dart 2.10.0; PKG: test/hello; `pub run test --run-skipped -t presubmit-only`"
+    name: "unit_test; Dart 2.10.0; PKG: test/hello; `pub run test -x presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -148,12 +147,12 @@ jobs:
         name: "test/hello; pub upgrade --no-precompile"
         working-directory: test/hello
         run: pub upgrade --no-precompile
-      - name: "test/hello; pub run test --run-skipped -t presubmit-only"
+      - name: "test/hello; pub run test -x presubmit-only"
         if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
-        run: pub run test --run-skipped -t presubmit-only
+        run: pub run test -x presubmit-only
   job_006:
-    name: "unit_test; Dart dev; PKG: test/hello; `pub run test --run-skipped -t presubmit-only`"
+    name: "unit_test; Dart dev; PKG: test/hello; `pub run test -x presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
@@ -175,11 +174,39 @@ jobs:
         name: "test/hello; pub upgrade --no-precompile"
         working-directory: test/hello
         run: pub upgrade --no-precompile
+      - name: "test/hello; pub run test -x presubmit-only"
+        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
+        working-directory: test/hello
+        run: pub run test -x presubmit-only
+  job_007:
+    name: "unit_test; Dart 2.10.0; PKG: test/hello; `pub run test --run-skipped -t presubmit-only`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@v2
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:test/hello;commands:test_0"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:test/hello
+            os:ubuntu-latest;pub-cache-hosted;dart:2.10.0
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: cedx/setup-dart@v2
+        with:
+          release-channel: stable
+          version: "2.10.0"
+      - run: dart --version
+      - uses: actions/checkout@v2
+      - id: test_hello_pub_upgrade
+        name: "test/hello; pub upgrade --no-precompile"
+        working-directory: test/hello
+        run: pub upgrade --no-precompile
       - name: "test/hello; pub run test --run-skipped -t presubmit-only"
         if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
         run: pub run test --run-skipped -t presubmit-only
-  job_007:
+  job_008:
     name: Notify failure
     runs-on: ubuntu-latest
     if: "(github.event_name == 'push' || github.event_name == 'schedule') && failure()"
@@ -197,3 +224,4 @@ jobs:
       - job_004
       - job_005
       - job_006
+      - job_007

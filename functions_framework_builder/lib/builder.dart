@@ -23,12 +23,14 @@
 library functions_framework_builder.builder;
 
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/nullability_suffix.dart';
-import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
+import 'package:dart_style/dart_style.dart';
 import 'package:functions_framework/functions_framework.dart';
 import 'package:path/path.dart' as path;
 import 'package:source_gen/source_gen.dart';
+
+import 'src/constants.dart';
+import 'src/supported_function_types.dart';
 
 Builder functionsFrameworkBuilder([BuilderOptions options]) =>
     const _FunctionsFrameworkBuilder();
@@ -48,16 +50,7 @@ class _FunctionsFrameworkBuilder implements Builder {
     final input = buildStep.inputId;
 
     final libraryElement = await buildStep.resolver.libraryFor(input);
-
-    final shelfHandlerFunctionType = await _shelfHandler(buildStep.resolver);
-    final shelfHandlerFunctionTypeStr =
-        shelfHandlerFunctionType.getDisplayString(withNullability: false);
-
-    bool shelfCompatible(FunctionElement func) =>
-        func.library.typeSystem.isSubtypeOf(
-          func.type,
-          shelfHandlerFunctionType,
-        );
+    final validator = await SupportedFunctionTypes.create(buildStep.resolver);
 
     for (var annotatedElement in _fromLibrary(libraryElement)) {
       final element = annotatedElement.element;
@@ -70,13 +63,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
       final function = element as FunctionElement;
 
-      if (!shelfCompatible(function)) {
-        throw InvalidGenerationSourceError(
-          'Not compatible with package:shelf Handler '
-          '`$shelfHandlerFunctionTypeStr`.',
-          element: element,
-        );
-      }
+      final invokeExpression = validator.validate(function);
 
       final targetReader = annotatedElement.annotation.read('target');
 
@@ -90,15 +77,10 @@ class _FunctionsFrameworkBuilder implements Builder {
         );
       }
 
-      entries[targetName] = function.name;
+      entries[targetName] = invokeExpression;
     }
 
-    // bin/server.dart
-    final serverDart = AssetId(
-      buildStep.inputId.package,
-      path.join('bin', 'server.dart'),
-    );
-    await buildStep.writeAsString(serverDart, '''
+    var output = '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
 //
@@ -117,31 +99,27 @@ class _FunctionsFrameworkBuilder implements Builder {
 import 'package:functions_framework/serve.dart';
 import 'package:shelf/shelf.dart';
 
-import '${input.uri}' as function_library;
+import '${input.uri}' as $functionsLibraryPrefix;
 
 Future<void> main(List<String> args) async {
   await serve(args, _functions);
 }
 
-const _functions = <String, Handler>{
-${entries.entries.map((e) => "  '${e.key}': function_library.${e.value},").join('\n')}
+final _functions = <String, Handler>{
+${entries.entries.map((e) => "  '${e.key}': ${e.value},").join('\n')}
 };
-''');
+''';
+
+    output = DartFormatter().format(output);
+
+    await buildStep.writeAsString(
+      AssetId(
+        buildStep.inputId.package,
+        path.join('bin', 'server.dart'),
+      ),
+      output,
+    );
   }
-}
-
-Future<FunctionType> _shelfHandler(Resolver resolver) async {
-  final shelfLib = await resolver.libraryFor(
-    AssetId.resolve('package:shelf/shelf.dart'),
-  );
-
-  final handlerTypeAlias =
-      shelfLib.exportNamespace.get('Handler') as FunctionTypeAliasElement;
-
-  return handlerTypeAlias.instantiate(
-    typeArguments: [],
-    nullabilitySuffix: NullabilitySuffix.none,
-  );
 }
 
 Iterable<AnnotatedElement> _fromLibrary(LibraryElement library) sync* {
