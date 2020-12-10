@@ -23,8 +23,6 @@ import 'package:source_gen/source_gen.dart';
 Builder functionsFrameworkBuilder([BuilderOptions options]) =>
     const _FunctionsFrameworkBuilder();
 
-const _checker = TypeChecker.fromRuntime(CloudFunction);
-
 class _FunctionsFrameworkBuilder implements Builder {
   const _FunctionsFrameworkBuilder();
 
@@ -39,25 +37,50 @@ class _FunctionsFrameworkBuilder implements Builder {
 
     final input = buildStep.inputId;
 
-    final element = await buildStep.resolver.libraryFor(input);
+    final libraryElement = await buildStep.resolver.libraryFor(input);
 
-    final reader = LibraryReader(element);
+    final shelfHandlerFunctionType = await _shelfHandler(buildStep.resolver);
+    final shelfHandlerFunctionTypeStr =
+        shelfHandlerFunctionType.getDisplayString(withNullability: false);
 
-    final handlerFunctionType = await _shelfHandler(buildStep.resolver);
+    bool shelfCompatible(FunctionElement func) =>
+        func.library.typeSystem.isSubtypeOf(
+          func.type,
+          shelfHandlerFunctionType,
+        );
 
-    for (var annotatedElement in reader.annotatedWithExact(_checker)) {
-      await _validateHandlerShape(
-          annotatedElement.element, handlerFunctionType);
-      final target = annotatedElement.annotation.read('target').stringValue;
-
-      if (entries.containsKey(target)) {
+    for (var annotatedElement in _fromLibrary(libraryElement)) {
+      final element = annotatedElement.element;
+      if (element is! FunctionElement || element.isPrivate) {
         throw InvalidGenerationSourceError(
-          'A function has already been annotated with target "$target".',
-          element: annotatedElement.element,
+          'Only top-level, public functions are supported.',
+          element: element,
         );
       }
 
-      entries[target] = annotatedElement.element.name;
+      final function = element as FunctionElement;
+
+      if (!shelfCompatible(function)) {
+        throw InvalidGenerationSourceError(
+          'Not compatible with package:shelf Handler '
+          '`$shelfHandlerFunctionTypeStr`.',
+          element: element,
+        );
+      }
+
+      final targetReader = annotatedElement.annotation.read('target');
+
+      final targetName =
+          targetReader.isNull ? function.name : targetReader.stringValue;
+
+      if (entries.containsKey(targetName)) {
+        throw InvalidGenerationSourceError(
+          'A function has already been annotated with target "$targetName".',
+          element: element,
+        );
+      }
+
+      entries[targetName] = function.name;
     }
 
     // bin/server.dart
@@ -101,28 +124,21 @@ Future<FunctionType> _shelfHandler(Resolver resolver) async {
   );
 }
 
-Future<void> _validateHandlerShape(
-  Element element,
-  FunctionType handlerFunctionType,
-) async {
-  if (element is! FunctionElement) {
-    throw InvalidGenerationSourceError(
-      'Only top-level functions are supported.',
-      element: element,
-    );
-  }
-  final func = element as FunctionElement;
+Iterable<AnnotatedElement> _fromLibrary(LibraryElement library) sync* {
+  for (var element in library.topLevelElements) {
+    final annotations = _checker.annotationsOf(element).toList();
 
-  final compatible = func.library.typeSystem.isSubtypeOf(
-    func.type,
-    handlerFunctionType,
-  );
-
-  if (!compatible) {
-    final str = handlerFunctionType.getDisplayString(withNullability: false);
-    throw InvalidGenerationSourceError(
-      'Not compatible with package:shelf Handler `$str`.',
-      element: element,
-    );
+    if (annotations.isEmpty) {
+      continue;
+    }
+    if (annotations.length > 1) {
+      throw InvalidGenerationSourceError(
+        'Cannot be annotated with `CloudFunction` more than once.',
+        element: element,
+      );
+    }
+    yield AnnotatedElement(ConstantReader(annotations.single), element);
   }
 }
+
+const _checker = TypeChecker.fromRuntime(CloudFunction);

@@ -30,7 +30,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
       '''
 $_outputHeader
 const _functions = <String, Handler>{
-  'function': function_library.handleGet,
+  'handleGet': function_library.handleGet,
 };
 ''',
     );
@@ -42,7 +42,7 @@ const _functions = <String, Handler>{
 import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
-@CloudFunction('some function')
+@CloudFunction(target: 'some function')
 Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
@@ -56,16 +56,24 @@ const _functions = <String, Handler>{
 
   test('All valid function shapes are supported', () async {
     final file = File('test/test_examples/all_valid_shapes.dart');
+
+    final lines = [
+      'syncFunction',
+      'asyncFunction',
+      'futureOrFunction',
+      'extraParam',
+      'optionalParam',
+      'objectParam',
+      'customResponse',
+      'customResponseAsync',
+      'customResponseFutureOr',
+    ].map((e) => "  '$e': function_library.$e,").join('\n');
     await _generateTest(
       file.readAsStringSync(),
       '''
 $_outputHeader
 const _functions = <String, Handler>{
-  'sync': function_library.handleGet,
-  'async': function_library.handleGet2,
-  'futureOr': function_library.handleGet3,
-  'extra params': function_library.handleGet4,
-  'optional positional': function_library.handleGet5,
+$lines
 };
 ''',
     );
@@ -78,10 +86,10 @@ import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
 @CloudFunction()
-Response handleGet(Request request) => Response.ok('Hello, World!');
+Response function(Request request) => Response.ok('Hello, World!');
 
-@CloudFunction()
-Response handleGet(Request request) => Response.ok('Hello, World!');
+@CloudFunction(target: 'function')
+Response function2(Request request) => Response.ok('Hello, World!');
 ''',
       isA<InvalidGenerationSourceError>().having(
         (e) => e.toString(),
@@ -90,7 +98,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 A function has already been annotated with target "function".
 package:$_pkgName/functions.dart:8:10
   ╷
-8 │ Response handleGet(Request request) => Response.ok('Hello, World!');
+8 │ Response function2(Request request) => Response.ok('Hello, World!');
   │          ^^^^^^^^^
   ╵''',
       ),
@@ -99,7 +107,7 @@ package:$_pkgName/functions.dart:8:10
 
   group('invalid function shapes are not allowed', () {
     final onlyFunctionMatcher =
-        startsWith('Only top-level functions are supported.');
+        startsWith('Only top-level, public functions are supported.');
     final notCompatibleMatcher = startsWith(
       'Not compatible with package:shelf Handler '
       '`FutureOr<Response> Function(Request)`.',
@@ -123,6 +131,13 @@ package:$_pkgName/functions.dart:8:10
       'Future<int> handleGet(Request request) => null;': notCompatibleMatcher,
       // Return type is wrong
       'FutureOr<int> handleGet(Request request) => null;': notCompatibleMatcher,
+      // Private functions do not work
+      'Response _function(Request request) => null;': onlyFunctionMatcher,
+      // Double-annotated functions are not allowed
+      '@CloudFunction() Response function(Request request) => null;':
+          startsWith(
+        'Cannot be annotated with `CloudFunction` more than once.',
+      ),
     };
 
     for (var shape in invalidShapes.entries) {

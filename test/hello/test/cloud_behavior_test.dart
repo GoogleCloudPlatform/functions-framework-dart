@@ -50,7 +50,7 @@ void main() {
     runFuture = runZoned(
       () => run(
         0,
-        handleGet,
+        function,
         completionSignal.future,
         cloudLoggingMiddleware(_projectId),
       ),
@@ -161,7 +161,7 @@ void main() {
         isA<String>(), // spec says this should be a String
       ),
     );
-    expect(sourceLocation, containsPair('function', 'handleGet'));
+    expect(sourceLocation, containsPair('function', 'function'));
 
     lines.clear();
   });
@@ -212,7 +212,7 @@ void main() {
         sourceLocation,
         containsPair(
           'function',
-          startsWith('handleGet'),
+          startsWith('function'),
         ),
       );
     }
