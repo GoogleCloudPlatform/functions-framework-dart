@@ -50,14 +50,22 @@ of presubmit is more expeditious as well as more professional.
 
 We're just starting on passing conformance tests.
 
-See https://github.com/GoogleCloudPlatform/functions-framework-conformance
+First, sync and build this repository locally.
 
-To run the HTTP conformance tests locally, sync and configure the repo above.
+https://github.com/GoogleCloudPlatform/functions-framework-conformance
 
-Then run:
+To run the tests locally:
+
+#### HTTP
 
 ```console
-$ $FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -cmd="dart test/hello/bin/main.dart --target conformance" -start-delay 3
+$ $FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-delay 3 -type=http -cmd="dart test/hello/bin/server.dart --target conformanceHttp"
+```
+
+#### Cloud events
+
+```console
+$ $FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-delay 3 -type=cloudevent -cmd="dart test/hello/bin/server.dart --target conformanceCloudEvent" --validate-mapping=false
 ```
 
 This corespondes to the configuration in `.github/workflows/conformance.yml`.
