@@ -22,7 +22,3 @@ dev_dependencies:
   package_config: ^1.9.3
   stream_transform: ^1.2.0
   test: ^1.15.7
-
-dependency_overrides:
-  functions_framework:
-    path: ../functions_framework
