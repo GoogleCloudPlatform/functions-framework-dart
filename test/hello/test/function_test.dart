@@ -14,220 +14,37 @@
 
 @Timeout(Duration(seconds: 3))
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart';
-import 'package:io/io.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
-const _defaultPort = '8080';
+import 'src/test_utils.dart';
+
+Future<TestProcess> _startServerTest() =>
+    startServerTest(expectedListeningPort: 0);
 
 void main() {
-  group('http function tests', () {
-    test('defaults', () async {
-      final proc = await _start();
-
-      final response = await get('http://localhost:$_defaultPort');
-      expect(response.statusCode, 200);
-      expect(response.body, 'Hello, World!');
-
-      await _finish(proc);
-    });
-
-    test('SIGINT also terminates the server', () async {
-      final proc = await _start();
-
-      final response = await get('http://localhost:$_defaultPort');
-      expect(response.statusCode, 200);
-      expect(response.body, 'Hello, World!');
-
-      await _finish(proc, signal: ProcessSignal.sigint);
-    });
-
-    test('good options', () async {
-      const port = '9000';
-      final proc = await _start(
-        port: port,
-        arguments: [
-          '--port',
-          port,
-          '--target',
-          'function',
-          '--signature-type',
-          'http'
-        ],
-        env: {
-          // make sure args have precedence over environment
-          'FUNCTION_TARGET': 'foo', // overridden by --target
-          'FUNCTION_SIGNATURE_TYPE':
-              'cloudevent', // overridden by --signature-type
-        },
-      );
-
-      final response = await get('http://localhost:$port');
-      expect(response.statusCode, 200);
-      expect(response.body, 'Hello, World!');
-
-      await _finish(proc);
-    });
-
-    group('environment', () {
-      test('good environment', () async {
-        const port = '8888';
-        final proc = await _start(port: port, env: {
-          'PORT': port,
-        });
-
-        final response = await get('http://localhost:$port');
-        expect(response.statusCode, 200);
-        expect(response.body, 'Hello, World!');
-
-        await _finish(proc);
-      });
-
-      test('bad FUNCTION_TARGET', () async {
-        final proc = await _start(shouldFail: true, env: {
-          'FUNCTION_TARGET': 'bob',
-        });
-
-        await expectLater(
-          proc.stderr,
-          emitsThrough(
-            'There is no handler configured for FUNCTION_TARGET `bob`.',
-          ),
-        );
-
-        await proc.shouldExit(ExitCode.usage.code);
-      });
-
-      test('bad FUNCTION_SIGNATURE_TYPE', () async {
-        final proc = await _start(shouldFail: true, env: {
-          'FUNCTION_SIGNATURE_TYPE': 'bob',
-        });
-
-        await expectLater(
-          proc.stderr,
-          emitsThrough(
-            'FUNCTION_SIGNATURE_TYPE environment variable "bob" is not a valid '
-            'option (must be "http" or "cloudevent")',
-          ),
-        );
-
-        await proc.shouldExit(ExitCode.usage.code);
-      });
-
-      test('bad PORT', () async {
-        final proc = await _start(shouldFail: true, env: {
-          'PORT': 'bob',
-        });
-
-        await expectLater(
-          proc.stderr,
-          emitsThrough(
-            'Bad value for environment variable "PORT" – "bob" – '
-            'Invalid radix-10 number.',
-          ),
-        );
-
-        await proc.shouldExit(ExitCode.usage.code);
-      });
-    });
-
-    group('command line', () {
-      test('unsupported option', () async {
-        final proc = await _start(
-          shouldFail: true,
-          arguments: [
-            '--bob',
-          ],
-        );
-
-        await expectLater(
-          proc.stderr,
-          emitsInOrder([
-            'Could not find an option named "bob".',
-            ...LineSplitter.split(_usage),
-          ]),
-        );
-
-        await proc.shouldExit(ExitCode.usage.code);
-      });
-
-      test('bad target', () async {
-        final proc = await _start(
-          shouldFail: true,
-          arguments: [
-            '--target',
-            'bob',
-          ],
-        );
-
-        await expectLater(
-          proc.stderr,
-          emitsThrough(
-            'There is no handler configured for FUNCTION_TARGET `bob`.',
-          ),
-        );
-
-        await proc.shouldExit(ExitCode.usage.code);
-      });
-
-      test('bad signature', () async {
-        final proc = await _start(
-          shouldFail: true,
-          arguments: ['--signature-type', 'foo'],
-        );
-
-        await expectLater(
-          proc.stderr,
-          emitsInOrder([
-            '"foo" is not an allowed value for option "signature-type".',
-            ...LineSplitter.split(_usage),
-          ]),
-        );
-
-        await proc.shouldExit(ExitCode.usage.code);
-      });
-
-      test('bad port', () async {
-        final proc = await _start(
-          shouldFail: true,
-          arguments: ['--port', 'foo'],
-        );
-
-        await expectLater(
-          proc.stderr,
-          emitsInOrder([
-            'Bad value for "port" – "foo" – Invalid radix-10 number.',
-            ...LineSplitter.split(_usage),
-          ]),
-        );
-
-        await proc.shouldExit(ExitCode.usage.code);
-      });
-    });
-  });
-
   group('not found assets', () {
     for (var item in const {'robots.txt', 'favicon.ico'}) {
       test('404 for $item', () async {
-        final proc = await _start();
+        final proc = await _startServerTest();
 
-        final response = await get('http://localhost:$_defaultPort/$item');
+        final response = await get('http://localhost:$autoPort/$item');
         expect(response.statusCode, 404);
         expect(response.body, 'Not found.');
 
-        await _finish(proc, requestOutput: endsWith('GET     [404] /$item'));
+        await finishServerTest(proc,
+            requestOutput: endsWith('GET     [404] /$item'));
       });
     }
   });
 
   group('special handlers', () {
     test('info', () async {
-      final proc = await _start();
+      final proc = await _startServerTest();
 
-      const requestUrl = 'http://localhost:$_defaultPort/info';
+      final requestUrl = 'http://localhost:$autoPort/info';
       final response = await get(requestUrl);
       expect(response.statusCode, 200);
       final responseBody = response.body;
@@ -236,21 +53,22 @@ void main() {
       expect(jsonBody, contains('headers'));
       expect(jsonBody, contains('environment'));
 
-      await _finish(proc, requestOutput: endsWith('GET     [200] /info'));
+      await finishServerTest(proc,
+          requestOutput: endsWith('GET     [200] /info'));
     });
 
     test('print', () async {
-      final proc = await _start();
+      final proc = await _startServerTest();
 
       const requestedPath = 'print/something/here';
-      const requestUrl = 'http://localhost:$_defaultPort/$requestedPath';
+      final requestUrl = 'http://localhost:$autoPort/$requestedPath';
       final response = await get(requestUrl);
       expect(response.statusCode, 200);
 
       const expectedOutput = 'Printing: $requestedPath';
       expect(response.body, expectedOutput);
 
-      await _finish(
+      await finishServerTest(
         proc,
         requestOutput: emitsInOrder(
           [
@@ -264,9 +82,9 @@ void main() {
     });
 
     test('error', () async {
-      final proc = await _start();
+      final proc = await _startServerTest();
 
-      final response = await get('http://localhost:$_defaultPort/error');
+      final response = await get('http://localhost:$autoPort/error');
       expect(response.statusCode, 500);
       expect(response.body, 'Internal Server Error');
 
@@ -279,13 +97,13 @@ void main() {
             'Exception: An error was forced by requesting "error"',
           ]));
 
-      await _finish(proc, requestOutput: isEmpty);
+      await finishServerTest(proc, requestOutput: isEmpty);
     });
 
     test('async error', () async {
-      final proc = await _start();
+      final proc = await _startServerTest();
 
-      final response = await get('http://localhost:$_defaultPort/error/async');
+      final response = await get('http://localhost:$autoPort/error/async');
       expect(response.statusCode, 500);
       expect(response.body, 'Internal Server Error');
 
@@ -304,188 +122,7 @@ void main() {
             startsWith('package:hello_world_function_test/functions.dart'),
           ]));
 
-      await _finish(proc, requestOutput: isEmpty);
-    });
-  });
-
-  group('cloudevent function tests', () {
-    // TODO: non-JSON body
-    // TODO: JSON-body, but not a Map
-    // TODO: JSON-body is a map, but wrong/missing keys/values
-    // TODO: invalid header value encoding (bad date time, for instance)
-    // TODO: proper error logging when hosted on cloud
-
-    test('binary-mode message', () async {
-      final proc = await _start(arguments: [
-        '--target',
-        'basicCloudEventHandler',
-        '--signature-type',
-        'cloudevent',
-      ]);
-
-      const requestUrl = 'http://localhost:$_defaultPort/';
-
-      const body = r'''
-{
- "subscription": "projects/my-project/subscriptions/my-subscription",
- "message": {
-   "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-   "attributes": {
-     "attr1":"attr1-value"
-   },
-   "data": "dGVzdCBtZXNzYWdlIDM="
- }
-}''';
-
-      final response = await post(
-        requestUrl,
-        body: body,
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-          'ce-specversion': '1.0',
-          'ce-type': 'google.cloud.pubsub.topic.publish',
-          'ce-time': '2020-09-05T03:56:24Z',
-          'ce-id': '1234-1234-1234',
-          'ce-source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
-        },
-      );
-      expect(response.statusCode, 200);
-      expect(response.body, isEmpty);
-
-      await _finish(
-        proc,
-        requestOutput: endsWith('POST    [200] /'),
-      );
-
-      final stderrOutput = await proc.stderrStream().join('\n');
-
-      final json = jsonDecode(stderrOutput) as Map<String, dynamic>;
-
-      expect(
-        json,
-        {
-          'id': '1234-1234-1234',
-          'specversion': '1.0',
-          'type': 'google.cloud.pubsub.topic.publish',
-          'datacontenttype': 'application/json; charset=utf-8',
-          'time': '2020-09-05T03:56:24.000Z',
-          'source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
-          'data': jsonDecode(body),
-        },
-      );
-    });
-
-    test('structured-mode message', () async {
-      final proc = await _start(arguments: [
-        '--target',
-        'basicCloudEventHandler',
-        '--signature-type',
-        'cloudevent',
-      ]);
-
-      const requestUrl = 'http://localhost:$_defaultPort/';
-
-      const body = r'''
-{
-  "specversion": "1.0",
-  "type": "google.cloud.pubsub.topic.publish",
-  "time": "2020-09-05T03:56:24.000Z",
-  "id": "1234-1234-1234",
-  "data": {
-    "subscription": "projects/my-project/subscriptions/my-subscription",
-    "message": {
-      "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-      "attributes": {
-        "attr1":"attr1-value"
-      },
-      "data": "dGVzdCBtZXNzYWdlIDM="
-    }
-  }
-}''';
-
-      final response = await post(
-        requestUrl,
-        body: body,
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-      );
-      expect(response.statusCode, 200);
-      expect(response.body, isEmpty);
-
-      await _finish(
-        proc,
-        requestOutput: endsWith('POST    [200] /'),
-      );
-
-      final stderrOutput = await proc.stderrStream().join('\n');
-
-      addTearDown(() {
-        final json = jsonDecode(stderrOutput) as Map<String, dynamic>;
-
-        expect(
-          json,
-          {
-            ...jsonDecode(body) as Map<String, dynamic>,
-            'datacontenttype': 'application/json; charset=utf-8',
-          },
-        );
-      });
+      await finishServerTest(proc, requestOutput: isEmpty);
     });
   });
 }
-
-Future<TestProcess> _start({
-  bool shouldFail = false,
-  String port = _defaultPort,
-  Map<String, String> env,
-  Iterable<String> arguments = const <String>[],
-}) async {
-  final args = [
-    'bin/server.dart',
-    ...arguments,
-  ];
-  final proc = await TestProcess.start('dart', args, environment: env);
-
-  if (!shouldFail) {
-    await expectLater(
-      proc.stdout,
-      emitsThrough('Listening on :$port'),
-    );
-  }
-
-  return proc;
-}
-
-Future<void> _finish(
-  TestProcess proc, {
-  ProcessSignal signal = ProcessSignal.sigterm,
-  Object requestOutput,
-}) async {
-  requestOutput ??= endsWith('GET     [200] /');
-  await expectLater(
-    proc.stdout,
-    requestOutput is StreamMatcher
-        ? requestOutput
-        : emitsThrough(requestOutput),
-  );
-  proc.signal(signal);
-  await proc.shouldExit(0);
-  await expectLater(
-    proc.stdout,
-    emitsThrough('Received signal $signal - closing'),
-  );
-}
-
-const _usage = r'''
---port              The port on which the Functions Framework listens for
-                    requests.
-                    Overrides the PORT environment variable.
---target            The name of the exported function to be invoked in response
-                    to requests.
-                    Overrides the FUNCTION_TARGET environment variable.
---signature-type    The signature used when writing your function. Controls
-                    unmarshalling rules and determines which arguments are used
-                    to invoke your function.
-                    Overrides the FUNCTION_SIGNATURE_TYPE environment variable.
-                    [http, cloudevent]''';
