@@ -28,7 +28,7 @@ const _functionTypeOpt = 'signature-type';
 
 enum FunctionType {
   http,
-  cloudEvent,
+  cloudevent,
 }
 
 class FunctionConfig {
@@ -140,7 +140,7 @@ FunctionType _parseFunctionType(String type) {
     case 'http':
       return FunctionType.http;
     case 'cloudevent':
-      return FunctionType.cloudEvent;
+      return FunctionType.cloudevent;
     default:
       throw BadConfigurationException(
         'FUNCTION_SIGNATURE_TYPE environment variable "$type" is not a valid '

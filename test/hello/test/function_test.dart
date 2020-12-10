@@ -364,4 +364,4 @@ const _usage = r'''
                     unmarshalling rules and determines which arguments are used
                     to invoke your function.
                     Overrides the FUNCTION_SIGNATURE_TYPE environment variable.
-                    [http, cloudEvent]''';
+                    [http, cloudevent]''';
