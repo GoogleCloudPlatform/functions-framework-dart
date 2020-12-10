@@ -22,11 +22,11 @@ const defaultTimeout = Timeout(Duration(seconds: 3));
 
 void main() {
   test('defaults', () async {
-    final proc = await TestProcess.start('dart', ['bin/main.dart']);
+    final proc = await TestProcess.start('dart', ['bin/server.dart']);
 
     await expectLater(
       proc.stdout,
-      emitsThrough('App listening on :8080'),
+      emitsThrough('Listening on :8080'),
     );
 
     final response = await get('http://localhost:8080');
@@ -43,7 +43,7 @@ void main() {
 
     await expectLater(
       proc.stdout,
-      emitsThrough('Got signal SIGTERM - closing'),
+      emitsThrough('Received signal SIGTERM - closing'),
     );
   }, timeout: defaultTimeout);
 }
