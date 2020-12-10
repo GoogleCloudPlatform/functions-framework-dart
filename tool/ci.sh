@@ -71,16 +71,16 @@ for PKG in ${PKGS}; do
         dartfmt -n --set-exit-if-changed . || EXIT_CODE=$?
         ;;
       test_0)
+        echo 'pub run test -x presubmit-only'
+        pub run test -x presubmit-only || EXIT_CODE=$?
+        ;;
+      test_1)
         echo 'pub run test --run-skipped -t presubmit-only'
         pub run test --run-skipped -t presubmit-only || EXIT_CODE=$?
         ;;
-      test_1)
+      test_2)
         echo 'pub run test'
         pub run test || EXIT_CODE=$?
-        ;;
-      test_2)
-        echo 'pub run test -x presubmit-only'
-        pub run test -x presubmit-only || EXIT_CODE=$?
         ;;
       *)
         echo -e "\033[31mUnknown TASK '${TASK}' - TERMINATING JOB\033[0m"
