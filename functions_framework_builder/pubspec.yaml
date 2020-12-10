@@ -1,5 +1,5 @@
 name: functions_framework_builder
-version: 0.2.0-dev
+version: 0.2.0
 description: Builder for package:functions_framework
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
@@ -9,9 +9,8 @@ environment:
 dependencies:
   analyzer: ^0.40.6
   build: ^1.3.0
-  # Because this package has a build.yaml file
   build_config: ^0.4.3
-  functions_framework: ^0.1.0
+  functions_framework: ^0.2.0
   glob: ^1.2.0
   meta: ^1.2.4
   path: ^1.7.0
