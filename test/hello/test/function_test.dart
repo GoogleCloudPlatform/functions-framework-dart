@@ -308,7 +308,65 @@ void main() {
     });
   });
 
-  group('cloudevent function tests', () {});
+  group('cloudevent function tests', () {
+    test('binary-mode message', () async {
+      final proc = await _start(arguments: [
+        '--target',
+        'basicCloudEventHandler',
+        '--signature-type',
+        'cloudevent',
+      ]);
+
+      const requestUrl = 'http://localhost:$_defaultPort/';
+
+      const body = r'''
+{
+ "subscription": "projects/my-project/subscriptions/my-subscription",
+ "message": {
+   "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
+   "attributes": {
+     "attr1":"attr1-value"
+   },
+   "data": "dGVzdCBtZXNzYWdlIDM="
+ }
+}''';
+
+      final response = await post(
+        requestUrl,
+        body: body,
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'ce-specversion': '1.0',
+          'ce-type': 'google.cloud.pubsub.topic.publish',
+          'ce-time': '2020-09-05T03:56:24Z',
+          'ce-id': '1234-1234-1234',
+        },
+      );
+      expect(response.statusCode, 200);
+      expect(response.body, isEmpty);
+
+      await _finish(
+        proc,
+        requestOutput: endsWith('POST    [200] /'),
+      );
+
+      final stderrOutput = await proc.stderrStream().join('\n');
+
+      final json = jsonDecode(stderrOutput) as Map<String, dynamic>;
+
+      expect(
+        json,
+        {
+          'id': '1234-1234-1234',
+          'specversion': '1.0',
+          'type': 'google.cloud.pubsub.topic.publish',
+          'datacontenttype': 'application/json; charset=utf-8',
+          'time': '2020-09-05T03:56:24.000Z',
+          'data': jsonDecode(body),
+        },
+      );
+    });
+  });
 }
 
 Future<TestProcess> _start({

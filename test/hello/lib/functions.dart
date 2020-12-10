@@ -101,6 +101,11 @@ Future<Response> function(Request request) async {
 }
 
 @CloudFunction()
+void basicCloudEventHandler(CloudEvent event) {
+  stderr.writeln(_encoder.convert(event));
+}
+
+@CloudFunction()
 Future<Response> conformanceHttp(Request request) async {
   final content = await request.readAsString();
 

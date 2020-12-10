@@ -24,6 +24,8 @@ Future<void> main(List<String> args) async {
 
 final _functions = <String, Handler>{
   'function': function_library.function,
+  'basicCloudEventHandler':
+      wrapCloudEventHandler(function_library.basicCloudEventHandler),
   'conformanceHttp': function_library.conformanceHttp,
   'conformanceCloudEvent':
       wrapCloudEventHandler(function_library.conformanceCloudEvent),
