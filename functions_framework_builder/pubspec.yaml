@@ -11,6 +11,7 @@ dependencies:
   build: ^1.3.0
   build_config: ^0.4.3
   dart_style: ^1.3.10
+  # TODO: put back version tight version constraint before publish
   functions_framework: any
   glob: ^1.2.0
   meta: ^1.2.4

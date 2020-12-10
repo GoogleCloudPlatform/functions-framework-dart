@@ -1,6 +1,6 @@
 # 0.2.1-dev
 
-- many things...
+- Added support for connecting functions that handle the `CloudEvent` type.
 
 # 0.2.0
 
