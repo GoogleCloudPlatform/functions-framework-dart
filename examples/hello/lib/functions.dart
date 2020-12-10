@@ -12,13 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@Tags(['presubmit-only'])
-import 'package:build_verify/build_verify.dart';
-import 'package:test/test.dart';
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
 
-void main() {
-  test(
-    'ensure_build',
-    () => expectBuildClean(packageRelativeDirectory: 'test/hello'),
-  );
-}
+@CloudFunction()
+Response function(Request request) => Response.ok('Hello, World!');

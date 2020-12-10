@@ -1,6 +1,16 @@
-// Copyright (c) 2020, the Dart project authors.
-// Please see the AUTHORS file or details. Use of this source code is
-// governed by a BSD-style license that can be found in the LICENSE file.
+// Copyright 2021 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import 'dart:io';
 
@@ -12,11 +22,11 @@ const defaultTimeout = Timeout(Duration(seconds: 3));
 
 void main() {
   test('defaults', () async {
-    final proc = await TestProcess.start('dart', ['bin/main.dart']);
+    final proc = await TestProcess.start('dart', ['bin/server.dart']);
 
     await expectLater(
       proc.stdout,
-      emitsThrough('App listening on :8080'),
+      emitsThrough('Listening on :8080'),
     );
 
     final response = await get('http://localhost:8080');
@@ -33,7 +43,7 @@ void main() {
 
     await expectLater(
       proc.stdout,
-      emitsThrough('Got signal SIGTERM - closing'),
+      emitsThrough('Received signal SIGTERM - closing'),
     );
   }, timeout: defaultTimeout);
 }

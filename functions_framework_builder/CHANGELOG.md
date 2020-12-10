@@ -1,4 +1,4 @@
-# 0.2.0-dev
+# 0.2.0
 
 * **BREAKING** Function definitions now must be in `lib/functions.dart`.
 * **BREAKING** Generated server binary is now `bin/server.dart` instead of

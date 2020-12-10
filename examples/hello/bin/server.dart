@@ -1,3 +1,4 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@Tags(['presubmit-only'])
-import 'package:build_verify/build_verify.dart';
-import 'package:test/test.dart';
+import 'package:functions_framework/serve.dart';
+import 'package:shelf/shelf.dart';
 
-void main() {
-  test(
-    'ensure_build',
-    () => expectBuildClean(packageRelativeDirectory: 'test/hello'),
-  );
+import 'package:hello_world_function/functions.dart' as function_library;
+
+Future<void> main(List<String> args) async {
+  await serve(args, _functions);
 }
+
+const _functions = <String, Handler>{
+  'function': function_library.function,
+};
