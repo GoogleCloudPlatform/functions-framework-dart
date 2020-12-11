@@ -279,8 +279,12 @@ Future<String> _makeBadRequest(
 ) async {
   final proc = await _hostBasicEventHandler();
   final response = await _makeRequest(body, headers);
-  expect(response.statusCode, 400);
-  expect(response.body, 'Could not decode the request as a $messageType.');
+  expect(response.statusCode, 400, reason: 'response.statusCode');
+  expect(
+    response.body,
+    'Bad request. Could not decode the request as a $messageType.',
+    reason: 'response.body',
+  );
 
   await finishServerTest(
     proc,

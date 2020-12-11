@@ -14,13 +14,49 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:shelf/shelf.dart';
 import 'package:stack_trace/stack_trace.dart';
 
+import 'bad_request_exception.dart';
 import 'constants.dart';
+import 'log_severity.dart';
 
-/// Return [Middleware] that logs errors using Google Cloud structured logs.
+Middleware createLoggingMiddleware(String projectId) =>
+    projectId == null ? _logSimple : cloudLoggingMiddleware(projectId);
+
+/// Logging middleware that "does the right thing" when not hosted on
+/// Google Cloud.
+Middleware get _logSimple => const Pipeline()
+    .addMiddleware(logRequests())
+    .addMiddleware(_handleBadRequest)
+    .middleware;
+
+/// Wraps [innerHandler], but catches any errors of type [BadRequestException].
+///
+/// Error details are written to [stderr] and a corresponding error [Response]
+/// is returned.
+Handler _handleBadRequest(Handler innerHandler) => (request) async {
+      try {
+        final response = await innerHandler(request);
+        return response;
+      } on BadRequestException catch (e) {
+        stderr.writeln(e);
+        return _fromBadRequestException(e);
+      }
+    };
+
+Response _fromBadRequestException(BadRequestException e) => Response(
+      e.statusCode,
+      body: 'Bad request. ${e.message}',
+      context: {
+        'bad_request_exception': e,
+      },
+    );
+
+/// Return [Middleware] that logs errors using Google Cloud structured logs and
+/// returns the correct response.
 Middleware cloudLoggingMiddleware(String projectid) {
   Handler hostedLoggingMiddleware(Handler innerHandler) => (request) async {
         // Add log correlation to nest all log messages beneath request log in
@@ -29,6 +65,43 @@ Middleware cloudLoggingMiddleware(String projectid) {
 
         String traceValue() =>
             'projects/$projectid/traces/${traceHeader.split('/')[0]}';
+
+        String createLogEntry(
+          Object error,
+          StackTrace stackTrace,
+          LogSeverity logSeverity, {
+          bool Function(Frame) predicate,
+        }) {
+          assert(error != null);
+          // Collect and format error information as described here
+          // https://cloud.google.com/functions/docs/monitoring/logging#writing_structured_logs
+
+          final chain = stackTrace == null
+              ? Chain.current()
+              : Chain.forTrace(stackTrace).foldFrames(
+                  predicate ??
+                      (f) =>
+                          f.package == 'functions_framework' ||
+                          f.package == 'shelf',
+                  terse: true,
+                );
+
+          final stackFrame = _frameFromChain(chain);
+
+          // https://cloud.google.com/logging/docs/agent/configuration#special-fields
+          final logContent = {
+            'message': '$error\n$chain'.trim(),
+            'severity': logSeverity,
+            // 'logging.googleapis.com/labels': { }
+            if (traceHeader != null)
+              'logging.googleapis.com/trace': traceValue(),
+            if (stackFrame != null)
+              'logging.googleapis.com/sourceLocation':
+                  _sourceLocation(stackFrame),
+          };
+
+          return jsonEncode(logContent);
+        }
 
         final completer = Completer<Response>.sync();
 
@@ -40,43 +113,39 @@ Middleware cloudLoggingMiddleware(String projectid) {
                 completer.completeError(error, stackTrace);
               }
 
-              // Collect and format error information as described here
-              // https://cloud.google.com/functions/docs/monitoring/logging#writing_structured_logs
-
-              final chain = stackTrace == null
-                  ? Chain.current()
-                  : Chain.forTrace(stackTrace).foldFrames(
-                      (f) =>
-                          f.package == 'functions_framework' ||
-                          f.package == 'shelf',
-                      terse: true,
+              final logContentString = error is BadRequestException
+                  ? createLogEntry(
+                      'Bad request. ${error.message}',
+                      error.innerStack ?? stackTrace,
+                      LogSeverity.debug,
+                      // Since the error should have been raised within the
+                      // framework, we want to see the stack within
+                      // functions_framework
+                      predicate: (f) => f.package == 'shelf',
+                    )
+                  : createLogEntry(
+                      error,
+                      stackTrace,
+                      LogSeverity.error,
                     );
 
-              final stackFrame = _frameFromChain(chain);
-
-              // https://cloud.google.com/logging/docs/agent/configuration#special-fields
-              final logContent = {
-                'message': '$error\n$chain'.trim(),
-                'severity': 'ERROR',
-                // 'logging.googleapis.com/labels': { }
-                if (traceHeader != null)
-                  'logging.googleapis.com/trace': traceValue(),
-                if (stackFrame != null)
-                  'logging.googleapis.com/sourceLocation':
-                      _sourceLocation(stackFrame),
-              };
-
               // Serialize to a JSON string and output.
-              parent.print(self, jsonEncode(logContent));
+              parent.print(self, logContentString);
 
-              if (!completer.isCompleted) {
-                completer.complete(Response.internalServerError());
+              if (completer.isCompleted) {
+                return;
               }
+
+              final response = error is BadRequestException
+                  ? _fromBadRequestException(error)
+                  : Response.internalServerError();
+
+              completer.complete(response);
             },
             print: (self, parent, zone, line) {
               final logContent = {
                 'message': line,
-                'severity': 'INFO',
+                'severity': LogSeverity.info,
                 // 'logging.googleapis.com/labels': { }
                 if (traceHeader != null)
                   'logging.googleapis.com/trace': traceValue(),
@@ -109,7 +178,13 @@ Frame _frameFromChain(Chain chain) {
   final trace = chain.traces.first;
   if (trace.frames.isEmpty) return null;
 
-  return trace.frames.first;
+  // Try to exclude frames in `package:json_annotation`
+  // These are likely the checked-yaml logic, which isn't helpful for debugging
+  final frame = trace.frames.firstWhere(
+      (element) => element.package != 'json_annotation',
+      orElse: () => null);
+
+  return frame ?? trace.frames.first;
 }
 
 // https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#LogEntrySourceLocation

@@ -114,7 +114,9 @@ void main() {
             'GET /error/async',
             'Error thrown by handler.',
             'Exception: An error was forced by requesting "error/async"',
-            startsWith('package:'),
+            // Need the `mayEmitMultiple` here because Dart 2.10 and Dart 2.12
+            // behave differently
+            mayEmitMultiple(startsWith('package:')),
             '',
             startsWith('ERROR -'),
             'Asynchronous error',
