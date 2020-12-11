@@ -14,38 +14,20 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http_parser/http_parser.dart';
 import 'package:shelf/shelf.dart';
-import 'package:stack_trace/stack_trace.dart';
 
+import 'bad_request_exception.dart';
 import 'cloud_event.dart';
 
 typedef CloudEventHandler = FutureOr<void> Function(CloudEvent request);
 
 Handler wrapCloudEventFunction(CloudEventHandler handler) => (request) async {
-      CloudEvent event;
+      final event = _requiredBinaryHeader.every(request.headers.containsKey)
+          ? await _decodeBinary(request)
+          : await _decodeStuctured(request);
 
-      try {
-        event = _requiredBinaryHeader.every(request.headers.containsKey)
-            ? await _decodeBinary(request)
-            : await _decodeStuctured(request);
-      } on _BadRequestException catch (e, stack) {
-        // TODO: use this in middleware to properly log exception
-        stderr.writeln(e);
-        stderr.writeln(Chain.forTrace(stack));
-        return Response(
-          e.statusCode,
-          body: e.message,
-          // TODO: use this in middleware to properly log exception
-          context: {
-            'bad_request_exception': e,
-            'bad_request_exception_stack': stack,
-          },
-        );
-      }
-      // TODO: Sholud we catch other errors here, too? Hrm...
       await handler(event);
 
       return Response.ok('');
@@ -88,7 +70,7 @@ CloudEvent _decodeValidCloudEvent(
   try {
     return CloudEvent.fromJson(map);
   } catch (e, stackTrace) {
-    throw _BadRequestException(
+    throw BadRequestException(
       400,
       'Could not decode the request as a $messageType.',
       innerError: e,
@@ -100,7 +82,7 @@ CloudEvent _decodeValidCloudEvent(
 void _mustBeJson(MediaType type) {
   if (type.mimeType != _jsonContentType) {
     // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
-    throw _BadRequestException(
+    throw BadRequestException(
       400,
       'Unsupported encoding "${type.toString()}". '
       'Only "$_jsonContentType" is supported.',
@@ -109,13 +91,13 @@ void _mustBeJson(MediaType type) {
 }
 
 Future<Object> _decodeJson(Request request) async {
+  final content = await request.readAsString();
   try {
-    final content = await request.readAsString();
     final value = jsonDecode(content);
     return value;
   } on FormatException catch (e, stackTrace) {
     // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
-    throw _BadRequestException(
+    throw BadRequestException(
       400,
       'Could not parse the request body as JSON.',
       innerError: e,
@@ -124,8 +106,22 @@ Future<Object> _decodeJson(Request request) async {
   }
 }
 
-MediaType _mediaTypeFromRequest(Request request) =>
-    MediaType.parse(request.headers[_contentTypeHeader]);
+MediaType _mediaTypeFromRequest(Request request) {
+  final contentType = request.headers[_contentTypeHeader];
+  if (contentType == null) {
+    throw BadRequestException(400, '$_contentTypeHeader header is required.');
+  }
+  try {
+    return MediaType.parse(request.headers[_contentTypeHeader]);
+  } catch (e, stack) {
+    throw BadRequestException(
+      400,
+      'Colud not parse $_contentTypeHeader header.',
+      innerError: e,
+      innerStack: stack,
+    );
+  }
+}
 
 const _requiredBinaryHeader = {
   'ce-type',
@@ -136,37 +132,3 @@ const _requiredBinaryHeader = {
 
 const _contentTypeHeader = 'Content-Type';
 const _jsonContentType = 'application/json';
-
-class _BadRequestException implements Exception {
-  final int statusCode;
-  final String message;
-  final Object innerError;
-  final StackTrace innerStack;
-
-  _BadRequestException(
-    this.statusCode,
-    this.message, {
-    this.innerError,
-    this.innerStack,
-  }) {
-    if (statusCode < 400 || statusCode > 499) {
-      throw ArgumentError.value(
-        statusCode,
-        'statusCode',
-        'Must be between 400 and 499',
-      );
-    }
-  }
-
-  @override
-  String toString() {
-    final buffer = StringBuffer('$message ($statusCode)');
-    if (innerError != null) {
-      buffer.write('\n$innerError');
-    }
-    if (innerStack != null) {
-      buffer.write('\n${Chain.forTrace(innerStack)}');
-    }
-    return buffer.toString();
-  }
-}

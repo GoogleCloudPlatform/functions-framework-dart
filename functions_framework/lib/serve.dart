@@ -17,7 +17,6 @@ import 'dart:io';
 
 import 'package:io/ansi.dart';
 import 'package:io/io.dart';
-import 'package:shelf/shelf.dart';
 
 import 'src/bad_configuration.dart';
 import 'src/cloud_metadata.dart';
@@ -75,8 +74,7 @@ Future<void> _serve(List<String> args, Set<FunctionEndpoint> functions) async {
   }
 
   final projectId = await CloudMetadata.projectId();
-  final loggingMiddleware =
-      projectId == null ? logRequests() : cloudLoggingMiddleware(projectId);
+  final loggingMiddleware = createLoggingMiddleware(projectId);
 
   final completer = Completer<bool>.sync();
 
