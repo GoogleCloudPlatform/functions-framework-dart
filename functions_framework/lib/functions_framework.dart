@@ -12,6 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/cloud_event.dart';
+export 'src/cloud_event.dart' show CloudEvent;
 export 'src/cloud_event_wrapper.dart' show CloudEventHandler;
-export 'src/cloud_function.dart';
+export 'src/cloud_function.dart' show CloudFunction;
