@@ -17,13 +17,16 @@ import 'package:meta/meta.dart';
 
 part 'cloud_event.g.dart';
 
-@JsonSerializable(includeIfNull: false)
+@JsonSerializable(includeIfNull: false, checked: true)
 class CloudEvent {
+  @JsonKey(required: true)
   final String id;
+  @JsonKey(required: true)
   final Uri source;
 
-  @JsonKey(name: 'specversion')
+  @JsonKey(name: 'specversion', required: true)
   final String specVersion;
+  @JsonKey(required: true)
   final String type;
 
   @JsonKey(name: 'datacontenttype')
