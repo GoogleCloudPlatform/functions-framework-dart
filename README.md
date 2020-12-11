@@ -1,8 +1,12 @@
 # Functions Framework for Dart
 
-> DISCLAIMER: this is not ready for production, doen't support
-> [cloudevents](https://github.com/googleapis/google-cloudevents) yet, and
-> doesn't have tests yet for [Functions Framework Conformance](https://github.com/GoogleCloudPlatform/functions-framework-conformance).
+> DISCLAIMER: This is not ready for production. Expect breaking changes.
+> We're sharing our progress with the developer community and appreciate
+> your feedback. Feel free to start a
+> [discussion](https://github.com/GoogleCloudPlatform/functions-framework-dart/discussions)
+> to share thoughts or open
+> [issues](https://github.com/GoogleCloudPlatform/functions-framework-dart/issues)
+> for bugs.
 
 |Functions Framework|Unit Tests|Lint Test|Conformance Tests|
 |---|---|---|---|
@@ -52,14 +56,17 @@ See the [Hello, World!](examples/hello/lib/app.dart) demo in the
     [CloudEvents](https://cloudevents.io/) spec
 *   Portable between serverless platforms
 
-## Quickstart: Hello, World on your local machine
+## Quickstart
+
+"Hello, World" on your local machine.
 
 ```shell
+$ cd examples/hello
 $ docker build -t app .
 ...
 
 $ docker run -it -p 8080:8080 --name demo app
-App listening on :8080
+Listening on :8080
 ```
 
 In another terminal...
@@ -94,3 +101,5 @@ BSD 3-Clause License. See [`LICENSE`](LICENSE) for details.
 <!-- Conformance Test links -->
 [ff_dart_conformance_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Conformance%20CI/badge.svg?branch=main
 [ff_dart_conformance_link]:  https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Conformance+CI"+branch%3Amain
+
+
