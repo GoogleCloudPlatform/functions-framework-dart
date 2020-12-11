@@ -1,9 +1,17 @@
 # 0.3.0-dev
 
-- Added support for basic Cloud Events.
-  - Added `CloudEvent` type.
-  - Added `typedef CloudEventHandler` and `wrapCloudEventHandler` function.
-  - Added support for serving requests for Cloud Events using the binary format.
+- Added support for defining and hosting Cloud Events.
+
+- `functions_framework.dart`
+
+  - Added `typedef CloudEventHandler`
+  - Added `CloudEvent` class.
+
+- `serve.dart`
+
+  - Added `FunctionEndpoint` class.
+  - **BREAKING** The signature for `serve is now:`<br>
+    `Future<void> serve(List<String> args, Set<FunctionEndpoint> functions)`
 
 # 0.2.0
 
@@ -17,5 +25,5 @@
 # 0.1.0 - 2020-11-23
 
 This is a preview release of the Functions Framework for Dart to demonstrate
-http functions support only (cloudevent support is not yet implemented). This 
+http functions support only (cloudevent support is not yet implemented). This
 is a work in progress and currently does not pass conformance testing.
