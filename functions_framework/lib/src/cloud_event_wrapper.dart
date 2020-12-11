@@ -64,7 +64,7 @@ Future<CloudEvent> _decodeStuctured(Request request) async {
     };
   }
 
-  return CloudEvent.fromJson(jsonObject);
+  return _decodeValidCloudEvent(jsonObject, 'structured-mode message');
 }
 
 Future<CloudEvent> _decodeBinary(Request request) async {
@@ -78,7 +78,23 @@ Future<CloudEvent> _decodeBinary(Request request) async {
   map['datacontenttype'] = type.toString();
   map['data'] = await _decodeJson(request);
 
-  return CloudEvent.fromJson(map);
+  return _decodeValidCloudEvent(map, 'binary-mode message');
+}
+
+CloudEvent _decodeValidCloudEvent(
+  Map<String, dynamic> map,
+  String messageType,
+) {
+  try {
+    return CloudEvent.fromJson(map);
+  } catch (e, stackTrace) {
+    throw _BadRequestException(
+      400,
+      'Could not decode the request as a $messageType.',
+      innerError: e,
+      innerStack: stackTrace,
+    );
+  }
 }
 
 void _mustBeJson(MediaType type) {

@@ -9,19 +9,30 @@ part of 'cloud_event.dart';
 // **************************************************************************
 
 CloudEvent _$CloudEventFromJson(Map<String, dynamic> json) {
-  return CloudEvent(
-    id: json['id'] as String,
-    source: json['source'] == null ? null : Uri.parse(json['source'] as String),
-    specVersion: json['specversion'] as String,
-    type: json['type'] as String,
-    data: json['data'],
-    dataContentType: json['datacontenttype'] as String,
-    dataSchema: json['dataschema'] == null
-        ? null
-        : Uri.parse(json['dataschema'] as String),
-    subject: json['subject'] as String,
-    time: json['time'] == null ? null : DateTime.parse(json['time'] as String),
-  );
+  return $checkedNew('CloudEvent', json, () {
+    $checkKeys(json,
+        requiredKeys: const ['id', 'source', 'specversion', 'type']);
+    final val = CloudEvent(
+      id: $checkedConvert(json, 'id', (v) => v as String),
+      source: $checkedConvert(
+          json, 'source', (v) => v == null ? null : Uri.parse(v as String)),
+      specVersion: $checkedConvert(json, 'specversion', (v) => v as String),
+      type: $checkedConvert(json, 'type', (v) => v as String),
+      data: $checkedConvert(json, 'data', (v) => v),
+      dataContentType:
+          $checkedConvert(json, 'datacontenttype', (v) => v as String),
+      dataSchema: $checkedConvert(
+          json, 'dataschema', (v) => v == null ? null : Uri.parse(v as String)),
+      subject: $checkedConvert(json, 'subject', (v) => v as String),
+      time: $checkedConvert(
+          json, 'time', (v) => v == null ? null : DateTime.parse(v as String)),
+    );
+    return val;
+  }, fieldKeyMap: const {
+    'specVersion': 'specversion',
+    'dataContentType': 'datacontenttype',
+    'dataSchema': 'dataschema'
+  });
 }
 
 Map<String, dynamic> _$CloudEventToJson(CloudEvent instance) {
