@@ -1,0 +1,73 @@
+# Created with package:mono_repo v3.4.1
+name: Verify Examples
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+  schedule:
+  - cron: "0 0 * * 0"
+defaults:
+  run:
+    shell: bash
+env:
+  PUB_ENVIRONMENT: bot.github
+
+jobs:
+  verify_examples:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        example_directory: ["examples/hello"]
+    defaults:
+      run:
+        working-directory: ${{ matrix.example_directory }}
+    steps:
+    - name: Cache Pub hosted dependencies
+      uses: actions/cache@v2
+      with:
+        path: "~/.pub-cache/hosted"
+        key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:${{ matrix.example_directory }}"
+        restore-keys: |
+          os:ubuntu-latest;pub-cache-hosted;dart:dev
+          os:ubuntu-latest;pub-cache-hosted
+          os:ubuntu-latest
+    - uses: cedx/setup-dart@v2
+      with:
+        release-channel: dev
+    - uses: actions/checkout@v2
+    - run: dart --version
+    - id: pub_upgrade
+      run: pub upgrade
+    - if: "steps.pub_upgrade.conclusion == 'success'"
+      run: |
+        pub run build_runner build  --delete-conflicting-outputs
+        export DIFF_OUTPUT="$(git diff)"
+        if [[ $DIFF_OUTPUT ]]; then
+          echo "::error::Build needs to be re-run!"
+          echo "::group::git diff"
+          echo "$DIFF_OUTPUT"
+          echo "::endgroup::"
+          exit 1
+        else
+          echo "Build output is all good!"
+        fi
+    - if: "steps.pub_upgrade.conclusion == 'success'"
+      run: dartfmt -n --set-exit-if-changed .
+    - if: "steps.pub_upgrade.conclusion == 'success'"
+      run: dartanalyzer --fatal-infos .
+    - if: "steps.pub_upgrade.conclusion == 'success'"
+      run: pub run test
+  notify:
+    name: Notify failure
+    runs-on: ubuntu-latest
+    if: "(github.event_name == 'push' || github.event_name == 'schedule') && failure()"
+    steps:
+    - run: |
+        curl -H "Content-Type: application/json" -X POST -d \
+          "{'text':'Build failed! ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}'}" \
+          "${CHAT_WEBHOOK_URL}"
+      env:
+        CHAT_WEBHOOK_URL: "${{ secrets.CHAT_WEBHOOK_URL }}"
+    needs:
+    - verify_examples
