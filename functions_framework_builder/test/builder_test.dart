@@ -39,8 +39,11 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-final _functions = <String, Handler>{
-  'handleGet': function_library.handleGet,
+const _functions = <FunctionEndpoint>{
+  FunctionEndpoint.http(
+    'handleGet',
+    function_library.handleGet,
+  ),
 };
 ''',
     );
@@ -57,8 +60,11 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-final _functions = <String, Handler>{
-  'some function': function_library.handleGet,
+const _functions = <FunctionEndpoint>{
+  FunctionEndpoint.http(
+    'some function',
+    function_library.handleGet,
+  ),
 };
 ''',
     );
@@ -77,12 +83,16 @@ final _functions = <String, Handler>{
       'customResponse',
       'customResponseAsync',
       'customResponseFutureOr',
-    ].map((e) => "  '$e': function_library.$e,").join('\n');
+    ].map((e) => """
+  FunctionEndpoint.http(
+    '$e',
+    function_library.$e,
+  ),""").join('\n');
     await _generateTest(
       file.readAsStringSync(),
       '''
 $_outputHeader
-final _functions = <String, Handler>{
+const _functions = <FunctionEndpoint>{
 $lines
 };
 ''',
@@ -98,14 +108,16 @@ $lines
       'futureOrFunction',
       'optionalParam',
       'objectParam',
-    ]
-        .map((e) => "  '$e': wrapCloudEventHandler(function_library.$e),")
-        .join('\n');
+    ].map((e) => """
+  FunctionEndpoint.cloudEvent(
+    '$e',
+    function_library.$e,
+  ),""").join('\n');
     await _generateTest(
       file.readAsStringSync(),
       '''
 $_outputHeader
-final _functions = <String, Handler>{
+const _functions = <FunctionEndpoint>{
 $lines
 };
 ''',
@@ -265,8 +277,6 @@ String get _outputHeader => '''
 // limitations under the License.
 
 import 'package:functions_framework/serve.dart';
-import 'package:shelf/shelf.dart';
-
 import 'package:$_pkgName/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {

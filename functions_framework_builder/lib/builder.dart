@@ -63,8 +63,6 @@ class _FunctionsFrameworkBuilder implements Builder {
 
       final function = element as FunctionElement;
 
-      final invokeExpression = validator.validate(function);
-
       final targetReader = annotatedElement.annotation.read('target');
 
       final targetName =
@@ -76,6 +74,8 @@ class _FunctionsFrameworkBuilder implements Builder {
           element: element,
         );
       }
+
+      final invokeExpression = validator.validate(targetName, function);
 
       entries[targetName] = invokeExpression;
     }
@@ -97,16 +97,14 @@ class _FunctionsFrameworkBuilder implements Builder {
 // limitations under the License.
 
 import 'package:functions_framework/serve.dart';
-import 'package:shelf/shelf.dart';
-
 import '${input.uri}' as $functionsLibraryPrefix;
 
 Future<void> main(List<String> args) async {
   await serve(args, _functions);
 }
 
-final _functions = <String, Handler>{
-${entries.entries.map((e) => "  '${e.key}': ${e.value},").join('\n')}
+const _functions = <FunctionEndpoint>{
+${entries.values.map((e) => "  $e,").join('\n')}
 };
 ''';
 

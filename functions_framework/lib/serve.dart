@@ -22,10 +22,11 @@ import 'package:shelf/shelf.dart';
 import 'src/bad_configuration.dart';
 import 'src/cloud_metadata.dart';
 import 'src/function_config.dart';
+import 'src/function_endpoint.dart';
 import 'src/logging.dart';
 import 'src/run.dart';
 
-export 'src/cloud_event_wrapper.dart' show wrapCloudEventHandler;
+export 'src/function_endpoint.dart' show FunctionEndpoint;
 
 /// If there is an invalid configuration, [BadConfigurationException] will be
 /// thrown.
@@ -33,9 +34,9 @@ export 'src/cloud_event_wrapper.dart' show wrapCloudEventHandler;
 /// If there are no configuration errors, this function will not return until
 /// the process has received signal [ProcessSignal.sigterm] or
 /// [ProcessSignal.sigint].
-Future<void> serve(List<String> args, Map<String, Handler> handlers) async {
+Future<void> serve(List<String> args, Set<FunctionEndpoint> functions) async {
   try {
-    await _serve(args, handlers);
+    await _serve(args, functions);
   } on BadConfigurationException catch (e) {
     stderr.writeln(red.wrap(e.message));
     if (e.details != null) {
@@ -45,7 +46,7 @@ Future<void> serve(List<String> args, Map<String, Handler> handlers) async {
   }
 }
 
-Future<void> _serve(List<String> args, Map<String, Handler> handlers) async {
+Future<void> _serve(List<String> args, Set<FunctionEndpoint> functions) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
   final config = FunctionConfig.fromArgs(
@@ -53,13 +54,24 @@ Future<void> _serve(List<String> args, Map<String, Handler> handlers) async {
     defaults: configFromEnvironment,
   );
 
-  final handler = handlers[config.target];
-
-  if (handler == null) {
-    throw BadConfigurationException(
+  final function = functions.singleWhere(
+    (element) => element.target == config.target,
+    orElse: () => throw BadConfigurationException(
       'There is no handler configured for '
-      'FUNCTION_TARGET `${config.target}`.',
+      '$environmentKeyFunctionTarget `${config.target}`.',
+    ),
+  );
+
+  if (function.functionType == FunctionType.cloudevent &&
+      config.functionType == FunctionType.http) {
+    // See https://github.com/GoogleCloudPlatform/functions-framework-conformance/issues/58
+    stderr.writeln(
+      'The configured $environmentKeyFunctionTarget `${config.target}` has a '
+      'function type of `cloudevent` which is not compatible with the '
+      'configured $environmentKeyFunctionSignatureType of `http`.',
     );
+    exitCode = ExitCode.usage.code;
+    return;
   }
 
   final projectId = await CloudMetadata.projectId();
@@ -89,5 +101,5 @@ Future<void> _serve(List<String> args, Map<String, Handler> handlers) async {
   sigIntSub = ProcessSignal.sigint.watch().listen(signalHandler);
   sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
 
-  await run(config.port, handler, completer.future, loggingMiddleware);
+  await run(config.port, function.handler, completer.future, loggingMiddleware);
 }

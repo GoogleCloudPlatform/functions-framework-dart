@@ -22,6 +22,9 @@ const defaultPort = 8080;
 const defaultFunctionType = FunctionType.http;
 const defaultFunctionTarget = 'function';
 
+const environmentKeyFunctionTarget = 'FUNCTION_TARGET';
+const environmentKeyFunctionSignatureType = 'FUNCTION_SIGNATURE_TYPE';
+
 const _portOpt = 'port';
 const _targetOpt = 'target';
 const _functionTypeOpt = 'signature-type';
@@ -62,7 +65,8 @@ class FunctionConfig {
 
     return FunctionConfig(
       port: port,
-      target: Platform.environment['FUNCTION_TARGET'] ?? defaultFunctionTarget,
+      target: Platform.environment[environmentKeyFunctionTarget] ??
+          defaultFunctionTarget,
       functionType: _parseFunctionType(
         Platform.environment['FUNCTION_SIGNATURE_TYPE'] ??
             _enumValue(FunctionType.http),
@@ -87,7 +91,7 @@ class FunctionConfig {
         _targetOpt,
         help: 'The name of the exported function to be invoked in response to '
             'requests.\n'
-            'Overrides the FUNCTION_TARGET environment variable.',
+            'Overrides the $environmentKeyFunctionTarget environment variable.',
       )
       ..addOption(
         _functionTypeOpt,

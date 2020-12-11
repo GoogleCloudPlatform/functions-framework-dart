@@ -13,5 +13,5 @@
 // limitations under the License.
 
 export 'src/cloud_event.dart';
-export 'src/cloud_event_wrapper.dart';
+export 'src/cloud_event_wrapper.dart' show CloudEventHandler;
 export 'src/cloud_function.dart';

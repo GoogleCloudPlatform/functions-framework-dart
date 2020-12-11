@@ -25,10 +25,10 @@ class SupportedFunctionTypes {
 
   SupportedFunctionTypes._(this._types);
 
-  String validate(FunctionElement element) {
+  String validate(String targetName, FunctionElement element) {
     for (var type in _types) {
       if (type.compatible(element)) {
-        return type.createReference(element);
+        return type.createReference(targetName, element);
       }
     }
     throw InvalidGenerationSourceError(
@@ -47,12 +47,13 @@ ${_types.map((e) => '  ${e.name} [${e.typeDescription}] from ${e.library}').join
             resolver,
             'package:shelf/shelf.dart',
             'Handler',
+            'FunctionEndpoint.http',
           ),
           await _SupportedFunctionType.create(
             resolver,
             'package:functions_framework/functions_framework.dart',
             'CloudEventHandler',
-            wrapperFunction: 'wrapCloudEventHandler',
+            'FunctionEndpoint.cloudEvent',
           ),
         ],
       );
@@ -63,21 +64,21 @@ class _SupportedFunctionType {
   final String name;
   final FunctionType type;
   final String typeDescription;
-  final String wrapperFunction;
+  final String constructor;
 
   _SupportedFunctionType(
     this.library,
     this.name,
     this.type, {
-    this.wrapperFunction,
+    this.constructor,
   }) : typeDescription = type.getDisplayString(withNullability: false);
 
   static Future<_SupportedFunctionType> create(
     Resolver resolver,
     String libraryUri,
-    String typeDefName, {
-    String wrapperFunction,
-  }) async {
+    String typeDefName,
+    String constructor,
+  ) async {
     final lib = await resolver.libraryFor(
       AssetId.resolve(libraryUri),
     );
@@ -94,7 +95,7 @@ class _SupportedFunctionType {
       libraryUri,
       typeDefName,
       functionType,
-      wrapperFunction: wrapperFunction,
+      constructor: constructor,
     );
   }
 
@@ -104,13 +105,6 @@ class _SupportedFunctionType {
         type,
       );
 
-  String createReference(FunctionElement element) {
-    var expression = '$functionsLibraryPrefix.${element.name}';
-
-    if (wrapperFunction != null) {
-      expression = '$wrapperFunction($expression)';
-    }
-
-    return expression;
-  }
+  String createReference(String targetName, FunctionElement element) =>
+      "$constructor('$targetName', $functionsLibraryPrefix.${element.name},)";
 }

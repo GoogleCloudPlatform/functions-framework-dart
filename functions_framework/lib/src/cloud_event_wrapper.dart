@@ -24,7 +24,7 @@ import 'cloud_event.dart';
 
 typedef CloudEventHandler = FutureOr<void> Function(CloudEvent request);
 
-Handler wrapCloudEventHandler(CloudEventHandler handler) => (request) async {
+Handler wrapCloudEventFunction(CloudEventHandler handler) => (request) async {
       CloudEvent event;
 
       try {

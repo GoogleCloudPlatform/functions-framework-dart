@@ -1,4 +1,4 @@
-# 0.2.1-dev
+# 0.3.0-dev
 
 - Added support for basic Cloud Events.
   - Added `CloudEvent` type.
