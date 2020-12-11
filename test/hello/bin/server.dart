@@ -14,19 +14,27 @@
 // limitations under the License.
 
 import 'package:functions_framework/serve.dart';
-import 'package:shelf/shelf.dart';
-
 import 'package:hello_world_function_test/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
   await serve(args, _functions);
 }
 
-final _functions = <String, Handler>{
-  'function': function_library.function,
-  'basicCloudEventHandler':
-      wrapCloudEventHandler(function_library.basicCloudEventHandler),
-  'conformanceHttp': function_library.conformanceHttp,
-  'conformanceCloudEvent':
-      wrapCloudEventHandler(function_library.conformanceCloudEvent),
+const _functions = <FunctionEndpoint>{
+  FunctionEndpoint.http(
+    'function',
+    function_library.function,
+  ),
+  FunctionEndpoint.cloudEvent(
+    'basicCloudEventHandler',
+    function_library.basicCloudEventHandler,
+  ),
+  FunctionEndpoint.http(
+    'conformanceHttp',
+    function_library.conformanceHttp,
+  ),
+  FunctionEndpoint.cloudEvent(
+    'conformanceCloudEvent',
+    function_library.conformanceCloudEvent,
+  ),
 };

@@ -55,6 +55,6 @@ jobs:
         functionType: 'cloudevent'
         useBuildpacks: false
         # Coordinate changes here with the documentation in `CONTRIBUTING.MD`
-        cmd: '"dart test/hello/bin/server.dart --target conformanceCloudEvent"'
+        cmd: '"dart test/hello/bin/server.dart --target conformanceCloudEvent --signature-type cloudevent"'
         validateMapping: false
         startDelay: 3

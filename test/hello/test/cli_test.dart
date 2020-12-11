@@ -205,6 +205,33 @@ void main() {
       await proc.shouldExit(ExitCode.usage.code);
     });
   });
+
+  test('incompatible signature type', () async {
+    final proc = await startServerTest(
+      shouldFail: true,
+      arguments: [
+        '--target',
+        'basicCloudEventHandler',
+        '--signature-type',
+        'http'
+      ],
+    );
+
+    await expectLater(
+      proc.stdout,
+      emitsInOrder([emitsDone]),
+    );
+    await expectLater(
+      proc.stderr,
+      emitsInOrder([
+        'The configured FUNCTION_TARGET `basicCloudEventHandler` has a '
+            'function type of `cloudevent` which is not compatible with the '
+            'configured FUNCTION_SIGNATURE_TYPE of `http`.',
+        emitsDone,
+      ]),
+    );
+    await proc.shouldExit(64);
+  });
 }
 
 const _usage = r'''
