@@ -174,7 +174,7 @@ void main() {
         startsWith('Bad request. Content-Type header is required.'),
         'package:functions_framework/src/cloud_event_wrapper.dart',
         '_mediaTypeFromRequest',
-        severity: 'DEBUG',
+        severity: 'WARNING',
       );
       lines.clear();
     });
@@ -215,7 +215,7 @@ void main() {
         ),
         startsWith('package:functions_framework/src/'),
         isNotEmpty,
-        severity: 'DEBUG',
+        severity: 'WARNING',
       );
       lines.clear();
     });
