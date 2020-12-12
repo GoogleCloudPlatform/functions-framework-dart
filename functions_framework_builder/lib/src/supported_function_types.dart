@@ -25,6 +25,8 @@ class SupportedFunctionTypes {
 
   SupportedFunctionTypes._(this._types);
 
+  // TODO: validate [targetName] - could cause big issues when generating code
+  // https://github.com/GoogleCloudPlatform/functions-framework-conformance/issues/60
   String validate(String targetName, FunctionElement element) {
     for (var type in _types) {
       if (type.compatible(element)) {
@@ -105,6 +107,7 @@ class _SupportedFunctionType {
         type,
       );
 
+  // TODO: careful! a poorly formatted [targetName] could create invalid code!
   String createReference(String targetName, FunctionElement element) =>
       "$constructor('$targetName', $functionsLibraryPrefix.${element.name},)";
 }
