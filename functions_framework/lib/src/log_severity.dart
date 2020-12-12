@@ -16,6 +16,7 @@
 class LogSeverity implements Comparable<LogSeverity> {
   static const debug = LogSeverity._(100, 'DEBUG');
   static const info = LogSeverity._(200, 'INFO');
+  static const warning = LogSeverity._(400, 'WARNING');
   static const error = LogSeverity._(500, 'ERROR');
 
   final int value;

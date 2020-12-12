@@ -117,7 +117,7 @@ Middleware cloudLoggingMiddleware(String projectid) {
                   ? createLogEntry(
                       'Bad request. ${error.message}',
                       error.innerStack ?? stackTrace,
-                      LogSeverity.debug,
+                      LogSeverity.warning,
                       // Since the error should have been raised within the
                       // framework, we want to see the stack within
                       // functions_framework
