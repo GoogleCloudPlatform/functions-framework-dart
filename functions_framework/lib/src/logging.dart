@@ -67,6 +67,25 @@ Middleware cloudLoggingMiddleware(String projectid) {
             'projects/$projectid/traces/${traceHeader.split('/')[0]}';
 
         String createLogEntry(
+          String message,
+          LogSeverity severity, {
+          Frame stackFrame,
+        }) {
+          // https://cloud.google.com/logging/docs/agent/configuration#special-fields
+          final logContent = {
+            'message': message,
+            'severity': severity,
+            // 'logging.googleapis.com/labels': { }
+            if (traceHeader != null)
+              'logging.googleapis.com/trace': traceValue(),
+            if (stackFrame != null)
+              'logging.googleapis.com/sourceLocation':
+                  _sourceLocation(stackFrame),
+          };
+          return jsonEncode(logContent);
+        }
+
+        String createErrorLogEntry(
           Object error,
           StackTrace stackTrace,
           LogSeverity logSeverity, {
@@ -88,19 +107,11 @@ Middleware cloudLoggingMiddleware(String projectid) {
 
           final stackFrame = _frameFromChain(chain);
 
-          // https://cloud.google.com/logging/docs/agent/configuration#special-fields
-          final logContent = {
-            'message': '$error\n$chain'.trim(),
-            'severity': logSeverity,
-            // 'logging.googleapis.com/labels': { }
-            if (traceHeader != null)
-              'logging.googleapis.com/trace': traceValue(),
-            if (stackFrame != null)
-              'logging.googleapis.com/sourceLocation':
-                  _sourceLocation(stackFrame),
-          };
-
-          return jsonEncode(logContent);
+          return createLogEntry(
+            '$error\n$chain'.trim(),
+            logSeverity,
+            stackFrame: stackFrame,
+          );
         }
 
         final completer = Completer<Response>.sync();
@@ -114,7 +125,7 @@ Middleware cloudLoggingMiddleware(String projectid) {
               }
 
               final logContentString = error is BadRequestException
-                  ? createLogEntry(
+                  ? createErrorLogEntry(
                       'Bad request. ${error.message}',
                       error.innerStack ?? stackTrace,
                       LogSeverity.warning,
@@ -123,7 +134,7 @@ Middleware cloudLoggingMiddleware(String projectid) {
                       // functions_framework
                       predicate: (f) => f.package == 'shelf',
                     )
-                  : createLogEntry(
+                  : createErrorLogEntry(
                       error,
                       stackTrace,
                       LogSeverity.error,
@@ -143,16 +154,10 @@ Middleware cloudLoggingMiddleware(String projectid) {
               completer.complete(response);
             },
             print: (self, parent, zone, line) {
-              final logContent = {
-                'message': line,
-                'severity': LogSeverity.info,
-                // 'logging.googleapis.com/labels': { }
-                if (traceHeader != null)
-                  'logging.googleapis.com/trace': traceValue(),
-              };
+              final logContent = createLogEntry(line, LogSeverity.info);
 
               // Serialize to a JSON string and output to parent zone.
-              parent.print(self, jsonEncode(logContent));
+              parent.print(self, logContent);
             },
           ),
         )
