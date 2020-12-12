@@ -73,9 +73,12 @@ void main() {
   group('environment', () {
     test('good environment', () async {
       const port = 8888;
-      final proc = await startServerTest(expectedListeningPort: port, env: {
-        'PORT': port.toString(),
-      });
+      final proc = await startServerTest(
+        expectedListeningPort: port,
+        env: {
+          'PORT': port.toString(),
+        },
+      );
 
       final response = await get('http://localhost:$port');
       expect(response.statusCode, 200);
@@ -85,9 +88,12 @@ void main() {
     });
 
     test('bad FUNCTION_TARGET', () async {
-      final proc = await startServerTest(shouldFail: true, env: {
-        'FUNCTION_TARGET': 'bob',
-      });
+      final proc = await startServerTest(
+        shouldFail: true,
+        env: {
+          'FUNCTION_TARGET': 'bob',
+        },
+      );
 
       await expectLater(
         proc.stderr,
@@ -100,9 +106,12 @@ void main() {
     });
 
     test('bad FUNCTION_SIGNATURE_TYPE', () async {
-      final proc = await startServerTest(shouldFail: true, env: {
-        'FUNCTION_SIGNATURE_TYPE': 'bob',
-      });
+      final proc = await startServerTest(
+        shouldFail: true,
+        env: {
+          'FUNCTION_SIGNATURE_TYPE': 'bob',
+        },
+      );
 
       await expectLater(
         proc.stderr,
@@ -116,9 +125,12 @@ void main() {
     });
 
     test('bad PORT', () async {
-      final proc = await startServerTest(shouldFail: true, env: {
-        'PORT': 'bob',
-      });
+      final proc = await startServerTest(
+        shouldFail: true,
+        env: {
+          'PORT': 'bob',
+        },
+      );
 
       await expectLater(
         proc.stderr,
