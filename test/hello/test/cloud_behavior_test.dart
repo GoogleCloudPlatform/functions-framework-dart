@@ -16,6 +16,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:functions_framework/functions_framework.dart';
 import 'package:functions_framework/serve.dart';
 import 'package:functions_framework/src/constants.dart';
 import 'package:functions_framework/src/logging.dart';
@@ -81,6 +82,24 @@ void main() {
 
     await runFuture;
   });
+
+  void matchEntry(
+    String entry,
+    String message, {
+    LogSeverity severity = LogSeverity.info,
+  }) {
+    final map = jsonDecode(entry) as Map<String, dynamic>;
+
+    expect(
+      map,
+      {
+        'message': message,
+        'severity': severity.name,
+        'logging.googleapis.com/trace':
+            'projects/test_project_id/traces/$traceStart'
+      },
+    );
+  }
 
   void validateCloudErrorOutput(
     Map<String, dynamic> map,
@@ -258,20 +277,6 @@ void main() {
       await _get('print/something', bodyMatcher: 'Printing: print/something');
       expect(lines, hasLength(2));
 
-      void matchEntry(String entry, String message) {
-        final map = jsonDecode(entry) as Map<String, dynamic>;
-
-        expect(
-          map,
-          {
-            'message': message,
-            'severity': 'INFO',
-            'logging.googleapis.com/trace':
-                'projects/test_project_id/traces/$traceStart'
-          },
-        );
-      }
-
       matchEntry(lines[0], 'print');
       matchEntry(lines[1], 'something');
 
@@ -317,6 +322,46 @@ void main() {
       );
 
       lines.clear();
+    });
+  });
+
+  group('logging', () {
+    setUp(() async {
+      await doSetup(loggingHandler);
+    });
+
+    Future<void> _get(
+      String path, {
+      int expectedStatusCode = 200,
+      Object bodyMatcher,
+    }) async {
+      if (bodyMatcher == null && expectedStatusCode == 500) {
+        bodyMatcher = 'Internal Server Error';
+      }
+
+      final response = await get(
+        'http://localhost:$port/$path',
+        headers: headers,
+      );
+
+      expect(response.statusCode, expectedStatusCode);
+      expect(response.body, bodyMatcher ?? isEmpty);
+    }
+
+    test('all levels in and out of zone', () async {
+      await _get('');
+      final trace = 'projects/test_project_id/traces/$traceStart';
+      expectLines([
+        '{"message":"default","severity":"DEFAULT","logging.googleapis.com/trace":"$trace"}',
+        '{"message":"debug","severity":"DEBUG","logging.googleapis.com/trace":"$trace"}',
+        '{"message":"info","severity":"INFO","logging.googleapis.com/trace":"$trace"}',
+        '{"message":"notice","severity":"NOTICE","logging.googleapis.com/trace":"$trace"}',
+        '{"message":"warning","severity":"WARNING","logging.googleapis.com/trace":"$trace"}',
+        '{"message":"error","severity":"ERROR","logging.googleapis.com/trace":"$trace"}',
+        '{"message":"critical","severity":"CRITICAL","logging.googleapis.com/trace":"$trace"}',
+        '{"message":"alert","severity":"ALERT","logging.googleapis.com/trace":"$trace"}',
+        '{"message":"emergency","severity":"EMERGENCY","logging.googleapis.com/trace":"$trace"}'
+      ]);
     });
   });
 }

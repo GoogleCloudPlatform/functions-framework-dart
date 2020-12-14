@@ -25,6 +25,10 @@ const _functions = <FunctionEndpoint>{
     'function',
     function_library.function,
   ),
+  FunctionEndpoint.http(
+    'loggingHandler',
+    function_library.loggingHandler,
+  ),
   FunctionEndpoint.cloudEvent(
     'basicCloudEventHandler',
     function_library.basicCloudEventHandler,

@@ -15,3 +15,5 @@
 export 'src/cloud_event.dart' show CloudEvent;
 export 'src/cloud_event_wrapper.dart' show CloudEventHandler;
 export 'src/cloud_function.dart' show CloudFunction;
+export 'src/log_severity.dart' show CloudLogger, LogSeverity;
+export 'src/logging.dart' show logger;

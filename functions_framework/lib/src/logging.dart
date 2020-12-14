@@ -23,6 +23,11 @@ import 'bad_request_exception.dart';
 import 'constants.dart';
 import 'log_severity.dart';
 
+final _loggerKey = Object();
+
+CloudLogger get logger =>
+    Zone.current[_loggerKey] as CloudLogger ?? const _DefaultLogger();
+
 Middleware createLoggingMiddleware(String projectId) =>
     projectId == null ? _logSimple : cloudLoggingMiddleware(projectId);
 
@@ -61,28 +66,13 @@ Middleware cloudLoggingMiddleware(String projectid) {
   Handler hostedLoggingMiddleware(Handler innerHandler) => (request) async {
         // Add log correlation to nest all log messages beneath request log in
         // Log Viewer.
+
+        String traceValue;
+
         final traceHeader = request.headers[cloudTraceContextHeader];
-
-        String traceValue() =>
-            'projects/$projectid/traces/${traceHeader.split('/')[0]}';
-
-        String createLogEntry(
-          String message,
-          LogSeverity severity, {
-          Frame stackFrame,
-        }) {
-          // https://cloud.google.com/logging/docs/agent/configuration#special-fields
-          final logContent = {
-            'message': message,
-            'severity': severity,
-            // 'logging.googleapis.com/labels': { }
-            if (traceHeader != null)
-              'logging.googleapis.com/trace': traceValue(),
-            if (stackFrame != null)
-              'logging.googleapis.com/sourceLocation':
-                  _sourceLocation(stackFrame),
-          };
-          return jsonEncode(logContent);
+        if (traceHeader != null) {
+          traceValue =
+              'projects/$projectid/traces/${traceHeader.split('/')[0]}';
         }
 
         String createErrorLogEntry(
@@ -107,7 +97,8 @@ Middleware cloudLoggingMiddleware(String projectid) {
 
           final stackFrame = _frameFromChain(chain);
 
-          return createLogEntry(
+          return _createLogEntry(
+            traceValue,
             '$error\n$chain'.trim(),
             logSeverity,
             stackFrame: stackFrame,
@@ -118,6 +109,11 @@ Middleware cloudLoggingMiddleware(String projectid) {
 
         Zone.current
             .fork(
+          zoneValues: traceValue == null
+              ? null
+              : {
+                  _loggerKey: _CloudLogger(Zone.current, traceValue),
+                },
           specification: ZoneSpecification(
             handleUncaughtError: (self, parent, zone, error, stackTrace) {
               if (error is HijackException) {
@@ -154,7 +150,11 @@ Middleware cloudLoggingMiddleware(String projectid) {
               completer.complete(response);
             },
             print: (self, parent, zone, line) {
-              final logContent = createLogEntry(line, LogSeverity.info);
+              final logContent = _createLogEntry(
+                traceValue,
+                line,
+                LogSeverity.info,
+              );
 
               // Serialize to a JSON string and output to parent zone.
               parent.print(self, logContent);
@@ -200,3 +200,51 @@ Map<String, dynamic> _sourceLocation(Frame frame) => {
       if (frame.line != null) 'line': frame.line.toString(),
       'function': frame.member,
     };
+
+/// A [CloudLogger] that prints messages normally.
+///
+/// Any message that's not [LogSeverity.defaultSeverity] is prefixed by the
+/// [LogSeverity] name.
+class _DefaultLogger extends CloudLogger {
+  const _DefaultLogger();
+
+  @override
+  void log(Object message, LogSeverity severity) {
+    if (severity == LogSeverity.defaultSeverity) {
+      print(message);
+    } else {
+      print('${severity.name}: $message');
+    }
+  }
+}
+
+/// A [CloudLogger] that prints messages using Google Cloud structured logging.
+class _CloudLogger extends CloudLogger {
+  final Zone _zone;
+  final String _traceId;
+
+  _CloudLogger(this._zone, this._traceId);
+
+  @override
+  void log(Object message, LogSeverity severity) {
+    _zone.print(_createLogEntry(_traceId, '$message', severity));
+  }
+}
+
+String _createLogEntry(
+  String traceValue,
+  String message,
+  LogSeverity severity, {
+  Frame stackFrame,
+}) {
+  // https://cloud.google.com/logging/docs/agent/configuration#special-fields
+  final logContent = {
+    'message': message,
+    'severity': severity,
+    // 'logging.googleapis.com/labels': { }
+    if (traceValue != null) 'logging.googleapis.com/trace': traceValue,
+    if (stackFrame != null)
+      'logging.googleapis.com/sourceLocation': _sourceLocation(stackFrame),
+  };
+  return jsonEncode(logContent);
+}

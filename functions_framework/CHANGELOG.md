@@ -4,8 +4,10 @@
 
 - `functions_framework.dart`
 
-  - Added `typedef CloudEventHandler`
-  - Added `CloudEvent` class.
+  - Added `typedef CloudEventHandler` and `CloudEvent` class to support
+    Cloud Events.
+  - Added the top-level `logger` property which exposes the new `CloudLogger`
+    class. Severity is expressed in terms of the new `LogSeverity` class.
 
 - `serve.dart`
 

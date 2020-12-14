@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -98,6 +99,22 @@ Future<Response> function(Request request) async {
   } finally {
     _activeRequests--;
   }
+}
+
+@CloudFunction()
+Response loggingHandler(Request handler) {
+  logger
+    ..log('default', LogSeverity.defaultSeverity)
+    ..debug('debug')
+    ..info('info')
+    ..notice('notice')
+    ..warning('warning')
+    ..error('error')
+    ..critical('critical')
+    ..alert('alert')
+    ..emergency('emergency');
+
+  return Response.ok('');
 }
 
 @CloudFunction()
