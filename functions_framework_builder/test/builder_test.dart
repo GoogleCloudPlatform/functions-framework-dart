@@ -124,6 +124,35 @@ $lines
     );
   });
 
+  test('complex target names do not crash the build', () async {
+    final file = File('test/test_examples/complex_target_name_handlers.dart');
+
+    await _generateTest(
+      file.readAsStringSync(),
+      '''
+$_outputHeader
+const _functions = <FunctionEndpoint>{
+  FunctionEndpoint.cloudEvent(
+    "'single quotes'",
+    function_library.function1,
+  ),
+  FunctionEndpoint.cloudEvent(
+    '"double quotes"',
+    function_library.function2,
+  ),
+  FunctionEndpoint.cloudEvent(
+    r'\$dollar signs\$',
+    function_library.function3,
+  ),
+  FunctionEndpoint.cloudEvent(
+    'white space\\t\\n\\r\\nall over',
+    function_library.function4,
+  ),
+};
+''',
+    );
+  });
+
   test('duplicate target names fails', () async {
     await _generateThrows(
       r'''
