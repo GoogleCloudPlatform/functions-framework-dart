@@ -3,9 +3,6 @@
 scriptdir="$PWD/$(dirname $(echo ${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}))"
 pubdir="${scriptdir}/.."
 bindir="${pubdir}/bin"
-echo "$scriptdir"
-echo "$pubdir"
-echo "$bindir"
 
 if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
   echo "This bash shell script (${BASH_SOURCE[0]}) is meant to be sourced in, not executed. Try:"
@@ -20,7 +17,7 @@ function db() {
 
 # dart run
 function dr() {
-  dart run "${bindir}/gfn.dart"
+  dart run "${bindir}/gfn.dart" "$@"
 }
 
 # dart activate

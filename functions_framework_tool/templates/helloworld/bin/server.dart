@@ -1,3 +1,4 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +13,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library functions_framework_tool;
+import 'package:functions_framework/serve.dart';
+import 'package:shelf/shelf.dart';
 
-export 'src/generators.dart';
-export 'src/printer.dart';
-export 'src/version.dart';
+import 'package:__projectName__/functions.dart' as function_library;
+
+Future<void> main(List<String> args) async {
+  await serve(args, _functions);
+}
+
+const _functions = <String, Handler>{
+  'function': function_library.function,
+};

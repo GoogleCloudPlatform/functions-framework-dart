@@ -12,8 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library functions_framework_tool;
+import 'package:stagehand/stagehand.dart';
 
-export 'src/generators.dart';
-export 'src/printer.dart';
-export 'src/version.dart';
+import 'generators/helloworld.dart';
+
+/// A sorted list of Dart Functions Framework project generators.
+final List<Generator> generators = [
+  HelloWorldGenerator(),
+]..sort();

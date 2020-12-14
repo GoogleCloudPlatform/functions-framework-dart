@@ -12,8 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library functions_framework_tool;
+import 'dart:io' as io;
 
-export 'src/generators.dart';
-export 'src/printer.dart';
-export 'src/version.dart';
+import 'package:stagehand/stagehand.dart';
+
+import 'console.dart';
+
+class Context {
+  final AppInfo app;
+  final Console console;
+  final GeneratorConfig generator;
+
+  Context({this.app, this.console, this.generator});
+}
+
+class AppInfo {
+  final String name;
+  final String version;
+
+  AppInfo(this.name, this.version);
+}
+
+class GeneratorConfig {
+  final List<Generator> generators;
+  final io.Directory cwd;
+  final GeneratorTarget target;
+
+  GeneratorConfig({this.generators, this.cwd, this.target});
+}

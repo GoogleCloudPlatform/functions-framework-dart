@@ -12,8 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library functions_framework_tool;
+@Tags(['presubmit-only'])
+import 'package:build_verify/build_verify.dart';
+import 'package:test/test.dart';
 
-export 'src/generators.dart';
-export 'src/printer.dart';
-export 'src/version.dart';
+void main() {
+  test(
+    'ensure_build',
+    () =>
+        expectBuildClean(packageRelativeDirectory: 'functions_framework_tool'),
+  );
+}

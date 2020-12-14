@@ -15,18 +15,18 @@
 // ignore: implementation_imports
 import 'package:stagehand/src/common.dart' as common;
 
-part 'package_simple.g.dart';
+part 'helloworld.g.dart';
 
 /// A generator for a pub library.
-class PackageSimpleGenerator extends common.DefaultGenerator {
-  PackageSimpleGenerator()
-      : super('package-simple', 'Dart Package',
-            'A starting point for Dart libraries or applications.',
+class HelloWorldGenerator extends common.DefaultGenerator {
+  HelloWorldGenerator()
+      : super('helloworld', 'Dart Package',
+            'A sample "Hello, World!" Functions Framework project.',
             categories: const ['dart']) {
     for (var file in common.decodeConcatenatedData(_data)) {
       addTemplateFile(file);
     }
 
-    setEntrypoint(getFile('lib/__projectName__.dart'));
+    setEntrypoint(getFile('bin/server.dart'));
   }
 }

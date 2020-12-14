@@ -12,8 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library functions_framework_tool;
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
 
-export 'src/generators.dart';
-export 'src/printer.dart';
-export 'src/version.dart';
+@CloudFunction()
+Response function(Request request) => Response.ok('Hello, World!');
+
+// Overriding the default 'function' also works, but you will need
+// to ensure to set the FUNCTION_TARGET environment variable for the
+// process to 'handleGet' as well.
+//@CloudFunction()
+//Response handleGet(Request request) => Response.ok('Hello, World!');
