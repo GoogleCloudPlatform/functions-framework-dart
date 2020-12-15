@@ -106,6 +106,7 @@ void main() {
       expect(
         stderrOutput,
         startsWith(
+          '[BAD REQUEST] POST\t/\n'
           'Could not decode the request as a binary-mode message. (400)\n'
           'CheckedFromJsonException\n'
           'Could not create `CloudEvent`.\n'
@@ -140,6 +141,7 @@ void main() {
       expect(
         stderrOutput,
         startsWith(
+          '[BAD REQUEST] POST\t/\n'
           // NOTE! Since binary-mode failed, we fallback to structured mode!
           'Could not decode the request as a structured-mode message. (400)\n'
           'CheckedFromJsonException\n'
@@ -225,6 +227,7 @@ void main() {
       expect(
         stderrOutput,
         startsWith(
+          '[BAD REQUEST] POST\t/\n'
           'Could not decode the request as a structured-mode message. (400)\n'
           'CheckedFromJsonException\n'
           'Could not create `CloudEvent`.\n'
@@ -261,6 +264,7 @@ void main() {
       expect(
         stderrOutput,
         startsWith(
+          '[BAD REQUEST] POST\t/\n'
           'Could not decode the request as a structured-mode message. (400)\n'
           'CheckedFromJsonException\n'
           'Could not create `CloudEvent`.\n'

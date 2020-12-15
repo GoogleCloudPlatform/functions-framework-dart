@@ -8,6 +8,8 @@
     Cloud Events.
   - Added the top-level `logger` property which exposes the new `CloudLogger`
     class. Severity is expressed in terms of the new `LogSeverity` class.
+  - Added `BadRequestException` class. Functions can throw this exception to
+    cause a `4xx` status code to be returned to a request source.
 
 - `serve.dart`
 

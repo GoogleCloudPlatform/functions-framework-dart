@@ -14,6 +14,16 @@
 
 import 'package:stack_trace/stack_trace.dart';
 
+/// When thrown in a request handler, causes a response with a status code
+/// [statusCode] to be returned.
+///
+/// [statusCode] must be >= `400` and <= `499`.
+///
+/// [message] is used as the body of the response send to the requester.
+///
+/// If provided, [innerError] and [innerStack] can be used to provide additional
+/// debugging information which is included in logs, but not sent to the
+/// requester.
 class BadRequestException implements Exception {
   final int statusCode;
   final String message;
@@ -36,14 +46,29 @@ class BadRequestException implements Exception {
   }
 
   @override
-  String toString() {
-    final buffer = StringBuffer('$message ($statusCode)');
+  String toString() => '$message ($statusCode)';
+
+  String errorMessage(Uri requestedUri, String method, StackTrace stack) {
+    final buffer = StringBuffer()
+      ..writeln('[BAD REQUEST] $method\t'
+          '${requestedUri.path}${_formatQuery(requestedUri.query)}')
+      ..writeln(this);
+
     if (innerError != null) {
-      buffer.write('\n$innerError');
+      buffer.writeln(innerError);
     }
-    if (innerStack != null) {
-      buffer.write('\n${Chain.forTrace(innerStack)}');
-    }
-    return buffer.toString();
+
+    final chain = Chain.forTrace(innerStack ?? stack)
+        .foldFrames((frame) =>
+            frame.isCore ||
+            frame.package == 'shelf' ||
+            frame.package == 'functions_framework')
+        .terse;
+
+    buffer.writeln(chain);
+
+    return buffer.toString().trim();
   }
 }
+
+String _formatQuery(String query) => query == '' ? '' : '?$query';
