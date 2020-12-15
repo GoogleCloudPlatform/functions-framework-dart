@@ -73,6 +73,10 @@ Future<Response> function(Request request) async {
       );
     }
 
+    if (urlPath.startsWith('exception')) {
+      throw BadRequestException(400, 'Testing `throw BadRequestException`');
+    }
+
     if (urlPath.startsWith('error')) {
       if (urlPath.contains('async')) {
         // Add a pause to the result

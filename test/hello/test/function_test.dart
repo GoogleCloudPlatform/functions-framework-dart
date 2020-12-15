@@ -100,6 +100,30 @@ void main() {
       await finishServerTest(proc, requestOutput: isEmpty);
     });
 
+    test('BadRequestException', () async {
+      final proc = await _startServerTest();
+
+      final response = await get('http://localhost:$autoPort/exception');
+      expect(response.statusCode, 400);
+      expect(response.body, 'Bad request. Testing `throw BadRequestException`');
+
+      await expectLater(
+        proc.stderr,
+        emitsInOrder([
+          '[BAD REQUEST] GET\t/exception',
+          'Testing `throw BadRequestException` (400)',
+          startsWith('package:hello_world_function_test/functions.dart'),
+        ]),
+      );
+
+      await finishServerTest(
+        proc,
+        requestOutput: emitsInOrder([
+          endsWith('GET     [400] /exception'),
+        ]),
+      );
+    });
+
     test('async error', () async {
       final proc = await _startServerTest();
 

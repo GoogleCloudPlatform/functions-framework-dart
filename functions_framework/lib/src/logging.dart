@@ -46,9 +46,16 @@ Handler _handleBadRequest(Handler innerHandler) => (request) async {
       try {
         final response = await innerHandler(request);
         return response;
-      } on BadRequestException catch (e) {
-        stderr.writeln(e);
-        return _fromBadRequestException(e);
+      } on BadRequestException catch (error, stack) {
+        stderr.writeln(
+          error.errorMessage(
+            request.requestedUri,
+            request.method,
+            stack,
+          ),
+        );
+
+        return _fromBadRequestException(error);
       }
     };
 
