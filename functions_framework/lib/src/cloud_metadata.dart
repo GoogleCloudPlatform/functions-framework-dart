@@ -83,7 +83,7 @@ class CloudMetadata {
         final projectInfo = await metadataClient.projectInfo();
         return projectInfo.projectId;
       } catch (_) {
-        stderr.writeln('Could not retreive cloud instance metadata.');
+        stderr.writeln('Could not retrieve cloud instance metadata.');
       } finally {
         metadataClient.close();
       }

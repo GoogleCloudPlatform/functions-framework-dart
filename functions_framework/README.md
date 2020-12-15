@@ -1,6 +1,6 @@
 # Functions Framework for Dart
 
-> DISCLAIMER: this is not ready for production, doen't support
+> DISCLAIMER: this is not ready for production, doesn't support
 > [cloudevents](https://github.com/googleapis/google-cloudevents) yet, and
 > doesn't have tests yet for [Functions Framework Conformance](https://github.com/GoogleCloudPlatform/functions-framework-conformance).
 
@@ -69,7 +69,7 @@ Hello, World!
 
 ## Contributing changes
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for details on how to contribute to
+See [`CONTRIBUTING.md`](../CONTRIBUTING.md) for details on how to contribute to
 this project, including how to build and test your changes as well as how to
 properly format your code.
 

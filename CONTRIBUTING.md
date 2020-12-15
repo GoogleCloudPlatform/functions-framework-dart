@@ -68,4 +68,4 @@ $ $FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-de
 $ $FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-delay 3 -type=cloudevent -cmd="dart test/hello/bin/server.dart --target conformanceCloudEvent --signature-type cloudevent" --validate-mapping=false
 ```
 
-This corespondes to the configuration in `.github/workflows/conformance.yml`.
+This corresponds to the configuration in `.github/workflows/conformance.yml`.

@@ -62,7 +62,7 @@ Response _fromBadRequestException(BadRequestException e) => Response(
 
 /// Return [Middleware] that logs errors using Google Cloud structured logs and
 /// returns the correct response.
-Middleware cloudLoggingMiddleware(String projectid) {
+Middleware cloudLoggingMiddleware(String projectId) {
   Handler hostedLoggingMiddleware(Handler innerHandler) => (request) async {
         // Add log correlation to nest all log messages beneath request log in
         // Log Viewer.
@@ -72,7 +72,7 @@ Middleware cloudLoggingMiddleware(String projectid) {
         final traceHeader = request.headers[cloudTraceContextHeader];
         if (traceHeader != null) {
           traceValue =
-              'projects/$projectid/traces/${traceHeader.split('/')[0]}';
+              'projects/$projectId/traces/${traceHeader.split('/')[0]}';
         }
 
         String createErrorLogEntry(

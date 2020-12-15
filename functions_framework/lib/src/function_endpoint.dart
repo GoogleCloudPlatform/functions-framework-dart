@@ -30,7 +30,9 @@ abstract class FunctionEndpoint {
       HttpFunctionEndPoint;
 
   const factory FunctionEndpoint.cloudEvent(
-      String target, CloudEventHandler function) = CloudEventFunctionEndPoint;
+    String target,
+    CloudEventHandler function,
+  ) = CloudEventFunctionEndPoint;
 }
 
 class HttpFunctionEndPoint extends FunctionEndpoint {
