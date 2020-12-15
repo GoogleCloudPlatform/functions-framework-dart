@@ -3,6 +3,7 @@
 This example handles HTTP GET requests by responding with 'Hello, World!'.
 
 ##### lib/app.dart
+
 ```dart
 import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
@@ -96,8 +97,10 @@ $ docker rm -f app
 Now launch another container, this time ensuring the environment variable is
 passed to Docker so that it will be set for the containerized function:
 
+```shell
 $ docker run -it -p 8080:8080 --name app -e 'FUNCTION_TARGET=handleGet' hello
 App listening on :8080
+
 ```
 
 ## Clean up
