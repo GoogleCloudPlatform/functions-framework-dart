@@ -24,7 +24,7 @@ at the same time, follow these steps.
 1. Publish `functions_framework`.
 1. Tag the commit with the package name and version.
    - The tag should be in the format of `[package_name]-v[version]`.
-   - e.g. `functions_framework_builder-v1.2.3`
+   - e.g. `functions_framework-v1.2.3`
 1. Prepare a PR to release `functions_framework_builder`
    - Make sure to remove the `dev_dependencies` section and update the
      dependency on `functions_framework` to the just published version.
