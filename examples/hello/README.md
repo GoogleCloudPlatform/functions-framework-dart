@@ -100,7 +100,6 @@ passed to Docker so that it will be set for the containerized function:
 ```shell
 $ docker run -it -p 8080:8080 --name app -e 'FUNCTION_TARGET=handleGet' hello
 App listening on :8080
-
 ```
 
 ## Clean up
