@@ -17,7 +17,7 @@
 
 # 0.2.0
 
-- **BREAKING** `CloudFunction` constructor paramaters `target` is now named and
+- **BREAKING** `CloudFunction` constructor parameters `target` is now named and
   optional. If not specified, it defaults to the name of the annotated function.
   (Previously, it defaulted to the string `'function'`.)
 - Detect if running on Google Cloud and generate logs appropriately.

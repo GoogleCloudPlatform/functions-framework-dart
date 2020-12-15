@@ -107,7 +107,7 @@ void main() {
     Object fileMatcher,
     Object functionMatcher, {
     String severity = 'ERROR',
-    bool containtsLine = true,
+    bool containsLine = true,
   }) {
     expect(map, hasLength(4));
     expect(map, containsPair('severity', severity));
@@ -137,7 +137,7 @@ void main() {
       ),
     );
 
-    if (containtsLine) {
+    if (containsLine) {
       expect(
         sourceLocation,
         containsPair(

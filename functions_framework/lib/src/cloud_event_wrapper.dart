@@ -26,14 +26,14 @@ typedef CloudEventHandler = FutureOr<void> Function(CloudEvent request);
 Handler wrapCloudEventFunction(CloudEventHandler handler) => (request) async {
       final event = _requiredBinaryHeader.every(request.headers.containsKey)
           ? await _decodeBinary(request)
-          : await _decodeStuctured(request);
+          : await _decodeStructured(request);
 
       await handler(event);
 
       return Response.ok('');
     };
 
-Future<CloudEvent> _decodeStuctured(Request request) async {
+Future<CloudEvent> _decodeStructured(Request request) async {
   final type = _mediaTypeFromRequest(request);
 
   _mustBeJson(type);
@@ -116,7 +116,7 @@ MediaType _mediaTypeFromRequest(Request request) {
   } catch (e, stack) {
     throw BadRequestException(
       400,
-      'Colud not parse $_contentTypeHeader header.',
+      'Could not parse $_contentTypeHeader header.',
       innerError: e,
       innerStack: stack,
     );
