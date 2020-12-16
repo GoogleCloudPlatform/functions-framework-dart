@@ -2,6 +2,8 @@
 
 > DISCLAIMER: this is not ready for production.
 
+[![pub package](https://img.shields.io/pub/v/functions_framework.svg)](https://pub.dev/packages/functions_framework)
+
 An open source FaaS (Function as a Service) framework for writing portable Dart functions,
 brought to you by the Google Dart and Cloud Functions teams.
 
