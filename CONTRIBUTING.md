@@ -30,7 +30,7 @@ information on using pull requests.
 
 ### Presubmit checks
 
-Before submitting a pull request, you should run the following from the repo's 
+Before submitting a pull request, you should run the following from the repo's
 root directory:
 
 ```shell
@@ -40,7 +40,7 @@ $ mono_repo presubmit
 This will run package tests, ensure a clean build, and identify formatting and
 lint issues.
 
-Ensure there are no failures (`skipped` is okay). Address any errors, 
+Ensure there are no failures (`skipped` is okay). Address any errors,
 formatting, and lint issues before you submit your code. These tests are also
 run automatically as continuous integration (CI) builds, but your pull requests
 won't get attention until these pass anyway, so addressing these early as part
@@ -58,13 +58,13 @@ To run the tests locally:
 
 #### HTTP
 
-```console
+```shell
 $ $FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-delay 3 -type=http -cmd="dart test/hello/bin/server.dart --target conformanceHttp"
 ```
 
 #### Cloud events
 
-```console
+```shell
 $ $FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-delay 3 -type=cloudevent -cmd="dart test/hello/bin/server.dart --target conformanceCloudEvent --signature-type cloudevent" --validate-mapping=false
 ```
 
