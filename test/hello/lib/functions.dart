@@ -20,6 +20,10 @@ import 'package:functions_framework/functions_framework.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:shelf/shelf.dart';
 
+import 'src/pub_sub_types.dart';
+
+export 'src/pub_sub_types.dart';
+
 int _activeRequests = 0;
 int _maxActiveRequests = 0;
 int _requestCount = 0;
@@ -159,6 +163,20 @@ void conformanceCloudEvent(CloudEvent event) {
     ..writeln(eventEncoded);
 
   print(buffer.toString());
+}
+
+@CloudFunction()
+void pubSubHandler(PubSub pubSub) {
+  print('subscription: ${pubSub.subscription}');
+  if (pubSub.message == null) {
+    throw BadRequestException(400, 'A message is required!');
+  }
+}
+
+@CloudFunction()
+FutureOr<bool> jsonHandler(Map<String, dynamic> request) {
+  print('Keys: ${request.keys.join(', ')}');
+  return request.isEmpty;
 }
 
 final _helloWorldBytes = utf8.encode('Hello, World!');
