@@ -2,9 +2,9 @@
 
 > DISCLAIMER: this is not ready for production.
 
-| Functions Framework | Unit Tests                                 | Lint Test                                  | Conformance Tests                                        |
-| ------------------- | ------------------------------------------ | ------------------------------------------ | -------------------------------------------------------- |
-| [Dart][ff_dart]     | [![][ff_dart_unit_img]][ff_dart_unit_link] | [![][ff_dart_lint_img]][ff_dart_lint_link] | [![][ff_dart_conformance_img]][ff_dart_conformance_link] |
+|Functions Framework|Unit Tests|Lint Test|Conformance Tests|
+|---|---|---|---|
+[Dart][ff_dart]| [![][ff_dart_unit_img]][ff_dart_unit_link] | [![][ff_dart_lint_img]][ff_dart_lint_link] | [![][ff_dart_conformance_img]][ff_dart_conformance_link] |
 
 An open source FaaS (Function as a Service) framework for writing portable Dart functions,
 brought to you by the Google Dart and Cloud Functions teams.

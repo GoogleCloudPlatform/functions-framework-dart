@@ -8,9 +8,9 @@
 > [issues](https://github.com/GoogleCloudPlatform/functions-framework-dart/issues)
 > for bugs.
 
-| Functions Framework | Unit Tests                                 | Lint Test                                  | Conformance Tests                                        |
-| ------------------- | ------------------------------------------ | ------------------------------------------ | -------------------------------------------------------- |
-| [Dart][ff_dart]     | [![][ff_dart_unit_img]][ff_dart_unit_link] | [![][ff_dart_lint_img]][ff_dart_lint_link] | [![][ff_dart_conformance_img]][ff_dart_conformance_link] |
+|Functions Framework|Unit Tests|Lint Test|Conformance Tests|
+|---|---|---|---|
+[Dart][ff_dart]| [![][ff_dart_unit_img]][ff_dart_unit_link] | [![][ff_dart_lint_img]][ff_dart_lint_link] | [![][ff_dart_conformance_img]][ff_dart_conformance_link] |
 
 An open source FaaS (Function as a Service) framework for writing portable Dart functions,
 brought to you by the Google Dart and Cloud Functions teams.
@@ -37,7 +37,7 @@ Response function(Request request) => Response.ok('Hello, World!');
 To:
 
 ```shell
-$ curl https://example.com
+curl https://example.com
 # Output: Hello, World!
 ```
 
