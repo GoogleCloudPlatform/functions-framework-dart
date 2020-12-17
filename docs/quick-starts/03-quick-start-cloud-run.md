@@ -88,33 +88,20 @@ free up all resources and stop any other charges from incurring) from
 the [Manage resources] page.
 
 ---
+
 [[toc]](../README.md) [[back]](02-quick-start-docker.md)
 
-[Cloud Build]: https://cloud.google.com/cloud-build
-
-[Cloud Run]: https://cloud.google.com/run
-
-[Cloud Shell]: https://cloud.google.com/shell
-
-[Cloud Shell Editor]: https://shell.cloud.google.com/?show=ide&environment_deployment=ide
-
+[cloud build]: https://cloud.google.com/cloud-build
+[cloud run]: https://cloud.google.com/run
+[cloud shell]: https://cloud.google.com/shell
+[cloud shell editor]: https://shell.cloud.google.com/?show=ide&environment_deployment=ide
 [codelab]: https://codelabs.developers.google.com/codelabs/cloud-shell
-
 [delete the image]: https://cloud.google.com/container-registry/docs/managing#deleting_images
-
 [gcloud]: https://cloud.google.com/sdk/docs/install
-
-[Google Cloud]: https://cloud.google.com/gcp
-
+[google cloud]: https://cloud.google.com/gcp
 [incur charges]: https://cloud.google.com/container-registry/pricing
-
-[Manage resources]: https://console.cloud.google.com/iam-admin/projects
-
+[manage resources]: https://console.cloud.google.com/iam-admin/projects
 [project selector]: https://console.cloud.google.com/projectselector2/home/dashboard
-
 [quickstart]: https://cloud.google.com/sdk/docs/quickstart
-
 [see how]: https://cloud.google.com/billing/docs/how-to/modify-project
-
 [zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip
-

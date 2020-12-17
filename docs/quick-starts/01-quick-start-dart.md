@@ -5,8 +5,8 @@ normal developer workflow.
 
 ## Prerequisites
 
-* [Dart SDK] v2.10+
-* Optional: [curl]
+- [Dart SDK] v2.10+
+- Optional: [curl]
 
 ## Get a copy of the `hello` example
 
@@ -156,18 +156,14 @@ Listening on :8080
 ```
 
 ---
+
 [[toc]](../README.md) [[back]](../01-introduction.md) [[next]](02-quick-start-docker.md)
 
 <!-- reference links -->
 
 [curl]: https://curl.se/docs/manual.html
-
-[Dart SDK]: https://dart.dev/get-dart
-
-[Request]: https://pub.dev/documentation/shelf/latest/shelf/Request-class.html
-
-[Response]: https://pub.dev/documentation/shelf/latest/shelf/Response-class.html
-
-[Shelf]: https://pub.dev/packages/shelf
-
+[dart sdk]: https://dart.dev/get-dart
+[request]: https://pub.dev/documentation/shelf/latest/shelf/Request-class.html
+[response]: https://pub.dev/documentation/shelf/latest/shelf/Response-class.html
+[shelf]: https://pub.dev/packages/shelf
 [zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip

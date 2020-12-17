@@ -9,7 +9,7 @@ environment.
 
 ## Prerequisites
 
-* [Docker] (Docker Desktop 3.0.0, Stable or Edge release)
+- [Docker] (Docker Desktop 3.0.0, Stable or Edge release)
 
 ## Get a copy of the `hello` example
 
@@ -30,7 +30,7 @@ a Docker image for running containers.
 > many different images you might have on your system, thus conserving a great
 > deal of space. The way these layers are built have a one to one correspondence
 > with each instruction in a `Dockerfile`. (As an interesting technical note,
-> each instruction actually runs in *its* own container while building the
+> each instruction actually runs in _its_ own container while building the
 > image).
 >
 > The idea of container isolation may sound like a virtual machine, but a key
@@ -134,7 +134,7 @@ $ docker run -p 8080:8080 -it --rm hellofunc --target handleGet
 
 If you need to select a different port on the host machine (perhaps
 because `8080` is already in use), you only need to remap the
-*host* port to `8080` inside of the container:
+_host_ port to `8080` inside of the container:
 
 ```shell
 $ docker run -p 9999:8080 -it --rm hellofunc
@@ -168,11 +168,11 @@ $ docker run -p 8080:9999 -it --rm -e PORT=9999 hellofunc
 ...
 ```
 
-Note that both the `-p` port mapping has to be updated *and* the environment
+Note that both the `-p` port mapping has to be updated _and_ the environment
 variable has to be set for the function server process listening in the
 container.
 
-Again, you also can  use the `--port` argument (which is a bit easier) 
+Again, you also can use the `--port` argument (which is a bit easier)
 instead of setting the environment variable:
 
 ```shell
@@ -196,10 +196,10 @@ $ docker image rm hellofunc   # remove the image
 ```
 
 ---
+
 [[toc]](../README.md) [[back]](01-quick-start-dart.md) [[next]](03-quick-start-cloud-run.md)
 
 <!-- reference links -->
 
 [docker]: https://docs.docker.com/get-docker/
-
 [zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip
