@@ -18,7 +18,7 @@ Go to the [project selector] page. Select an existing or create a new
 project. **Note your project ID for later.**
 
 Creating a new project is highly recommended because you can destroy all
-resources when you're finished just be deleting the project.
+resources when you're finished just by deleting the project.
 
 Make sure that billing is enabled for your project ([see how]).
 

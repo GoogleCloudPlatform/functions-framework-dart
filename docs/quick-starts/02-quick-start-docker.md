@@ -130,31 +130,61 @@ $ docker run -p 8080:8080 -it --rm hellofunc --target handleGet
 ...
 ```
 
-### Change the default port (in the container):
+### Using a different port on the host
+
+If you need to select a different port on the host machine (perhaps
+because `8080` is already in use), you only need to remap the
+*host* port to `8080` inside of the container:
+
+```shell
+$ docker run -p 9999:8080 -it --rm hellofunc
+...
+```
+
+Now you can send requests from localhost to port `9999`:
+
+```shell
+$ curl http://localhost:9999
+Hello, World!
+```
+
+Inside of the container, the server still listens on port `8080`.
+
+### Change the default port inside the container:
+
+There shouldn't be any need to change the port that the function server listens
+on **inside** of the container. Most hosting environments will set the
+environment for container processes with `PORT` assigned to `8080`.
+
+You can have multiple simultaneously running containers with processes listening
+on port `8080` on the same host, as long as each container is mapped to a unique
+host port (a unique port on localhost).
+
+Nevertheless, if you really want to change the container port for some reason,
+you can do so as shown below.
 
 ```shell
 $ docker run -p 8080:9999 -it --rm -e PORT=9999 hellofunc
 ...
 ```
 
-Note that the port mapping had to be updated *and* the environment variable had
-to be set for the function process listening in the container.
+Note that both the `-p` port mapping has to be updated *and* the environment
+variable has to be set for the function server process listening in the
+container.
 
-Again, you also can just use the `--port` argument (which is a bit easier):
+Again, you also can  use the `--port` argument (which is a bit easier) 
+instead of setting the environment variable:
 
 ```shell
 $ docker run -p 8080:9999 -it --rm hellofunc --port 8080
 ...
 ```
 
-On the other hand, if you only need to select a different port on the host
-machine (perhaps because `8080` is already in use), you only need to remap the
-*host*
-port to `8080` in the container:
+In this scenario, you will still send requests to port `8080` on localhost:
 
 ```shell
-$ docker run -p 9999:8080 -it --rm hellofunc
-...
+$ curl http://localhost:8080
+Hello, World!
 ```
 
 ## Clean up
