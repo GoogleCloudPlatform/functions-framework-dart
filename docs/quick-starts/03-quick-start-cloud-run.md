@@ -90,6 +90,8 @@ the [Manage resources] page.
 ---
 [[toc]](../README.md) [[back]](02-quick-start-docker.md)
 
+<!-- reference links -->
+
 [Cloud Build]: https://cloud.google.com/cloud-build
 
 [Cloud Run]: https://cloud.google.com/run
