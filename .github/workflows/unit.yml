@@ -1,4 +1,4 @@
-# Created with package:mono_repo v3.4.1
+# Created with package:mono_repo v3.4.3
 name: Dart Unit CI
 on:
   push:
@@ -38,7 +38,7 @@ jobs:
         working-directory: functions_framework
         run: pub upgrade --no-precompile
       - name: "functions_framework; pub run test --run-skipped -t presubmit-only"
-        if: "steps.functions_framework_pub_upgrade.conclusion == 'success'"
+        if: "always() && steps.functions_framework_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework
         run: pub run test --run-skipped -t presubmit-only
   job_002:
@@ -65,7 +65,7 @@ jobs:
         working-directory: test/hello
         run: pub upgrade --no-precompile
       - name: "test/hello; pub run test --run-skipped -t presubmit-only"
-        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
+        if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
         run: pub run test --run-skipped -t presubmit-only
   job_003:
@@ -93,7 +93,7 @@ jobs:
         working-directory: functions_framework_builder
         run: pub upgrade --no-precompile
       - name: functions_framework_builder; pub run test
-        if: "steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
+        if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: pub run test
   job_004:
@@ -120,7 +120,7 @@ jobs:
         working-directory: functions_framework_builder
         run: pub upgrade --no-precompile
       - name: functions_framework_builder; pub run test
-        if: "steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
+        if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: pub run test
   job_005:
@@ -148,7 +148,7 @@ jobs:
         working-directory: test/hello
         run: pub upgrade --no-precompile
       - name: "test/hello; pub run test -x presubmit-only"
-        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
+        if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
         run: pub run test -x presubmit-only
   job_006:
@@ -175,7 +175,7 @@ jobs:
         working-directory: test/hello
         run: pub upgrade --no-precompile
       - name: "test/hello; pub run test -x presubmit-only"
-        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
+        if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
         run: pub run test -x presubmit-only
   job_007:
@@ -203,7 +203,7 @@ jobs:
         working-directory: test/hello
         run: pub upgrade --no-precompile
       - name: "test/hello; pub run test --run-skipped -t presubmit-only"
-        if: "steps.test_hello_pub_upgrade.conclusion == 'success'"
+        if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
         run: pub run test --run-skipped -t presubmit-only
   job_008:
