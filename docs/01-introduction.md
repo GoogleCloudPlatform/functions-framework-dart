@@ -25,7 +25,7 @@ Functions created with this framework:
 * Are packaged in an industry-standard, portable format (Docker images), which
   can be deployed to various hosted Cloud environments for running [containers]
 
-The [Google Cloud] team defines the [specification] for Functions Framework
+The Google Cloud team defines the [specification] for Functions Framework
 conformance (the contract between a framework and your code) for a number of
 programming languages. You can find more details [here].
 
@@ -50,8 +50,6 @@ by an HTTP GET request event simply by accessing the URL with a browser.
 <br>
 
 ![img.png](quick-starts/assets/helloworld-browser.png)
-
-<br>
 
 When you are interactively testing your function, you can use tools like [curl]
 or [postman], which are helpful for making and automating more complex web

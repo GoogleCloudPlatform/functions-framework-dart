@@ -76,7 +76,7 @@ Visit your deployed function by opening the service URL in a web browser.
 
 ![img.png](assets/helloworld-browser.png)
 
-<br>
+**Congratulations!** You have successfully deployed your function to Cloud Run!
 
 ## Clean up
 
@@ -115,3 +115,6 @@ the [Manage resources] page.
 [quickstart]: https://cloud.google.com/sdk/docs/quickstart
 
 [see how]: https://cloud.google.com/billing/docs/how-to/modify-project
+
+[zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip
+
