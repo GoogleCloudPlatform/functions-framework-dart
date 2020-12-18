@@ -29,7 +29,7 @@ The Google Cloud team defines the [specification] for Functions Framework
 conformance (the contract between a framework and your code) for a number of
 programming languages. You can find more details [here].
 
-## Hello, World!
+## Hello, World
 
 Here is a simple example of how to write a function that responds to HTTP
 request events with a "Hello, World!" greeting:
@@ -56,18 +56,17 @@ or [postman], which are helpful for making and automating more complex web
 request tests.
 
 A best practice is to incorporate automated tests as part of your continuous
-integration (CI) process during development. The example demonstrates the 
+integration (CI) process during development. The example demonstrates the
 use of Dart tests, which we'll cover as part of this quick start.
 
 ## What's next
 
-Using the example presented above, we will walk through a few quick start 
+Using the example presented above, we will walk through a few quick start
 scenarios that demonstrate running the function
 
 * locally during development: [Quick Start: Dart](quick-starts/01-quick-start-dart.md)
 * locally using Docker to simulate a hosted environment: [Quick Start: Docker](quick-starts/02-quick-start-docker.md)
 * hosted on [Cloud Run], a serverless platform on Google Cloud: [Quick Start: Cloud Run](quick-starts/03-quick-start-cloud-run.md)
-
 
 ---
 [[toc]](README.md) [[next]](quick-starts/01-quick-start-dart.md)

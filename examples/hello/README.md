@@ -91,7 +91,7 @@ If you had a previous container running, make sure to remove it now. Assuming
 you named the container `app` (as demonstrated earlier):
 
 ```shell
-$ docker rm -f app
+docker rm -f app
 ```
 
 Now launch another container, this time ensuring the environment variable is
@@ -107,6 +107,6 @@ App listening on :8080
 When finished, clean up by entering:
 
 ```shell
-$ docker rm -f app        # remove the container
-$ docker image rm hello   # remove the image
+docker rm -f app        # remove the container
+docker image rm hello   # remove the image
 ```

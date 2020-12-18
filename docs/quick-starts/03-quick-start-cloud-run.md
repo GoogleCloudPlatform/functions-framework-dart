@@ -51,7 +51,7 @@ directory to `examples/hello`.
 
 ## Build and deploy with a single command
 
-Using the new `gcloud beta run deploy` command, you can now build and deploy 
+Using the new `gcloud beta run deploy` command, you can now build and deploy
 your function in a single step.
 
 ```shell
@@ -71,8 +71,8 @@ same for platform and region and omit the arguments from the command line.
 > For a list of regions, run `gcloud compute regions list`.
 
 ```shell
-$ gcloud config set run/platform managed
-$ gcloud config set compute/region us-central1
+gcloud config set run/platform managed
+gcloud config set compute/region us-central1
 ```
 
 For example:
@@ -93,11 +93,11 @@ Service URL: https://hello-gpua4upw6q-uc.a.run.app
 
 <br>
 
-**Congratulations!** You have successfully built and deployed your function 
+**Congratulations!** You have successfully built and deployed your function
 to Cloud Run. You can now access your function at the Service URL that is
 printed in the last line of output.
 
-If you prefer not to use this beta command for now, read on. The next two 
+If you prefer not to use this beta command for now, read on. The next two
 sections cover building and deploying in two separate steps.
 
 ## Build the container image using Cloud Build
@@ -183,4 +183,3 @@ the [Manage resources] page.
 [see how]: https://cloud.google.com/billing/docs/how-to/modify-project
 
 [zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip
-

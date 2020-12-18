@@ -116,7 +116,7 @@ option can be used to override the default function.
 However, with Docker you will need to specify environment variables differently
 than previously shown:
 
-### Change the default function:
+### Change the default function
 
 ```shell
 $ docker run -p 8080:8080 -it --rm -e FUNCTION_TARGET=handleGet hellofunc
@@ -150,7 +150,7 @@ Hello, World!
 
 Inside of the container, the server still listens on port `8080`.
 
-### Change the default port inside the container:
+### Change the default port inside the container
 
 There shouldn't be any need to change the port that the function server listens
 on **inside** of the container. Most hosting environments will set the
@@ -172,7 +172,7 @@ Note that both the `-p` port mapping has to be updated *and* the environment
 variable has to be set for the function server process listening in the
 container.
 
-Again, you also can  use the `--port` argument (which is a bit easier) 
+Again, you also can  use the `--port` argument (which is a bit easier)
 instead of setting the environment variable:
 
 ```shell
@@ -192,7 +192,7 @@ Hello, World!
 When finished, clean up by entering:
 
 ```shell
-$ docker image rm hellofunc   # remove the image
+docker image rm hellofunc   # remove the image
 ```
 
 ---
