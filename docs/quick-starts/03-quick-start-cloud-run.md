@@ -12,6 +12,9 @@ this [codelab] can help you get started.
 
 ## Prerequisites
 
+The only prerequisites are to have a Google Cloud project ID and the Cloud
+SDK (`gcloud`) installed and configured (authenticated) on your machine.
+
 ### Set up your Google Cloud project
 
 Go to the [project selector] page. Select an existing or create a new
@@ -27,14 +30,71 @@ Make sure that billing is enabled for your project ([see how]).
 Install and configure [gcloud].
 
 If you need help installing or configuring `gcloud` on your machine, see
-[Quickstart: Getting started with Cloud SDK][quickstart].
+[Quickstart: Getting started with Cloud SDK][quickstart]. Don't forget to run
+the `gcloud auth login` command to authenticate your terminal.
 
 > Note: `gcloud` is preinstalled in [Cloud Shell].
+
+### Set your gcloud project
+
+Update your `gcloud` configuration to use your project ID.
+
+```shell
+$ gcloud config set core/project <PROJECT-ID>
+Updated property [core/project].
+```
 
 ## Get a copy of the `hello` example
 
 Clone this repo or download a [zip] archive and extract the contents. Change
 directory to `examples/hello`.
+
+## Build and deploy with a single command
+
+The next two sections cover two commands that can be replaced with a single
+command that is now in beta:
+
+```shell
+gcloud beta run deploy NAME \
+  --source=PATH` \         # can use $PWD or . for current dir
+  --project=PROJECT \      # the Google Cloud project ID
+  --region=REGION  \       # ex: us-central1
+  --platform managed \     # for Cloud Run
+  --allow-unauthenticated  # for public access
+```
+
+Since the project ID was saved to the `gcloud` configuration in the
+[Set your gcloud project](#set-your-gcloud-project) section, you can also do the
+same for platform and region and omit the arguments from the command line.
+
+> For Cloud Run, the platform must be set to `managed`.
+> For a list of regions, run `gcloud compute regions list`.
+
+```shell
+$ gcloud config set run/platform managed
+$ gcloud config set compute/region us-central1
+```
+
+For example:
+
+```shell
+$ gcloud beta run deploy hello --allow-unauthenticated --source=.
+Building using Dockerfile and deploying container to Cloud Run service [hello] in project [dart-demo] region [us-central1]
+✓ Building and deploying new service... Done.
+  ✓ Uploading sources...
+  ✓ Building Container... Logs are available at [https://console.cloud.google.com/cloud-build/builds/df7f07d1-d88b-4443-a2b1-bdfd3cdab15b?project=700116488077].
+  ✓ Creating Revision... Revision deployment finished. Waiting for health check to begin.
+  ✓ Routing traffic...
+  ✓ Setting IAM Policy...
+Done.
+Service [hello] revision [hello-00001-yen] has been deployed and is serving 100 percent of traffic.
+Service URL: https://hello-gpua4upw6q-uc.a.run.app
+```
+
+<br>
+**Congratulations!** You have successfully built and deployed your function 
+to Cloud Run. You can now access your function at the Service URL that is
+printed in the last line of output.
 
 ## Build the container image using Cloud Build
 
