@@ -27,15 +27,15 @@ abstract class FunctionEndpoint {
   const FunctionEndpoint(this.target);
 
   const factory FunctionEndpoint.http(String target, Handler function) =
-      HttpFunctionEndPoint;
+      _HttpFunctionEndPoint;
 
   const factory FunctionEndpoint.cloudEvent(
     String target,
     CloudEventHandler function,
-  ) = CloudEventFunctionEndPoint;
+  ) = _CloudEventFunctionEndPoint;
 }
 
-class HttpFunctionEndPoint extends FunctionEndpoint {
+class _HttpFunctionEndPoint extends FunctionEndpoint {
   final Handler function;
 
   @override
@@ -44,10 +44,10 @@ class HttpFunctionEndPoint extends FunctionEndpoint {
   @override
   Handler get handler => function;
 
-  const HttpFunctionEndPoint(String target, this.function) : super(target);
+  const _HttpFunctionEndPoint(String target, this.function) : super(target);
 }
 
-class CloudEventFunctionEndPoint extends FunctionEndpoint {
+class _CloudEventFunctionEndPoint extends FunctionEndpoint {
   final CloudEventHandler function;
 
   @override
@@ -56,6 +56,6 @@ class CloudEventFunctionEndPoint extends FunctionEndpoint {
   @override
   Handler get handler => wrapCloudEventFunction(function);
 
-  const CloudEventFunctionEndPoint(String target, this.function)
+  const _CloudEventFunctionEndPoint(String target, this.function)
       : super(target);
 }
