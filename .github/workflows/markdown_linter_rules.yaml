@@ -1,0 +1,5 @@
+MD013: false # line length
+MD033: # disallow in-line HTML
+  allowed_elements: [br]
+MD041: false # require heading at top of file
+MD045: false # image alt text

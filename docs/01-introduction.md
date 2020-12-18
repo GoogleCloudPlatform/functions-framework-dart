@@ -18,18 +18,18 @@ happen once a function is triggered.
 
 Functions created with this framework:
 
-* Have a minimum amount of boilerplate, allowing you to focus on the business
+- Have a minimum amount of boilerplate, allowing you to focus on the business
   logic of your functions
-* Support standard HTTP requests and requests triggered by [CloudEvents]
-* Can be tested on your own machine
-* Are packaged in an industry-standard, portable format (Docker images), which
+- Support standard HTTP requests and requests triggered by [CloudEvents]
+- Can be tested on your own machine
+- Are packaged in an industry-standard, portable format (Docker images), which
   can be deployed to various hosted Cloud environments for running [containers]
 
 The Google Cloud team defines the [specification] for Functions Framework
 conformance (the contract between a framework and your code) for a number of
 programming languages. You can find more details [here].
 
-## Hello, World!
+## Hello, World
 
 Here is a simple example of how to write a function that responds to HTTP
 request events with a "Hello, World!" greeting:
@@ -56,36 +56,29 @@ or [postman], which are helpful for making and automating more complex web
 request tests.
 
 A best practice is to incorporate automated tests as part of your continuous
-integration (CI) process during development. The example demonstrates the 
+integration (CI) process during development. The example demonstrates the
 use of Dart tests, which we'll cover as part of this quick start.
 
 ## What's next
 
-Using the example presented above, we will walk through a few quick start 
+Using the example presented above, we will walk through a few quick start
 scenarios that demonstrate running the function
 
-* locally during development: [Quick Start: Dart](quick-starts/01-quick-start-dart.md)
-* locally using Docker to simulate a hosted environment: [Quick Start: Docker](quick-starts/02-quick-start-docker.md)
-* hosted on [Cloud Run], a serverless platform on Google Cloud: [Quick Start: Cloud Run](quick-starts/03-quick-start-cloud-run.md)
-
+- locally during development: [Quick Start: Dart](quick-starts/01-quick-start-dart.md)
+- locally using Docker to simulate a hosted environment: [Quick Start: Docker](quick-starts/02-quick-start-docker.md)
+- hosted on [Cloud Run], a serverless platform on Google Cloud: [Quick Start: Cloud Run](quick-starts/03-quick-start-cloud-run.md)
 
 ---
+
 [[toc]](README.md) [[next]](quick-starts/01-quick-start-dart.md)
 
 <!-- reference links -->
 
-[Cloud Run]: https://cloud.google.com/run
-
+[cloud run]: https://cloud.google.com/run
 [containers]: https://www.docker.com/resources/what-container
-
-[CloudEvents]: https://cloudevents.io/
-
+[cloudevents]: https://cloudevents.io/
 [curl]: https://curl.se/docs/manual.html
-
-[Functions Framework for Dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart
-
+[functions framework for dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart
 [here]: https://github.com/GoogleCloudPlatform/functions-framework
-
 [postman]: https://www.postman.com/product/api-client/
-
 [specification]: https://github.com/GoogleCloudPlatform/functions-framework

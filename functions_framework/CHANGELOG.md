@@ -1,4 +1,4 @@
-# 0.3.0-dev
+## 0.3.0-dev
 
 - Added support for functions that handle and return JSON data.
 - Added support for defining and hosting Cloud Events.
@@ -23,7 +23,7 @@
   - **BREAKING** The signature for `serve is now:`<br>
     `Future<void> serve(List<String> args, Set<FunctionEndpoint> functions)`
 
-# 0.2.0
+## 0.2.0
 
 - **BREAKING** `CloudFunction` constructor parameters `target` is now named and
   optional. If not specified, it defaults to the name of the annotated function.
@@ -32,7 +32,7 @@
 - Improved the error messages and exit codes for failures.
 - Correctly respond with `404` with requests for `robots.txt` and `favicon.ico`.
 
-# 0.1.0 - 2020-11-23
+## 0.1.0
 
 This is a preview release of the Functions Framework for Dart to demonstrate
 http functions support only (cloudevent support is not yet implemented). This

@@ -1,5 +1,5 @@
 Unless otherwise noted, follow the guidance here:
-https://github.com/dart-lang/sdk/wiki/External-Package-Maintenance
+<https://github.com/dart-lang/sdk/wiki/External-Package-Maintenance>
 
 The most important rules are:
 
