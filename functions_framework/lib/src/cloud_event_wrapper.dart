@@ -13,13 +13,12 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:http_parser/http_parser.dart';
 import 'package:shelf/shelf.dart';
 
 import 'bad_request_exception.dart';
 import 'cloud_event.dart';
+import 'json_request_utils.dart';
 
 typedef CloudEventHandler = FutureOr<void> Function(CloudEvent request);
 
@@ -34,10 +33,10 @@ Handler wrapCloudEventFunction(CloudEventHandler handler) => (request) async {
     };
 
 Future<CloudEvent> _decodeStructured(Request request) async {
-  final type = _mediaTypeFromRequest(request);
+  final type = mediaTypeFromRequest(request);
 
-  _mustBeJson(type);
-  var jsonObject = await _decodeJson(request) as Map<String, dynamic>;
+  mustBeJson(type);
+  var jsonObject = await decodeJson(request) as Map<String, dynamic>;
 
   if (!jsonObject.containsKey('datacontenttype')) {
     jsonObject = {
@@ -54,11 +53,11 @@ Future<CloudEvent> _decodeBinary(Request request) async {
       .where((element) => element.key.startsWith('ce-'))
       .map((e) => MapEntry(e.key.substring(3), e.value)));
 
-  final type = _mediaTypeFromRequest(request);
+  final type = mediaTypeFromRequest(request);
 
-  _mustBeJson(type);
+  mustBeJson(type);
   map['datacontenttype'] = type.toString();
-  map['data'] = await _decodeJson(request);
+  map['data'] = await decodeJson(request);
 
   return _decodeValidCloudEvent(map, 'binary-mode message');
 }
@@ -79,56 +78,9 @@ CloudEvent _decodeValidCloudEvent(
   }
 }
 
-void _mustBeJson(MediaType type) {
-  if (type.mimeType != _jsonContentType) {
-    // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
-    throw BadRequestException(
-      400,
-      'Unsupported encoding "${type.toString()}". '
-      'Only "$_jsonContentType" is supported.',
-    );
-  }
-}
-
-Future<Object> _decodeJson(Request request) async {
-  final content = await request.readAsString();
-  try {
-    final value = jsonDecode(content);
-    return value;
-  } on FormatException catch (e, stackTrace) {
-    // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
-    throw BadRequestException(
-      400,
-      'Could not parse the request body as JSON.',
-      innerError: e,
-      innerStack: stackTrace,
-    );
-  }
-}
-
-MediaType _mediaTypeFromRequest(Request request) {
-  final contentType = request.headers[_contentTypeHeader];
-  if (contentType == null) {
-    throw BadRequestException(400, '$_contentTypeHeader header is required.');
-  }
-  try {
-    return MediaType.parse(request.headers[_contentTypeHeader]);
-  } catch (e, stack) {
-    throw BadRequestException(
-      400,
-      'Could not parse $_contentTypeHeader header.',
-      innerError: e,
-      innerStack: stack,
-    );
-  }
-}
-
 const _requiredBinaryHeader = {
   'ce-type',
   'ce-specversion',
   'ce-source',
   'ce-id',
 };
-
-const _contentTypeHeader = 'Content-Type';
-const _jsonContentType = 'application/json';
