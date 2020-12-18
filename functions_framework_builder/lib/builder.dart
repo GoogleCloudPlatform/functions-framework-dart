@@ -30,7 +30,8 @@ import 'package:path/path.dart' as path;
 import 'package:source_gen/source_gen.dart';
 
 import 'src/constants.dart';
-import 'src/supported_function_types.dart';
+import 'src/function_type_validator.dart';
+import 'src/supported_function_type.dart';
 
 Builder functionsFrameworkBuilder([BuilderOptions options]) =>
     const _FunctionsFrameworkBuilder();
@@ -45,12 +46,12 @@ class _FunctionsFrameworkBuilder implements Builder {
 
   @override
   Future<void> build(BuildStep buildStep) async {
-    final entries = <String, String>{};
+    final entries = <String, FactoryData>{};
 
     final input = buildStep.inputId;
 
     final libraryElement = await buildStep.resolver.libraryFor(input);
-    final validator = await SupportedFunctionTypes.create(buildStep.resolver);
+    final validator = await FunctionTypeValidator.create(buildStep.resolver);
 
     for (var annotatedElement in _fromLibrary(libraryElement)) {
       final element = annotatedElement.element;
@@ -80,6 +81,16 @@ class _FunctionsFrameworkBuilder implements Builder {
       entries[targetName] = invokeExpression;
     }
 
+    final functions = <String>[];
+    final factories = <String>[];
+    for (var e in entries.values) {
+      final factory = e.createFactory(functions.length);
+      if (factory != null) {
+        factories.add(factory);
+      }
+      functions.add('  ${e.createReference(functions.length)},');
+    }
+
     var output = '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
@@ -104,8 +115,10 @@ Future<void> main(List<String> args) async {
 }
 
 const _functions = <FunctionEndpoint>{
-${entries.values.map((e) => "  $e,").join('\n')}
+${functions.join('\n')}
 };
+
+${factories.join('\n')}
 ''';
 
     output = DartFormatter().format(output);
