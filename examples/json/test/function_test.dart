@@ -12,31 +12,68 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
+
+part 'function_test.g.dart';
+
+@JsonSerializable(nullable: false)
+class GreetingResponse {
+  final String salutation;
+  final String name;
+
+  GreetingResponse({this.salutation, this.name});
+
+  factory GreetingResponse.fromJson(Map<String, dynamic> json) =>
+      _$GreetingResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GreetingResponseToJson(this);
+
+  @override
+  bool operator ==(other) =>
+      (other is GreetingResponse) &&
+      other.salutation == salutation &&
+      other.name == name;
+
+  @override
+  int get hashCode => salutation.hashCode ^ name.hashCode;
+}
 
 const defaultTimeout = Timeout(Duration(seconds: 3));
 
 void main() {
   test('defaults', () async {
-    final proc = await TestProcess.start('dart', ['bin/server.dart']);
+    final proc = await TestProcess.start(
+        'dart', ['bin/server.dart', '--target', 'jsonHandler']);
 
     await expectLater(
       proc.stdout,
       emitsThrough('Listening on :8080'),
     );
 
-    final response = await get('http://localhost:8080');
-    expect(response.statusCode, 200);
-    expect(response.body, 'Hello, World!');
+    const body = '''
+    {
+      "name": "World"
+    }''';
 
-    await expectLater(
-      proc.stdout,
-      emitsThrough(endsWith('GET     [200] /')),
-    );
+    const headers = {'Content-type': 'application/json'};
+
+    final response =
+        await post('http://localhost:8080', headers: headers, body: body);
+    expect(response.statusCode, 200);
+
+    final data = json.decode(response.body) as Map<String, dynamic>;
+    final actualResponse = GreetingResponse.fromJson(data);
+
+    final expectedResponse =
+        GreetingResponse(salutation: 'Hello', name: 'World');
+
+    expect(actualResponse, expectedResponse);
 
     proc.signal(ProcessSignal.sigterm);
     await proc.shouldExit(0);
