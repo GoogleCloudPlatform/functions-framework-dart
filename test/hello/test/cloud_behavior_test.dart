@@ -191,8 +191,8 @@ void main() {
       validateCloudErrorOutput(
         map,
         startsWith('Bad request. Content-Type header is required.'),
-        'package:functions_framework/src/cloud_event_wrapper.dart',
-        '_mediaTypeFromRequest',
+        'package:functions_framework/src/json_request_utils.dart',
+        'mediaTypeFromRequest',
         severity: 'WARNING',
       );
       lines.clear();
