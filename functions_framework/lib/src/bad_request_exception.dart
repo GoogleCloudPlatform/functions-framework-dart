@@ -55,7 +55,7 @@ class BadRequestException implements Exception {
       ..writeln(this);
 
     if (innerError != null) {
-      buffer.writeln(innerError);
+      buffer.writeln('$innerError'.trim());
     }
 
     final chain = Chain.forTrace(innerStack ?? stack)
@@ -65,9 +65,9 @@ class BadRequestException implements Exception {
             frame.package == 'functions_framework')
         .terse;
 
-    buffer.writeln(chain);
+    buffer.write('$chain'.trim());
 
-    return buffer.toString().trim();
+    return buffer.toString();
   }
 }
 
