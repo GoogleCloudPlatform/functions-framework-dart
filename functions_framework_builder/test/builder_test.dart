@@ -124,12 +124,9 @@ $lines
   });
 
   group('Valid custom type function shapes are supported', () {
-    String inputContent;
-
-    setUpAll(() {
-      inputContent = File('test/test_examples/valid_custom_type_handlers.dart')
-          .readAsStringSync();
-    });
+    final inputContent =
+        File('test/test_examples/valid_custom_type_handlers.dart')
+            .readAsStringSync();
 
     test('void return type', () async {
       await _testItems(
@@ -142,7 +139,45 @@ $lines
             'optionalParam',
           ],
           (e, index) => """
-  VoidCustomTypeFunctionEndPoint(
+  CustomTypeFunctionEndPoint.voidResult(
+    '$e',
+    function_library.$e,
+    _factory$index,
+  ),""",
+          (index) => """
+function_library.JsonType _factory$index(Object json) {
+  if (json is Map<String, dynamic>) {
+    return function_library.JsonType.fromJson(json);
+  }
+  throw BadRequestException(
+    400,
+    'The provided JSON is not the expected type `Map<String, dynamic>`.',
+  );
+}""");
+    });
+
+    test('void return type with context', () async {
+      final newInputContent = inputContent
+          .replaceAll(
+            '(JsonType request) ',
+            '(JsonType request, RequestContext context)',
+          )
+          .replaceAll(
+            'int other',
+            'RequestContext context, int other',
+          );
+
+      await _testItems(
+          newInputContent,
+          [
+            'syncFunction',
+            'asyncFunction',
+            'futureOrFunction',
+            'extraParam',
+            'optionalParam',
+          ],
+          (e, index) => """
+  CustomTypeWithContextFunctionEndPoint.voidResult(
     '$e',
     function_library.$e,
     _factory$index,
@@ -257,12 +292,9 @@ function_library.JsonType _factory$index(Object json) {
   });
 
   group('Valid JSON type function shapes are supported', () {
-    String inputContent;
-
-    setUpAll(() {
-      inputContent = File('test/test_examples/valid_json_type_handlers.dart')
-          .readAsStringSync();
-    });
+    final inputContent =
+        File('test/test_examples/valid_json_type_handlers.dart')
+            .readAsStringSync();
 
     test('void return type', () async {
       await _testItems(
@@ -275,7 +307,7 @@ function_library.JsonType _factory$index(Object json) {
             'optionalParam',
           ],
           (e, index) => """
-  VoidCustomTypeFunctionEndPoint(
+  CustomTypeFunctionEndPoint.voidResult(
     '$e',
     function_library.$e,
     _factory$index,
@@ -339,6 +371,44 @@ num _factory$index(Object json) {
           ],
           (e, index) => """
   CustomTypeFunctionEndPoint(
+    '$e',
+    function_library.$e,
+    _factory$index,
+  ),""",
+          (index) => """
+num _factory$index(Object json) {
+  if (json is num) {
+    return json;
+  }
+  throw BadRequestException(
+    400,
+    'The provided JSON is not the expected type `num`.',
+  );
+}""");
+    });
+
+    test('void with context', () async {
+      final newInputContent = inputContent
+          .replaceAll(
+            '(num request)',
+            '(num request, RequestContext context)',
+          )
+          .replaceAll(
+            'int other',
+            'RequestContext context, int other',
+          );
+
+      await _testItems(
+          newInputContent,
+          [
+            'syncFunction',
+            'asyncFunction',
+            'futureOrFunction',
+            'extraParam',
+            'optionalParam',
+          ],
+          (e, index) => """
+  CustomTypeWithContextFunctionEndPoint.voidResult(
     '$e',
     function_library.$e,
     _factory$index,

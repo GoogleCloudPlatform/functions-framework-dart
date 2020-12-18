@@ -45,6 +45,12 @@ ${_types.map((e) => '  ${e.typedefName} [${e.typeDescription}] from ${e.libraryU
         [
           await SupportedFunctionType.create(
             resolver,
+            'package:functions_framework/functions_framework.dart',
+            'HandlerWithLogger',
+            'FunctionEndpoint.httpWithLogger',
+          ),
+          await SupportedFunctionType.create(
+            resolver,
             'package:shelf/shelf.dart',
             'Handler',
             'FunctionEndpoint.http',
@@ -52,9 +58,16 @@ ${_types.map((e) => '  ${e.typedefName} [${e.typeDescription}] from ${e.libraryU
           await SupportedFunctionType.create(
             resolver,
             'package:functions_framework/functions_framework.dart',
+            'CloudEventWithContextHandler',
+            'FunctionEndpoint.cloudEventWithContext',
+          ),
+          await SupportedFunctionType.create(
+            resolver,
+            'package:functions_framework/functions_framework.dart',
             'CloudEventHandler',
             'FunctionEndpoint.cloudEvent',
           ),
+          await GenericFunctionType.createWithContext(resolver),
           await GenericFunctionType.create(resolver),
         ],
       );

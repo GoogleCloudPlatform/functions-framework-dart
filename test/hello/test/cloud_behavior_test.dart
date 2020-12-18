@@ -23,7 +23,6 @@ import 'package:functions_framework/src/logging.dart';
 import 'package:functions_framework/src/run.dart';
 import 'package:hello_world_function_test/functions.dart';
 import 'package:http/http.dart';
-import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 
 const _projectId = 'test_project_id';
@@ -46,14 +45,14 @@ void main() {
   var count = 0;
   String traceStart;
 
-  Future<void> doSetup(Handler function) async {
+  Future<void> doSetup(FunctionEndpoint endpoint) async {
     lines.clear();
     completionSignal = Completer<bool>.sync();
 
     runFuture = runZoned(
       () => run(
         0,
-        function,
+        endpoint.handler,
         completionSignal.future,
         cloudLoggingMiddleware(_projectId),
       ),
@@ -154,8 +153,10 @@ void main() {
   group('cloud event', () {
     setUp(() async {
       await doSetup(
-        const FunctionEndpoint.cloudEvent('function', basicCloudEventHandler)
-            .handler,
+        const FunctionEndpoint.cloudEventWithContext(
+          'function',
+          basicCloudEventHandler,
+        ),
       );
     });
 
@@ -242,7 +243,7 @@ void main() {
 
   group('http', () {
     setUp(() async {
-      await doSetup(function);
+      await doSetup(const FunctionEndpoint.http('function', function));
     });
 
     Future<void> _get(
@@ -327,7 +328,9 @@ void main() {
 
   group('logging', () {
     setUp(() async {
-      await doSetup(loggingHandler);
+      await doSetup(
+        const FunctionEndpoint.httpWithLogger('function', loggingHandler),
+      );
     });
 
     Future<void> _get(

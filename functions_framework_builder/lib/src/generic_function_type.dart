@@ -24,8 +24,13 @@ import 'valid_json_utils.dart';
 
 const _libraryUri = 'package:functions_framework/functions_framework.dart';
 const _typedefName = 'CustomEventHandler';
+const _typedefWithContextName = 'CustomEventWithContextHandler';
+
 const _constructorName = 'CustomTypeFunctionEndPoint';
-const _voidConstructorName = 'VoidCustomTypeFunctionEndPoint';
+const _voidConstructorName = '$_constructorName.voidResult';
+const _withContextConstructorName = 'CustomTypeWithContextFunctionEndPoint';
+const _voidWithContextConstructorName =
+    '$_withContextConstructorName.voidResult';
 
 class GenericFunctionType implements SupportedFunctionType {
   @override
@@ -39,8 +44,10 @@ class GenericFunctionType implements SupportedFunctionType {
       .getDisplayString(withNullability: false);
 
   final FunctionTypeAliasElement _functionTypeAliasElement;
+  final bool _withContext;
 
-  GenericFunctionType._(this._functionTypeAliasElement);
+  GenericFunctionType._(this._functionTypeAliasElement, this._withContext)
+      : assert(_functionTypeAliasElement != null);
 
   static Future<GenericFunctionType> create(Resolver resolver) async {
     final lib = await resolver.libraryFor(AssetId.resolve(_libraryUri));
@@ -48,7 +55,18 @@ class GenericFunctionType implements SupportedFunctionType {
     final handlerTypeAlias =
         lib.exportNamespace.get(_typedefName) as FunctionTypeAliasElement;
 
-    return GenericFunctionType._(handlerTypeAlias);
+    return GenericFunctionType._(handlerTypeAlias, false);
+  }
+
+  static Future<GenericFunctionType> createWithContext(
+    Resolver resolver,
+  ) async {
+    final lib = await resolver.libraryFor(AssetId.resolve(_libraryUri));
+
+    final handlerTypeAlias = lib.exportNamespace.get(_typedefWithContextName)
+        as FunctionTypeAliasElement;
+
+    return GenericFunctionType._(handlerTypeAlias, true);
   }
 
   @override
@@ -91,6 +109,7 @@ class GenericFunctionType implements SupportedFunctionType {
       }
 
       return _GenericFactoryData(
+        _withContext,
         returnKind == JsonReturnKind.isVoid,
         paramInfo,
         escapeDartString(targetName),
@@ -102,7 +121,7 @@ class GenericFunctionType implements SupportedFunctionType {
 }
 
 class _GenericFactoryData implements FactoryData {
-  final bool isVoid;
+  final String _endpointConstructorName;
   final String arg1;
   final String arg2;
 
@@ -110,7 +129,7 @@ class _GenericFactoryData implements FactoryData {
   final String factoryBody;
 
   _GenericFactoryData._(
-    this.isVoid,
+    this._endpointConstructorName,
     this.arg1,
     this.arg2,
     this.returnType,
@@ -118,6 +137,7 @@ class _GenericFactoryData implements FactoryData {
   );
 
   factory _GenericFactoryData(
+    bool withContext,
     bool isVoid,
     JsonParamInfo info,
     String arg1,
@@ -145,7 +165,13 @@ class _GenericFactoryData implements FactoryData {
 ''';
 
     return _GenericFactoryData._(
-      isVoid,
+      isVoid
+          ? withContext
+              ? _voidWithContextConstructorName
+              : _voidConstructorName
+          : withContext
+              ? _withContextConstructorName
+              : _constructorName,
       arg1,
       arg2,
       typeDisplayName,
@@ -155,7 +181,7 @@ class _GenericFactoryData implements FactoryData {
 
   @override
   String createReference(int index) =>
-      '$_ctorName($arg1,$arg2,_factory$index,)';
+      '$_endpointConstructorName($arg1,$arg2,_factory$index,)';
 
   @override
   String createFactory(int index) => '''
@@ -164,8 +190,6 @@ $returnType _factory$index(Object $_jsonParamName) {
   
 }
 ''';
-
-  String get _ctorName => isVoid ? _voidConstructorName : _constructorName;
 }
 
 const _jsonParamName = 'json';
