@@ -12,10 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/bad_request_exception.dart' show BadRequestException;
-export 'src/cloud_event.dart' show CloudEvent;
-export 'src/cloud_event_wrapper.dart' show CloudEventHandler;
-export 'src/cloud_function.dart' show CloudFunction;
-export 'src/custom_event_wrapper.dart' show CustomEventHandler;
-export 'src/log_severity.dart' show CloudLogger, LogSeverity;
-export 'src/logging.dart' show logger;
+import 'dart:async';
+
+import 'package:functions_framework/functions_framework.dart';
+
+@CloudFunction()
+void syncFunction(num request) => throw UnimplementedError();
+
+@CloudFunction()
+Future<void> asyncFunction(num request) => throw UnimplementedError();
+
+@CloudFunction()
+FutureOr<void> futureOrFunction(num request) => throw UnimplementedError();
+
+@CloudFunction()
+void extraParam(num request, [int other]) => throw UnimplementedError();
+
+@CloudFunction()
+void optionalParam([num request, int other]) => throw UnimplementedError();

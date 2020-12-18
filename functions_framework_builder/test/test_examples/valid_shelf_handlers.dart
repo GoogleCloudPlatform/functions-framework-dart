@@ -35,17 +35,14 @@ Response optionalParam([Request request, int other]) =>
     throw UnimplementedError();
 
 @CloudFunction()
-Response objectParam(Object request) => throw UnimplementedError();
+_MyResponse customResponse(Request request) => throw UnimplementedError();
 
 @CloudFunction()
-_MyResponse customResponse(Object request) => throw UnimplementedError();
-
-@CloudFunction()
-Future<_MyResponse> customResponseAsync(Object request) =>
+Future<_MyResponse> customResponseAsync(Request request) =>
     throw UnimplementedError();
 
 @CloudFunction()
-FutureOr<_MyResponse> customResponseFutureOr(Object request) =>
+FutureOr<_MyResponse> customResponseFutureOr(Request request) =>
     throw UnimplementedError();
 
 abstract class _MyResponse extends Response {

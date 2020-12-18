@@ -41,4 +41,34 @@ const _functions = <FunctionEndpoint>{
     'conformanceCloudEvent',
     function_library.conformanceCloudEvent,
   ),
+  VoidCustomTypeFunctionEndPoint(
+    'pubSubHandler',
+    function_library.pubSubHandler,
+    _factory5,
+  ),
+  CustomTypeFunctionEndPoint(
+    'jsonHandler',
+    function_library.jsonHandler,
+    _factory6,
+  ),
 };
+
+function_library.PubSub _factory5(Object json) {
+  if (json is Map<String, dynamic>) {
+    return function_library.PubSub.fromJson(json);
+  }
+  throw BadRequestException(
+    400,
+    'The provided JSON is not the expected type `Map<String, dynamic>`.',
+  );
+}
+
+Map<String, dynamic> _factory6(Object json) {
+  if (json is Map<String, dynamic>) {
+    return json;
+  }
+  throw BadRequestException(
+    400,
+    'The provided JSON is not the expected type `Map<String, dynamic>`.',
+  );
+}

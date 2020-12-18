@@ -79,7 +79,6 @@ const _functions = <FunctionEndpoint>{
       'futureOrFunction',
       'extraParam',
       'optionalParam',
-      'objectParam',
       'customResponse',
       'customResponseAsync',
       'customResponseFutureOr',
@@ -124,33 +123,237 @@ $lines
     );
   });
 
-  test('complex target names do not crash the build', () async {
-    final file = File('test/test_examples/complex_target_name_handlers.dart');
+  group('Valid custom type function shapes are supported', () {
+    String inputContent;
 
-    await _generateTest(
-      file.readAsStringSync(),
-      '''
-$_outputHeader
-const _functions = <FunctionEndpoint>{
-  FunctionEndpoint.cloudEvent(
-    "'single quotes'",
-    function_library.function1,
-  ),
-  FunctionEndpoint.cloudEvent(
-    '"double quotes"',
-    function_library.function2,
-  ),
-  FunctionEndpoint.cloudEvent(
-    r'\$dollar signs\$',
-    function_library.function3,
-  ),
-  FunctionEndpoint.cloudEvent(
-    'white space\\t\\n\\r\\nall over',
-    function_library.function4,
-  ),
-};
-''',
-    );
+    setUpAll(() {
+      inputContent = File('test/test_examples/valid_custom_type_handlers.dart')
+          .readAsStringSync();
+    });
+
+    test('void return type', () async {
+      await _testItems(
+          inputContent,
+          [
+            'syncFunction',
+            'asyncFunction',
+            'futureOrFunction',
+            'extraParam',
+            'optionalParam',
+          ],
+          (e, index) => """
+  VoidCustomTypeFunctionEndPoint(
+    '$e',
+    function_library.$e,
+    _factory$index,
+  ),""",
+          (index) => """
+function_library.JsonType _factory$index(Object json) {
+  if (json is Map<String, dynamic>) {
+    return function_library.JsonType.fromJson(json);
+  }
+  throw BadRequestException(
+    400,
+    'The provided JSON is not the expected type `Map<String, dynamic>`.',
+  );
+}""");
+    });
+
+    test('simple return type', () async {
+      final newInputContent = inputContent
+          .replaceAll('void ', 'int ')
+          .replaceAll('<void>', '<int>');
+
+      await _testItems(
+          newInputContent,
+          [
+            'syncFunction',
+            'asyncFunction',
+            'futureOrFunction',
+            'extraParam',
+            'optionalParam',
+          ],
+          (e, index) => """
+  CustomTypeFunctionEndPoint(
+    '$e',
+    function_library.$e,
+    _factory$index,
+  ),""",
+          (index) => """
+function_library.JsonType _factory$index(Object json) {
+  if (json is Map<String, dynamic>) {
+    return function_library.JsonType.fromJson(json);
+  }
+  throw BadRequestException(
+    400,
+    'The provided JSON is not the expected type `Map<String, dynamic>`.',
+  );
+}""");
+    });
+
+    test('JSON return type', () async {
+      final newInputContent = inputContent
+          .replaceAll('void ', 'int ')
+          .replaceAll('<void>', '<int>');
+
+      await _testItems(
+          newInputContent,
+          [
+            'syncFunction',
+            'asyncFunction',
+            'futureOrFunction',
+            'extraParam',
+            'optionalParam',
+          ],
+          (e, index) => """
+  CustomTypeFunctionEndPoint(
+    '$e',
+    function_library.$e,
+    _factory$index,
+  ),""",
+          (index) => """
+function_library.JsonType _factory$index(Object json) {
+  if (json is Map<String, dynamic>) {
+    return function_library.JsonType.fromJson(json);
+  }
+  throw BadRequestException(
+    400,
+    'The provided JSON is not the expected type `Map<String, dynamic>`.',
+  );
+}""");
+    });
+
+    test('complex return type', () async {
+      final newInputContent = inputContent
+          .replaceAll('void ', 'Map<String, List<JsonType>> ')
+          .replaceAll('<void>', '<Map<String, List<JsonType>>>');
+
+      await _testItems(
+          newInputContent,
+          [
+            'syncFunction',
+            'asyncFunction',
+            'futureOrFunction',
+            'extraParam',
+            'optionalParam',
+          ],
+          (e, index) => """
+  CustomTypeFunctionEndPoint(
+    '$e',
+    function_library.$e,
+    _factory$index,
+  ),""",
+          (index) => """
+function_library.JsonType _factory$index(Object json) {
+  if (json is Map<String, dynamic>) {
+    return function_library.JsonType.fromJson(json);
+  }
+  throw BadRequestException(
+    400,
+    'The provided JSON is not the expected type `Map<String, dynamic>`.',
+  );
+}""");
+    });
+  });
+
+  group('Valid JSON type function shapes are supported', () {
+    String inputContent;
+
+    setUpAll(() {
+      inputContent = File('test/test_examples/valid_json_type_handlers.dart')
+          .readAsStringSync();
+    });
+
+    test('void return type', () async {
+      await _testItems(
+          inputContent,
+          [
+            'syncFunction',
+            'asyncFunction',
+            'futureOrFunction',
+            'extraParam',
+            'optionalParam',
+          ],
+          (e, index) => """
+  VoidCustomTypeFunctionEndPoint(
+    '$e',
+    function_library.$e,
+    _factory$index,
+  ),""",
+          (index) => """
+num _factory$index(Object json) {
+  if (json is num) {
+    return json;
+  }
+  throw BadRequestException(
+    400,
+    'The provided JSON is not the expected type `num`.',
+  );
+}""");
+    });
+
+    test('simple return type', () async {
+      final newInputContent = inputContent
+          .replaceAll('void ', 'int ')
+          .replaceAll('<void>', '<int>');
+      await _testItems(
+          newInputContent,
+          [
+            'syncFunction',
+            'asyncFunction',
+            'futureOrFunction',
+            'extraParam',
+            'optionalParam',
+          ],
+          (e, index) => """
+  CustomTypeFunctionEndPoint(
+    '$e',
+    function_library.$e,
+    _factory$index,
+  ),""",
+          (index) => """
+num _factory$index(Object json) {
+  if (json is num) {
+    return json;
+  }
+  throw BadRequestException(
+    400,
+    'The provided JSON is not the expected type `num`.',
+  );
+}""");
+    });
+
+    test('complex return type', () async {
+      final newInputContent = inputContent
+          .replaceAll('void ', 'Map<String, List<bool>> ')
+          .replaceAll('<void>', '<Map<String, List<bool>>>');
+
+      await _testItems(
+          newInputContent,
+          [
+            'syncFunction',
+            'asyncFunction',
+            'futureOrFunction',
+            'extraParam',
+            'optionalParam',
+          ],
+          (e, index) => """
+  CustomTypeFunctionEndPoint(
+    '$e',
+    function_library.$e,
+    _factory$index,
+  ),""",
+          (index) => """
+num _factory$index(Object json) {
+  if (json is num) {
+    return json;
+  }
+  throw BadRequestException(
+    400,
+    'The provided JSON is not the expected type `num`.',
+  );
+}""");
+    });
   });
 
   test('duplicate target names fails', () async {
@@ -186,9 +389,25 @@ package:$_pkgName/functions.dart:8:10
       'Not compatible with a supported function shape:',
     );
     final invalidShapes = {
+      //
+      // Not functions
+      //
       'class AClass{}': onlyFunctionMatcher,
       'int field = 5;': onlyFunctionMatcher,
       'int get getter => 5;': onlyFunctionMatcher,
+
+      //
+      // Double-annotated functions are not allowed
+      //
+      '@CloudFunction() Response function(Request request) => null;':
+          startsWith(
+        'Cannot be annotated with `CloudFunction` more than once.',
+      ),
+
+      //
+      // pkg:shelf handlers
+      //
+
       // Not enough params
       'Response handleGet() => null;': notCompatibleMatcher,
       // First param is not positional
@@ -206,11 +425,17 @@ package:$_pkgName/functions.dart:8:10
       'FutureOr<int> handleGet(Request request) => null;': notCompatibleMatcher,
       // Private functions do not work
       'Response _function(Request request) => null;': onlyFunctionMatcher,
-      // Double-annotated functions are not allowed
-      '@CloudFunction() Response function(Request request) => null;':
-          startsWith(
-        'Cannot be annotated with `CloudFunction` more than once.',
-      ),
+
+      //
+      // CloudEvent types handlers
+      //
+
+      // TODO: exclude return non-void return types?
+
+      //
+      // Custom and JSON event types
+      //
+      'Duration handleGet(DateTime request) => null;': notCompatibleMatcher,
     };
 
     for (var shape in invalidShapes.entries) {
@@ -238,6 +463,31 @@ Future<void> _generateThrows(String inputLibrary, Object matcher) async {
   await expectLater(
     () => _generateTest(inputLibrary, null, validateLog: false),
     throwsA(matcher),
+  );
+}
+
+Future<void> _testItems(
+  String inputContent,
+  List<String> functions,
+  String Function(String entry, int index) entryFactory, [
+  String Function(int index) factoryFactory,
+]) async {
+  var count = 0;
+  final entries = functions.map((e) => entryFactory(e, count++)).join('\n');
+
+  count = 0;
+  final factories = functions.map((e) => factoryFactory(count++)).join('\n\n');
+
+  await _generateTest(
+    inputContent,
+    '''
+$_outputHeader
+const _functions = <FunctionEndpoint>{
+$entries
+};
+
+$factories
+''',
   );
 }
 

@@ -1,5 +1,6 @@
 ## 0.3.0-dev
 
+- Added support for connecting functions that handle and return JSON data.
 - Added support for connecting functions that handle the `CloudEvent` type.
 - Support `analyzer: '>=0.40.6 <0.42.0'`
 

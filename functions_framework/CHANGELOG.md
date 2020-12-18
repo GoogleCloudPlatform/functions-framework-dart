@@ -1,9 +1,12 @@
 ## 0.3.0-dev
 
+- Added support for functions that handle and return JSON data.
 - Added support for defining and hosting Cloud Events.
 
 - `functions_framework.dart`
 
+  - Added `typedef CustomEventHandler` to support functions that handle and
+    return JSON data.
   - Added `typedef CloudEventHandler` and `CloudEvent` class to support
     Cloud Events.
   - Added the top-level `logger` property which exposes the new `CloudLogger`
@@ -13,6 +16,9 @@
 
 - `serve.dart`
 
+  - Added `CustomTypeFunctionEndPoint`, `VoidCustomTypeFunctionEndPoint`, and
+    `BadRequestException` classes to support generated code for functions that
+    handle and return JSON data.
   - Added `FunctionEndpoint` class.
   - **BREAKING** The signature for `serve is now:`<br>
     `Future<void> serve(List<String> args, Set<FunctionEndpoint> functions)`
