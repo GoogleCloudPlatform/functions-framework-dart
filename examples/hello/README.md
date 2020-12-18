@@ -2,9 +2,8 @@
 
 This example handles HTTP GET requests by responding with 'Hello, World!'.
 
-##### lib/app.dart
-
 ```dart
+// lib/functions.dart
 import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
