@@ -92,6 +92,7 @@ Service URL: https://hello-gpua4upw6q-uc.a.run.app
 ```
 
 <br>
+
 **Congratulations!** You have successfully built and deployed your function 
 to Cloud Run. You can now access your function at the Service URL that is
 printed in the last line of output.
