@@ -1,6 +1,6 @@
-# Quick Start: Docker
+# Quickstart: Docker
 
-This quick start discusses how to build and test a function using Docker on your
+This quickstart discusses how to build and test a function using Docker on your
 own machine.
 
 You can use this approach if you don't have Dart installed or if you just want
@@ -104,11 +104,11 @@ Listening on :8080
 ```
 
 You can access the function at `http://localhost:8080` from a browser or using
-`curl`, as explained in the [previous quick start](01-quick-start-dart.md).
+`curl`, as explained in the [previous quickstart](01-quickstart-dart.md).
 
 ## Changing the default port or function target
 
-As described in the [previous quick start](01-quick-start-dart.md), the
+As described in the [previous quickstart](01-quickstart-dart.md), the
 `PORT` environment variable or `--port` option can be used to override the
 default port, and the `FUNCTION_TARGET` environment variable or `--target`
 option can be used to override the default function.
@@ -196,10 +196,8 @@ docker image rm hellofunc   # remove the image
 ```
 
 ---
-[[toc]](../README.md) [[back]](01-quick-start-dart.md) [[next]](03-quick-start-cloud-run.md)
+[[toc]](../README.md) [[back]](01-quickstart-dart.md) [[next]](03-quickstart-cloudrun.md)
 
 <!-- reference links -->
-
 [docker]: https://docs.docker.com/get-docker/
-
 [zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip

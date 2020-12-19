@@ -65,7 +65,7 @@ $ cd examples/hello
 $ docker build -t app .
 ...
 
-$ docker run -it -p 8080:8080 --name demo app
+$ docker run -it -p 8080:8080 --name demo --rm app
 Listening on :8080
 ```
 
@@ -75,6 +75,8 @@ In another terminal...
 $ curl localhost:8080
 Hello, World!
 ```
+
+See the [docs] for more quickstarts.
 
 ## Contributing changes
 
@@ -87,20 +89,17 @@ properly format your code.
 Apache 2.0; see [`LICENSE`](LICENSE) for details.
 
 <!-- Repo links -->
-
+[docs]: docs
 [ff_dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
 <!-- Unit Test links -->
-
 [ff_dart_unit_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Unit%20CI/badge.svg?branch=main
 [ff_dart_unit_link]: https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Unit+CI"+branch%3Amain
 
 <!-- Lint Test links -->
-
 [ff_dart_lint_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Lint%20CI/badge.svg?branch=main
 [ff_dart_lint_link]: https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Lint+CI"+branch%3Amain
 
 <!-- Conformance Test links -->
-
 [ff_dart_conformance_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Conformance%20CI/badge.svg?branch=main
 [ff_dart_conformance_link]: https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Conformance+CI"+branch%3Amain

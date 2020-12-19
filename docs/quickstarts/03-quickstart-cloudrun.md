@@ -1,13 +1,13 @@
-# Quick Start: Cloud Run
+# Quickstart: Cloud Run
 
-This quick start discusses how to build and deploy a function using
+This quickstart discusses how to build and deploy a function using
 [Cloud Run], a serverless platform on [Google Cloud].
 
-The instructions in this quick start can be run from a terminal on your own
+The instructions in this quickstart can be run from a terminal on your own
 machine or from [Cloud Shell], an online development and operations environment,
 using the [Cloud Shell Editor].
 
-Using the [Cloud Shell Editor] is beyond the scope of this quick start, but
+Using the [Cloud Shell Editor] is beyond the scope of this quickstart, but
 this [codelab] can help you get started.
 
 ## Prerequisites
@@ -152,34 +152,20 @@ free up all resources and stop any other charges from incurring) from
 the [Manage resources] page.
 
 ---
-[[toc]](../README.md) [[back]](02-quick-start-docker.md)
+[[toc]](../README.md) [[back]](02-quickstart-docker.md)
 
 <!-- reference links -->
-
 [Cloud Build]: https://cloud.google.com/cloud-build
-
 [Cloud Run]: https://cloud.google.com/run
-
 [Cloud Shell]: https://cloud.google.com/shell
-
 [Cloud Shell Editor]: https://shell.cloud.google.com/?show=ide&environment_deployment=ide
-
 [codelab]: https://codelabs.developers.google.com/codelabs/cloud-shell
-
 [delete the image]: https://cloud.google.com/container-registry/docs/managing#deleting_images
-
 [gcloud]: https://cloud.google.com/sdk/docs/install
-
 [Google Cloud]: https://cloud.google.com/gcp
-
 [incur charges]: https://cloud.google.com/container-registry/pricing
-
 [Manage resources]: https://console.cloud.google.com/iam-admin/projects
-
 [project selector]: https://console.cloud.google.com/projectselector2/home/dashboard
-
 [quickstart]: https://cloud.google.com/sdk/docs/quickstart
-
 [see how]: https://cloud.google.com/billing/docs/how-to/modify-project
-
 [zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip
