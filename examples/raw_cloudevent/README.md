@@ -92,15 +92,16 @@ Tools like [curl] (and [postman]) are good for sending HTTP requests. The
 options used in this example are:
 
 - `--data-binary @sample/data.json` - set the request body to a JSON document
+  read from the file `sample/data.json`
 - `-H "content-type: application/json"` - set an HTTP header to indicate that
   the body is a JSON document
 - `-w '%{http_code}\n'` - print the HTTP status code (expect 200 for success)
 
 Alternatively, instead of running `curl`, you can run either of the following
-Dart scripts under the `examples/raw_cloudevent/tool` directory:
+Dart scripts examples under the `examples/raw_cloudevent/tool` directory:
 
-- `binary_mode_request.dart`
-- `structured_mode_request.dart`
+- `dart run tool/binary_mode_request.dart`
+- `dart run tool/structured_mode_request.dart`
 
 For more details on getting started or to see how to run the function locally on
 Docker or deploy to Cloud Run, see these quick start guides:
