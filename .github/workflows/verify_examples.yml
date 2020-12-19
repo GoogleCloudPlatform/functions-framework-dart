@@ -18,7 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        example_directory: ["examples/hello", "examples/json"]
+        example_directory:
+          - examples/hello
+          - examples/json
+          - examples/raw_cloudevent
     defaults:
       run:
         working-directory: ${{ matrix.example_directory }}
