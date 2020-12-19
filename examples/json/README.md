@@ -60,7 +60,7 @@ GreetingResponse function(Map<String, dynamic> request) {
 
 The full code is shown below:
 
-_lib/functions.dart_
+lib/functions.dart
 
 ```dart
 import 'dart:async';
@@ -153,12 +153,14 @@ The last line, separated by a blank line, prints the response body.
 For more details on getting started or to see how to run the function locally on
 Docker or deploy to Cloud Run, see these quick start guides:
 
-- [Quick start: Dart](/docs/quick-starts/01-quick-start-dart.md)
-- [Quick start: Docker](/docs/quick-starts/02-quick-start-docker.md)
-- [Quick start: Cloud Run](/docs/quick-starts/03-quick-start-cloud-run.md)
+- [Quick start: Dart]
+- [Quick start: Docker]
+- [Quick start: Cloud Run]
 
 <!-- reference links -->
 
 [curl]: https://curl.se/docs/manual.html
-
+[Quick Start: Dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quick-starts/01-quick-start-dart.md
+[Quick Start: Docker]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quick-starts/02-quick-start-docker.md
+[Quick Start: Cloud Run]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quick-starts/03-quick-start-cloud-run.md
 [postman]: https://www.postman.com/product/api-client/
