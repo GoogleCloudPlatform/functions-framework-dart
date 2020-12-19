@@ -2,7 +2,3 @@ targets:
   $default:
     builders:
       source_gen|combining_builder:
-        options:
-          ignore_for_file:
-          - prefer_expression_function_bodies
-

@@ -20,6 +20,7 @@ jobs:
       matrix:
         example_directory:
           - examples/hello
+          - examples/json
           - examples/raw_cloudevent
     defaults:
       run:
