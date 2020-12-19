@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        example_directory: ["examples/hello"]
+        example_directory: ["examples/hello", "examples/json"]
     defaults:
       run:
         working-directory: ${{ matrix.example_directory }}
