@@ -7,7 +7,7 @@ The basic shape of the function handler looks like this:
 
 ```dart
 @CloudFunction()
-FutureOr<GreetingResponse> function(Map<String, dynamic> request) {
+GreetingResponse function(Map<String, dynamic> request) {
 }
 ```
 
@@ -38,7 +38,7 @@ code looks like this:
 
 ```dart
 @CloudFunction()
-FutureOr<GreetingResponse> function(Map<String, dynamic> request) {
+GreetingResponse function(Map<String, dynamic> request) {
   final name = request['name'] as String ?? 'World';
 }
 ```
@@ -51,7 +51,7 @@ and set the response header (`content-type`) to `application/json`).
 
 ```dart
 @CloudFunction()
-FutureOr<GreetingResponse> function(Map<String, dynamic> request) {
+GreetingResponse function(Map<String, dynamic> request) {
   final name = request['name'] as String ?? 'World';
   final json = GreetingResponse(salutation: 'Hello', name: name);
   return json;
@@ -81,7 +81,7 @@ class GreetingResponse {
 }
 
 @CloudFunction()
-FutureOr<GreetingResponse> function(Map<String, dynamic> request) {
+GreetingResponse function(Map<String, dynamic> request) {
   final name = request['name'] as String ?? 'World';
   final json = GreetingResponse(salutation: 'Hello', name: name);
   return json;
