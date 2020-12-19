@@ -72,7 +72,7 @@ same for platform and region and omit the arguments from the command line.
 
 ```shell
 gcloud config set run/platform managed
-gcloud config set compute/region us-central1
+gcloud config set run/region us-central1
 ```
 
 For example:
