@@ -84,7 +84,7 @@ properly format your code.
 
 ## Licensing
 
-BSD 3-Clause License. See [`LICENSE`](LICENSE) for details.
+Apache 2.0; see [`LICENSE`](LICENSE) for details.
 
 <!-- Repo links -->
 
