@@ -39,7 +39,13 @@ jobs:
     - run: dart --version
     - id: pub_upgrade
       run: pub upgrade
-    - if: "steps.pub_upgrade.conclusion == 'success'"
+    - if: "always() && steps.pub_upgrade.conclusion == 'success'"
+      run: dartfmt -n --set-exit-if-changed .
+    - if: "always() && steps.pub_upgrade.conclusion == 'success'"
+      run: dartanalyzer --fatal-infos .
+    - if: "always() && steps.pub_upgrade.conclusion == 'success'"
+      run: pub run test
+    - if: "always() && steps.pub_upgrade.conclusion == 'success'"
       run: |
         pub run build_runner build  --delete-conflicting-outputs
         export DIFF_OUTPUT="$(git diff)"
@@ -52,12 +58,6 @@ jobs:
         else
           echo "Build output is all good!"
         fi
-    - if: "steps.pub_upgrade.conclusion == 'success'"
-      run: dartfmt -n --set-exit-if-changed .
-    - if: "steps.pub_upgrade.conclusion == 'success'"
-      run: dartanalyzer --fatal-infos .
-    - if: "steps.pub_upgrade.conclusion == 'success'"
-      run: pub run test
   notify:
     name: Notify failure
     runs-on: ubuntu-latest
