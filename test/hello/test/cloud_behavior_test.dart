@@ -45,7 +45,7 @@ void main() {
   var count = 0;
   String traceStart;
 
-  Future<void> doSetup(FunctionEndpoint endpoint) async {
+  Future<void> doSetup(FunctionTarget endpoint) async {
     lines.clear();
     completionSignal = Completer<bool>.sync();
 
@@ -153,7 +153,7 @@ void main() {
   group('cloud event', () {
     setUp(() async {
       await doSetup(
-        const FunctionEndpoint.cloudEventWithContext(
+        const FunctionTarget.cloudEventWithContext(
           'function',
           basicCloudEventHandler,
         ),
@@ -243,7 +243,7 @@ void main() {
 
   group('http', () {
     setUp(() async {
-      await doSetup(const FunctionEndpoint.http('function', function));
+      await doSetup(const FunctionTarget.http('function', function));
     });
 
     Future<void> _get(
@@ -329,7 +329,7 @@ void main() {
   group('logging', () {
     setUp(() async {
       await doSetup(
-        const FunctionEndpoint.httpWithLogger('function', loggingHandler),
+        const FunctionTarget.httpWithLogger('function', loggingHandler),
       );
     });
 

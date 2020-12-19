@@ -21,14 +21,13 @@ import 'package:io/io.dart';
 import 'src/bad_configuration.dart';
 import 'src/cloud_metadata.dart';
 import 'src/function_config.dart';
-import 'src/function_endpoint.dart';
+import 'src/function_target.dart';
 import 'src/logging.dart';
 import 'src/run.dart';
 
 export 'src/bad_request_exception.dart' show BadRequestException;
-export 'src/custom_event_wrapper.dart'
-    show CustomTypeFunctionEndPoint, CustomTypeWithContextFunctionEndPoint;
-export 'src/function_endpoint.dart' show FunctionEndpoint;
+export 'src/function_target.dart'
+    show FunctionTarget, JsonFunctionTarget, JsonWithContextFunctionTarget;
 
 /// If there is an invalid configuration, [BadConfigurationException] will be
 /// thrown.
@@ -36,9 +35,9 @@ export 'src/function_endpoint.dart' show FunctionEndpoint;
 /// If there are no configuration errors, this function will not return until
 /// the process has received signal [ProcessSignal.sigterm] or
 /// [ProcessSignal.sigint].
-Future<void> serve(List<String> args, Set<FunctionEndpoint> functions) async {
+Future<void> serve(List<String> args, Set<FunctionTarget> targets) async {
   try {
-    await _serve(args, functions);
+    await _serve(args, targets);
   } on BadConfigurationException catch (e) {
     stderr.writeln(red.wrap(e.message));
     if (e.details != null) {
@@ -48,7 +47,7 @@ Future<void> serve(List<String> args, Set<FunctionEndpoint> functions) async {
   }
 }
 
-Future<void> _serve(List<String> args, Set<FunctionEndpoint> functions) async {
+Future<void> _serve(List<String> args, Set<FunctionTarget> targets) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
   final config = FunctionConfig.fromArgs(
@@ -56,15 +55,15 @@ Future<void> _serve(List<String> args, Set<FunctionEndpoint> functions) async {
     defaults: configFromEnvironment,
   );
 
-  final function = functions.singleWhere(
-    (element) => element.target == config.target,
+  final functionTarget = targets.singleWhere(
+    (target) => target.name == config.target,
     orElse: () => throw BadConfigurationException(
       'There is no handler configured for '
       '$environmentKeyFunctionTarget `${config.target}`.',
     ),
   );
 
-  if (function.functionType == FunctionType.cloudevent &&
+  if (functionTarget.type == FunctionType.cloudevent &&
       config.functionType == FunctionType.http) {
     // See https://github.com/GoogleCloudPlatform/functions-framework-conformance/issues/58
     stderr.writeln(
@@ -102,5 +101,6 @@ Future<void> _serve(List<String> args, Set<FunctionEndpoint> functions) async {
   sigIntSub = ProcessSignal.sigint.watch().listen(signalHandler);
   sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
 
-  await run(config.port, function.handler, completer.future, loggingMiddleware);
+  await run(
+      config.port, functionTarget.handler, completer.future, loggingMiddleware);
 }

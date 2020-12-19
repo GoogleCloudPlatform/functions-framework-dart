@@ -14,11 +14,13 @@
 
 export 'src/bad_request_exception.dart' show BadRequestException;
 export 'src/cloud_event.dart' show CloudEvent;
-export 'src/cloud_event_wrapper.dart'
-    show CloudEventHandler, CloudEventWithContextHandler;
 export 'src/cloud_function.dart' show CloudFunction;
-export 'src/custom_event_wrapper.dart'
-    show CustomEventHandler, CustomEventWithContextHandler;
-export 'src/function_endpoint.dart' show HandlerWithLogger;
-export 'src/log_severity.dart' show CloudLogger, LogSeverity;
+export 'src/log_severity.dart' show RequestLogger, LogSeverity;
 export 'src/request_context.dart' show RequestContext;
+export 'src/typedefs.dart'
+    show
+        HandlerWithLogger,
+        CloudEventHandler,
+        CloudEventWithContextHandler,
+        JsonHandler,
+        JsonWithContextHandler;

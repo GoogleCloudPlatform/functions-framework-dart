@@ -16,39 +16,55 @@ import 'dart:async';
 
 import 'package:shelf/shelf.dart';
 
-import 'bad_request_exception.dart';
-import 'cloud_event.dart';
-import 'json_request_utils.dart';
-import 'request_context.dart';
+import '../bad_request_exception.dart';
+import '../cloud_event.dart';
+import '../function_config.dart';
+import '../function_target.dart';
+import '../json_request_utils.dart';
+import '../request_context.dart';
+import '../typedefs.dart';
 
-typedef CloudEventHandler = FutureOr<void> Function(CloudEvent request);
-typedef CloudEventWithContextHandler = FutureOr<void> Function(
-  CloudEvent request,
-  RequestContext context,
-);
+class CloudEventFunctionTarget extends FunctionTarget {
+  final CloudEventHandler function;
 
-Handler wrapCloudEventFunction(CloudEventHandler handler) => (request) async {
-      final event = _requiredBinaryHeader.every(request.headers.containsKey)
-          ? await _decodeBinary(request)
-          : await _decodeStructured(request);
+  @override
+  FunctionType get type => FunctionType.cloudevent;
 
-      await handler(event);
+  @override
+  FutureOr<Response> handler(Request request) async {
+    final event = _requiredBinaryHeader.every(request.headers.containsKey)
+        ? await _decodeBinary(request)
+        : await _decodeStructured(request);
 
-      return Response.ok('');
-    };
+    await function(event);
 
-Handler wrapCloudEventWithContextFunction(
-        CloudEventWithContextHandler handler) =>
-    (request) async {
-      final event = _requiredBinaryHeader.every(request.headers.containsKey)
-          ? await _decodeBinary(request)
-          : await _decodeStructured(request);
+    return Response.ok('');
+  }
 
-      final context = contextForRequest(request);
-      await handler(event, context);
+  const CloudEventFunctionTarget(String target, this.function) : super(target);
+}
 
-      return Response.ok('');
-    };
+class CloudEventWithContextFunctionTarget extends FunctionTarget {
+  final CloudEventWithContextHandler function;
+
+  @override
+  FunctionType get type => FunctionType.cloudevent;
+
+  @override
+  Future<Response> handler(Request request) async {
+    final event = _requiredBinaryHeader.every(request.headers.containsKey)
+        ? await _decodeBinary(request)
+        : await _decodeStructured(request);
+
+    final context = contextForRequest(request);
+    await function(event, context);
+
+    return Response.ok('');
+  }
+
+  const CloudEventWithContextFunctionTarget(String target, this.function)
+      : super(target);
+}
 
 Future<CloudEvent> _decodeStructured(Request request) async {
   final type = mediaTypeFromRequest(request);

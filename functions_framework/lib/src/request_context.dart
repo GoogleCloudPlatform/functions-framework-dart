@@ -19,7 +19,7 @@ import 'log_severity.dart';
 import 'logging.dart';
 
 class RequestContext {
-  final CloudLogger logger;
+  final RequestLogger logger;
   final Request _request;
 
   RequestContext._(this._request) : logger = loggerForRequest(_request);

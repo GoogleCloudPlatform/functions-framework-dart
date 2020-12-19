@@ -17,11 +17,11 @@ import 'package:functions_framework/serve.dart';
 import 'package:example_json_function/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functions);
+  await serve(args, _functionTargets);
 }
 
-const _functions = <FunctionEndpoint>{
-  CustomTypeFunctionEndPoint(
+const _functionTargets = <FunctionTarget>{
+  JsonFunctionTarget(
     'function',
     function_library.function,
     _factory0,

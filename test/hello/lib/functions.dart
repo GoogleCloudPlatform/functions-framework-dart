@@ -110,7 +110,7 @@ Future<Response> function(Request request) async {
 }
 
 @CloudFunction()
-Response loggingHandler(Request handler, CloudLogger logger) {
+Response loggingHandler(Request handler, RequestLogger logger) {
   logger
     ..log('default', LogSeverity.defaultSeverity)
     ..debug('debug')
