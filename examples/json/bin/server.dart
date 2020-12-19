@@ -22,8 +22,8 @@ Future<void> main(List<String> args) async {
 
 const _functions = <FunctionEndpoint>{
   CustomTypeFunctionEndPoint(
-    'jsonHandler',
-    function_library.jsonHandler,
+    'function',
+    function_library.function,
     _factory0,
   ),
 };

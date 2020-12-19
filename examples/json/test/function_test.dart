@@ -49,7 +49,7 @@ const defaultTimeout = Timeout(Duration(seconds: 3));
 void main() {
   test('defaults', () async {
     final proc = await TestProcess.start(
-        'dart', ['bin/server.dart', '--target', 'jsonHandler']);
+        'dart', ['bin/server.dart']);
 
     await expectLater(
       proc.stdout,
@@ -61,7 +61,7 @@ void main() {
       "name": "World"
     }''';
 
-    const headers = {'Content-type': 'application/json'};
+    const headers = {'content-type': 'application/json'};
 
     final response =
         await post('http://localhost:8080', headers: headers, body: body);

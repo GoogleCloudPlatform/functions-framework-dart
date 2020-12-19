@@ -30,7 +30,7 @@ class GreetingResponse {
 }
 
 @CloudFunction()
-FutureOr<GreetingResponse> jsonHandler(Map<String, dynamic> request) {
+FutureOr<GreetingResponse> function(Map<String, dynamic> request) {
   final name = request['name'] as String ?? 'World';
   final json = GreetingResponse(salutation: 'Hello', name: name);
   return json;

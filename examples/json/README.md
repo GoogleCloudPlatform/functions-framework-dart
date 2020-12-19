@@ -1,111 +1,164 @@
-# Hello world example
+# JSON example
 
-This example handles HTTP GET requests by responding with 'Hello, World!'.
+This example demonstrates writing a function that accepts a JSON request and
+sends a JSON response to the client.
+
+The basic shape of the function handler looks like this:
 
 ```dart
-// lib/functions.dart
+@CloudFunction()
+FutureOr<GreetingResponse> function(Map<String, dynamic> request) {
+}
+```
+
+The client will send a JSON document using the HTTP POST method. Here's an
+example request:
+
+```json
+{
+  "name": "World"
+}
+
+```
+
+The function will send a JSON document as the response. Here's an example
+response after receiving the above request:
+
+```json
+{
+  "salutation": "Hello",
+  "name": "World"
+}
+```
+
+The function handler actually receives the JSON request parsed as a map by the
+Functions Framework. To access the expected `name` field of the request
+document (and provide a default value in case the `name` field is empty), the
+code looks like this:
+
+```dart
+@CloudFunction()
+FutureOr<GreetingResponse> function(Map<String, dynamic> request) {
+  final name = request['name'] as String ?? 'World';
+}
+```
+
+Finally, the function creates an object returns it. The Functions Framework will
+take this and attempt "do the right" thing. In this case, the function is typed
+to return a `FutureOr<GreetingResponse>`, which has a `toJson()` method, so the
+framework will invoke this, then set the response body to the stringified result
+and set the response header (`content-type`) to `application/json`).
+
+```dart
+@CloudFunction()
+FutureOr<GreetingResponse> function(Map<String, dynamic> request) {
+  final name = request['name'] as String ?? 'World';
+  final json = GreetingResponse(salutation: 'Hello', name: name);
+  return json;
+}
+```
+
+The full code is shown below:
+
+_lib/functions.dart_
+
+```dart
+import 'dart:async';
+
 import 'package:functions_framework/functions_framework.dart';
-import 'package:shelf/shelf.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'functions.g.dart';
+
+@JsonSerializable(nullable: false)
+class GreetingResponse {
+  final String salutation;
+  final String name;
+
+  GreetingResponse({this.salutation, this.name});
+
+  Map<String, dynamic> toJson() => _$GreetingResponseToJson(this);
+}
 
 @CloudFunction()
-Response function(Request request) => Response.ok('Hello, World!');
+FutureOr<GreetingResponse> function(Map<String, dynamic> request) {
+  final name = request['name'] as String ?? 'World';
+  final json = GreetingResponse(salutation: 'Hello', name: name);
+  return json;
+}
 ```
 
-## Simulate a hosted environment on your own machine
+## Generate project files
 
-You can run this function example on your own machine using Docker to simulate
-running in a hosted environment.
+The Dart `build_runner` tool generates the following files
 
-```shell
-$ docker build -t hello .
-...
+- `lib/functions.g.dart` - the part file for `GreetingResponse` serialization
+- `bin/server.dart` - the main entry point for the function server app, which
+  invokes the function
 
-$ docker run -it -p 8080:8080 --name app hello
-Listening on :8080
-```
-
-From another terminal:
-
-```shell
-curl http://localhost:8080
-Hello, World!
-```
-
-If you're curious about the size of the image you created, enter:
-
-```shell
-$ docker image ls hello
-REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
-hello        latest    3f23c737877b   1 minute ago     11.6MB
-```
-
-## Editing the function and testing locally
-
-If you would like to rename the handler function (`function`) to something else
-(ex: `handleGet`), you need to ensure that the `FUNCTION_TARGET` environment
-variable is set to the new function name.
-
-For example:
-
-```dart
-@CloudFunction()
-Response handleGet(Request request) => Response.ok('Hello, World!');
-```
-
-Run the `build_runner` to regenerate `bin/server.dart` from `lib/functions.dart`
+Run the `build_runner` tool, as shown here:
 
 ```shell
 $ dart run build_runner build
-[INFO] Generating build script completed, took 304ms
-[INFO] Reading cached asset graph completed, took 46ms
-[INFO] Checking for updates since last build completed, took 412ms
-[INFO] Running build completed, took 2.2s
-[INFO] Caching finalized dependency graph completed, took 28ms
-[INFO] Succeeded after 2.3s with 1 outputs (1 actions)
-
+[INFO] Generating build script completed, took 337ms
+[INFO] Reading cached asset graph completed, took 48ms
+[INFO] Checking for updates since last build completed, took 426ms
+[INFO] Running build completed, took 13ms
+[INFO] Caching finalized dependency graph completed, took 29ms
+[INFO] Succeeded after 51ms with 0 outputs (0 actions)
 ```
 
-Run tests (note that `FUNCTION_TARGET` must now be set for the test process):
+## Test the function
 
 ```shell
-$ FUNCTION_TARGET=handleGet dart test
+$ dart test
 00:02 +1: All tests passed!
 ```
 
-Run it on your system:
+## Run the function
 
 ```shell
-$ FUNCTION_TARGET=handleGet dart run bin/server.dart
+$ dart run bin/server.dart
 Listening on :8080
 ```
 
-If you want to test this hosted on your machine, rebuild the image
+From another terminal, send a JSON request:
 
 ```shell
-$ docker build -t hello .
-...
+$ curl -X POST -H "content-type: application/json" -d '{ "name": "World" }' -i localhost:8080
+HTTP/1.1 200 OK
+date: Sat, 19 Dec 2020 02:17:42 GMT
+content-length: 37
+x-frame-options: SAMEORIGIN
+content-type: application/json
+x-xss-protection: 1; mode=block
+x-content-type-options: nosniff
+server: dart:io with Shelf
+
+{"salutation":"Hello","name":"World"}
 ```
 
-If you had a previous container running, make sure to remove it now. Assuming
-you named the container `app` (as demonstrated earlier):
+Tools like [curl] (and [postman]) are good for sending HTTP requests. The
+options used in this example are:
 
-```shell
-docker rm -f app
-```
+- `-X POST` - send an HTTP POST request
+- `-H "content-type: application/json"` - set an HTTP header to indicate that
+  the body is a JSON document
+- `-d '{ "name": "World" }'` - set the request body to a JSON document
+- `-i` - show the response headers (to confirm the response body content type is
+  also a JSON document)
 
-Now launch another container, this time ensuring the environment variable is
-passed to Docker so that it will be set for the containerized function:
+The last line, separated by a blank line, prints the response body.
 
-```shell
-$ docker run -it -p 8080:8080 --name app -e 'FUNCTION_TARGET=handleGet' hello
-App listening on :8080
-```
+For more details on getting started or to see how to run the function locally on
+Docker or deploy to Cloud Run, see these quick start guides:
 
-## Clean up
+- [Quick start: Dart](/docs/quick-starts/01-quick-start-dart.md)
+- [Quick start: Docker](/docs/quick-starts/02-quick-start-docker.md)
+- [Quick start: Cloud Run](/docs/quick-starts/03-quick-start-cloud-run.md)
 
-When finished, clean up by entering:
+<!-- reference links -->
 
-```shell
-docker rm -f app        # remove the container
-docker image rm hello   # remove the image
-```
+[curl]: https://curl.se/docs/manual.html
+
+[postman]: https://www.postman.com/product/api-client/
