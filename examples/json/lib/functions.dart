@@ -17,14 +17,26 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'functions.g.dart';
 
-@JsonSerializable(nullable: false, createFactory: false)
+@JsonSerializable(nullable: false)
 class GreetingResponse {
   final String salutation;
   final String name;
 
   GreetingResponse({this.salutation, this.name});
 
+  factory GreetingResponse.fromJson(Map<String, dynamic> json) =>
+      _$GreetingResponseFromJson(json);
+
   Map<String, dynamic> toJson() => _$GreetingResponseToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      other is GreetingResponse &&
+      other.salutation == salutation &&
+      other.name == name;
+
+  @override
+  int get hashCode => salutation.hashCode ^ name.hashCode;
 }
 
 @CloudFunction()

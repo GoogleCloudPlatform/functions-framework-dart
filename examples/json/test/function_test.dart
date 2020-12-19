@@ -15,34 +15,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:example_json_function/functions.dart';
 import 'package:http/http.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
-
-part 'function_test.g.dart';
-
-@JsonSerializable(nullable: false)
-class GreetingResponse {
-  final String salutation;
-  final String name;
-
-  GreetingResponse({this.salutation, this.name});
-
-  factory GreetingResponse.fromJson(Map<String, dynamic> json) =>
-      _$GreetingResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$GreetingResponseToJson(this);
-
-  @override
-  bool operator ==(Object other) =>
-      (other is GreetingResponse) &&
-      other.salutation == salutation &&
-      other.name == name;
-
-  @override
-  int get hashCode => salutation.hashCode ^ name.hashCode;
-}
 
 const defaultTimeout = Timeout(Duration(seconds: 3));
 
