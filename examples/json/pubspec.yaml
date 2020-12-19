@@ -6,7 +6,7 @@ environment:
 
 dependencies:
   functions_framework: any
-  json_serializable: ^3.5.1
+  json_annotation: ^3.1.1
   shelf: ^0.7.9
 
 dev_dependencies:
@@ -14,6 +14,7 @@ dev_dependencies:
   build_verify: ^1.1.1
   functions_framework_builder: any
   http: ^0.12.0
+  json_serializable: ^3.5.1
   test: ^1.15.0
   test_process: ^1.0.0
 

@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:async';
-
 import 'package:functions_framework/functions_framework.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -26,7 +24,19 @@ class GreetingResponse {
 
   GreetingResponse({this.salutation, this.name});
 
+  factory GreetingResponse.fromJson(Map<String, dynamic> json) =>
+      _$GreetingResponseFromJson(json);
+
   Map<String, dynamic> toJson() => _$GreetingResponseToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      other is GreetingResponse &&
+      other.salutation == salutation &&
+      other.name == name;
+
+  @override
+  int get hashCode => salutation.hashCode ^ name.hashCode;
 }
 
 @CloudFunction()
