@@ -1,6 +1,6 @@
 # Introduction
 
-Quick start guide to the [Functions Framework for Dart].
+Quickstart guide to the [Functions Framework for Dart].
 
 ## Background
 
@@ -49,7 +49,7 @@ by an HTTP GET request event simply by accessing the URL with a browser.
 
 <br>
 
-![img.png](quick-starts/assets/helloworld-browser.png)
+![img.png](quickstarts/assets/helloworld-browser.png)
 
 When you are interactively testing your function, you can use tools like [curl]
 or [postman], which are helpful for making and automating more complex web
@@ -57,23 +57,22 @@ request tests.
 
 A best practice is to incorporate automated tests as part of your continuous
 integration (CI) process during development. The example demonstrates the
-use of Dart tests, which we'll cover as part of this quick start.
+use of Dart tests, which we'll cover as part of this quickstart.
 
 ## What's next
 
-Using the example presented above, we will walk through a few quick start
+Using the example presented above, we will walk through a few quickstart
 scenarios that demonstrate running the function
 
-- locally during development: [Quick Start: Dart](quick-starts/01-quick-start-dart.md)
-- locally using Docker to simulate a hosted environment: [Quick Start: Docker](quick-starts/02-quick-start-docker.md)
-- hosted on [Cloud Run], a serverless platform on Google Cloud: [Quick Start: Cloud Run](quick-starts/03-quick-start-cloud-run.md)
+- locally during development: [Quickstart: Dart](quickstarts/01-quickstart-dart.md)
+- locally using Docker to simulate a hosted environment: [Quickstart: Docker](quickstarts/02-quickstart-docker.md)
+- hosted on [Cloud Run], a serverless platform on Google Cloud: [Quickstart: Cloud Run](quickstarts/03-quickstart-cloudrun.md)
 
 ---
 
-[[toc]](README.md) [[next]](quick-starts/01-quick-start-dart.md)
+[[toc]](README.md) [[next]](quickstarts/01-quickstart-dart.md)
 
 <!-- reference links -->
-
 [cloud run]: https://cloud.google.com/run
 [containers]: https://www.docker.com/resources/what-container
 [cloudevents]: https://cloudevents.io/

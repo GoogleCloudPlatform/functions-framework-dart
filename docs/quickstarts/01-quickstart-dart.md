@@ -1,6 +1,6 @@
-# Quick Start: Dart
+# Quickstart: Dart
 
-This quick start discusses how to build and test a function locally as part of a
+This quickstart discusses how to build and test a function locally as part of a
 normal developer workflow.
 
 ## Prerequisites
@@ -156,18 +156,12 @@ Listening on :8080
 ```
 
 ---
-[[toc]](../README.md) [[back]](../01-introduction.md) [[next]](02-quick-start-docker.md)
+[[toc]](../README.md) [[back]](../01-introduction.md) [[next]](02-quickstart-docker.md)
 
 <!-- reference links -->
-
 [curl]: https://curl.se/docs/manual.html
-
 [Dart SDK]: https://dart.dev/get-dart
-
 [Request]: https://pub.dev/documentation/shelf/latest/shelf/Request-class.html
-
 [Response]: https://pub.dev/documentation/shelf/latest/shelf/Response-class.html
-
 [Shelf]: https://pub.dev/packages/shelf
-
 [zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip
