@@ -2,7 +2,7 @@
 
 This example demonstrates writing a function to handle a CloudEvent.
 
-CloudEvent function handlers don't return a response to send to the event 
+CloudEvent function handlers don't return a response to send to the event
 producter. They generally perform some work and print output for logging.
 
 The basic shape of the function handler looks like this:
@@ -13,7 +13,7 @@ void function(CloudEvent event, RequestContext context) {
 }
 ```
 
-Or like this if it needs to perform work that will complete sometime in the 
+Or like this if it needs to perform work that will complete sometime in the
 future:
 
 ```dart
@@ -41,9 +41,9 @@ void function(CloudEvent event, RequestContext context) {
 }
 ```
 
-All the function does is log the source and subject of the CloudEvent that 
-triggered it, and then prints out the entire event JSON object for 
-informational purposes.
+All the function does is log the source and subject of the CloudEvent that
+triggered it, and then prints out the entire event JSON object for informational
+purposes.
 
 ## Generate project files
 
@@ -74,9 +74,9 @@ $ dart test
 
 ## Run the function
 
-The default signature type for a function is for handling normal HTTP 
-requests. When running a function for handling a cloudevent, you must either 
-set the `FUNCTION_SIGNATURE_TYPE` environment variable or the 
+The default signature type for a function is for handling normal HTTP requests.
+When running a function for handling a cloudevent, you must either set
+the `FUNCTION_SIGNATURE_TYPE` environment variable or the
 `--signature-type` command line option to `cloudevent`, as shown below:
 
 ```shell
@@ -99,8 +99,8 @@ options used in this example are:
   the body is a JSON document
 - `-w '%{http_code}\n'` - print the HTTP status code (expect 200 for success)
 
-Alternatively, instead of running `curl`, you can run either of the 
-following Dart scripts under the `examples/raw_cloudevent/tool` directory:
+Alternatively, instead of running `curl`, you can run either of the following
+Dart scripts under the `examples/raw_cloudevent/tool` directory:
 
 - `binary_mode_request.dart`
 - `structured_mode_request.dart`
@@ -115,7 +115,11 @@ Docker or deploy to Cloud Run, see these quick start guides:
 <!-- reference links -->
 
 [curl]: https://curl.se/docs/manual.html
+
 [Quick Start: Dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quick-starts/01-quick-start-dart.md
+
 [Quick Start: Docker]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quick-starts/02-quick-start-docker.md
+
 [Quick Start: Cloud Run]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quick-starts/03-quick-start-cloud-run.md
+
 [postman]: https://www.postman.com/product/api-client/
