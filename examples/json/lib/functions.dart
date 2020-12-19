@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:async';
-
 import 'package:functions_framework/functions_framework.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'functions.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable(nullable: false, createFactory: false)
 class GreetingResponse {
   final String salutation;
   final String name;

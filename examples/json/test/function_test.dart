@@ -35,7 +35,7 @@ class GreetingResponse {
   Map<String, dynamic> toJson() => _$GreetingResponseToJson(this);
 
   @override
-  bool operator ==(other) =>
+  bool operator ==(Object other) =>
       (other is GreetingResponse) &&
       other.salutation == salutation &&
       other.name == name;
@@ -48,8 +48,7 @@ const defaultTimeout = Timeout(Duration(seconds: 3));
 
 void main() {
   test('defaults', () async {
-    final proc = await TestProcess.start(
-        'dart', ['bin/server.dart']);
+    final proc = await TestProcess.start('dart', ['bin/server.dart']);
 
     await expectLater(
       proc.stdout,
