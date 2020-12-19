@@ -27,7 +27,7 @@ import 'src/run.dart';
 
 export 'src/bad_request_exception.dart' show BadRequestException;
 export 'src/custom_event_wrapper.dart'
-    show CustomTypeFunctionEndPoint, VoidCustomTypeFunctionEndPoint;
+    show CustomTypeFunctionEndPoint, CustomTypeWithContextFunctionEndPoint;
 export 'src/function_endpoint.dart' show FunctionEndpoint;
 
 /// If there is an invalid configuration, [BadConfigurationException] will be

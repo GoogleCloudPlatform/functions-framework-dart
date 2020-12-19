@@ -12,10 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+
 import 'package:shelf/shelf.dart';
 
 import 'cloud_event_wrapper.dart';
 import 'function_config.dart';
+import 'log_severity.dart';
+import 'logging.dart' show loggerForRequest;
+
+typedef HandlerWithLogger = FutureOr<Response> Function(
+  Request request,
+  CloudLogger logger,
+);
 
 abstract class FunctionEndpoint {
   final String target;
@@ -29,10 +38,20 @@ abstract class FunctionEndpoint {
   const factory FunctionEndpoint.http(String target, Handler function) =
       _HttpFunctionEndPoint;
 
+  const factory FunctionEndpoint.httpWithLogger(
+    String target,
+    HandlerWithLogger function,
+  ) = _HttpFunctionWithLoggerEndPoint;
+
   const factory FunctionEndpoint.cloudEvent(
     String target,
     CloudEventHandler function,
   ) = _CloudEventFunctionEndPoint;
+
+  const factory FunctionEndpoint.cloudEventWithContext(
+    String target,
+    CloudEventWithContextHandler function,
+  ) = _CloudEventFunctionWithLoggerEndPoint;
 }
 
 class _HttpFunctionEndPoint extends FunctionEndpoint {
@@ -47,6 +66,20 @@ class _HttpFunctionEndPoint extends FunctionEndpoint {
   const _HttpFunctionEndPoint(String target, this.function) : super(target);
 }
 
+class _HttpFunctionWithLoggerEndPoint extends FunctionEndpoint {
+  final HandlerWithLogger function;
+
+  @override
+  FunctionType get functionType => FunctionType.http;
+
+  @override
+  Handler get handler =>
+      (request) async => await function(request, loggerForRequest(request));
+
+  const _HttpFunctionWithLoggerEndPoint(String target, this.function)
+      : super(target);
+}
+
 class _CloudEventFunctionEndPoint extends FunctionEndpoint {
   final CloudEventHandler function;
 
@@ -57,5 +90,18 @@ class _CloudEventFunctionEndPoint extends FunctionEndpoint {
   Handler get handler => wrapCloudEventFunction(function);
 
   const _CloudEventFunctionEndPoint(String target, this.function)
+      : super(target);
+}
+
+class _CloudEventFunctionWithLoggerEndPoint extends FunctionEndpoint {
+  final CloudEventWithContextHandler function;
+
+  @override
+  FunctionType get functionType => FunctionType.cloudevent;
+
+  @override
+  Handler get handler => wrapCloudEventWithContextFunction(function);
+
+  const _CloudEventFunctionWithLoggerEndPoint(String target, this.function)
       : super(target);
 }

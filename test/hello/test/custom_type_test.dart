@@ -153,6 +153,7 @@ void main() {
           testProcess,
           requestOutput: emitsInOrder([
             'subscription: subABC123',
+            'INFO: subscription: subABC123',
             endsWith('POST    [200] /'),
           ]),
         );
@@ -175,7 +176,10 @@ void main() {
         await expectInvalid(
           response,
           'A message is required!',
-          extraPrintMatcher: 'subscription: null',
+          extraPrintMatcher: emitsInOrder([
+            'subscription: null',
+            'INFO: subscription: null',
+          ]),
         );
       });
     });

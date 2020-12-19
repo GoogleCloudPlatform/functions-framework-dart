@@ -23,10 +23,10 @@ import 'bad_request_exception.dart';
 import 'constants.dart';
 import 'log_severity.dart';
 
-final _loggerKey = Object();
+CloudLogger loggerForRequest(Request request) =>
+    _requestExpando[request] ?? const _DefaultLogger();
 
-CloudLogger get logger =>
-    Zone.current[_loggerKey] as CloudLogger ?? const _DefaultLogger();
+final _requestExpando = Expando<CloudLogger>('request logger expando');
 
 Middleware createLoggingMiddleware(String projectId) =>
     projectId == null ? _logSimple : cloudLoggingMiddleware(projectId);
@@ -114,13 +114,10 @@ Middleware cloudLoggingMiddleware(String projectId) {
 
         final completer = Completer<Response>.sync();
 
+        final currentZone = Zone.current;
+
         Zone.current
             .fork(
-          zoneValues: traceValue == null
-              ? null
-              : {
-                  _loggerKey: _CloudLogger(Zone.current, traceValue),
-                },
           specification: ZoneSpecification(
             handleUncaughtError: (self, parent, zone, error, stackTrace) {
               if (error is HijackException) {
@@ -170,6 +167,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
         )
             .runGuarded(
           () async {
+            _requestExpando[request] = _CloudLogger(currentZone, traceValue);
             final response = await innerHandler(request);
             if (!completer.isCompleted) {
               completer.complete(response);
@@ -233,9 +231,8 @@ class _CloudLogger extends CloudLogger {
   _CloudLogger(this._zone, this._traceId);
 
   @override
-  void log(Object message, LogSeverity severity) {
-    _zone.print(_createLogEntry(_traceId, '$message', severity));
-  }
+  void log(Object message, LogSeverity severity) =>
+      _zone.print(_createLogEntry(_traceId, '$message', severity));
 }
 
 String _createLogEntry(

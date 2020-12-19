@@ -19,8 +19,13 @@ import 'package:shelf/shelf.dart';
 import 'bad_request_exception.dart';
 import 'cloud_event.dart';
 import 'json_request_utils.dart';
+import 'request_context.dart';
 
 typedef CloudEventHandler = FutureOr<void> Function(CloudEvent request);
+typedef CloudEventWithContextHandler = FutureOr<void> Function(
+  CloudEvent request,
+  RequestContext context,
+);
 
 Handler wrapCloudEventFunction(CloudEventHandler handler) => (request) async {
       final event = _requiredBinaryHeader.every(request.headers.containsKey)
@@ -28,6 +33,19 @@ Handler wrapCloudEventFunction(CloudEventHandler handler) => (request) async {
           : await _decodeStructured(request);
 
       await handler(event);
+
+      return Response.ok('');
+    };
+
+Handler wrapCloudEventWithContextFunction(
+        CloudEventWithContextHandler handler) =>
+    (request) async {
+      final event = _requiredBinaryHeader.every(request.headers.containsKey)
+          ? await _decodeBinary(request)
+          : await _decodeStructured(request);
+
+      final context = contextForRequest(request);
+      await handler(event, context);
 
       return Response.ok('');
     };

@@ -25,11 +25,11 @@ const _functions = <FunctionEndpoint>{
     'function',
     function_library.function,
   ),
-  FunctionEndpoint.http(
+  FunctionEndpoint.httpWithLogger(
     'loggingHandler',
     function_library.loggingHandler,
   ),
-  FunctionEndpoint.cloudEvent(
+  FunctionEndpoint.cloudEventWithContext(
     'basicCloudEventHandler',
     function_library.basicCloudEventHandler,
   ),
@@ -41,12 +41,12 @@ const _functions = <FunctionEndpoint>{
     'conformanceCloudEvent',
     function_library.conformanceCloudEvent,
   ),
-  VoidCustomTypeFunctionEndPoint(
+  CustomTypeWithContextFunctionEndPoint.voidResult(
     'pubSubHandler',
     function_library.pubSubHandler,
     _factory5,
   ),
-  CustomTypeFunctionEndPoint(
+  CustomTypeWithContextFunctionEndPoint(
     'jsonHandler',
     function_library.jsonHandler,
     _factory6,

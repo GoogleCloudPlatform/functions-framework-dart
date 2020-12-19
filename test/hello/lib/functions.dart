@@ -110,7 +110,7 @@ Future<Response> function(Request request) async {
 }
 
 @CloudFunction()
-Response loggingHandler(Request handler) {
+Response loggingHandler(Request handler, CloudLogger logger) {
   logger
     ..log('default', LogSeverity.defaultSeverity)
     ..debug('debug')
@@ -126,7 +126,8 @@ Response loggingHandler(Request handler) {
 }
 
 @CloudFunction()
-void basicCloudEventHandler(CloudEvent event) {
+void basicCloudEventHandler(CloudEvent event, RequestContext context) {
+  context.logger.info('event subject: ${event.subject}');
   stderr.writeln(_encoder.convert(event));
 }
 
@@ -166,15 +167,19 @@ void conformanceCloudEvent(CloudEvent event) {
 }
 
 @CloudFunction()
-void pubSubHandler(PubSub pubSub) {
+void pubSubHandler(PubSub pubSub, RequestContext context) {
   print('subscription: ${pubSub.subscription}');
+  context.logger.info('subscription: ${pubSub.subscription}');
   if (pubSub.message == null) {
     throw BadRequestException(400, 'A message is required!');
   }
 }
 
 @CloudFunction()
-FutureOr<bool> jsonHandler(Map<String, dynamic> request) {
+FutureOr<bool> jsonHandler(
+  Map<String, dynamic> request,
+  RequestContext context,
+) {
   print('Keys: ${request.keys.join(', ')}');
   return request.isEmpty;
 }
