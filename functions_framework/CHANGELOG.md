@@ -11,7 +11,7 @@
     functions that handle and return JSON data.
   - Added `CloudLogger`, `LogSeverity`, and `HandlerWithLogger` to support
     logging from handlers.
-  - `RequestContext` to git access to request information, including logging,
+  - `RequestContext` to get access to request information, including logging,
     from `CloudEvent` and custom handlers.
   - Added `BadRequestException` class. Functions can throw this exception to
     cause a `4xx` status code to be returned to a request source.
