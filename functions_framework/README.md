@@ -12,11 +12,11 @@ functions, brought to you by the Google Dart and Cloud Functions teams.
 The Functions Framework lets you write lightweight functions that run in many
 different environments, including:
 
-- [Google Cloud Functions](https://cloud.google.com/functions/)
+- [Google Cloud Functions]
 - Your local development machine
-- [Knative](https://github.com/knative/)-based environments
-- [Google App Engine](https://cloud.google.com/appengine/docs/go/)
-- [Google Cloud Run](https://cloud.google.com/run/docs/quickstarts/build-and-deploy)
+- [Knative]-based environments
+- [Google App Engine]
+- [Google Cloud Run]
 
 The framework allows you to go from:
 
@@ -75,21 +75,32 @@ properly format your code.
 
 BSD 3-Clause License. See [`LICENSE`](LICENSE) for details.
 
-<!-- Repo links -->
+<!-- Reference links -->
+[buildpacks]: https://github.com/GoogleCloudPlatform/buildpacks
+[CloudEvents]: https://cloudevents.io/
+[Google App Engine]: https://cloud.google.com/appengine/docs/go/
+[Google Cloud Functions]: https://cloud.google.com/functions/
+[Google Cloud Run]:
+https://cloud.google.com/run/docs/quickstarts/build-and-deploy
+[Knative]: https://github.com/knative/
 
+<!-- Repo links -->
 [ff_dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
 <!-- Unit Test links -->
-
-[ff_dart_unit_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Unit%20CI/badge.svg
-[ff_dart_unit_link]: https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Unit+CI"
+[ff_dart_unit_img]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Unit%20CI/badge.svg
+[ff_dart_unit_link]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Unit+CI"
 
 <!-- Lint Test links -->
-
-[ff_dart_lint_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Lint%20CI/badge.svg
-[ff_dart_lint_link]: https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Lint+CI"
+[ff_dart_lint_img]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Lint%20CI/badge.svg
+[ff_dart_lint_link]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Lint+CI"
 
 <!-- Conformance Test links -->
-
-[ff_dart_conformance_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Conformance%20CI/badge.svg
-[ff_dart_conformance_link]: https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Conformance+CI"
+[ff_dart_conformance_img]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Conformance%20CI/badge.svg
+[ff_dart_conformance_link]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Conformance+CI"

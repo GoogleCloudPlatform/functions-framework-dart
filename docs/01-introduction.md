@@ -56,17 +56,18 @@ or [postman], which are helpful for making and automating more complex web
 request tests.
 
 A best practice is to incorporate automated tests as part of your continuous
-integration (CI) process during development. The example demonstrates the
-use of Dart tests, which we'll cover as part of this quickstart.
+integration (CI) process during development. The example demonstrates the use of
+Dart tests, which we'll cover as part of this quickstart.
 
 ## What's next
 
 Using the example presented above, we will walk through a few quickstart
 scenarios that demonstrate running the function
 
-- locally during development: [Quickstart: Dart](quickstarts/01-quickstart-dart.md)
-- locally using Docker to simulate a hosted environment: [Quickstart: Docker](quickstarts/02-quickstart-docker.md)
-- hosted on [Cloud Run], a serverless platform on Google Cloud: [Quickstart: Cloud Run](quickstarts/03-quickstart-cloudrun.md)
+- locally during development: [Quickstart: Dart]
+- locally using Docker to simulate a hosted environment: [Quickstart: Docker]
+- hosted on [Cloud Run], a serverless platform on Google Cloud:
+  [Quickstart: Cloud Run]
 
 ---
 
@@ -77,7 +78,11 @@ scenarios that demonstrate running the function
 [containers]: https://www.docker.com/resources/what-container
 [cloudevents]: https://cloudevents.io/
 [curl]: https://curl.se/docs/manual.html
-[functions framework for dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart
+[functions framework for dart]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart
 [here]: https://github.com/GoogleCloudPlatform/functions-framework
 [postman]: https://www.postman.com/product/api-client/
+[Quickstart: Dart]: quickstarts/01-quickstart-dart.md
+[Quickstart: Docker]: quickstarts/02-quickstart-docker.md
+[Quickstart: Cloud Run]: quickstarts/03-quickstart-cloudrun.md
 [specification]: https://github.com/GoogleCloudPlatform/functions-framework

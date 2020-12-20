@@ -1,3 +1,5 @@
+# Changelog
+
 ## 0.3.0-dev
 
 - Added support for functions that handle and return JSON data.
