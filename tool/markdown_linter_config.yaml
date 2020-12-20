@@ -1,4 +1,4 @@
-MD013: false # line length
+MD013: true # line length
 MD033: # disallow in-line HTML
   allowed_elements: [br]
 MD041: false # require heading at top of file
