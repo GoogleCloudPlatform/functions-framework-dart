@@ -39,8 +39,8 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-const _functions = <FunctionEndpoint>{
-  FunctionEndpoint.http(
+const _functionTargets = <FunctionTarget>{
+  FunctionTarget.http(
     'handleGet',
     function_library.handleGet,
   ),
@@ -60,8 +60,8 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-const _functions = <FunctionEndpoint>{
-  FunctionEndpoint.http(
+const _functionTargets = <FunctionTarget>{
+  FunctionTarget.http(
     'some function',
     function_library.handleGet,
   ),
@@ -83,7 +83,7 @@ const _functions = <FunctionEndpoint>{
       'customResponseAsync',
       'customResponseFutureOr',
     ].map((e) => """
-  FunctionEndpoint.http(
+  FunctionTarget.http(
     '$e',
     function_library.$e,
   ),""").join('\n');
@@ -91,7 +91,7 @@ const _functions = <FunctionEndpoint>{
       file.readAsStringSync(),
       '''
 $_outputHeader
-const _functions = <FunctionEndpoint>{
+const _functionTargets = <FunctionTarget>{
 $lines
 };
 ''',
@@ -108,7 +108,7 @@ $lines
       'optionalParam',
       'objectParam',
     ].map((e) => """
-  FunctionEndpoint.cloudEvent(
+  FunctionTarget.cloudEvent(
     '$e',
     function_library.$e,
   ),""").join('\n');
@@ -116,7 +116,7 @@ $lines
       file.readAsStringSync(),
       '''
 $_outputHeader
-const _functions = <FunctionEndpoint>{
+const _functionTargets = <FunctionTarget>{
 $lines
 };
 ''',
@@ -139,7 +139,7 @@ $lines
             'optionalParam',
           ],
           (e, index) => """
-  CustomTypeFunctionEndPoint.voidResult(
+  JsonFunctionTarget.voidResult(
     '$e',
     function_library.$e,
     _factory$index,
@@ -177,7 +177,7 @@ function_library.JsonType _factory$index(Object json) {
             'optionalParam',
           ],
           (e, index) => """
-  CustomTypeWithContextFunctionEndPoint.voidResult(
+  JsonWithContextFunctionTarget.voidResult(
     '$e',
     function_library.$e,
     _factory$index,
@@ -209,7 +209,7 @@ function_library.JsonType _factory$index(Object json) {
             'optionalParam',
           ],
           (e, index) => """
-  CustomTypeFunctionEndPoint(
+  JsonFunctionTarget(
     '$e',
     function_library.$e,
     _factory$index,
@@ -241,7 +241,7 @@ function_library.JsonType _factory$index(Object json) {
             'optionalParam',
           ],
           (e, index) => """
-  CustomTypeFunctionEndPoint(
+  JsonFunctionTarget(
     '$e',
     function_library.$e,
     _factory$index,
@@ -273,7 +273,7 @@ function_library.JsonType _factory$index(Object json) {
             'optionalParam',
           ],
           (e, index) => """
-  CustomTypeFunctionEndPoint(
+  JsonFunctionTarget(
     '$e',
     function_library.$e,
     _factory$index,
@@ -307,7 +307,7 @@ function_library.JsonType _factory$index(Object json) {
             'optionalParam',
           ],
           (e, index) => """
-  CustomTypeFunctionEndPoint.voidResult(
+  JsonFunctionTarget.voidResult(
     '$e',
     function_library.$e,
     _factory$index,
@@ -338,7 +338,7 @@ num _factory$index(Object json) {
             'optionalParam',
           ],
           (e, index) => """
-  CustomTypeFunctionEndPoint(
+  JsonFunctionTarget(
     '$e',
     function_library.$e,
     _factory$index,
@@ -370,7 +370,7 @@ num _factory$index(Object json) {
             'optionalParam',
           ],
           (e, index) => """
-  CustomTypeFunctionEndPoint(
+  JsonFunctionTarget(
     '$e',
     function_library.$e,
     _factory$index,
@@ -408,7 +408,7 @@ num _factory$index(Object json) {
             'optionalParam',
           ],
           (e, index) => """
-  CustomTypeWithContextFunctionEndPoint.voidResult(
+  JsonWithContextFunctionTarget.voidResult(
     '$e',
     function_library.$e,
     _factory$index,
@@ -552,7 +552,7 @@ Future<void> _testItems(
     inputContent,
     '''
 $_outputHeader
-const _functions = <FunctionEndpoint>{
+const _functionTargets = <FunctionTarget>{
 $entries
 };
 
@@ -629,6 +629,6 @@ import 'package:functions_framework/serve.dart';
 import 'package:$_pkgName/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functions);
+  await serve(args, _functionTargets);
 }
 ''';

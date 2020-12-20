@@ -7,9 +7,9 @@
 
   - Added `CloudEventHandler`, `CloudEventWithContextHandler`, and `CloudEvent`
     class to support Cloud Events.
-  - Added `CustomEventHandler` and `CustomEventWithContextHandler` to support
+  - Added `JsonHandler` and `JsonWithContextHandler` to support
     functions that handle and return JSON data.
-  - Added `CloudLogger`, `LogSeverity`, and `HandlerWithLogger` to support
+  - Added `RequestLogger`, `LogSeverity`, and `HandlerWithLogger` to support
     logging from handlers.
   - `RequestContext` to get access to request information, including logging,
     from `CloudEvent` and custom handlers.
@@ -18,12 +18,13 @@
 
 - `serve.dart`
 
-  - Added `CustomTypeFunctionEndPoint`, `CustomTypeWithContextFunctionEndPoint`,
+  - Added `JsonFunctionTarget`, `JsonWithContextFunctionTarget`,
     and `BadRequestException` classes to support generated code for functions
     that handle and return JSON data.
-  - Added `FunctionEndpoint` class.
+  - Added `FunctionTarget` class. This is the abstract base class that wraps
+    user written functions and links them to a name.
   - **BREAKING** The signature for `serve is now:`<br>
-    `Future<void> serve(List<String> args, Set<FunctionEndpoint> functions)`
+    `Future<void> serve(List<String> args, Set<FunctionTarget> targets)`
 
 ## 0.2.0
 

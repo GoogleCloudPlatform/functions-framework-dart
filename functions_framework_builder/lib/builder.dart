@@ -111,10 +111,10 @@ import 'package:functions_framework/serve.dart';
 import '${input.uri}' as $functionsLibraryPrefix;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functions);
+  await serve(args, _functionTargets);
 }
 
-const _functions = <FunctionEndpoint>{
+const _functionTargets = <FunctionTarget>{
 ${functions.join('\n')}
 };
 

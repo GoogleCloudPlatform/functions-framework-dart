@@ -23,12 +23,12 @@ import 'utils.dart';
 import 'valid_json_utils.dart';
 
 const _libraryUri = 'package:functions_framework/functions_framework.dart';
-const _typedefName = 'CustomEventHandler';
-const _typedefWithContextName = 'CustomEventWithContextHandler';
+const _typedefName = 'JsonHandler';
+const _typedefWithContextName = 'JsonWithContextHandler';
 
-const _constructorName = 'CustomTypeFunctionEndPoint';
+const _constructorName = 'JsonFunctionTarget';
 const _voidConstructorName = '$_constructorName.voidResult';
-const _withContextConstructorName = 'CustomTypeWithContextFunctionEndPoint';
+const _withContextConstructorName = 'JsonWithContextFunctionTarget';
 const _voidWithContextConstructorName =
     '$_withContextConstructorName.voidResult';
 

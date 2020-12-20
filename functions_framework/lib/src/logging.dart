@@ -23,10 +23,10 @@ import 'bad_request_exception.dart';
 import 'constants.dart';
 import 'log_severity.dart';
 
-CloudLogger loggerForRequest(Request request) =>
+RequestLogger loggerForRequest(Request request) =>
     _requestExpando[request] ?? const _DefaultLogger();
 
-final _requestExpando = Expando<CloudLogger>('request logger expando');
+final _requestExpando = Expando<RequestLogger>('request logger expando');
 
 Middleware createLoggingMiddleware(String projectId) =>
     projectId == null ? _logSimple : cloudLoggingMiddleware(projectId);
@@ -206,11 +206,11 @@ Map<String, dynamic> _sourceLocation(Frame frame) => {
       'function': frame.member,
     };
 
-/// A [CloudLogger] that prints messages normally.
+/// A [RequestLogger] that prints messages normally.
 ///
 /// Any message that's not [LogSeverity.defaultSeverity] is prefixed by the
 /// [LogSeverity] name.
-class _DefaultLogger extends CloudLogger {
+class _DefaultLogger extends RequestLogger {
   const _DefaultLogger();
 
   @override
@@ -223,8 +223,9 @@ class _DefaultLogger extends CloudLogger {
   }
 }
 
-/// A [CloudLogger] that prints messages using Google Cloud structured logging.
-class _CloudLogger extends CloudLogger {
+/// A [RequestLogger] that prints messages using Google Cloud structured
+/// logging.
+class _CloudLogger extends RequestLogger {
   final Zone _zone;
   final String _traceId;
 

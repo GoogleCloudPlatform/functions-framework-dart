@@ -17,36 +17,36 @@ import 'package:functions_framework/serve.dart';
 import 'package:hello_world_function_test/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functions);
+  await serve(args, _functionTargets);
 }
 
-const _functions = <FunctionEndpoint>{
-  FunctionEndpoint.http(
+const _functionTargets = <FunctionTarget>{
+  FunctionTarget.http(
     'function',
     function_library.function,
   ),
-  FunctionEndpoint.httpWithLogger(
+  FunctionTarget.httpWithLogger(
     'loggingHandler',
     function_library.loggingHandler,
   ),
-  FunctionEndpoint.cloudEventWithContext(
+  FunctionTarget.cloudEventWithContext(
     'basicCloudEventHandler',
     function_library.basicCloudEventHandler,
   ),
-  FunctionEndpoint.http(
+  FunctionTarget.http(
     'conformanceHttp',
     function_library.conformanceHttp,
   ),
-  FunctionEndpoint.cloudEvent(
+  FunctionTarget.cloudEvent(
     'conformanceCloudEvent',
     function_library.conformanceCloudEvent,
   ),
-  CustomTypeWithContextFunctionEndPoint.voidResult(
+  JsonWithContextFunctionTarget.voidResult(
     'pubSubHandler',
     function_library.pubSubHandler,
     _factory5,
   ),
-  CustomTypeWithContextFunctionEndPoint(
+  JsonWithContextFunctionTarget(
     'jsonHandler',
     function_library.jsonHandler,
     _factory6,
