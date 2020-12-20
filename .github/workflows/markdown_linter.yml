@@ -27,4 +27,4 @@ jobs:
       - name: Install dependencies
         run: npm install --global markdownlint-cli2
       - name: Run lint check
-        run: markdownlint-cli2-fix **/*.md
+        run: markdownlint-cli2-fix "**/*.md"

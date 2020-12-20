@@ -196,7 +196,9 @@ docker image rm hellofunc   # remove the image
 ```
 
 ---
-[[toc]](../README.md) [[back]](01-quickstart-dart.md) [[next]](03-quickstart-cloudrun.md)
+[[toc]](../README.md)
+[[back]](01-quickstart-dart.md)
+[[next]](03-quickstart-cloudrun.md)
 
 <!-- reference links -->
 [docker]: https://docs.docker.com/get-docker/

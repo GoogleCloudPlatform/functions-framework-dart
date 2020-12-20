@@ -109,7 +109,9 @@ The Functions Framework for Dart provides a wrapper over the [Shelf] web server
 framework. While you do not need to set up the server yourself, you should be
 aware of the Shelf [Request] and [Response] classes.
 
-> These docs and the framework itself are an evolving work in progress. The docs will be expanded to including more examples and details for setting HTTP response headers and returning structured JSON data.
+> These docs and the framework itself are an evolving work in progress.
+> The docs will be expanded to including more examples and details for setting
+> HTTP response headers and returning structured JSON data.
 
 ## Changing the default function name
 
@@ -156,7 +158,9 @@ Listening on :8080
 ```
 
 ---
-[[toc]](../README.md) [[back]](../01-introduction.md) [[next]](02-quickstart-docker.md)
+[[toc]](../README.md)
+[[back]](../01-introduction.md)
+[[next]](02-quickstart-docker.md)
 
 <!-- reference links -->
 [curl]: https://curl.se/docs/manual.html
