@@ -1,7 +1,13 @@
+# Rules for markdownlint-cli2 (https://github.com/DavidAnson/markdownlint-cli2)
+# Based on markdownlint library (https://github.com/DavidAnson/markdownlint)
+# (same linter as vscode-markdownlint).
+# See rules descriptions here:
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+# 
 line_length:              # MD013 max line length
   stern: true             # allows for lines with no spaces (long URLs), otherwise error
+  tables: false           # don't break tables
   line_length: 80
-  tables: false
 html:                     # MD033 no html
   allowed_elements: [br]
 headings: true            # MD041 require heading at top of file
