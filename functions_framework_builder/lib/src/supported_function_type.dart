@@ -62,7 +62,11 @@ class SupportedFunctionType {
     );
   }
 
-  FactoryData createReference(String targetName, FunctionElement element) {
+  FactoryData createReference(
+    LibraryElement library,
+    String targetName,
+    FunctionElement element,
+  ) {
     if (element.library.typeSystem.isSubtypeOf(element.type, _type)) {
       return _TrivialFactoryData(
         '$_constructor(${escapeDartString(targetName)}, '

@@ -76,7 +76,11 @@ class _FunctionsFrameworkBuilder implements Builder {
         );
       }
 
-      final invokeExpression = validator.validate(targetName, function);
+      final invokeExpression = validator.validate(
+        libraryElement,
+        targetName,
+        function,
+      );
 
       entries[targetName] = invokeExpression;
     }
@@ -134,7 +138,7 @@ ${factories.join('\n')}
 }
 
 Iterable<AnnotatedElement> _fromLibrary(LibraryElement library) sync* {
-  for (var element in library.topLevelElements) {
+  for (var element in library.exportNamespace.definedNames.values) {
     final annotations = _checker.annotationsOf(element).toList();
 
     if (annotations.isEmpty) {

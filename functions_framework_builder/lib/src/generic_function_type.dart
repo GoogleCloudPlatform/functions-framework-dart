@@ -70,7 +70,11 @@ class GenericFunctionType implements SupportedFunctionType {
   }
 
   @override
-  FactoryData createReference(String targetName, FunctionElement element) {
+  FactoryData createReference(
+    LibraryElement library,
+    String targetName,
+    FunctionElement element,
+  ) {
     if (element.parameters.isEmpty) {
       return null;
     }
@@ -94,15 +98,14 @@ class GenericFunctionType implements SupportedFunctionType {
       nullabilitySuffix: NullabilitySuffix.none,
     );
 
-    if (element.library.typeSystem.isSubtypeOf(element.type, functionType)) {
+    if (library.typeSystem.isSubtypeOf(element.type, functionType)) {
       if (paramInfo.paramType != null) {
-        if (null ==
-            element.library.exportNamespace
-                .get(paramInfo.paramType.element.name)) {
+        if (library.exportNamespace.get(paramInfo.paramType.element.name) ==
+            null) {
           // TODO: add a test for this!
           throw InvalidGenerationSourceError(
             'The type `${paramInfo.paramType.element.name}` is not exposed by '
-            'the function library `${element.library.source.uri}` so it cannot '
+            'the function library `${library.source.uri}` so it cannot '
             'be used.',
           );
         }
