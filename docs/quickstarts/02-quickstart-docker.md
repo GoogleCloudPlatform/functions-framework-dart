@@ -9,7 +9,7 @@ environment.
 
 ## Prerequisites
 
-* [Docker] (Docker Desktop 3.0.0, Stable or Edge release)
+* [Docker] (Docker Desktop 3.x, Stable or Edge release)
 
 ## Get a copy of the `hello` example
 
@@ -160,8 +160,9 @@ You can have multiple simultaneously running containers with processes listening
 on port `8080` on the same host, as long as each container is mapped to a unique
 host port (a unique port on localhost).
 
-Nevertheless, if you really want to change the container port for some reason,
-you can do so as shown below.
+Nevertheless, if you really want to change the container port (the port the 
+server binds to **inside** of the container) for some reason, you can do so as
+shown below.
 
 ```shell
 $ docker run -p 8080:9999 -it --rm -e PORT=9999 hellofunc
@@ -176,7 +177,7 @@ Again, you also can  use the `--port` argument (which is a bit easier)
 instead of setting the environment variable:
 
 ```shell
-$ docker run -p 8080:9999 -it --rm hellofunc --port 8080
+$ docker run -p 8080:9999 -it --rm hellofunc --port 9999
 ...
 ```
 
