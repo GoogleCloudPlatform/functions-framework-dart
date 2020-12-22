@@ -78,3 +78,6 @@ Future<void> finishServerTest(
     emitsThrough('Received signal $signal - closing'),
   );
 }
+
+final containsTextPlainHeader =
+    containsPair('content-type', 'text/plain; charset=utf-8');

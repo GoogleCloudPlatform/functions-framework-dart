@@ -20,6 +20,7 @@ import 'package:functions_framework/functions_framework.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:shelf/shelf.dart';
 
+import 'src/pub_sub_types.dart';
 import 'src/utils.dart';
 
 export 'src/conformance_handlers.dart';
@@ -130,6 +131,12 @@ Response loggingHandler(Request handler, RequestLogger logger) {
 @CloudFunction()
 void basicCloudEventHandler(CloudEvent event, RequestContext context) {
   context.logger.info('event subject: ${event.subject}');
+
+  final pubSub = PubSub.fromJson(event.data as Map<String, dynamic>);
+
+  context.responseHeaders['x-attribute_count'] =
+      pubSub.message.attributes.length.toString();
+
   stderr.writeln(encodeJsonPretty(event));
 }
 

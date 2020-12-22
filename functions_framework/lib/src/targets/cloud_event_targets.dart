@@ -59,7 +59,7 @@ class CloudEventWithContextFunctionTarget extends FunctionTarget {
     final context = contextForRequest(request);
     await function(event, context);
 
-    return Response.ok('');
+    return Response.ok('', headers: context.responseHeaders);
   }
 
   const CloudEventWithContextFunctionTarget(String target, this.function)

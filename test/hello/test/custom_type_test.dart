@@ -33,7 +33,7 @@ void main() {
     expect(response.statusCode, 400);
     expect(
       response.headers,
-      _containsTextPlainHeader,
+      containsTextPlainHeader,
     );
     expect(
       response.body,
@@ -123,6 +123,7 @@ void main() {
 
     group('valid', () {
       test('correct', () async {
+        const subscription = 'subABC123';
         final requestUrl = 'http://localhost:$autoPort/';
         final response = await post(
           requestUrl,
@@ -137,7 +138,7 @@ void main() {
                 DateTime.now(),
                 {},
               ),
-              'subABC123',
+              subscription,
             ),
           ),
         );
@@ -145,15 +146,19 @@ void main() {
         expect(response.statusCode, 200);
         expect(
           response.headers,
-          _containsTextPlainHeader,
+          allOf(
+            containsTextPlainHeader,
+            containsPair('subscription', subscription),
+            containsPair('multi', 'item1, item2'),
+          ),
         );
         expect(response.body, isEmpty);
 
         await finishServerTest(
           testProcess,
           requestOutput: emitsInOrder([
-            'subscription: subABC123',
-            'INFO: subscription: subABC123',
+            'subscription: $subscription',
+            'INFO: subscription: $subscription',
             endsWith('POST    [200] /'),
           ]),
         );
@@ -208,7 +213,11 @@ void main() {
         expect(response.statusCode, 200);
         expect(
           response.headers,
-          containsPair('content-type', 'application/json'),
+          allOf(
+            containsPair('content-type', 'application/json'),
+            containsPair('key_count', '1'),
+            containsPair('multi', 'item1, item2'),
+          ),
         );
         final jsonBody = jsonDecode(response.body);
         expect(jsonBody, false);
@@ -234,7 +243,11 @@ void main() {
         expect(response.statusCode, 200);
         expect(
           response.headers,
-          containsPair('content-type', 'application/json'),
+          allOf(
+            containsPair('content-type', 'application/json'),
+            containsPair('key_count', '0'),
+            containsPair('multi', 'item1, item2'),
+          ),
         );
         final jsonBody = jsonDecode(response.body);
         expect(jsonBody, true);
@@ -252,6 +265,3 @@ void main() {
     group('invalid', testInvalid);
   });
 }
-
-final _containsTextPlainHeader =
-    containsPair('content-type', 'text/plain; charset=utf-8');

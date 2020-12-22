@@ -20,6 +20,8 @@ import 'pub_sub_types.dart';
 void pubSubHandler(PubSub pubSub, RequestContext context) {
   print('subscription: ${pubSub.subscription}');
   context.logger.info('subscription: ${pubSub.subscription}');
+  context.responseHeaders['subscription'] = pubSub.subscription;
+  context.responseHeaders['multi'] = ['item1', 'item2'];
   if (pubSub.message == null) {
     throw BadRequestException(400, 'A message is required!');
   }
@@ -31,5 +33,7 @@ FutureOr<bool> jsonHandler(
   RequestContext context,
 ) {
   print('Keys: ${request.keys.join(', ')}');
+  context.responseHeaders['key_count'] = request.keys.length.toString();
+  context.responseHeaders['multi'] = ['item1', 'item2'];
   return request.isEmpty;
 }
