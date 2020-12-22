@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:args/command_runner.dart' as cr;
+import 'dart:io' as io;
 
-import 'context.dart';
+import 'package:args/command_runner.dart' as cr;
+import 'package:stagehand/stagehand.dart';
+
+import 'console.dart';
 
 abstract class Command extends cr.Command {
-  final Context context;
+  final CommandContext context;
 
   Command(this.context);
 
@@ -36,4 +39,27 @@ abstract class Command extends cr.Command {
   void error(Object obj) {
     context.console.error(obj);
   }
+}
+
+class CommandContext {
+  final AppInfo app;
+  final Console console;
+  final GeneratorConfig generator;
+
+  CommandContext({this.app, this.console, this.generator});
+}
+
+class AppInfo {
+  final String name;
+  final String version;
+
+  AppInfo(this.name, this.version);
+}
+
+class GeneratorConfig {
+  final List<Generator> generators;
+  final io.Directory cwd;
+  final GeneratorTarget target;
+
+  GeneratorConfig({this.generators, this.cwd, this.target});
 }

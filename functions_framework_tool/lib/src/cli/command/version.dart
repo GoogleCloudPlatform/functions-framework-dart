@@ -15,7 +15,6 @@
 import 'dart:async';
 
 import '../command.dart';
-import '../context.dart';
 import '../http_utils.dart';
 
 class VersionCommand extends Command {
@@ -25,7 +24,7 @@ class VersionCommand extends Command {
   @override
   final description = 'Print the current version.';
 
-  VersionCommand(Context context) : super(context) {
+  VersionCommand(CommandContext context) : super(context) {
     argParser.addFlag('short',
         abbr: 's', negatable: false, help: 'Print just the version number.');
   }
@@ -40,7 +39,7 @@ class VersionCommand extends Command {
 ///
 /// If [short] is true, prints just the version number.
 /// If [checkUpdates] is true, also checks pub.dev for newer versions.
-FutureOr<void> printVersion(Context context,
+FutureOr<void> printVersion(CommandContext context,
     {bool short, bool checkUpdates}) async {
   final name = context.app.name;
   final version = context.app.version;

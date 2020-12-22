@@ -23,7 +23,7 @@ import '../version.dart';
 import 'command/generate.dart';
 import 'command/version.dart';
 import 'console.dart';
-import 'context.dart';
+import 'command.dart';
 
 export 'terminal.dart' show TerminalPrinter;
 
@@ -33,7 +33,7 @@ const String appDescription =
 
 /// App is a CLI tool for running in a user's terminal.
 class App extends Console {
-  Context _context;
+  CommandContext _context;
   CommandRunner _runner;
 
   App(List<Generator> generators, [Printer out, GeneratorTarget target])
@@ -41,7 +41,7 @@ class App extends Console {
         super(out) {
     generators.sort();
 
-    _context = Context(
+    _context = CommandContext(
         app: AppInfo(appName, packageVersion),
         console: this,
         generator: GeneratorConfig(
@@ -52,7 +52,7 @@ class App extends Console {
       ..addCommand(VersionCommand(context));
   }
 
-  Context get context => _context;
+  CommandContext get context => _context;
 
   Future run(List<String> args) async {
     try {

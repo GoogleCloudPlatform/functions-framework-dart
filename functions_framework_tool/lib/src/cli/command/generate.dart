@@ -21,7 +21,6 @@ import 'package:stagehand/src/common.dart';
 import 'package:stagehand/stagehand.dart' as stagehand;
 
 import '../command.dart';
-import '../context.dart';
 import '../directory.dart';
 
 class GenerateCommand extends Command {
@@ -31,7 +30,7 @@ class GenerateCommand extends Command {
   @override
   final description = 'Run a project generator to get started.';
 
-  GenerateCommand(Context context) : super(context) {
+  GenerateCommand(CommandContext context) : super(context) {
     argParser.addFlag('list',
         negatable: false, help: 'List available generators.');
 
