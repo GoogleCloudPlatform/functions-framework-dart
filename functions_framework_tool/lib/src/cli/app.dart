@@ -28,6 +28,8 @@ import 'context.dart';
 export 'terminal.dart' show TerminalPrinter;
 
 const String appName = 'fn';
+const String appDescription =
+    'fn is a tool for managing Dart Functions-as-a-Service (FaaS) projects.';
 
 /// App is a CLI tool for running in a user's terminal.
 class App extends Console {
@@ -39,18 +41,18 @@ class App extends Console {
         super(out) {
     generators.sort();
 
-    final generateCmd = GenerateCommand(_context);
-    final versionCmd = VersionCommand(_context);
-
-    _runner = CommandRunner(appName, 'awesome app')
-      ..addCommand(generateCmd)
-      ..addCommand(versionCmd);
-
     _context = Context(
         app: AppInfo(appName, packageVersion),
         console: this,
         generator: GeneratorConfig(
             generators: generators, cwd: io.Directory.current, target: target));
+
+    final generateCmd = GenerateCommand(context);
+    final versionCmd = VersionCommand(context);
+
+    _runner = CommandRunner(appName, appDescription)
+      ..addCommand(generateCmd)
+      ..addCommand(versionCmd);
   }
 
   Context get context => _context;
