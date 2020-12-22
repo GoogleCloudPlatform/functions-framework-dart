@@ -15,6 +15,8 @@
 import 'dart:async';
 import 'dart:io' as io;
 
+import 'package:io/io.dart' show ExitCode;
+
 import 'package:args/command_runner.dart';
 import 'package:functions_framework_tool/functions_framework_tool.dart' as tool;
 import 'package:functions_framework_tool/src/cli/app.dart' as cli;
@@ -27,18 +29,18 @@ import 'package:functions_framework_tool/src/cli/app.dart' as cli;
 // Normal (expected) errors are handled by the CLI app and displayed to the
 // user; only print errors and a stacktrace for problems indicating there is
 // something wrong with the app itself.
-FutureOr main(List<String> args) async {
+FutureOr<int> main(List<String> args) async {
   final app = cli.App(tool.generators, cli.TerminalPrinter());
 
   try {
     await app.run(args);
-    io.exit(0);
+    return io.exitCode = 0;
   } catch (e, st) {
     if (e is UsageException) {
-      io.exit(1);
+      return io.exitCode = ExitCode.usage.code;
     } else {
       print('Unexpected error: $e\n$st');
-      io.exit(1);
+      return io.exitCode = ExitCode.software.code;
     }
   }
 }
