@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0-dev
+## 0.3.0
 
 - Added support for connecting functions that handle and return JSON data.
 - Added support for connecting functions that handle the `CloudEvent` type.

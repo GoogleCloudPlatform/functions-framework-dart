@@ -16,7 +16,5 @@ dev_dependencies:
   test_process: ^1.0.0
 
 dependency_overrides:
-  functions_framework:
-    path: ../../functions_framework
   functions_framework_builder:
     path: ../../functions_framework_builder
