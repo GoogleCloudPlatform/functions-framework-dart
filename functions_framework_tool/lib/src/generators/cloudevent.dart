@@ -15,13 +15,13 @@
 // ignore: implementation_imports
 import 'package:stagehand/src/common.dart' as common;
 
-part 'json.g.dart';
+part 'cloudevent.g.dart';
 
 /// A generator for a pub library.
-class JsonFunctionGenerator extends common.DefaultGenerator {
-  JsonFunctionGenerator()
-      : super('json', 'Dart Package',
-            'A sample Functions Framework project for handling JSON.',
+class CloudEventFunctionGenerator extends common.DefaultGenerator {
+  CloudEventFunctionGenerator()
+      : super('cloudevent', 'Dart Package',
+            'A sample Functions Framework project for handling a cloudevent.',
             categories: const ['dart']) {
     for (var file in common.decodeConcatenatedData(_data)) {
       addTemplateFile(file);

@@ -16,9 +16,11 @@ import 'package:stagehand/stagehand.dart';
 
 import 'generators/helloworld.dart';
 import 'generators/json.dart';
+import 'generators/cloudevent.dart';
 
 /// A sorted list of Dart Functions Framework project generators.
 final List<Generator> generators = [
   HelloWorldGenerator(),
   JsonFunctionGenerator(),
+  CloudEventFunctionGenerator(),
 ]..sort();
