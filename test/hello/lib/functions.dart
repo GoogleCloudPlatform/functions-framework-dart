@@ -20,8 +20,10 @@ import 'package:functions_framework/functions_framework.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:shelf/shelf.dart';
 
-import 'src/pub_sub_types.dart';
+import 'src/utils.dart';
 
+export 'src/conformance_handlers.dart';
+export 'src/json_handlers.dart';
 export 'src/pub_sub_types.dart';
 
 int _activeRequests = 0;
@@ -72,7 +74,7 @@ Future<Response> function(Request request) async {
       };
 
       return Response.ok(
-        _encoder.convert(output),
+        encodeJsonPretty(output),
         headers: _jsonHeaders,
       );
     }
@@ -128,60 +130,7 @@ Response loggingHandler(Request handler, RequestLogger logger) {
 @CloudFunction()
 void basicCloudEventHandler(CloudEvent event, RequestContext context) {
   context.logger.info('event subject: ${event.subject}');
-  stderr.writeln(_encoder.convert(event));
-}
-
-@CloudFunction()
-Future<Response> conformanceHttp(Request request) async {
-  final content = await request.readAsString();
-
-  File('function_output.json').writeAsStringSync(
-    content,
-  );
-
-  final buffer = StringBuffer()
-    ..writeln('Hello, conformance test!')
-    ..writeln('HEADERS')
-    ..writeln(_encoder.convert(request.headers))
-    ..writeln('BODY')
-    ..writeln(_encoder.convert(jsonDecode(content)));
-
-  final output = buffer.toString();
-  print(output);
-  return Response.ok(output);
-}
-
-@CloudFunction()
-void conformanceCloudEvent(CloudEvent event) {
-  final eventEncoded = _encoder.convert(event);
-  File('function_output.json').writeAsStringSync(
-    eventEncoded,
-  );
-
-  final buffer = StringBuffer()
-    ..writeln('Hello, conformance test!')
-    ..writeln('EVENT')
-    ..writeln(eventEncoded);
-
-  print(buffer.toString());
-}
-
-@CloudFunction()
-void pubSubHandler(PubSub pubSub, RequestContext context) {
-  print('subscription: ${pubSub.subscription}');
-  context.logger.info('subscription: ${pubSub.subscription}');
-  if (pubSub.message == null) {
-    throw BadRequestException(400, 'A message is required!');
-  }
-}
-
-@CloudFunction()
-FutureOr<bool> jsonHandler(
-  Map<String, dynamic> request,
-  RequestContext context,
-) {
-  print('Keys: ${request.keys.join(', ')}');
-  return request.isEmpty;
+  stderr.writeln(encodeJsonPretty(event));
 }
 
 final _helloWorldBytes = utf8.encode('Hello, World!');
@@ -189,5 +138,3 @@ final _helloWorldBytes = utf8.encode('Hello, World!');
 const _contentTypeHeader = 'Content-Type';
 const _jsonContentType = 'application/json';
 const _jsonHeaders = {_contentTypeHeader: _jsonContentType};
-
-const _encoder = JsonEncoder.withIndent(' ');
