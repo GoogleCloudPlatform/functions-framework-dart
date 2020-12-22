@@ -138,7 +138,12 @@ class _JsonWithContextFunctionTarget<RequestType, ResponseType>
 
     return Response.ok(
       responseJson,
-      headers: const {contentTypeHeader: jsonContentType},
+      headers: context.responseHeaders.isEmpty
+          ? const {contentTypeHeader: jsonContentType}
+          : {
+              contentTypeHeader: jsonContentType,
+              ...context.responseHeaders,
+            },
     );
   }
 }
@@ -156,6 +161,6 @@ class _VoidJsonWithContextFunctionTarget<RequestType, ResponseType>
     final argument = await _toRequestType(request);
     final context = contextForRequest(request);
     await _function(argument, context);
-    return Response.ok('');
+    return Response.ok('', headers: context.responseHeaders);
   }
 }

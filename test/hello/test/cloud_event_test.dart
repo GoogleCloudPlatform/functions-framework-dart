@@ -21,18 +21,7 @@ import 'package:test_process/test_process.dart';
 
 import 'src/test_utils.dart';
 
-void main() {
-  // TODO: non-JSON body
-  // TODO: JSON-body, but not a Map
-  // TODO: JSON-body is a map, but wrong/missing keys/values
-  // TODO: invalid header value encoding (bad date time, for instance)
-  // TODO: proper error logging when hosted on cloud
-
-  group('binary-mode message', () {
-    test('valid input', () async {
-      final proc = await _hostBasicEventHandler();
-
-      const body = r'''
+const _pubSubJsonString = r'''
 {
  "subscription": "projects/my-project/subscriptions/my-subscription",
  "message": {
@@ -44,8 +33,17 @@ void main() {
  }
 }''';
 
+void main() {
+  // TODO: non-JSON body
+  // TODO: JSON-body, but not a Map
+  // TODO: proper error logging when hosted on cloud
+
+  group('binary-mode message', () {
+    test('valid input', () async {
+      final proc = await _hostBasicEventHandler();
+
       final response = await _makeRequest(
-        body,
+        _pubSubJsonString,
         {
           'Content-Type': 'application/json; charset=utf-8',
           'ce-specversion': '1.0',
@@ -57,6 +55,13 @@ void main() {
       );
       expect(response.statusCode, 200);
       expect(response.body, isEmpty);
+      expect(
+        response.headers,
+        allOf(
+          containsTextPlainHeader,
+          containsPair('x-attribute_count', '1'),
+        ),
+      );
 
       await finishServerTest(
         proc,
@@ -75,24 +80,14 @@ void main() {
           'datacontenttype': 'application/json; charset=utf-8',
           'time': '2020-09-05T03:56:24.000Z',
           'source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
-          'data': jsonDecode(body),
+          'data': jsonDecode(_pubSubJsonString),
         },
       );
     });
 
     test('bad format of core header: time', () async {
       final stderrOutput = await _makeBadRequest(
-        r'''
-{
- "subscription": "projects/my-project/subscriptions/my-subscription",
- "message": {
-   "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-   "attributes": {
-     "attr1":"attr1-value"
-   },
-   "data": "dGVzdCBtZXNzYWdlIDM="
- }
-}''',
+        _pubSubJsonString,
         {
           'Content-Type': 'application/json; charset=utf-8',
           'ce-specversion': '1.0',
@@ -180,6 +175,13 @@ void main() {
       });
       expect(response.statusCode, 200);
       expect(response.body, isEmpty);
+      expect(
+        response.headers,
+        allOf(
+          containsTextPlainHeader,
+          containsPair('x-attribute_count', '1'),
+        ),
+      );
 
       await finishServerTest(
         proc,

@@ -22,6 +22,8 @@ class RequestContext {
   final RequestLogger logger;
   final Request _request;
 
+  final responseHeaders = <String, /* String | List<String> */ Object>{};
+
   RequestContext._(this._request) : logger = loggerForRequest(_request);
 
   /// The HTTP headers with case-insensitive keys.
