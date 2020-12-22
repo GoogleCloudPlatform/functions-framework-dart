@@ -160,7 +160,7 @@ You can have multiple simultaneously running containers with processes listening
 on port `8080` on the same host, as long as each container is mapped to a unique
 host port (a unique port on localhost).
 
-Nevertheless, if you really want to change the container port (the port the 
+Nevertheless, if you really want to change the container port (the port the
 server binds to **inside** of the container) for some reason, you can do so as
 shown below.
 
