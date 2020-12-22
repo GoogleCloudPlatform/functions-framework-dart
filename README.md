@@ -18,14 +18,19 @@ functions, brought to you by the Google Dart and Cloud Functions teams.
 The Functions Framework lets you write lightweight functions that run in many
 different environments, including:
 
-- [Google Cloud Functions](https://cloud.google.com/functions/)
 - Your local development machine
-- [Knative](https://github.com/knative/)-based environments
-- [Google App Engine](https://cloud.google.com/appengine/docs/go/)
-- [Google Cloud Run](https://cloud.google.com/run/docs/quickstarts/build-and-deploy)
+- [Google Cloud Run] - see [quickstart]
+- [Google App Engine]
+- [Knative]-based environments
+
+[Google Cloud Functions] does not currently provide an officially supported Dart
+language runtime, but we're working to make running on [Google Cloud Run] as
+seamless and symmetric an experience as possible for your Dart Functions
+Framework projects.
 
 The framework allows you to go from:
 
+[examples/hello/lib/functions.dart]
 ```dart
 import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
@@ -37,28 +42,26 @@ Response function(Request request) => Response.ok('Hello, World!');
 To:
 
 ```shell
-curl https://example.com
+curl https://<your-app-url>
 # Output: Hello, World!
 ```
 
 All without needing to worry about writing an HTTP server or request
 handling logic.
 
-See the [Hello, World!](examples/hello/lib/functions.dart) demo in the
-`examples/hello` directory.
+See more demos under the [examples] directory.
 
 ## Features
 
 - Build your Function in the same container environment used by Cloud Functions
-  using [buildpacks](https://github.com/GoogleCloudPlatform/buildpacks).
+  using [buildpacks]
 - Invoke a function in response to a request
-- Automatically unmarshal events conforming to the
-  [CloudEvents](https://cloudevents.io/) spec
+- Automatically unmarshal events conforming to the [CloudEvents] spec
 - Portable between serverless platforms
 
 ## Quickstart
 
-"Hello, World" on your local machine.
+[Dart quickstart] on your local machine.
 
 ```shell
 $ cd examples/hello
@@ -76,7 +79,7 @@ $ curl localhost:8080
 Hello, World!
 ```
 
-See the [docs] for more quickstarts.
+See more [quickstarts].
 
 ## Contributing changes
 
@@ -89,7 +92,6 @@ properly format your code.
 Apache 2.0; see [`LICENSE`](LICENSE) for details.
 
 <!-- Repo links -->
-[docs]: docs
 [ff_dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
 <!-- Unit Test links -->
@@ -109,3 +111,18 @@ https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=wo
 https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Conformance%20CI/badge.svg
 [ff_dart_conformance_link]:
 https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Conformance+CI"
+
+<!-- Reference links -->
+[buildpacks]: https://github.com/GoogleCloudPlatform/buildpacks
+[CloudEvents]: https://cloudevents.io/
+[Dart quickstart]: docs/quickstarts/01-quickstart-dart.md
+[docs]: docs
+[examples]: examples
+[examples/hello/lib/functions.dart]: examples/hello/lib/functions.dart
+[Google Cloud Run]:
+https://cloud.google.com/run/docs/quickstarts/build-and-deploy
+[Google App Engine]: https://cloud.google.com/appengine/docs/go/
+[Google Cloud Functions]: https://cloud.google.com/functions/
+[Knative]: https://github.com/knative/
+[quickstart]: docs/quickstarts/03-quickstart-cloudrun.md
+[quickstarts]: docs
