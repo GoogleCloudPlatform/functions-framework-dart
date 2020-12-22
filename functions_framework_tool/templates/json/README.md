@@ -1,7 +1,6 @@
 # JSON example
 
-This example demonstrates writing a function that accepts a JSON request and
-sends a JSON response to the client.
+This example demonstrates writing a function that accepts and returns JSON.
 
 The basic shape of the function handler looks like this:
 
@@ -18,7 +17,6 @@ example request:
 {
   "name": "World"
 }
-
 ```
 
 The function will send a JSON document as the response. Here's an example
