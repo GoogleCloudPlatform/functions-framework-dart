@@ -12,13 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:stagehand/stagehand.dart';
+// ignore: implementation_imports
+import 'package:stagehand/src/common.dart' as common;
 
-import 'generators/helloworld.dart';
-import 'generators/json.dart';
+part 'json.g.dart';
 
-/// A sorted list of Dart Functions Framework project generators.
-final List<Generator> generators = [
-  HelloWorldGenerator(),
-  JsonFunctionGenerator(),
-]..sort();
+/// A generator for a pub library.
+class JsonFunctionGenerator extends common.DefaultGenerator {
+  JsonFunctionGenerator()
+      : super('helloworld', 'Dart Package',
+            'A sample Functions Framework project for handling JSON.',
+            categories: const ['dart']) {
+    for (var file in common.decodeConcatenatedData(_data)) {
+      addTemplateFile(file);
+    }
+
+    setEntrypoint(getFile('bin/server.dart'));
+  }
+}
