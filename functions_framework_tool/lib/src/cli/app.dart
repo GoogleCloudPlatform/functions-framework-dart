@@ -47,12 +47,9 @@ class App extends Console {
         generator: GeneratorConfig(
             generators: generators, cwd: io.Directory.current, target: target));
 
-    final generateCmd = GenerateCommand(context);
-    final versionCmd = VersionCommand(context);
-
     _runner = CommandRunner(appName, appDescription)
-      ..addCommand(generateCmd)
-      ..addCommand(versionCmd);
+      ..addCommand(GenerateCommand(context))
+      ..addCommand(VersionCommand(context));
   }
 
   Context get context => _context;

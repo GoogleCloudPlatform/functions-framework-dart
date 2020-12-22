@@ -14,6 +14,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 // ignore: implementation_imports
 import 'package:stagehand/src/common.dart';
@@ -28,55 +29,69 @@ class GenerateCommand extends Command {
   final name = 'generate';
 
   @override
-  final description = 'Generate a project to get started.';
+  final description = 'Run a project generator to get started.';
 
   GenerateCommand(Context context) : super(context) {
-    // Hidden option to generate into the current directory.
-    argParser.addFlag('force', abbr: 'f', negatable: false, hide: true);
+    argParser.addFlag('list',
+        negatable: false, help: 'List available generators.');
 
     // Hidden option to list available projects as JSON to stdout.
+    // This is useful for tools that don't want to have to parse the output of
+    // `--help`.
     argParser.addFlag('machine', negatable: false, hide: true);
+
+    // Hidden option to generate into the current directory.
+    argParser.addFlag('force', abbr: 'f', negatable: false, hide: true);
   }
 
   @override
-  Future<void> run() async {
-    var options = argResults;
+  String get usage => 'Usage: ${context.app.name} generate [generator]';
 
-    // The `--machine` option emits the list of available generators to stdout
-    // as JSON. This is useful for tools that don't want to have to parse the
-    // output of `--help`. It's an undocumented command line flag, and may go
-    // away or change.
+  @override
+  Future<void> run() async {
+    final generators = context.generator.generators;
+    final options = argResults;
+
     if (options['machine']) {
-      return Future.sync(
-          () => write(_createMachineInfo(context.generator.generators)));
+      return write(_createMachineInfo(generators));
+    }
+
+    if (argResults['list']) {
+      return _listGenerators(generators);
     }
 
     if (options.rest.isEmpty) {
-      usageException('No generator specified.');
+      error('No generator specified.');
+      write();
+      return _listGenerators(generators);
     }
 
     if (options.rest.length >= 2) {
-      usageException('Too many arguments (should only be one generator).');
+      return usageException(
+          'Too many arguments (should only be one generator).');
     }
 
     var generatorName = options.rest.first;
-    var generator = _getGenerator(generatorName);
+    if (!options['force'] && !await context.generator.cwd.isEmpty()) {
+      return error(
+          'The current directory is not empty. Overwritting an exising project '
+          'is NOT recommended.\n'
+          'Create a new (empty) project directory, or use --force to override '
+          "this safeguard if you know what you're doing.");
+    }
 
+    return await _generate(generatorName);
+  }
+
+  Future<void> _generate(String generatorName) {
+    var generator = _getGenerator(generatorName);
     if (generator == null) {
       usageException("'$generatorName' is not a valid generator.\n");
     }
 
-    if (!options['force'] && !await context.generator.cwd.isEmpty()) {
-      warning(
-          'The current directory is not empty. Overwritting an exising project is NOT recommended.\n'
-          'Create a new (empty) project directory, or use --force to '
-          "override this safeguard if you know what you're doing.");
-      return Future.error(
-          TargetDirectoryNotEmptyError('project directory not empty'));
-    }
-
     var projectName = context.generator.cwd.basename();
     projectName = normalizeProjectName(projectName);
+
     write('project: $projectName');
 
     final target = context.generator.target ??
@@ -99,11 +114,6 @@ class GenerateCommand extends Command {
     });
   }
 
-  stagehand.Generator _getGenerator(String id) {
-    return context.generator.generators
-        .firstWhere((g) => g.id == id, orElse: () => null);
-  }
-
   String _createMachineInfo(List<stagehand.Generator> generators) {
     var itor = generators.map((stagehand.Generator generator) {
       var m = {
@@ -120,5 +130,20 @@ class GenerateCommand extends Command {
       return m;
     });
     return json.encode(itor.toList());
+  }
+
+  void _listGenerators(List<stagehand.Generator> generators) {
+    write('Available generators:');
+
+    final generators = context.generator.generators;
+    final len = generators.fold(0, (int length, g) => max(length, g.id.length));
+    generators
+        .map((g) => '  ${g.id.padRight(len)} - ${g.description}')
+        .forEach(write);
+  }
+
+  stagehand.Generator _getGenerator(String id) {
+    return context.generator.generators
+        .firstWhere((g) => g.id == id, orElse: () => null);
   }
 }

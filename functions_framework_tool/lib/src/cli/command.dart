@@ -36,21 +36,4 @@ abstract class Command extends cr.Command {
   void error(Object obj) {
     context.console.error(obj);
   }
-
-  // void printUsage({bool header = false}) {
-  //   if (header) {
-  //     write('fn runs a Functions Framework project generator in the current '
-  //         'directory.');
-  //   }
-  //   write();
-  //   write('Usage: $appName <generator>');
-  //   write(argParser.usage);
-  //   write();
-  //   write('Available generators:');
-  //   final len = generators.fold(0, (int length, g) => max(length, g.id.length));
-  //   generators
-  //       .map((g) => '  ${g.id.padRight(len)} - ${g.description}')
-  //       .forEach(write);
-  // }
-
 }
