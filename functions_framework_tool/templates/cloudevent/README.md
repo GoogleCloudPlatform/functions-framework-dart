@@ -24,7 +24,7 @@ FutureOr<void> function(CloudEvent event, RequestContext context) async {
 
 The full code of the function for this example is shown below:
 
-lib/functions.dart
+*lib/functions.dart*
 
 ```dart
 import 'dart:convert';
