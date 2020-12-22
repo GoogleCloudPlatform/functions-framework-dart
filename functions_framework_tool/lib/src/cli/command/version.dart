@@ -45,16 +45,20 @@ FutureOr<void> printVersion(Context context,
   final name = context.app.name;
   final version = context.app.version;
 
-  context.console.write(short
-      ? version
-      : 'Google Functions Framework for Dart CLI ($name) version: $version');
+  if (short) {
+    return context.console.write(version);
+  }
+
+  context.console.write(
+      'Google Functions Framework for Dart CLI ($name) version: $version');
+
   if (!checkUpdates) return;
 
   return Future(() async {
     // TODO: Don't say a "later" version is available in certain situations.
     // For example: when current version is "0.3.0-dev" and latest published is
     // "0.2.0".
-    var latest = await checkPubForLaterVersion('functions_framework', version);
+    var latest = await checkPubForLaterVersion(name, version);
     if (latest != null) {
       context.console.write(
           'Version $latest is available! To update to this version, run: '
