@@ -138,7 +138,15 @@ ${factories.join('\n')}
 }
 
 Iterable<AnnotatedElement> _fromLibrary(LibraryElement library) sync* {
-  for (var element in library.exportNamespace.definedNames.values) {
+  // Merging the `topLevelElements` picks up private elements and fields.
+  // While neither is supported, it allows us to provide helpful errors if devs
+  // are using the annotations incorrectly.
+  final mergedElements = {
+    ...library.topLevelElements,
+    ...library.exportNamespace.definedNames.values,
+  };
+
+  for (var element in mergedElements) {
     final annotations = _checker.annotationsOf(element).toList();
 
     if (annotations.isEmpty) {
