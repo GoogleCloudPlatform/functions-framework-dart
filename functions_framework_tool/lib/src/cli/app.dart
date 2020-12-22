@@ -27,9 +27,9 @@ import 'command.dart';
 
 export 'terminal.dart' show TerminalPrinter;
 
-const String appName = 'fn';
+const String appName = 'dartfn';
 const String appDescription =
-    'fn is a tool for managing Dart Functions-as-a-Service (FaaS) projects.';
+    '$appName is a tool for managing Dart Functions-as-a-Service (FaaS) projects.';
 
 /// App is a CLI tool for running in a user's terminal.
 class App extends Console {

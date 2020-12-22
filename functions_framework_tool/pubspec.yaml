@@ -9,7 +9,7 @@ environment:
   sdk: '>=2.10.0 <3.0.0'
 
 executables:
-  fn:
+  dartfn:
 
 dependencies:
   args: ^1.6.0
