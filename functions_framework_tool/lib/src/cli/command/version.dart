@@ -50,7 +50,7 @@ FutureOr<void> printVersion(Context context,
   }
 
   context.console.write(
-      'Google Functions Framework for Dart CLI ($name) version: $version');
+      'Functions Framework for Dart CLI ($name) version: $version');
 
   if (!checkUpdates) return;
 
