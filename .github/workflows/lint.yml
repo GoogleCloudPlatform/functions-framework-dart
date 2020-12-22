@@ -36,16 +36,16 @@ jobs:
       - name: mono_repo self validate
         run: pub global run mono_repo generate --validate
   job_002:
-    name: "analyze_format; Dart dev; PKGS: functions_framework, functions_framework_builder, test/hello; `dartfmt -n --set-exit-if-changed .`, `dartanalyzer --fatal-infos .`"
+    name: "analyze_format; Dart dev; PKGS: functions_framework, functions_framework_builder, functions_framework_tool, test/hello; `dartfmt -n --set-exit-if-changed .`, `dartanalyzer --fatal-infos .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@v2
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:functions_framework-functions_framework_builder-test/hello;commands:dartfmt-dartanalyzer_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:functions_framework-functions_framework_builder-functions_framework_tool-test/hello;commands:dartfmt-dartanalyzer_0"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:functions_framework-functions_framework_builder-test/hello
+            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:functions_framework-functions_framework_builder-functions_framework_tool-test/hello
             os:ubuntu-latest;pub-cache-hosted;dart:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -78,6 +78,18 @@ jobs:
         if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: dartanalyzer --fatal-infos .
+      - id: functions_framework_tool_pub_upgrade
+        name: "functions_framework_tool; pub upgrade --no-precompile"
+        working-directory: functions_framework_tool
+        run: pub upgrade --no-precompile
+      - name: "functions_framework_tool; dartfmt -n --set-exit-if-changed ."
+        if: "always() && steps.functions_framework_tool_pub_upgrade.conclusion == 'success'"
+        working-directory: functions_framework_tool
+        run: dartfmt -n --set-exit-if-changed .
+      - name: "functions_framework_tool; dartanalyzer --fatal-infos ."
+        if: "always() && steps.functions_framework_tool_pub_upgrade.conclusion == 'success'"
+        working-directory: functions_framework_tool
+        run: dartanalyzer --fatal-infos .
       - id: test_hello_pub_upgrade
         name: "test/hello; pub upgrade --no-precompile"
         working-directory: test/hello
@@ -91,16 +103,16 @@ jobs:
         working-directory: test/hello
         run: dartanalyzer --fatal-infos .
   job_003:
-    name: "analyze_format; Dart 2.10.0; PKGS: functions_framework, functions_framework_builder, test/hello; `dartanalyzer .`"
+    name: "analyze_format; Dart 2.10.0; PKGS: functions_framework, functions_framework_builder, functions_framework_tool, test/hello; `dartanalyzer .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@v2
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:functions_framework-functions_framework_builder-test/hello;commands:dartanalyzer_1"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:functions_framework-functions_framework_builder-functions_framework_tool-test/hello;commands:dartanalyzer_1"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:functions_framework-functions_framework_builder-test/hello
+            os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:functions_framework-functions_framework_builder-functions_framework_tool-test/hello
             os:ubuntu-latest;pub-cache-hosted;dart:2.10.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -125,6 +137,14 @@ jobs:
       - name: functions_framework_builder; dartanalyzer .
         if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
+        run: dartanalyzer .
+      - id: functions_framework_tool_pub_upgrade
+        name: "functions_framework_tool; pub upgrade --no-precompile"
+        working-directory: functions_framework_tool
+        run: pub upgrade --no-precompile
+      - name: functions_framework_tool; dartanalyzer .
+        if: "always() && steps.functions_framework_tool_pub_upgrade.conclusion == 'success'"
+        working-directory: functions_framework_tool
         run: dartanalyzer .
       - id: test_hello_pub_upgrade
         name: "test/hello; pub upgrade --no-precompile"
