@@ -48,8 +48,8 @@ FutureOr<void> printVersion(CommandContext context,
     return context.console.write(version);
   }
 
-  context.console.write(
-      'Functions Framework for Dart CLI ($name) version: $version');
+  context.console
+      .write('Functions Framework for Dart CLI ($name) version: $version');
 
   if (!checkUpdates) return;
 
