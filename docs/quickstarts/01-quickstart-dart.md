@@ -12,10 +12,10 @@ normal developer workflow.
 
 You can either
 
-- Run `dartfn` to create a new project using the `helloworld` generator (see 
+* Run `dartfn` to create a new project using the `helloworld` generator (see
   [Installing and using dartfn])
-- Clone this repo or download a [zip] archive and extract the contents
-  - Change directory to `examples/hello`.
+* Clone this repo or download a [zip] archive and extract the contents
+  * Change directory to `examples/hello`.
 
 ## Build the example
 

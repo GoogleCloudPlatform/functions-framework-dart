@@ -13,8 +13,12 @@ environment.
 
 ## Get a copy of the `hello` example
 
-Clone this repo or download a [zip] archive and extract the contents. Change
-directory to `examples/hello`.
+You can either
+
+* Run `dartfn` to create a new project using the `helloworld` generator (see
+  [Installing and using dartfn])
+* Clone this repo or download a [zip] archive and extract the contents
+  * Change directory to `examples/hello`.
 
 ## Build a Docker image
 
@@ -203,4 +207,5 @@ docker image rm hellofunc   # remove the image
 
 <!-- reference links -->
 [docker]: https://docs.docker.com/get-docker/
+[Installing and using dartfn]: 00-install-dartfn.md
 [zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip
