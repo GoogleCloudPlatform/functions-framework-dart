@@ -46,8 +46,10 @@ Updated property [core/project].
 
 ## Get a copy of the `hello` example
 
-Clone this repo or download a [zip] archive and extract the contents. Change
-directory to `examples/hello`.
+* Run `dartfn` to create a new project using the `helloworld` generator (see
+  [Installing and using dartfn])
+* Clone this repo or download a [zip] archive and extract the contents
+  * Change directory to `examples/hello`.
 
 ## Build and deploy with a single command
 
@@ -164,6 +166,7 @@ the [Manage resources] page.
 [gcloud]: https://cloud.google.com/sdk/docs/install
 [Google Cloud]: https://cloud.google.com/gcp
 [incur charges]: https://cloud.google.com/container-registry/pricing
+[Installing and using dartfn]: 00-install-dartfn.md
 [Manage resources]: https://console.cloud.google.com/iam-admin/projects
 [project selector]: https://console.cloud.google.com/projectselector2/home/dashboard
 [quickstart]: https://cloud.google.com/sdk/docs/quickstart

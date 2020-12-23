@@ -7,9 +7,9 @@ In this early iteration, a CLI tool (`dartfn`) is provided with a `generate`
 command for scaffolding new projects into an empty directory. Three initial
 generator templates are available:
 
-* helloworld - a basic HTTP handler function
-* json - a simple function handler that accepts and sends JSON
-* cloudevent - a simple cloudevent function handler
+- helloworld - a basic HTTP handler function
+- json - a simple function handler that accepts and sends JSON
+- cloudevent - a simple cloudevent function handler
 
 To install the `dartfn` tool on your machine, run the following command:
 
@@ -123,4 +123,3 @@ Output
 ```text
 0.3.1
 ```
-

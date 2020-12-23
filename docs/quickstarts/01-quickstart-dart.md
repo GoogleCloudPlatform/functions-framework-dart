@@ -10,8 +10,12 @@ normal developer workflow.
 
 ## Get a copy of the `hello` example
 
-Clone this repo or download a [zip] archive and extract the contents. Change
-directory to `examples/hello`.
+You can either
+
+* Run `dartfn` to create a new project using the `helloworld` generator (see
+  [Installing and using dartfn])
+* Clone this repo or download a [zip] archive and extract the contents
+  * Change directory to `examples/hello`.
 
 ## Build the example
 
@@ -159,12 +163,13 @@ Listening on :8080
 
 ---
 [[toc]](../README.md)
-[[back]](../01-introduction.md)
+[[back]](00-install-dartfn.md)
 [[next]](02-quickstart-docker.md)
 
 <!-- reference links -->
 [curl]: https://curl.se/docs/manual.html
 [Dart SDK]: https://dart.dev/get-dart
+[Installing and using dartfn]: 00-install-dartfn.md
 [Request]: https://pub.dev/documentation/shelf/latest/shelf/Request-class.html
 [Response]: https://pub.dev/documentation/shelf/latest/shelf/Response-class.html
 [Shelf]: https://pub.dev/packages/shelf
