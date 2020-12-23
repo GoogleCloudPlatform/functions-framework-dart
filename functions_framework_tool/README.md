@@ -96,7 +96,7 @@ dartfn version
 Output
 
 ```text
-Google Functions Framework for Dart CLI (dartfn) version: 0.3.0
+Google Functions Framework for Dart CLI (dartfn) version: 0.3.1
 ```
 
 If a newer version is available, the command will inform  you. Example:
@@ -105,11 +105,11 @@ If a newer version is available, the command will inform  you. Example:
 dartfn version
 ```
 
-Output
+Output (hypothetical update available)
 
 ```text
-Google Functions Framework for Dart CLI (dartfn) version: 0.2.0
-Version 0.3.0 is available! To update to this version, run: `pub global activate dartfn`.
+Google Functions Framework for Dart CLI (dartfn) version: 0.3.1
+Version 0.3.2 is available! To update to this version, run: `pub global activate dartfn`.
 ```
 
 If you just want the version number, use the `-s` or `--short` option:
@@ -121,5 +121,6 @@ dartfn version --short
 Output
 
 ```text
-0.3.0
+0.3.1
 ```
+
