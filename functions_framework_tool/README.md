@@ -121,5 +121,5 @@ dartfn version --short
 Output
 
 ```text
-0.3.0-dev
+0.3.0
 ```
