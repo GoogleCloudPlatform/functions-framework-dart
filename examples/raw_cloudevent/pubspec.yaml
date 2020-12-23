@@ -5,7 +5,7 @@ environment:
   sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
-  functions_framework: any
+  functions_framework: ^0.3.0
   shelf: ^0.7.9
 
 dev_dependencies:
