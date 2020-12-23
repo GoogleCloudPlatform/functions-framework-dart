@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+- Renamed the package to `dartfn` so `dart pub global activate dartfn` works.
+
 ## 0.3.0
 
 The first version is `0.3.0` to align with the rest of published Functions

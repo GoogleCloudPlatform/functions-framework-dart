@@ -9,13 +9,13 @@ targets:
         - templates/**
         - tool/**
     builders:
-      functions_framework_tool:
+      dartfn:
         generate_for:
           - lib/src/generators/*.dart
         enabled: true
 
 builders:
-  functions_framework_tool:
+  dartfn:
     import: "tool/builder/builder.dart"
     builder_factories: ["builder"]
     build_extensions: {".dart": [".g.dart"]}

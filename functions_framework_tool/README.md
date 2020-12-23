@@ -1,4 +1,4 @@
-# Functions Framework Tool package for Dart
+# Functions Framework Tool package for Dart: dartfn
 
 This package is intended to support tools for working with Functions Framework
 projects.

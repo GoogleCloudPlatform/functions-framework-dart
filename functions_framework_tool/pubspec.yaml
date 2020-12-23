@@ -1,4 +1,4 @@
-name: functions_framework_tool
+name: dartfn
 description: >
   A tools package for managing FaaS (Function as a service) portable Dart functions projects
 # After changing the version, run `pub run build_runner build`.
