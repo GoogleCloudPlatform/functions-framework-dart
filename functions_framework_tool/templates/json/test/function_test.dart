@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:example_json_function/functions.dart';
+import 'package:__projectName__/functions.dart';
 import 'package:http/http.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
