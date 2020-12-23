@@ -41,6 +41,7 @@ dartfn generate --list
 ```
 
 Output
+
 ```text
 Available generators:
 cloudevent - A sample Functions Framework project for handling a cloudevent.
@@ -53,7 +54,9 @@ If you want the generator list as JSON, use the hidden `--machine` flag:
 ```shell
 dartfn generate --machine
 ```
+
 Output
+
 ```json
 [{"name":"cloudevent","label":"Dart Package","description":"A sample Functions Framework project for handling a cloudevent.","categories":["dart"],"entrypoint":"bin/server.dart"},{"name":"helloworld","label":"Dart Package","description":"A sample \"Hello, World!\" Functions Framework project.","categories":["dart"],"entrypoint":"bin/server.dart"},{"name":"json","label":"Dart Package","description":"A sample Functions Framework project for handling JSON.","categories":["dart"],"entrypoint":"bin/server.dart"}]
 ```
@@ -67,6 +70,7 @@ dartfn generate helloworld
 ```
 
 Output
+
 ```text
 project: demo
 Creating helloworld application `ex`:
@@ -90,6 +94,7 @@ dartfn version
 ```
 
 Output
+
 ```text
 Google Functions Framework for Dart CLI (dartfn) version: 0.3.0
 ```
@@ -101,6 +106,7 @@ dartfn version
 ```
 
 Output
+
 ```text
 Google Functions Framework for Dart CLI (dartfn) version: 0.2.0
 Version 0.3.0 is available! To update to this version, run: `pub global activate dartfn`.
@@ -113,6 +119,7 @@ dartfn version --short
 ```
 
 Output
+
 ```text
-0.3.0-dev
+0.3.0
 ```

@@ -16,7 +16,7 @@ targets:
 
 builders:
   functions_framework_tool:
-    import: "lib/src/builder/builder.dart"
+    import: "tool/builder/builder.dart"
     builder_factories: ["builder"]
     build_extensions: {".dart": [".g.dart"]}
     build_to: source

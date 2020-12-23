@@ -31,6 +31,7 @@ Framework projects.
 The framework allows you to go from:
 
 [examples/hello/lib/functions.dart]
+
 ```dart
 import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
