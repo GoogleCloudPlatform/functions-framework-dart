@@ -20,7 +20,6 @@ dart pub global activate dartfn
 Run `dartfn` without any arguments to confirm it is installed.
 
 ```shell
-$ dartfn
 dartfn is a tool for managing Dart Functions-as-a-Service (FaaS) projects.
 
 Usage: dartfn <command> [arguments]
@@ -41,7 +40,7 @@ Run "dartfn help <command>" for more information about a command.
 dartfn generate --list
 ```
 
-Output:
+Output
 ```text
 Available generators:
 cloudevent - A sample Functions Framework project for handling a cloudevent.
