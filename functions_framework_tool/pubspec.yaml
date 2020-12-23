@@ -1,8 +1,8 @@
-name: functions_framework_tool
+name: dartfn
 description: >
   A tools package for managing FaaS (Function as a service) portable Dart functions projects
 # After changing the version, run `pub run build_runner build`.
-version: 0.3.0
+version: 0.3.1
 homepage: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
 environment:

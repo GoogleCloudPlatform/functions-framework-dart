@@ -18,8 +18,8 @@ import 'dart:io' as io;
 import 'package:io/io.dart' show ExitCode;
 
 import 'package:args/command_runner.dart';
-import 'package:functions_framework_tool/functions_framework_tool.dart' as tool;
-import 'package:functions_framework_tool/src/cli/app.dart' as cli;
+import 'package:dartfn/functions_framework_tool.dart' as tool;
+import 'package:dartfn/src/cli/app.dart' as cli;
 
 // Initialize the CLI app with a list of generators and a terminal printer.
 // Process args and/or execute a subcommand. Always exit immediately when the
