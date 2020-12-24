@@ -20,6 +20,6 @@ void main() {
   test(
     'ensure_build',
     () =>
-        expectBuildClean(packageRelativeDirectory: 'functions_framework_tool'),
+        expectBuildClean(packageRelativeDirectory: 'dartfn'),
   );
 }
