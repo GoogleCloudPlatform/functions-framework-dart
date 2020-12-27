@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1-dev
+
+- `functions_framework.dart`
+
+  - `RequestContext`
+    - Added `request` property to access original request.
+    - Deprecated `headers` and `headersAll` - use `request` instead.
+
 ## 0.3.0
 
 - Added support for functions that handle and return JSON data.
