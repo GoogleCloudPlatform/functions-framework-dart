@@ -20,11 +20,14 @@ import 'logging.dart';
 
 class RequestContext {
   final RequestLogger logger;
-  final Request _request;
+
+  /// Access to the source [Request] object.
+  ///
+  /// Accessing `read` or `readAsString` will throw an error because the body
+  /// of the [Request] has already been read.
+  final Request request;
 
   final responseHeaders = <String, /* String | List<String> */ Object>{};
-
-  RequestContext._(this._request) : logger = loggerForRequest(_request);
 
   /// The HTTP headers with case-insensitive keys.
   ///
@@ -32,7 +35,8 @@ class RequestContext {
   /// by concatenating them with a comma.
   ///
   /// The returned map is unmodifiable.
-  Map<String, String> get headers => _request.headers;
+  @Deprecated('Use request.headers instead')
+  Map<String, String> get headers => request.headers;
 
   /// The HTTP headers with multiple values with case-insensitive keys.
   ///
@@ -41,7 +45,10 @@ class RequestContext {
   /// for that occurrence.
   ///
   /// The returned map and the lists it contains are unmodifiable.
-  Map<String, List<String>> get headersAll => _request.headersAll;
+  @Deprecated('Use request.headersAll instead')
+  Map<String, List<String>> get headersAll => request.headersAll;
+
+  RequestContext._(this.request) : logger = loggerForRequest(request);
 }
 
 @internal
