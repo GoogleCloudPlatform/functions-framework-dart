@@ -61,7 +61,7 @@ Dart tests, which we'll cover as part of this quickstart.
 
 ## What's next
 
-Using the example presented above, we will walk through a few quickstarts
+Using the example presented above, we will walk through a few quickstart
 scenarios that demonstrate running the function
 
 - locally during development: [Quickstart: Dart]
