@@ -4,7 +4,7 @@ Quickstart guide to the [Functions Framework for Dart].
 
 ## Background
 
-The [Functions Framework for Dart] is an open-source **FaaS** (Function as a
+The [Functions Framework for Dart] is an open source **FaaS** (Function as a
 Service) framework that lets you write and deploy lightweight, event-driven
 functions.
 

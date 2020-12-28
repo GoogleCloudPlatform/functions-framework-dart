@@ -12,7 +12,7 @@
 | ------------------- | ------------------------------------------ | ------------------------------------------ | -------------------------------------------------------- |
 | [Dart][ff_dart]     | [![][ff_dart_unit_img]][ff_dart_unit_link] | [![][ff_dart_lint_img]][ff_dart_lint_link] | [![][ff_dart_conformance_img]][ff_dart_conformance_link] |
 
-An open-source FaaS (Function as a Service) framework for writing portable Dart
+An open source FaaS (Function as a Service) framework for writing portable Dart
 functions, brought to you by the Google Dart and Cloud Functions teams.
 
 The Functions Framework lets you write lightweight functions that run in many
