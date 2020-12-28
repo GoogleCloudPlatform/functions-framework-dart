@@ -162,15 +162,19 @@ the [Manage resources] page.
 [cloud build]: https://cloud.google.com/cloud-build
 [cloud run]: https://cloud.google.com/run
 [cloud shell]: https://cloud.google.com/shell
-[cloud shell editor]: https://shell.cloud.google.com/?show=ide&environment_deployment=ide
+[cloud shell editor]:
+https://shell.cloud.google.com/?show=ide&environment_deployment=ide
 [codelab]: https://codelabs.developers.google.com/codelabs/cloud-shell
-[delete the image]: https://cloud.google.com/container-registry/docs/managing#deleting_images
+[delete the image]:
+https://cloud.google.com/container-registry/docs/managing#deleting_images
 [gcloud]: https://cloud.google.com/sdk/docs/install
 [google cloud]: https://cloud.google.com/gcp
 [incur charges]: https://cloud.google.com/container-registry/pricing
 [installing and using dartfn]: 00-install-dartfn.md
 [manage resources]: https://console.cloud.google.com/iam-admin/projects
-[project selector]: https://console.cloud.google.com/projectselector2/home/dashboard
+[project selector]:
+https://console.cloud.google.com/projectselector2/home/dashboard
 [quickstart]: https://cloud.google.com/sdk/docs/quickstart
 [see how]: https://cloud.google.com/billing/docs/how-to/modify-project
-[zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip
+[zip]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip

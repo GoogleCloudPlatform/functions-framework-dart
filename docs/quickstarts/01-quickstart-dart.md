@@ -173,6 +173,8 @@ Listening on :8080
 [dart sdk]: https://dart.dev/get-dart
 [installing and using dartfn]: 00-install-dartfn.md
 [request]: https://pub.dev/documentation/shelf/latest/shelf/Request-class.html
-[response]: https://pub.dev/documentation/shelf/latest/shelf/Response-class.html
+[response]:
+https://pub.dev/documentation/shelf/latest/shelf/Response-class.html
 [shelf]: https://pub.dev/packages/shelf
-[zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip
+[zip]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip

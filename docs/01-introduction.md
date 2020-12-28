@@ -79,7 +79,8 @@ scenarios that demonstrate running the function
 [containers]: https://www.docker.com/resources/what-container
 [cloudevents]: https://cloudevents.io/
 [curl]: https://curl.se/docs/manual.html
-[functions framework for dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart
+[functions framework for dart]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart
 [here]: https://github.com/GoogleCloudPlatform/functions-framework
 [postman]: https://www.postman.com/product/api-client/
 [quickstart: dart]: quickstarts/01-quickstart-dart.md

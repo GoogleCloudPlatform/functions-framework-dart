@@ -211,4 +211,5 @@ docker image rm hellofunc   # remove the image
 
 [docker]: https://docs.docker.com/get-docker/
 [installing and using dartfn]: 00-install-dartfn.md
-[zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip
+[zip]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip

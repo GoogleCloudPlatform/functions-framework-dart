@@ -98,18 +98,24 @@ Apache 2.0; see [`LICENSE`](LICENSE) for details.
 
 <!-- Unit Test links -->
 
-[ff_dart_unit_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Unit%20CI/badge.svg
-[ff_dart_unit_link]: https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Unit+CI"
+[ff_dart_unit_img]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Unit%20CI/badge.svg
+[ff_dart_unit_link]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Unit+CI"
 
 <!-- Lint Test links -->
 
-[ff_dart_lint_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Lint%20CI/badge.svg
-[ff_dart_lint_link]: https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Lint+CI"
+[ff_dart_lint_img]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Lint%20CI/badge.svg
+[ff_dart_lint_link]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Lint+CI"
 
 <!-- Conformance Test links -->
 
-[ff_dart_conformance_img]: https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Conformance%20CI/badge.svg
-[ff_dart_conformance_link]: https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Conformance+CI"
+[ff_dart_conformance_img]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/workflows/Dart%20Conformance%20CI/badge.svg
+[ff_dart_conformance_link]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=workflow%3A"Dart+Conformance+CI"
 
 <!-- Reference links -->
 
@@ -119,7 +125,8 @@ Apache 2.0; see [`LICENSE`](LICENSE) for details.
 [docs]: docs
 [examples]: examples
 [examples/hello/lib/functions.dart]: examples/hello/lib/functions.dart
-[google cloud run]: https://cloud.google.com/run/docs/quickstarts/build-and-deploy
+[google cloud run]:
+https://cloud.google.com/run/docs/quickstarts/build-and-deploy
 [google app engine]: https://cloud.google.com/appengine/docs/go/
 [google cloud functions]: https://cloud.google.com/functions/
 [knative]: https://github.com/knative/
