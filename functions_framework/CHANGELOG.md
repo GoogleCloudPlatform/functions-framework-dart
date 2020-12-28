@@ -7,7 +7,6 @@
   - `RequestContext`
     - Added `request` property to access original request.
     - Deprecated `headers` and `headersAll` - use `request` instead.
-
   - Fix exception on Windows due to SIGTERM handler ([PR #153]).
 
 ## 0.3.0
