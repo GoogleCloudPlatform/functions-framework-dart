@@ -82,8 +82,7 @@ $ docker build -t hellofunc .
 ```
 
 The base image for the `hellofunc` has been heavily optimized so that it has
-only the system dependencies necessary to provide support for a server
-application.
+only the system dependencies necessary to provide support for a server application.
 The function app itself is compiled as a native executable for Linux, so the
 Dart VM isn't necessary at runtime.
 
