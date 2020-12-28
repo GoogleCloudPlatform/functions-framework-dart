@@ -46,10 +46,10 @@ Updated property [core/project].
 
 ## Get a copy of the `hello` example
 
-* Run `dartfn` to create a new project using the `helloworld` generator (see
+- Run `dartfn` to create a new project using the `helloworld` generator (see
   [Installing and using dartfn])
-* Clone this repo or download a [zip] archive and extract the contents
-  * Change directory to `examples/hello`.
+- Clone this repo or download a [zip] archive and extract the contents
+  - Change directory to `examples/hello`.
 
 ## Build and deploy with a single command
 
@@ -99,13 +99,13 @@ Service URL: https://hello-gpua4upw6q-uc.a.run.app
 to Cloud Run. You can now access your function at the Service URL that is
 printed in the last line of output.
 
-If you prefer not to use this beta command for now, read on. The next two
-sections cover building and deploying in two separate steps.
+If you prefer not to use this beta command, for now, read on. The next two
+sections cover the building and deploying in two separate steps.
 
 ## Build the container image using Cloud Build
 
 [Cloud Build] is a fully serverless continuous integration / continuous delivery
-(CI/CD) platform for [Google Cloud]. Instead of building the image on your own
+(CI/CD) platform for [Google Cloud]. Instead of building the image on your
 machine, you can use `gcloud` to upload the project to Cloud Build. Cloud Build
 knows how to build Docker images and save them to an image repository in the
 container registry associated with your project.
@@ -133,8 +133,7 @@ gcloud run deploy --image gcr.io/$PROJECT_ID/$IMAGE_NAME --platform managed
 1. You will be prompted for region: select the region of your choice, for
    example `us-central1`.
 1. You will be prompted to allow unauthenticated invocations: respond `y`. Then
-   wait a few moments until the deployment is complete. On success, the command
-   line displays the service URL.
+   wait a few moments until the deployment is complete. On success, the command-line displays the service URL.
 
 Visit your deployed function by opening the service URL in a web browser.
 
@@ -154,20 +153,22 @@ free up all resources and stop any other charges from incurring) from
 the [Manage resources] page.
 
 ---
+
 [[toc]](../README.md) [[back]](02-quickstart-docker.md)
 
 <!-- reference links -->
-[Cloud Build]: https://cloud.google.com/cloud-build
-[Cloud Run]: https://cloud.google.com/run
-[Cloud Shell]: https://cloud.google.com/shell
-[Cloud Shell Editor]: https://shell.cloud.google.com/?show=ide&environment_deployment=ide
+
+[cloud build]: https://cloud.google.com/cloud-build
+[cloud run]: https://cloud.google.com/run
+[cloud shell]: https://cloud.google.com/shell
+[cloud shell editor]: https://shell.cloud.google.com/?show=ide&environment_deployment=ide
 [codelab]: https://codelabs.developers.google.com/codelabs/cloud-shell
 [delete the image]: https://cloud.google.com/container-registry/docs/managing#deleting_images
 [gcloud]: https://cloud.google.com/sdk/docs/install
-[Google Cloud]: https://cloud.google.com/gcp
+[google cloud]: https://cloud.google.com/gcp
 [incur charges]: https://cloud.google.com/container-registry/pricing
-[Installing and using dartfn]: 00-install-dartfn.md
-[Manage resources]: https://console.cloud.google.com/iam-admin/projects
+[installing and using dartfn]: 00-install-dartfn.md
+[manage resources]: https://console.cloud.google.com/iam-admin/projects
 [project selector]: https://console.cloud.google.com/projectselector2/home/dashboard
 [quickstart]: https://cloud.google.com/sdk/docs/quickstart
 [see how]: https://cloud.google.com/billing/docs/how-to/modify-project

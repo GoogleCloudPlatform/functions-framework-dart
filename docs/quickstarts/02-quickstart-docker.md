@@ -9,16 +9,16 @@ environment.
 
 ## Prerequisites
 
-* [Docker] (Docker Desktop 3.x, Stable or Edge release)
+- [Docker] (Docker Desktop 3.x, Stable or Edge release)
 
 ## Get a copy of the `hello` example
 
 You can either
 
-* Run `dartfn` to create a new project using the `helloworld` generator (see
+- Run `dartfn` to create a new project using the `helloworld` generator (see
   [Installing and using dartfn])
-* Clone this repo or download a [zip] archive and extract the contents
-  * Change directory to `examples/hello`.
+- Clone this repo or download a [zip] archive and extract the contents
+  - Change directory to `examples/hello`.
 
 ## Build a Docker image
 
@@ -34,7 +34,7 @@ a Docker image for running containers.
 > many different images you might have on your system, thus conserving a great
 > deal of space. The way these layers are built have a one to one correspondence
 > with each instruction in a `Dockerfile`. (As an interesting technical note,
-> each instruction actually runs in *its* own container while building the
+> each instruction runs in _its_ own container while building the
 > image).
 >
 > The idea of container isolation may sound like a virtual machine, but a key
@@ -82,7 +82,7 @@ $ docker build -t hellofunc .
 ```
 
 The base image for the `hellofunc` has been heavily optimized so that it has
-only the system dependencies necessary to provide support a server application.
+only the system dependencies necessary to provide support for a server application.
 The function app itself is compiled as a native executable for Linux, so the
 Dart VM isn't necessary at runtime.
 
@@ -138,7 +138,7 @@ $ docker run -p 8080:8080 -it --rm hellofunc --target handleGet
 
 If you need to select a different port on the host machine (perhaps
 because `8080` is already in use), you only need to remap the
-*host* port to `8080` inside of the container:
+_host_ port to `8080` inside of the container:
 
 ```shell
 $ docker run -p 9999:8080 -it --rm hellofunc
@@ -164,7 +164,7 @@ You can have multiple simultaneously running containers with processes listening
 on port `8080` on the same host, as long as each container is mapped to a unique
 host port (a unique port on localhost).
 
-Nevertheless, if you really want to change the container port (the port the
+Nevertheless, if you really want to change the container port (the port that the
 server binds to **inside** of the container) for some reason, you can do so as
 shown below.
 
@@ -173,11 +173,11 @@ $ docker run -p 8080:9999 -it --rm -e PORT=9999 hellofunc
 ...
 ```
 
-Note that both the `-p` port mapping has to be updated *and* the environment
+Note that both the `-p` port mapping has to be updated _and_ the environment
 variable has to be set for the function server process listening in the
 container.
 
-Again, you also can  use the `--port` argument (which is a bit easier)
+Again, you also can use the `--port` argument (which is a bit easier)
 instead of setting the environment variable:
 
 ```shell
@@ -201,11 +201,13 @@ docker image rm hellofunc   # remove the image
 ```
 
 ---
+
 [[toc]](../README.md)
 [[back]](01-quickstart-dart.md)
 [[next]](03-quickstart-cloudrun.md)
 
 <!-- reference links -->
+
 [docker]: https://docs.docker.com/get-docker/
-[Installing and using dartfn]: 00-install-dartfn.md
+[installing and using dartfn]: 00-install-dartfn.md
 [zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip

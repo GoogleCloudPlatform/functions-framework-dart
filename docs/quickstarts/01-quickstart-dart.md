@@ -5,17 +5,17 @@ normal developer workflow.
 
 ## Prerequisites
 
-* [Dart SDK] v2.10+
-* Optional: [curl]
+- [Dart SDK] v2.10+
+- Optional: [curl]
 
 ## Get a copy of the `hello` example
 
 You can either
 
-* Run `dartfn` to create a new project using the `helloworld` generator (see
+- Run `dartfn` to create a new project using the `helloworld` generator (see
   [Installing and using dartfn])
-* Clone this repo or download a [zip] archive and extract the contents
-  * Change directory to `examples/hello`.
+- Clone this repo or download a [zip] archive and extract the contents
+  - Change directory to `examples/hello`.
 
 ## Build the example
 
@@ -23,7 +23,7 @@ The Functions Framework generates code based on the function you write in
 `lib/functions.dart` to create a complete server for listening to HTTP and
 CloudEvent requests. The output of this build process is `bin/server.dart`.
 
-To generate `bin/server.dart`, you need to run the Dart `build_runner` tool.
+To generate the `bin/server.dart`, you need to run the Dart `build_runner` tool.
 
 ```shell
 $ dart run build_runner build --delete-conflicting-outputs
@@ -162,15 +162,17 @@ Listening on :8080
 ```
 
 ---
+
 [[toc]](../README.md)
 [[back]](00-install-dartfn.md)
 [[next]](02-quickstart-docker.md)
 
 <!-- reference links -->
+
 [curl]: https://curl.se/docs/manual.html
-[Dart SDK]: https://dart.dev/get-dart
-[Installing and using dartfn]: 00-install-dartfn.md
-[Request]: https://pub.dev/documentation/shelf/latest/shelf/Request-class.html
-[Response]: https://pub.dev/documentation/shelf/latest/shelf/Response-class.html
-[Shelf]: https://pub.dev/packages/shelf
+[dart sdk]: https://dart.dev/get-dart
+[installing and using dartfn]: 00-install-dartfn.md
+[request]: https://pub.dev/documentation/shelf/latest/shelf/Request-class.html
+[response]: https://pub.dev/documentation/shelf/latest/shelf/Response-class.html
+[shelf]: https://pub.dev/packages/shelf
 [zip]: https://github.com/GoogleCloudPlatform/functions-framework-dart/archive/main.zip
