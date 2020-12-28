@@ -74,7 +74,7 @@ $ dart test
 The default signature type for a function is for handling normal HTTP requests.
 When running a function for handling a cloudevent, you must either set
 the `FUNCTION_SIGNATURE_TYPE` environment variable or the
-`--signature-type` command-line option to `cloudevent`, as shown below:
+`--signature-type` command line option to `cloudevent`, as shown below:
 
 ```shell
 $ dart run bin/server.dart --signature-type cloudevent
@@ -111,9 +111,8 @@ Docker or deploy to Cloud Run, see these quick start guides:
 - [Quickstart: Cloud Run]
 
 <!-- reference links -->
-
 [curl]: https://curl.se/docs/manual.html
-[quickstart: dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quickstarts/01-quickstart-dart.md
-[quickstart: docker]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quickstarts/02-quickstart-docker.md
-[quickstart: cloud run]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quickstarts/03-quickstart-cloudrun.md
+[Quickstart: Dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quickstarts/01-quickstart-dart.md
+[Quickstart: Docker]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quickstarts/02-quickstart-docker.md
+[Quickstart: Cloud Run]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quickstarts/03-quickstart-cloudrun.md
 [postman]: https://www.postman.com/product/api-client/
