@@ -92,14 +92,21 @@ Future<void> _serve(List<String> args, Set<FunctionTarget> targets) async {
       sigIntSub = null;
       await subCopy.cancel();
       sigIntSub = null;
-      await sigTermSub.cancel();
-      sigTermSub = null;
+      if (sigTermSub != null) {
+        await sigTermSub.cancel();
+        sigTermSub = null;
+      }
       completer.complete(true);
     }
   }
 
   sigIntSub = ProcessSignal.sigint.watch().listen(signalHandler);
-  sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
+
+  // SIGTERM is not supported on Windows. Attempting to register a SIGTERM
+  // handler raises an exception.
+  if (!Platform.isWindows) {
+    sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
+  }
 
   await run(
       config.port, functionTarget.handler, completer.future, loggingMiddleware);
