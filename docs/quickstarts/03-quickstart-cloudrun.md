@@ -67,7 +67,7 @@ gcloud beta run deploy NAME \
 
 Since the project ID was saved to the `gcloud` configuration in the
 [Set your gcloud project](#set-your-gcloud-project) section, you can also do the
-same for platform and region and omit the arguments from the command line.
+same for platform and region and omit the arguments from the command-line.
 
 > For Cloud Run, the platform must be set to `managed`.
 > For a list of regions, run `gcloud compute regions list`.
@@ -133,7 +133,8 @@ gcloud run deploy --image gcr.io/$PROJECT_ID/$IMAGE_NAME --platform managed
 1. You will be prompted for region: select the region of your choice, for
    example `us-central1`.
 1. You will be prompted to allow unauthenticated invocations: respond `y`. Then
-   wait a few moments until the deployment is complete. On success, the command-line displays the service URL.
+   wait a few moments until the deployment is complete. On success, the
+   command-line displays the service URL.
 
 Visit your deployed function by opening the service URL in a web browser.
 

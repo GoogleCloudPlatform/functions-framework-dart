@@ -76,7 +76,7 @@ The Functions Framework for Dart automatically checks this environment variable
 for you so that the server listens to the correct port; if PORT isn't set, then
 the default listening port is `8080`.
 
-You can set a port explicitly from the command line like this:
+You can set a port explicitly from the command-line like this:
 
 ```shell
 $ PORT=9090 dart run bin/server.dart
@@ -152,8 +152,8 @@ $ FUNCTION_TARGET=handleGet dart run bin/server.dart
 Listening on :8080
 ```
 
-You can use the `--target` command line argument to override
-`FUNCTION_TARGET`, similar to using the `--port` command line argument to
+You can use the `--target` command-line argument to override
+`FUNCTION_TARGET`, similar to using the `--port` command-line argument to
 override `PORT`:
 
 ```shell

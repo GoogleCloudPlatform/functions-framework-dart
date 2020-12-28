@@ -1,6 +1,6 @@
 # Installing and using dartfn
 
-`dartfn` is a command line (CLI) tool for working with Dart Functions Framework
+`dartfn` is a command-line (CLI) tool for working with Dart Functions Framework
 projects. In this early version of the tool, you can use it to generate sample
 projects from templates. Currently, there are three templates:
 
