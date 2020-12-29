@@ -7,6 +7,7 @@
   - `RequestContext`
     - Added `request` property to access original request.
     - Deprecated `headers` and `headersAll` - use `request` instead.
+  - Fix exception on Windows due to SIGTERM handler ([PR #153]).
 
 ## 0.3.0
 
@@ -50,3 +51,7 @@
 This is a preview release of the Functions Framework for Dart to demonstrate
 http functions support only (cloudevent support is not yet implemented). This
 is a work in progress and currently does not pass conformance testing.
+
+<!-- Reference links -->
+[pr #153]:
+https://github.com/GoogleCloudPlatform/functions-framework-dart/issues/151
