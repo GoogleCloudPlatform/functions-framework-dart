@@ -1,13 +1,14 @@
 # Changelog
 
+## 0.3.2-dev
+
 ## 0.3.1
 
 - `functions_framework.dart`
-
   - `RequestContext`
     - Added `request` property to access original request.
     - Deprecated `headers` and `headersAll` - use `request` instead.
-  - Fix exception on Windows due to SIGTERM handler ([PR #153]).
+- Fix exception on Windows due to SIGTERM handler ([PR #153]).
 
 ## 0.3.0
 
