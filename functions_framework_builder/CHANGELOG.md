@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+
+- Support the latest `package:functions_framework` version.
+
 ## 0.3.0
 
 - Added support for connecting functions that handle and return JSON data.
