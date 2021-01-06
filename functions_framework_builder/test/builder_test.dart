@@ -20,8 +20,6 @@ import 'package:functions_framework_builder/builder.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:test/test.dart';
 
-import 'test_package_asset_reader.dart';
-
 void main() {
   tearDown(() {
     // Increment this after each test so the next test has it's own package
@@ -595,7 +593,7 @@ Future<void> _generateTest(
         fail(output);
       });
     },
-    reader: await TestPackageAssetReader.currentIsolate(),
+    reader: await PackageAssetReader.currentIsolate(),
   );
 }
 
