@@ -1,4 +1,4 @@
-# Created with package:mono_repo v3.4.3
+# Created with package:mono_repo v3.4.5
 name: Dart Unit CI
 on:
   push:
@@ -28,13 +28,14 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;dart:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
+      - uses: dart-lang/setup-dart@v0.3
         with:
-          release-channel: dev
-      - run: dart --version
-      - uses: actions/checkout@v2
+          sdk: dev
+      - id: checkout
+        uses: actions/checkout@v2
       - id: dartfn_pub_upgrade
         name: "dartfn; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: dartfn
         run: pub upgrade --no-precompile
       - name: "dartfn; pub run test --run-skipped -t presubmit-only"
@@ -55,13 +56,14 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;dart:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
+      - uses: dart-lang/setup-dart@v0.3
         with:
-          release-channel: dev
-      - run: dart --version
-      - uses: actions/checkout@v2
+          sdk: dev
+      - id: checkout
+        uses: actions/checkout@v2
       - id: functions_framework_pub_upgrade
         name: "functions_framework; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework
         run: pub upgrade --no-precompile
       - name: "functions_framework; pub run test --run-skipped -t presubmit-only"
@@ -82,13 +84,14 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;dart:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
+      - uses: dart-lang/setup-dart@v0.3
         with:
-          release-channel: dev
-      - run: dart --version
-      - uses: actions/checkout@v2
+          sdk: dev
+      - id: checkout
+        uses: actions/checkout@v2
       - id: test_hello_pub_upgrade
         name: "test/hello; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
         run: pub upgrade --no-precompile
       - name: "test/hello; pub run test --run-skipped -t presubmit-only"
@@ -109,14 +112,15 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;dart:2.10.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
+      - uses: dart-lang/setup-dart@v0.3
         with:
           release-channel: stable
           version: "2.10.0"
-      - run: dart --version
-      - uses: actions/checkout@v2
+      - id: checkout
+        uses: actions/checkout@v2
       - id: functions_framework_builder_pub_upgrade
         name: "functions_framework_builder; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: pub upgrade --no-precompile
       - name: functions_framework_builder; pub run test
@@ -137,13 +141,14 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;dart:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
+      - uses: dart-lang/setup-dart@v0.3
         with:
-          release-channel: dev
-      - run: dart --version
-      - uses: actions/checkout@v2
+          sdk: dev
+      - id: checkout
+        uses: actions/checkout@v2
       - id: functions_framework_builder_pub_upgrade
         name: "functions_framework_builder; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: pub upgrade --no-precompile
       - name: functions_framework_builder; pub run test
@@ -164,14 +169,15 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;dart:2.10.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
+      - uses: dart-lang/setup-dart@v0.3
         with:
           release-channel: stable
           version: "2.10.0"
-      - run: dart --version
-      - uses: actions/checkout@v2
+      - id: checkout
+        uses: actions/checkout@v2
       - id: test_hello_pub_upgrade
         name: "test/hello; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
         run: pub upgrade --no-precompile
       - name: "test/hello; pub run test -x presubmit-only"
@@ -192,13 +198,14 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;dart:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
+      - uses: dart-lang/setup-dart@v0.3
         with:
-          release-channel: dev
-      - run: dart --version
-      - uses: actions/checkout@v2
+          sdk: dev
+      - id: checkout
+        uses: actions/checkout@v2
       - id: test_hello_pub_upgrade
         name: "test/hello; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
         run: pub upgrade --no-precompile
       - name: "test/hello; pub run test -x presubmit-only"
@@ -219,14 +226,15 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;dart:2.10.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
+      - uses: dart-lang/setup-dart@v0.3
         with:
           release-channel: stable
           version: "2.10.0"
-      - run: dart --version
-      - uses: actions/checkout@v2
+      - id: checkout
+        uses: actions/checkout@v2
       - id: test_hello_pub_upgrade
         name: "test/hello; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
         run: pub upgrade --no-precompile
       - name: "test/hello; pub run test --run-skipped -t presubmit-only"
