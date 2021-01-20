@@ -1,4 +1,4 @@
-# Created with package:mono_repo v3.4.5
+# Created with package:mono_repo v3.4.6
 name: Dart Unit CI
 on:
   push:
@@ -114,8 +114,7 @@ jobs:
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v0.3
         with:
-          release-channel: stable
-          version: "2.10.0"
+          sdk: "2.10.0"
       - id: checkout
         uses: actions/checkout@v2
       - id: functions_framework_builder_pub_upgrade
@@ -171,8 +170,7 @@ jobs:
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v0.3
         with:
-          release-channel: stable
-          version: "2.10.0"
+          sdk: "2.10.0"
       - id: checkout
         uses: actions/checkout@v2
       - id: test_hello_pub_upgrade
@@ -228,8 +226,7 @@ jobs:
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v0.3
         with:
-          release-channel: stable
-          version: "2.10.0"
+          sdk: "2.10.0"
       - id: checkout
         uses: actions/checkout@v2
       - id: test_hello_pub_upgrade

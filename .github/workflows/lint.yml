@@ -1,4 +1,4 @@
-# Created with package:mono_repo v3.4.5
+# Created with package:mono_repo v3.4.6
 name: Dart Lint CI
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2
       - name: mono_repo self validate
-        run: pub global activate mono_repo 3.4.5
+        run: pub global activate mono_repo 3.4.6
       - name: mono_repo self validate
         run: pub global run mono_repo generate --validate
   job_002:
@@ -122,8 +122,7 @@ jobs:
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v0.3
         with:
-          release-channel: stable
-          version: "2.10.0"
+          sdk: "2.10.0"
       - id: checkout
         uses: actions/checkout@v2
       - id: dartfn_pub_upgrade
