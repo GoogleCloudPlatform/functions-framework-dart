@@ -1,4 +1,4 @@
-# Created with package:mono_repo v3.4.3
+# Created with package:mono_repo v3.4.5
 name: Dart Lint CI
 on:
   push:
@@ -26,13 +26,13 @@ jobs:
           restore-keys: |
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
+      - uses: dart-lang/setup-dart@v0.3
         with:
-          release-channel: stable
-      - run: dart --version
-      - uses: actions/checkout@v2
+          sdk: stable
+      - id: checkout
+        uses: actions/checkout@v2
       - name: mono_repo self validate
-        run: pub global activate mono_repo 3.4.3
+        run: pub global activate mono_repo 3.4.5
       - name: mono_repo self validate
         run: pub global run mono_repo generate --validate
   job_002:
@@ -49,13 +49,14 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;dart:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
+      - uses: dart-lang/setup-dart@v0.3
         with:
-          release-channel: dev
-      - run: dart --version
-      - uses: actions/checkout@v2
+          sdk: dev
+      - id: checkout
+        uses: actions/checkout@v2
       - id: dartfn_pub_upgrade
         name: "dartfn; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: dartfn
         run: pub upgrade --no-precompile
       - name: "dartfn; dartfmt -n --set-exit-if-changed ."
@@ -68,6 +69,7 @@ jobs:
         run: dartanalyzer --fatal-infos .
       - id: functions_framework_pub_upgrade
         name: "functions_framework; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework
         run: pub upgrade --no-precompile
       - name: "functions_framework; dartfmt -n --set-exit-if-changed ."
@@ -80,6 +82,7 @@ jobs:
         run: dartanalyzer --fatal-infos .
       - id: functions_framework_builder_pub_upgrade
         name: "functions_framework_builder; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: pub upgrade --no-precompile
       - name: "functions_framework_builder; dartfmt -n --set-exit-if-changed ."
@@ -92,6 +95,7 @@ jobs:
         run: dartanalyzer --fatal-infos .
       - id: test_hello_pub_upgrade
         name: "test/hello; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
         run: pub upgrade --no-precompile
       - name: "test/hello; dartfmt -n --set-exit-if-changed ."
@@ -116,14 +120,15 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted;dart:2.10.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
-      - uses: cedx/setup-dart@v2
+      - uses: dart-lang/setup-dart@v0.3
         with:
           release-channel: stable
           version: "2.10.0"
-      - run: dart --version
-      - uses: actions/checkout@v2
+      - id: checkout
+        uses: actions/checkout@v2
       - id: dartfn_pub_upgrade
         name: "dartfn; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: dartfn
         run: pub upgrade --no-precompile
       - name: dartfn; dartanalyzer .
@@ -132,6 +137,7 @@ jobs:
         run: dartanalyzer .
       - id: functions_framework_pub_upgrade
         name: "functions_framework; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework
         run: pub upgrade --no-precompile
       - name: functions_framework; dartanalyzer .
@@ -140,6 +146,7 @@ jobs:
         run: dartanalyzer .
       - id: functions_framework_builder_pub_upgrade
         name: "functions_framework_builder; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: pub upgrade --no-precompile
       - name: functions_framework_builder; dartanalyzer .
@@ -148,6 +155,7 @@ jobs:
         run: dartanalyzer .
       - id: test_hello_pub_upgrade
         name: "test/hello; pub upgrade --no-precompile"
+        if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
         run: pub upgrade --no-precompile
       - name: test/hello; dartanalyzer .
