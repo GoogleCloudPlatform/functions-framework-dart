@@ -3,7 +3,7 @@
 This example demonstrates writing a function to handle a CloudEvent.
 
 CloudEvent function handlers don't return a response to send to the event
-producter. They generally perform some work and print output for logging.
+producer. They generally perform some work and print output for logging.
 
 The basic shape of the function handler looks like this:
 
