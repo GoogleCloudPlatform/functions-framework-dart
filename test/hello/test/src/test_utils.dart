@@ -14,8 +14,23 @@
 
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
+
+Future<http.Response> get(Object url, {Map<String, String> headers}) =>
+    http.get(url is String ? Uri.parse(url) : url as Uri, headers: headers);
+
+Future<http.Response> post(
+  Object url, {
+  Map<String, String> headers,
+  Object body,
+}) =>
+    http.post(
+      url is String ? Uri.parse(url) : url as Uri,
+      headers: headers,
+      body: body,
+    );
 
 const defaultPort = 8080;
 

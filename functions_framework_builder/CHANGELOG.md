@@ -2,6 +2,8 @@
 
 ## 0.3.2-dev
 
+- Allow the latest version `package:shelf`.
+
 ## 0.3.1
 
 - Support the latest `package:functions_framework` version.
