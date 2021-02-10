@@ -30,7 +30,7 @@ const _pubSubJsonString = r'''
   },
   "data": "RG8gdGhhdCB0aGluZywgeW8hIEkgbG92ZSBpdA==",
   "messageId": "1999507485604232",
-  "publishTime": "2021-02-10T18:13:19.698Z",
+  "publishTime": "2021-02-10T18:13:19.698Z"
  }
 }''';
 
@@ -43,7 +43,6 @@ final _realHeaders = (jsonDecode(r'''
  "ce-specversion": "1.0",
  "ce-time": "2021-02-10T18:13:19.698Z",
  "ce-type": "google.cloud.pubsub.topic.v1.messagePublished",
- "content-length": "343",
  "content-type": "application/json",
  "forwarded": "for=\"66.102.6.169\";proto=https",
  "from": "noreply@google.com",
