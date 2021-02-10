@@ -15,7 +15,7 @@
 @Timeout(Duration(seconds: 3))
 import 'dart:convert';
 
-import 'package:http/http.dart';
+import 'package:http/http.dart' show Response;
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 

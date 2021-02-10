@@ -16,7 +16,7 @@
 import 'dart:convert';
 
 import 'package:hello_world_function_test/functions.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' show Response;
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 

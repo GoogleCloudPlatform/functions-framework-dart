@@ -22,8 +22,9 @@ import 'package:functions_framework/src/constants.dart';
 import 'package:functions_framework/src/logging.dart';
 import 'package:functions_framework/src/run.dart';
 import 'package:hello_world_function_test/functions.dart';
-import 'package:http/http.dart';
 import 'package:test/test.dart';
+
+import 'src/test_utils.dart';
 
 const _projectId = 'test_project_id';
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.2-dev
+
+- Allow the latest versions of `args`, `http`, `http_parser`, and `shelf` 
+  packages.
+
 ## 0.3.1
 
 - `functions_framework.dart`
