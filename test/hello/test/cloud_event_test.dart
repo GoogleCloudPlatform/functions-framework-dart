@@ -25,13 +25,34 @@ const _pubSubJsonString = r'''
 {
  "subscription": "projects/my-project/subscriptions/my-subscription",
  "message": {
-   "@type": "type.googleapis.com/google.pubsub.v1.PubsubMessage",
-   "attributes": {
-     "attr1":"attr1-value"
-   },
-   "data": "dGVzdCBtZXNzYWdlIDM="
+  "attributes": {
+   "foz": "42"
+  },
+  "data": "RG8gdGhhdCB0aGluZywgeW8hIEkgbG92ZSBpdA==",
+  "messageId": "1999507485604232",
+  "publishTime": "2021-02-10T18:13:19.698Z",
  }
 }''';
+
+final _realHeaders = (jsonDecode(r'''
+{
+ "accept": "application/json",
+ "accept-encoding": "gzip,deflate,br",
+ "ce-id": "1999507485604232",
+ "ce-source": "//pubsub.googleapis.com/projects/redacted/topics/eventarc-us-central1-events-pubsub-trigger-072",
+ "ce-specversion": "1.0",
+ "ce-time": "2021-02-10T18:13:19.698Z",
+ "ce-type": "google.cloud.pubsub.topic.v1.messagePublished",
+ "content-length": "343",
+ "content-type": "application/json",
+ "forwarded": "for=\"66.102.6.169\";proto=https",
+ "from": "noreply@google.com",
+ "host": "helloworld-events-rgvedcg7vq-uc.a.run.app",
+ "user-agent": "APIs-Google; (+https://developers.google.com/webmasters/APIs-Google.html)",
+ "x-cloud-trace-context": "99f400597336e627f680986c0835f115/10739301396915309367;o=1",
+ "x-forwarded-for": "66.102.6.169",
+ "x-forwarded-proto": "https"
+}''') as Map<String, dynamic>).cast<String, String>();
 
 void main() {
   // TODO: non-JSON body
@@ -42,17 +63,7 @@ void main() {
     test('valid input', () async {
       final proc = await _hostBasicEventHandler();
 
-      final response = await _makeRequest(
-        _pubSubJsonString,
-        {
-          'Content-Type': 'application/json; charset=utf-8',
-          'ce-specversion': '1.0',
-          'ce-type': 'google.cloud.pubsub.topic.publish',
-          'ce-time': '2020-09-05T03:56:24Z',
-          'ce-id': '1234-1234-1234',
-          'ce-source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
-        },
-      );
+      final response = await _makeRequest(_pubSubJsonString, _realHeaders);
       expect(response.statusCode, 200);
       expect(response.body, isEmpty);
       expect(
@@ -74,12 +85,13 @@ void main() {
       expect(
         json,
         {
-          'id': '1234-1234-1234',
+          'id': '1999507485604232',
           'specversion': '1.0',
-          'type': 'google.cloud.pubsub.topic.publish',
+          'type': 'google.cloud.pubsub.topic.v1.messagePublished',
           'datacontenttype': 'application/json; charset=utf-8',
-          'time': '2020-09-05T03:56:24.000Z',
-          'source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
+          'time': '2021-02-10T18:13:19.698Z',
+          'source':
+              '//pubsub.googleapis.com/projects/redacted/topics/eventarc-us-central1-events-pubsub-trigger-072',
           'data': jsonDecode(_pubSubJsonString),
         },
       );
