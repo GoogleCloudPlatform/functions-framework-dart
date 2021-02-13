@@ -39,7 +39,7 @@ class CloudEventFunctionTarget extends FunctionTarget {
     return Response.ok('');
   }
 
-  const CloudEventFunctionTarget(String target, this.function) : super(target);
+  CloudEventFunctionTarget(this.function);
 }
 
 class CloudEventWithContextFunctionTarget extends FunctionTarget {
@@ -58,8 +58,7 @@ class CloudEventWithContextFunctionTarget extends FunctionTarget {
     return Response.ok('', headers: context.responseHeaders);
   }
 
-  const CloudEventWithContextFunctionTarget(String target, this.function)
-      : super(target);
+  CloudEventWithContextFunctionTarget(this.function);
 }
 
 Future<CloudEvent> _eventFromRequest(Request request) =>

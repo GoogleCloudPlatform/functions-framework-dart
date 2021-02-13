@@ -24,27 +24,21 @@ import 'typedefs.dart';
 export 'targets/json_targets.dart';
 
 abstract class FunctionTarget {
-  final String name;
-
   FunctionType get type => FunctionType.http;
 
-  const FunctionTarget(this.name);
+  FunctionTarget();
 
-  const factory FunctionTarget.http(String target, Handler function) =
-      HttpFunctionTarget;
+  factory FunctionTarget.http(Handler function) = HttpFunctionTarget;
 
-  const factory FunctionTarget.httpWithLogger(
-    String target,
+  factory FunctionTarget.httpWithLogger(
     HandlerWithLogger function,
   ) = HttpWithLoggerFunctionTarget;
 
-  const factory FunctionTarget.cloudEvent(
-    String target,
+  factory FunctionTarget.cloudEvent(
     CloudEventHandler function,
   ) = CloudEventFunctionTarget;
 
-  const factory FunctionTarget.cloudEventWithContext(
-    String target,
+  factory FunctionTarget.cloudEventWithContext(
     CloudEventWithContextHandler function,
   ) = CloudEventWithContextFunctionTarget;
 

@@ -154,8 +154,7 @@ void main() {
   group('cloud event', () {
     setUp(() async {
       await doSetup(
-        const FunctionTarget.cloudEventWithContext(
-          'function',
+        FunctionTarget.cloudEventWithContext(
           basicCloudEventHandler,
         ),
       );
@@ -244,7 +243,7 @@ void main() {
 
   group('http', () {
     setUp(() async {
-      await doSetup(const FunctionTarget.http('function', function));
+      await doSetup(FunctionTarget.http(function));
     });
 
     Future<void> _get(
@@ -330,7 +329,7 @@ void main() {
   group('logging', () {
     setUp(() async {
       await doSetup(
-        const FunctionTarget.httpWithLogger('function', loggingHandler),
+        FunctionTarget.httpWithLogger(loggingHandler),
       );
     });
 
