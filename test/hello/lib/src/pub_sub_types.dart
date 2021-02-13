@@ -15,6 +15,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:functions_framework/functions_framework.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'pub_sub_types.g.dart';
@@ -47,3 +48,6 @@ class PubSubMessage {
 
   Map<String, dynamic> toJson() => _$PubSubMessageToJson(this);
 }
+
+@CloudFunction()
+void customTypeHandler(CloudEvent bob, RequestContext context) {}

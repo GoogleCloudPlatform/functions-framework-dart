@@ -20,10 +20,10 @@ import 'cloud_event.dart';
 import 'log_severity.dart';
 import 'request_context.dart';
 
-typedef CloudEventHandler = FutureOr<void> Function(CloudEvent request);
+typedef CloudEventHandler<T> = FutureOr<void> Function(CloudEvent<T> request);
 
-typedef CloudEventWithContextHandler = FutureOr<void> Function(
-  CloudEvent request,
+typedef CloudEventWithContextHandler<T> = FutureOr<void> Function(
+  CloudEvent<T> request,
   RequestContext context,
 );
 

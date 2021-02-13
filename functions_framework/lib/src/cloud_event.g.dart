@@ -8,17 +8,20 @@ part of 'cloud_event.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CloudEvent _$CloudEventFromJson(Map<String, dynamic> json) {
+CloudEvent<T> _$CloudEventFromJson<T>(
+  Map<String, dynamic> json,
+  T Function(Object json) fromJsonT,
+) {
   return $checkedNew('CloudEvent', json, () {
     $checkKeys(json,
         requiredKeys: const ['id', 'source', 'specversion', 'type']);
-    final val = CloudEvent(
+    final val = CloudEvent<T>(
       id: $checkedConvert(json, 'id', (v) => v as String),
       source: $checkedConvert(
           json, 'source', (v) => v == null ? null : Uri.parse(v as String)),
       specVersion: $checkedConvert(json, 'specversion', (v) => v as String),
       type: $checkedConvert(json, 'type', (v) => v as String),
-      data: $checkedConvert(json, 'data', (v) => v),
+      data: $checkedConvert(json, 'data', (v) => fromJsonT(v)),
       dataContentType:
           $checkedConvert(json, 'datacontenttype', (v) => v as String),
       dataSchema: $checkedConvert(
@@ -35,7 +38,10 @@ CloudEvent _$CloudEventFromJson(Map<String, dynamic> json) {
   });
 }
 
-Map<String, dynamic> _$CloudEventToJson(CloudEvent instance) {
+Map<String, dynamic> _$CloudEventToJson<T>(
+  CloudEvent<T> instance,
+  Object Function(T value) toJsonT,
+) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
@@ -49,7 +55,7 @@ Map<String, dynamic> _$CloudEventToJson(CloudEvent instance) {
   writeNotNull('specversion', instance.specVersion);
   writeNotNull('type', instance.type);
   writeNotNull('datacontenttype', instance.dataContentType);
-  writeNotNull('data', instance.data);
+  writeNotNull('data', toJsonT(instance.data));
   writeNotNull('dataschema', instance.dataSchema?.toString());
   writeNotNull('subject', instance.subject);
   writeNotNull('time', instance.time?.toIso8601String());
