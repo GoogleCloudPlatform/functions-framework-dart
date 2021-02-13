@@ -25,7 +25,7 @@ MediaType mediaTypeFromRequest(Request request) {
     throw BadRequestException(400, '$contentTypeHeader header is required.');
   }
   try {
-    return MediaType.parse(request.headers[contentTypeHeader]);
+    return MediaType.parse(contentType);
   } catch (e, stack) {
     throw BadRequestException(
       400,
