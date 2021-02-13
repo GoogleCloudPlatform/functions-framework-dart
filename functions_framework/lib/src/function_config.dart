@@ -124,36 +124,29 @@ class FunctionConfig {
       port = defaults?.port ?? defaultPort;
     }
 
+    final functionTypeOptionValue = options[_functionTypeOpt] as String;
+
     return FunctionConfig(
       port: port,
       target: options[_targetOpt] as String ??
           defaults?.target ??
           defaultFunctionTarget,
-      functionType: _parseFunctionType(options[_functionTypeOpt] as String) ??
-          defaults?.functionType ??
-          defaultFunctionType,
+      functionType: functionTypeOptionValue == null
+          ? defaults?.functionType ?? defaultFunctionType
+          : _parseFunctionType(functionTypeOptionValue),
     );
   }
 }
 
-FunctionType _parseFunctionType(String type) {
-  type ??= '';
-  switch (type) {
-    case '':
-      return defaultFunctionType;
-    case 'http':
-      return FunctionType.http;
-    case 'cloudevent':
-      return FunctionType.cloudevent;
-    default:
-      throw BadConfigurationException(
+FunctionType _parseFunctionType(String type) => FunctionType.values.singleWhere(
+      (element) => type == _enumValue(element),
+      orElse: () => throw BadConfigurationException(
         'FUNCTION_SIGNATURE_TYPE environment variable "$type" is not a valid '
         'option (must be "http" or "cloudevent")',
-      );
-  }
-}
+      ),
+    );
 
-String _enumValue(Object enumEntry) {
+String _enumValue(FunctionType enumEntry) {
   final v = enumEntry.toString();
   return v.substring(v.indexOf('.') + 1);
 }
