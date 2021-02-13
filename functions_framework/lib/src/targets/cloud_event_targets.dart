@@ -32,16 +32,14 @@ class CloudEventFunctionTarget extends FunctionTarget {
 
   @override
   FutureOr<Response> handler(Request request) async {
-    final event = _requiredBinaryHeader.every(request.headers.containsKey)
-        ? await _decodeBinary(request)
-        : await _decodeStructured(request);
+    final event = await _eventFromRequest(request);
 
     await function(event);
 
     return Response.ok('');
   }
 
-  const CloudEventFunctionTarget(String target, this.function) : super(target);
+  CloudEventFunctionTarget(this.function);
 }
 
 class CloudEventWithContextFunctionTarget extends FunctionTarget {
@@ -52,9 +50,7 @@ class CloudEventWithContextFunctionTarget extends FunctionTarget {
 
   @override
   Future<Response> handler(Request request) async {
-    final event = _requiredBinaryHeader.every(request.headers.containsKey)
-        ? await _decodeBinary(request)
-        : await _decodeStructured(request);
+    final event = await _eventFromRequest(request);
 
     final context = contextForRequest(request);
     await function(event, context);
@@ -62,9 +58,13 @@ class CloudEventWithContextFunctionTarget extends FunctionTarget {
     return Response.ok('', headers: context.responseHeaders);
   }
 
-  const CloudEventWithContextFunctionTarget(String target, this.function)
-      : super(target);
+  CloudEventWithContextFunctionTarget(this.function);
 }
+
+Future<CloudEvent> _eventFromRequest(Request request) =>
+    _requiredBinaryHeader.every(request.headers.containsKey)
+        ? _decodeBinary(request)
+        : _decodeStructured(request);
 
 Future<CloudEvent> _decodeStructured(Request request) async {
   final type = mediaTypeFromRequest(request);
@@ -82,16 +82,20 @@ Future<CloudEvent> _decodeStructured(Request request) async {
   return _decodeValidCloudEvent(jsonObject, 'structured-mode message');
 }
 
+const _cloudEventPrefix = 'ce-';
+const _clientEventPrefixLength = _cloudEventPrefix.length;
+
 Future<CloudEvent> _decodeBinary(Request request) async {
-  final map = Map<String, dynamic>.fromEntries(request.headers.entries
-      .where((element) => element.key.startsWith('ce-'))
-      .map((e) => MapEntry(e.key.substring(3), e.value)));
-
   final type = mediaTypeFromRequest(request);
-
   mustBeJson(type);
-  map['datacontenttype'] = type.toString();
-  map['data'] = await decodeJson(request);
+
+  final map = <String, Object>{
+    for (var e in request.headers.entries
+        .where((element) => element.key.startsWith(_cloudEventPrefix)))
+      e.key.substring(_clientEventPrefixLength): e.value,
+    'datacontenttype': type.toString(),
+    'data': await decodeJson(request),
+  };
 
   return _decodeValidCloudEvent(map, 'binary-mode message');
 }

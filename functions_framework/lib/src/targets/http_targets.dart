@@ -26,7 +26,7 @@ class HttpFunctionTarget extends FunctionTarget {
   @override
   FutureOr<Response> handler(Request request) => _function(request);
 
-  const HttpFunctionTarget(String target, this._function) : super(target);
+  HttpFunctionTarget(this._function);
 }
 
 class HttpWithLoggerFunctionTarget extends FunctionTarget {
@@ -36,6 +36,5 @@ class HttpWithLoggerFunctionTarget extends FunctionTarget {
   FutureOr<Response> handler(Request request) =>
       _function(request, loggerForRequest(request));
 
-  const HttpWithLoggerFunctionTarget(String target, this._function)
-      : super(target);
+  HttpWithLoggerFunctionTarget(this._function);
 }

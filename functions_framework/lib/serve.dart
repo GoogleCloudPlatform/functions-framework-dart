@@ -35,9 +35,12 @@ export 'src/function_target.dart'
 /// If there are no configuration errors, this function will not return until
 /// the process has received signal [ProcessSignal.sigterm] or
 /// [ProcessSignal.sigint].
-Future<void> serve(List<String> args, Set<FunctionTarget> targets) async {
+Future<void> serve(
+  List<String> args,
+  FunctionTarget Function(String) functionForName,
+) async {
   try {
-    await _serve(args, targets);
+    await _serve(args, functionForName);
   } on BadConfigurationException catch (e) {
     stderr.writeln(red.wrap(e.message));
     if (e.details != null) {
@@ -47,7 +50,10 @@ Future<void> serve(List<String> args, Set<FunctionTarget> targets) async {
   }
 }
 
-Future<void> _serve(List<String> args, Set<FunctionTarget> targets) async {
+Future<void> _serve(
+  List<String> args,
+  FunctionTarget Function(String) functionForName,
+) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
   final config = FunctionConfig.fromArgs(
@@ -55,13 +61,13 @@ Future<void> _serve(List<String> args, Set<FunctionTarget> targets) async {
     defaults: configFromEnvironment,
   );
 
-  final functionTarget = targets.singleWhere(
-    (target) => target.name == config.target,
-    orElse: () => throw BadConfigurationException(
+  final functionTarget = functionForName(config.target);
+  if (functionTarget == null) {
+    throw BadConfigurationException(
       'There is no handler configured for '
       '$environmentKeyFunctionTarget `${config.target}`.',
-    ),
-  );
+    );
+  }
 
   if (functionTarget.type == FunctionType.cloudevent &&
       config.functionType == FunctionType.http) {

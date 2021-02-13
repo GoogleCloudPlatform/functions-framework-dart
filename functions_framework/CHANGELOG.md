@@ -1,6 +1,16 @@
 # Changelog
 
-## 0.3.2-dev
+## 0.4.0-dev
+
+- **BREAKING** `RequestContext`: removed deprecated `headers` and `headersAll`
+  properties.
+- **BREAKING** `serve.dart`:
+  - Changed the signature for `serve` function accept
+    `FunctionTarget Function(String) functionForName` instead of
+    `Set<FunctionTarget> targets`. This will allow more flexibility in future
+    `FunctionTarget` implementations.
+  - `FunctionTarget` no longer has a `const` constructor. The `name` parameter
+    has also been removed.
 
 - Allow the latest versions of `args`, `http`, `http_parser`, and `shelf` 
   packages.
