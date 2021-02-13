@@ -34,13 +34,15 @@ abstract class FunctionTarget {
     HandlerWithLogger function,
   ) = HttpWithLoggerFunctionTarget;
 
-  factory FunctionTarget.cloudEvent(
-    CloudEventHandler function,
-  ) = CloudEventFunctionTarget;
+  static FunctionTarget cloudEvent<T>(
+    CloudEventHandler<T> function,
+  ) =>
+      CloudEventFunctionTarget<T>(function);
 
-  factory FunctionTarget.cloudEventWithContext(
-    CloudEventWithContextHandler function,
-  ) = CloudEventWithContextFunctionTarget;
+  static FunctionTarget cloudEventWithContext<T>(
+    CloudEventWithContextHandler<T> function,
+  ) =>
+      CloudEventWithContextFunctionTarget<T>(function);
 
   FutureOr<Response> handler(Request request);
 }
