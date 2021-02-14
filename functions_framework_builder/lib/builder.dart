@@ -85,15 +85,9 @@ class _FunctionsFrameworkBuilder implements Builder {
       entries[targetName] = invokeExpression;
     }
 
-    final functions = <String>[];
-    final factories = <String>[];
-    for (var e in entries.values) {
-      final factory = e.createFactory(functions.length);
-      if (factory != null) {
-        factories.add(factory);
-      }
-      functions.add('  ${e.createReference(functions.length)},');
-    }
+    final cases = [
+      for (var e in entries.values) '  case ${e.name}:return ${e.expression};',
+    ];
 
     var output = '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
@@ -115,17 +109,23 @@ import 'package:functions_framework/serve.dart';
 import '${input.uri}' as $functionsLibraryPrefix;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functionTargets);
+  await serve(args, _functionForName);
 }
 
-const _functionTargets = <FunctionTarget>{
-${functions.join('\n')}
-};
-
-${factories.join('\n')}
+FunctionTarget _functionForName(String name) {
+  switch (name) {
+${cases.join('\n')}
+    default:
+      return null;
+  }
+}
 ''';
 
-    output = DartFormatter().format(output);
+    try {
+      output = DartFormatter().format(output);
+    } on FormatterException catch (e, stack) {
+      log.warning('Could not format output.', e, stack);
+    }
 
     await buildStep.writeAsString(
       AssetId(

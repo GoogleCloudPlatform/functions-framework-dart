@@ -125,16 +125,16 @@ class GenericFunctionType implements SupportedFunctionType {
 
 class _GenericFactoryData implements FactoryData {
   final String _endpointConstructorName;
-  final String arg1;
-  final String arg2;
+  final String target;
+  final String function;
 
   final String returnType;
   final String factoryBody;
 
   _GenericFactoryData._(
     this._endpointConstructorName,
-    this.arg1,
-    this.arg2,
+    this.target,
+    this.function,
     this.returnType,
     this.factoryBody,
   );
@@ -143,8 +143,8 @@ class _GenericFactoryData implements FactoryData {
     bool withContext,
     bool isVoid,
     JsonParamInfo info,
-    String arg1,
-    String arg2,
+    String target,
+    String function,
   ) {
     final jsonTypeDisplay =
         info.jsonType.getDisplayString(withNullability: false);
@@ -163,7 +163,8 @@ class _GenericFactoryData implements FactoryData {
   }
   throw BadRequestException(
     400,
-    'The provided JSON is not the expected type `$jsonTypeDisplay`.',
+    'The provided JSON is not the expected type '
+    '`$jsonTypeDisplay`.',
   );
 ''';
 
@@ -175,24 +176,22 @@ class _GenericFactoryData implements FactoryData {
           : withContext
               ? _withContextConstructorName
               : _constructorName,
-      arg1,
-      arg2,
+      target,
+      function,
       typeDisplayName,
       body,
     );
   }
 
   @override
-  String createReference(int index) =>
-      '$_endpointConstructorName($arg1,$arg2,_factory$index,)';
+  String get expression => '''
+$_endpointConstructorName($function, ($_jsonParamName) {
+  $factoryBody
+},)
+''';
 
   @override
-  String createFactory(int index) => '''
-$returnType _factory$index(Object $_jsonParamName) {
-  $factoryBody
-  
-}
-''';
+  String get name => target;
 }
 
 const _jsonParamName = 'json';
