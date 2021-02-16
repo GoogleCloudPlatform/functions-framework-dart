@@ -69,7 +69,7 @@ class SupportedFunctionType {
   ) {
     if (element.library.typeSystem.isSubtypeOf(element.type, _type)) {
       return _TrivialFactoryData(
-          escapeDartString(targetName),
+        escapeDartString(targetName),
         '$_constructor('
         '$functionsLibraryPrefix.${element.name},)',
       );
