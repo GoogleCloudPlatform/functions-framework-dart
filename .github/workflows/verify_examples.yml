@@ -19,9 +19,9 @@ jobs:
     strategy:
       matrix:
         example_directory:
-          - examples/hello
-          - examples/json
-          - examples/raw_cloudevent
+          - example/hello
+          - example/json
+          - example/raw_cloudevent
     defaults:
       run:
         working-directory: ${{ matrix.example_directory }}

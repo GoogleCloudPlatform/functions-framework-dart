@@ -18,11 +18,11 @@ You can either
 * Run `dartfn` to create a new project using the `helloworld` generator (see
   [Installing and using dartfn])
 * Clone this repo or download a [zip] archive and extract the contents
-  * Change directory to `examples/hello`.
+  * Change directory to `example/hello`.
 
 ## Build a Docker image
 
-The `docker run` command will use the `Dockerfile` in `examples/hello` to build
+The `docker run` command will use the `Dockerfile` in `example/hello` to build
 a Docker image for running containers.
 
 > You can think of a Docker image as something like a binary package that
@@ -49,7 +49,7 @@ a Docker image for running containers.
 > big part of why containers have become so popular in the Cloud, where services
 > generally need to scale very quickly in response to dynamic demand.
 
-From the root of the `examples/hello` directory, create an image that tagged
+From the root of the `example/hello` directory, create an image that tagged
 (`-t`) with the name `hellofunc` using the current directory (`.`) for the build
 context (the root of the files that will be copied into the image):
 

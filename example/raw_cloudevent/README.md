@@ -98,7 +98,7 @@ options used in this example are:
 - `-w '%{http_code}\n'` - print the HTTP status code (expect 200 for success)
 
 Alternatively, instead of running `curl`, you can run either of the following
-Dart scripts examples under the `examples/raw_cloudevent/tool` directory:
+Dart scripts examples under the `example/raw_cloudevent/tool` directory:
 
 - `dart run tool/binary_mode_request.dart`
 - `dart run tool/structured_mode_request.dart`

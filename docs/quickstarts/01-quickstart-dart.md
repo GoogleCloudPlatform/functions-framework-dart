@@ -15,7 +15,7 @@ You can either
 * Run `dartfn` to create a new project using the `helloworld` generator (see
   [Installing and using dartfn])
 * Clone this repo or download a [zip] archive and extract the contents
-  * Change directory to `examples/hello`.
+  * Change directory to `example/hello`.
 
 ## Build the example
 
@@ -40,7 +40,7 @@ $ dart run build_runner build --delete-conflicting-outputs
 
 A test (`test/function_test.dart`) is provided as a simple example for testing
 your function now that it has been built. You can run this test from the root
-of `examples/hello`.
+of `example/hello`.
 
 ```shell
 $ dart test

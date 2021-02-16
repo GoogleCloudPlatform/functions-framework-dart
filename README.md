@@ -30,7 +30,7 @@ Framework projects.
 
 The framework allows you to go from:
 
-[examples/hello/lib/functions.dart]
+[example/hello/lib/functions.dart]
 
 ```dart
 import 'package:functions_framework/functions_framework.dart';
@@ -50,7 +50,7 @@ curl https://<your-app-url>
 All without needing to worry about writing an HTTP server or request
 handling logic.
 
-See more demos under the [examples] directory.
+See more demos under the [example] directory.
 
 ## Features
 
@@ -65,7 +65,7 @@ See more demos under the [examples] directory.
 [Dart quickstart] on your local machine.
 
 ```shell
-$ cd examples/hello
+$ cd example/hello
 $ docker build -t app .
 ...
 
@@ -118,8 +118,8 @@ https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=wo
 [CloudEvents]: https://cloudevents.io/
 [Dart quickstart]: docs/quickstarts/01-quickstart-dart.md
 [docs]: docs
-[examples]: examples
-[examples/hello/lib/functions.dart]: examples/hello/lib/functions.dart
+[example]: example
+[example/hello/lib/functions.dart]: example/hello/lib/functions.dart
 [Google Cloud Run]:
 https://cloud.google.com/run/docs/quickstarts/build-and-deploy
 [Google App Engine]: https://cloud.google.com/appengine/docs/go/

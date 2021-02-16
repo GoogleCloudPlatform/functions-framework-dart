@@ -49,7 +49,7 @@ Updated property [core/project].
 * Run `dartfn` to create a new project using the `helloworld` generator (see
   [Installing and using dartfn])
 * Clone this repo or download a [zip] archive and extract the contents
-  * Change directory to `examples/hello`.
+  * Change directory to `example/hello`.
 
 ## Build and deploy with a single command
 
