@@ -1,7 +1,8 @@
 # Changelog
 
-## 0.3.2-dev
+## 0.4.0-dev
 
+- Support the latest `package:functions_framework` version.
 - Allow the latest version `package:shelf`.
 
 ## 0.3.1

@@ -29,25 +29,6 @@ class RequestContext {
 
   final responseHeaders = <String, /* String | List<String> */ Object>{};
 
-  /// The HTTP headers with case-insensitive keys.
-  ///
-  /// If a header occurs more than once in the query string, they are mapped to
-  /// by concatenating them with a comma.
-  ///
-  /// The returned map is unmodifiable.
-  @Deprecated('Use request.headers instead')
-  Map<String, String> get headers => request.headers;
-
-  /// The HTTP headers with multiple values with case-insensitive keys.
-  ///
-  /// If a header occurs only once, its value is a singleton list.
-  /// If a header occurs with no value, the empty string is used as the value
-  /// for that occurrence.
-  ///
-  /// The returned map and the lists it contains are unmodifiable.
-  @Deprecated('Use request.headersAll instead')
-  Map<String, List<String>> get headersAll => request.headersAll;
-
   RequestContext._(this.request) : logger = loggerForRequest(request);
 }
 

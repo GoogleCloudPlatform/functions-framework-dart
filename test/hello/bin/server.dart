@@ -17,58 +17,60 @@ import 'package:functions_framework/serve.dart';
 import 'package:hello_world_function_test/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functionTargets);
+  await serve(args, _nameToFunctionTarget);
 }
 
-const _functionTargets = <FunctionTarget>{
-  FunctionTarget.http(
-    'function',
-    function_library.function,
-  ),
-  FunctionTarget.httpWithLogger(
-    'loggingHandler',
-    function_library.loggingHandler,
-  ),
-  FunctionTarget.cloudEventWithContext(
-    'basicCloudEventHandler',
-    function_library.basicCloudEventHandler,
-  ),
-  FunctionTarget.http(
-    'conformanceHttp',
-    function_library.conformanceHttp,
-  ),
-  FunctionTarget.cloudEvent(
-    'conformanceCloudEvent',
-    function_library.conformanceCloudEvent,
-  ),
-  JsonWithContextFunctionTarget.voidResult(
-    'pubSubHandler',
-    function_library.pubSubHandler,
-    _factory5,
-  ),
-  JsonWithContextFunctionTarget(
-    'jsonHandler',
-    function_library.jsonHandler,
-    _factory6,
-  ),
-};
-
-function_library.PubSub _factory5(Object json) {
-  if (json is Map<String, dynamic>) {
-    return function_library.PubSub.fromJson(json);
+FunctionTarget _nameToFunctionTarget(String name) {
+  switch (name) {
+    case 'function':
+      return FunctionTarget.http(
+        function_library.function,
+      );
+    case 'loggingHandler':
+      return FunctionTarget.httpWithLogger(
+        function_library.loggingHandler,
+      );
+    case 'basicCloudEventHandler':
+      return FunctionTarget.cloudEventWithContext(
+        function_library.basicCloudEventHandler,
+      );
+    case 'conformanceHttp':
+      return FunctionTarget.http(
+        function_library.conformanceHttp,
+      );
+    case 'conformanceCloudEvent':
+      return FunctionTarget.cloudEvent(
+        function_library.conformanceCloudEvent,
+      );
+    case 'pubSubHandler':
+      return JsonWithContextFunctionTarget.voidResult(
+        function_library.pubSubHandler,
+        (json) {
+          if (json is Map<String, dynamic>) {
+            return function_library.PubSub.fromJson(json);
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`Map<String, dynamic>`.',
+          );
+        },
+      );
+    case 'jsonHandler':
+      return JsonWithContextFunctionTarget(
+        function_library.jsonHandler,
+        (json) {
+          if (json is Map<String, dynamic>) {
+            return json;
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`Map<String, dynamic>`.',
+          );
+        },
+      );
+    default:
+      return null;
   }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `Map<String, dynamic>`.',
-  );
-}
-
-Map<String, dynamic> _factory6(Object json) {
-  if (json is Map<String, dynamic>) {
-    return json;
-  }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `Map<String, dynamic>`.',
-  );
 }

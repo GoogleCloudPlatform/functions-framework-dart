@@ -69,7 +69,8 @@ class SupportedFunctionType {
   ) {
     if (element.library.typeSystem.isSubtypeOf(element.type, _type)) {
       return _TrivialFactoryData(
-        '$_constructor(${escapeDartString(targetName)}, '
+        escapeDartString(targetName),
+        '$_constructor('
         '$functionsLibraryPrefix.${element.name},)',
       );
     }
@@ -78,19 +79,16 @@ class SupportedFunctionType {
 }
 
 abstract class FactoryData {
-  String createReference(int index);
+  String get name;
 
-  String createFactory(int index);
+  String get expression;
 }
 
 class _TrivialFactoryData implements FactoryData {
-  final String content;
-
-  _TrivialFactoryData(this.content);
-
   @override
-  String createReference(int index) => content;
-
+  final String name;
   @override
-  String createFactory(int index) => null;
+  final String expression;
+
+  _TrivialFactoryData(this.name, this.expression);
 }

@@ -37,12 +37,16 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-const _functionTargets = <FunctionTarget>{
-  FunctionTarget.http(
-    'handleGet',
-    function_library.handleGet,
-  ),
-};
+FunctionTarget _nameToFunctionTarget(String name) {
+  switch (name) {
+    case 'handleGet':
+      return FunctionTarget.http(
+        function_library.handleGet,
+      );
+    default:
+      return null;
+  }
+}
 ''',
     );
   });
@@ -58,12 +62,16 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-const _functionTargets = <FunctionTarget>{
-  FunctionTarget.http(
-    'some function',
-    function_library.handleGet,
-  ),
-};
+FunctionTarget _nameToFunctionTarget(String name) {
+  switch (name) {
+    case 'some function':
+      return FunctionTarget.http(
+        function_library.handleGet,
+      );
+    default:
+      return null;
+  }
+}
 ''',
     );
   });
@@ -81,17 +89,21 @@ const _functionTargets = <FunctionTarget>{
       'customResponseAsync',
       'customResponseFutureOr',
     ].map((e) => """
-  FunctionTarget.http(
-    '$e',
-    function_library.$e,
-  ),""").join('\n');
+    case '$e':
+      return FunctionTarget.http(
+        function_library.$e,
+      );""").join('\n');
     await _generateTest(
       file.readAsStringSync(),
       '''
 $_outputHeader
-const _functionTargets = <FunctionTarget>{
+FunctionTarget _nameToFunctionTarget(String name) {
+  switch (name) {
 $lines
-};
+    default:
+      return null;
+  }
+}
 ''',
     );
   });
@@ -106,17 +118,21 @@ $lines
       'optionalParam',
       'objectParam',
     ].map((e) => """
-  FunctionTarget.cloudEvent(
-    '$e',
-    function_library.$e,
-  ),""").join('\n');
+    case '$e':
+      return FunctionTarget.cloudEvent(
+        function_library.$e,
+      );""").join('\n');
     await _generateTest(
       file.readAsStringSync(),
       '''
 $_outputHeader
-const _functionTargets = <FunctionTarget>{
+FunctionTarget _nameToFunctionTarget(String name) {
+  switch (name) {
 $lines
-};
+    default:
+      return null;
+  }
+}
 ''',
     );
   });
@@ -136,22 +152,21 @@ $lines
             'extraParam',
             'optionalParam',
           ],
-          (e, index) => """
-  JsonFunctionTarget.voidResult(
-    '$e',
-    function_library.$e,
-    _factory$index,
-  ),""",
-          (index) => """
-function_library.JsonType _factory$index(Object json) {
-  if (json is Map<String, dynamic>) {
-    return function_library.JsonType.fromJson(json);
-  }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `Map<String, dynamic>`.',
-  );
-}""");
+          (e) => """
+    case '$e':
+      return JsonFunctionTarget.voidResult(
+        function_library.$e,
+        (json) {
+          if (json is Map<String, dynamic>) {
+            return function_library.JsonType.fromJson(json);
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`Map<String, dynamic>`.',
+          );
+        },
+      );""");
     });
 
     test('void return type with context', () async {
@@ -174,22 +189,21 @@ function_library.JsonType _factory$index(Object json) {
             'extraParam',
             'optionalParam',
           ],
-          (e, index) => """
-  JsonWithContextFunctionTarget.voidResult(
-    '$e',
-    function_library.$e,
-    _factory$index,
-  ),""",
-          (index) => """
-function_library.JsonType _factory$index(Object json) {
-  if (json is Map<String, dynamic>) {
-    return function_library.JsonType.fromJson(json);
-  }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `Map<String, dynamic>`.',
-  );
-}""");
+          (e) => """
+    case '$e':
+      return JsonWithContextFunctionTarget.voidResult(
+        function_library.$e,
+        (json) {
+          if (json is Map<String, dynamic>) {
+            return function_library.JsonType.fromJson(json);
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`Map<String, dynamic>`.',
+          );
+        },
+      );""");
     });
 
     test('simple return type', () async {
@@ -206,22 +220,21 @@ function_library.JsonType _factory$index(Object json) {
             'extraParam',
             'optionalParam',
           ],
-          (e, index) => """
-  JsonFunctionTarget(
-    '$e',
-    function_library.$e,
-    _factory$index,
-  ),""",
-          (index) => """
-function_library.JsonType _factory$index(Object json) {
-  if (json is Map<String, dynamic>) {
-    return function_library.JsonType.fromJson(json);
-  }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `Map<String, dynamic>`.',
-  );
-}""");
+          (e) => """
+    case '$e':
+      return JsonFunctionTarget(
+        function_library.$e,
+        (json) {
+          if (json is Map<String, dynamic>) {
+            return function_library.JsonType.fromJson(json);
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`Map<String, dynamic>`.',
+          );
+        },
+      );""");
     });
 
     test('JSON return type', () async {
@@ -238,22 +251,21 @@ function_library.JsonType _factory$index(Object json) {
             'extraParam',
             'optionalParam',
           ],
-          (e, index) => """
-  JsonFunctionTarget(
-    '$e',
-    function_library.$e,
-    _factory$index,
-  ),""",
-          (index) => """
-function_library.JsonType _factory$index(Object json) {
-  if (json is Map<String, dynamic>) {
-    return function_library.JsonType.fromJson(json);
-  }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `Map<String, dynamic>`.',
-  );
-}""");
+          (e) => """
+    case '$e':
+      return JsonFunctionTarget(
+        function_library.$e,
+        (json) {
+          if (json is Map<String, dynamic>) {
+            return function_library.JsonType.fromJson(json);
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`Map<String, dynamic>`.',
+          );
+        },
+      );""");
     });
 
     test('complex return type', () async {
@@ -270,22 +282,21 @@ function_library.JsonType _factory$index(Object json) {
             'extraParam',
             'optionalParam',
           ],
-          (e, index) => """
-  JsonFunctionTarget(
-    '$e',
-    function_library.$e,
-    _factory$index,
-  ),""",
-          (index) => """
-function_library.JsonType _factory$index(Object json) {
-  if (json is Map<String, dynamic>) {
-    return function_library.JsonType.fromJson(json);
-  }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `Map<String, dynamic>`.',
-  );
-}""");
+          (e) => """
+    case '$e':
+      return JsonFunctionTarget(
+        function_library.$e,
+        (json) {
+          if (json is Map<String, dynamic>) {
+            return function_library.JsonType.fromJson(json);
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`Map<String, dynamic>`.',
+          );
+        },
+      );""");
     });
   });
 
@@ -304,22 +315,21 @@ function_library.JsonType _factory$index(Object json) {
             'extraParam',
             'optionalParam',
           ],
-          (e, index) => """
-  JsonFunctionTarget.voidResult(
-    '$e',
-    function_library.$e,
-    _factory$index,
-  ),""",
-          (index) => """
-num _factory$index(Object json) {
-  if (json is num) {
-    return json;
-  }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `num`.',
-  );
-}""");
+          (e) => """
+    case '$e':
+      return JsonFunctionTarget.voidResult(
+        function_library.$e,
+        (json) {
+          if (json is num) {
+            return json;
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`num`.',
+          );
+        },
+      );""");
     });
 
     test('simple return type', () async {
@@ -335,22 +345,21 @@ num _factory$index(Object json) {
             'extraParam',
             'optionalParam',
           ],
-          (e, index) => """
-  JsonFunctionTarget(
-    '$e',
-    function_library.$e,
-    _factory$index,
-  ),""",
-          (index) => """
-num _factory$index(Object json) {
-  if (json is num) {
-    return json;
-  }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `num`.',
-  );
-}""");
+          (e) => """
+    case '$e':
+      return JsonFunctionTarget(
+        function_library.$e,
+        (json) {
+          if (json is num) {
+            return json;
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`num`.',
+          );
+        },
+      );""");
     });
 
     test('complex return type', () async {
@@ -367,22 +376,21 @@ num _factory$index(Object json) {
             'extraParam',
             'optionalParam',
           ],
-          (e, index) => """
-  JsonFunctionTarget(
-    '$e',
-    function_library.$e,
-    _factory$index,
-  ),""",
-          (index) => """
-num _factory$index(Object json) {
-  if (json is num) {
-    return json;
-  }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `num`.',
-  );
-}""");
+          (e) => """
+    case '$e':
+      return JsonFunctionTarget(
+        function_library.$e,
+        (json) {
+          if (json is num) {
+            return json;
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`num`.',
+          );
+        },
+      );""");
     });
 
     test('void with context', () async {
@@ -405,22 +413,21 @@ num _factory$index(Object json) {
             'extraParam',
             'optionalParam',
           ],
-          (e, index) => """
-  JsonWithContextFunctionTarget.voidResult(
-    '$e',
-    function_library.$e,
-    _factory$index,
-  ),""",
-          (index) => """
-num _factory$index(Object json) {
-  if (json is num) {
-    return json;
-  }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `num`.',
-  );
-}""");
+          (e) => """
+    case '$e':
+      return JsonWithContextFunctionTarget.voidResult(
+        function_library.$e,
+        (json) {
+          if (json is num) {
+            return json;
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`num`.',
+          );
+        },
+      );""");
     });
   });
 
@@ -534,27 +541,21 @@ Future<void> _generateThrows(String inputLibrary, Object matcher) async {
   );
 }
 
-Future<void> _testItems(
-  String inputContent,
-  List<String> functions,
-  String Function(String entry, int index) entryFactory, [
-  String Function(int index) factoryFactory,
-]) async {
-  var count = 0;
-  final entries = functions.map((e) => entryFactory(e, count++)).join('\n');
-
-  count = 0;
-  final factories = functions.map((e) => factoryFactory(count++)).join('\n\n');
+Future<void> _testItems(String inputContent, List<String> functions,
+    String Function(String entry) entryFactory) async {
+  final entries = functions.map((e) => entryFactory(e)).join('\n');
 
   await _generateTest(
     inputContent,
     '''
 $_outputHeader
-const _functionTargets = <FunctionTarget>{
+FunctionTarget _nameToFunctionTarget(String name) {
+  switch (name) {
 $entries
-};
-
-$factories
+    default:
+      return null;
+  }
+}
 ''',
   );
 }
@@ -627,6 +628,6 @@ import 'package:functions_framework/serve.dart';
 import 'package:$_pkgName/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functionTargets);
+  await serve(args, _nameToFunctionTarget);
 }
 ''';
