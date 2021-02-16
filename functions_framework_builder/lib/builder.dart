@@ -109,10 +109,10 @@ import 'package:functions_framework/serve.dart';
 import '${input.uri}' as $functionsLibraryPrefix;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functionForName);
+  await serve(args, _nameToFunctionTarget);
 }
 
-FunctionTarget _functionForName(String name) {
+FunctionTarget _nameToFunctionTarget(String name) {
   switch (name) {
 ${cases.join('\n')}
     default:

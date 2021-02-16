@@ -37,10 +37,10 @@ export 'src/function_target.dart'
 /// [ProcessSignal.sigint].
 Future<void> serve(
   List<String> args,
-  FunctionTarget Function(String) functionForName,
+  FunctionTarget Function(String) nameToFunctionTarget,
 ) async {
   try {
-    await _serve(args, functionForName);
+    await _serve(args, nameToFunctionTarget);
   } on BadConfigurationException catch (e) {
     stderr.writeln(red.wrap(e.message));
     if (e.details != null) {
@@ -52,7 +52,7 @@ Future<void> serve(
 
 Future<void> _serve(
   List<String> args,
-  FunctionTarget Function(String) functionForName,
+  FunctionTarget Function(String) nameToFunctionTarget,
 ) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
@@ -61,7 +61,7 @@ Future<void> _serve(
     defaults: configFromEnvironment,
   );
 
-  final functionTarget = functionForName(config.target);
+  final functionTarget = nameToFunctionTarget(config.target);
   if (functionTarget == null) {
     throw BadConfigurationException(
       'There is no handler configured for '

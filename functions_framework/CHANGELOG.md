@@ -6,7 +6,7 @@
   properties.
 - **BREAKING** `serve.dart`:
   - Changed the signature for `serve` function accept
-    `FunctionTarget Function(String) functionForName` instead of
+    `FunctionTarget Function(String) nameToFunctionTarget` instead of
     `Set<FunctionTarget> targets`. This will allow more flexibility in future
     `FunctionTarget` implementations.
   - `FunctionTarget` no longer has a `const` constructor. The `name` parameter

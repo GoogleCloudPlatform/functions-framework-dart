@@ -17,10 +17,10 @@ import 'package:functions_framework/serve.dart';
 import 'package:hello_world_function_test/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functionForName);
+  await serve(args, _nameToFunctionTarget);
 }
 
-FunctionTarget _functionForName(String name) {
+FunctionTarget _nameToFunctionTarget(String name) {
   switch (name) {
     case 'function':
       return FunctionTarget.http(

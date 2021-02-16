@@ -37,7 +37,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-FunctionTarget _functionForName(String name) {
+FunctionTarget _nameToFunctionTarget(String name) {
   switch (name) {
     case 'handleGet':
       return FunctionTarget.http(
@@ -62,7 +62,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-FunctionTarget _functionForName(String name) {
+FunctionTarget _nameToFunctionTarget(String name) {
   switch (name) {
     case 'some function':
       return FunctionTarget.http(
@@ -97,7 +97,7 @@ FunctionTarget _functionForName(String name) {
       file.readAsStringSync(),
       '''
 $_outputHeader
-FunctionTarget _functionForName(String name) {
+FunctionTarget _nameToFunctionTarget(String name) {
   switch (name) {
 $lines
     default:
@@ -126,7 +126,7 @@ $lines
       file.readAsStringSync(),
       '''
 $_outputHeader
-FunctionTarget _functionForName(String name) {
+FunctionTarget _nameToFunctionTarget(String name) {
   switch (name) {
 $lines
     default:
@@ -549,7 +549,7 @@ Future<void> _testItems(String inputContent, List<String> functions,
     inputContent,
     '''
 $_outputHeader
-FunctionTarget _functionForName(String name) {
+FunctionTarget _nameToFunctionTarget(String name) {
   switch (name) {
 $entries
     default:
@@ -628,6 +628,6 @@ import 'package:functions_framework/serve.dart';
 import 'package:$_pkgName/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functionForName);
+  await serve(args, _nameToFunctionTarget);
 }
 ''';
