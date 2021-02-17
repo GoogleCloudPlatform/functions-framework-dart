@@ -17,16 +17,20 @@ import 'dart:async';
 import 'package:functions_framework/functions_framework.dart';
 
 @CloudFunction()
-void syncFunction(num request) => throw UnimplementedError();
+void syncFunction(Map<String, dynamic> request) => throw UnimplementedError();
 
 @CloudFunction()
-Future<void> asyncFunction(num request) => throw UnimplementedError();
+Future<void> asyncFunction(Map<String, dynamic> request) =>
+    throw UnimplementedError();
 
 @CloudFunction()
-FutureOr<void> futureOrFunction(num request) => throw UnimplementedError();
+FutureOr<void> futureOrFunction(Map<String, dynamic> request) =>
+    throw UnimplementedError();
 
 @CloudFunction()
-void extraParam(num request, [int? other]) => throw UnimplementedError();
+void extraParam(Map<String, dynamic> request, [int? other]) =>
+    throw UnimplementedError();
 
 @CloudFunction()
-void optionalParam([num? request, int? other]) => throw UnimplementedError();
+void optionalParam([Map<String, dynamic>? request, int? other]) =>
+    throw UnimplementedError();

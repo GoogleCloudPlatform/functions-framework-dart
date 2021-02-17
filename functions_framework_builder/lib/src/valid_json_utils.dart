@@ -27,19 +27,8 @@ bool _validJsonType(DartType type, bool allowComplexMembers) {
     return memberType.isDynamic || memberType.isDartCoreObject;
   }
 
-  if (type.isDartCoreBool ||
-      type.isDartCoreNum ||
-      type.isDartCoreDouble ||
-      type.isDartCoreInt ||
-      type.isDartCoreString) {
-    return true;
-  }
-
   if (type is InterfaceType) {
-    if (type.isDartCoreList) {
-      final arg = type.typeArguments.single;
-      return validCollectionMember(arg);
-    } else if (type.isDartCoreMap) {
+    if (type.isDartCoreMap) {
       final keyArg = type.typeArguments[0];
       final valueArg = type.typeArguments[1];
       return keyArg.isDartCoreString && validCollectionMember(valueArg);

@@ -226,8 +226,8 @@ $lines
 
     test('simple return type', () async {
       final newInputContent = inputContent
-          .replaceAll('void ', 'int ')
-          .replaceAll('<void>', '<int>');
+          .replaceAll('void ', 'Map<String, dynamic> ')
+          .replaceAll('<void>', '<Map<String, dynamic>>');
 
       await _testItems(
           newInputContent,
@@ -266,48 +266,8 @@ $lines
 
     test('JSON return type', () async {
       final newInputContent = inputContent
-          .replaceAll('void ', 'int ')
-          .replaceAll('<void>', '<int>');
-
-      await _testItems(
-          newInputContent,
-          [
-            'syncFunction',
-            'asyncFunction',
-            'futureOrFunction',
-            'extraParam',
-            'optionalParam',
-          ],
-          (e) => """
-    case '$e':
-      return JsonFunctionTarget(
-        function_library.$e,
-        (json) {
-          if (json is Map<String, dynamic>) {
-            try {
-              return function_library.JsonType.fromJson(json);
-            } catch (e, stack) {
-              throw BadRequestException(
-                400,
-                'There was an error parsing the provided JSON data.',
-                innerError: e,
-                innerStack: stack,
-              );
-            }
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`Map<String, dynamic>`.',
-          );
-        },
-      );""");
-    });
-
-    test('complex return type', () async {
-      final newInputContent = inputContent
-          .replaceAll('void ', 'Map<String, List<JsonType>> ')
-          .replaceAll('<void>', '<Map<String, List<JsonType>>>');
+          .replaceAll('void ', 'Map<String, dynamic> ')
+          .replaceAll('<void>', '<Map<String, dynamic>>');
 
       await _testItems(
           newInputContent,
@@ -365,13 +325,13 @@ $lines
       return JsonFunctionTarget.voidResult(
         function_library.$e,
         (json) {
-          if (json is num) {
+          if (json is Map<String, dynamic>) {
             return json;
           }
           throw BadRequestException(
             400,
             'The provided JSON is not the expected type '
-            '`num`.',
+            '`Map<String, dynamic>`.',
           );
         },
       );""");
@@ -379,8 +339,8 @@ $lines
 
     test('simple return type', () async {
       final newInputContent = inputContent
-          .replaceAll('void ', 'int ')
-          .replaceAll('<void>', '<int>');
+          .replaceAll('void ', 'Map<String, dynamic> ')
+          .replaceAll('<void>', '<Map<String, dynamic>>');
       await _testItems(
           newInputContent,
           [
@@ -395,44 +355,13 @@ $lines
       return JsonFunctionTarget(
         function_library.$e,
         (json) {
-          if (json is num) {
+          if (json is Map<String, dynamic>) {
             return json;
           }
           throw BadRequestException(
             400,
             'The provided JSON is not the expected type '
-            '`num`.',
-          );
-        },
-      );""");
-    });
-
-    test('complex return type', () async {
-      final newInputContent = inputContent
-          .replaceAll('void ', 'Map<String, List<bool>> ')
-          .replaceAll('<void>', '<Map<String, List<bool>>>');
-
-      await _testItems(
-          newInputContent,
-          [
-            'syncFunction',
-            'asyncFunction',
-            'futureOrFunction',
-            'extraParam',
-            'optionalParam',
-          ],
-          (e) => """
-    case '$e':
-      return JsonFunctionTarget(
-        function_library.$e,
-        (json) {
-          if (json is num) {
-            return json;
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`num`.',
+            '`Map<String, dynamic>`.',
           );
         },
       );""");
@@ -441,8 +370,8 @@ $lines
     test('void with context', () async {
       final newInputContent = inputContent
           .replaceAll(
-            '(num request)',
-            '(num request, RequestContext context)',
+            '(Map<String, dynamic> request)',
+            '(Map<String, dynamic> request, RequestContext context)',
           )
           .replaceAll(
             'int? other',
@@ -463,13 +392,13 @@ $lines
       return JsonWithContextFunctionTarget.voidResult(
         function_library.$e,
         (json) {
-          if (json is num) {
+          if (json is Map<String, dynamic>) {
             return json;
           }
           throw BadRequestException(
             400,
             'The provided JSON is not the expected type '
-            '`num`.',
+            '`Map<String, dynamic>`.',
           );
         },
       );""");
@@ -556,6 +485,21 @@ package:$_pkgName/functions.dart:8:10
       // Custom and JSON event types
       //
       'Duration handleGet(DateTime request) => null;': notCompatibleMatcher,
+
+      //
+      // dart:core types that aren't `Map<String, dynamic>`
+      //
+      // Map param is under-specified
+      'Map<String, dynamic> handleGet(Map request) => null;':
+          notCompatibleMatcher,
+      'int handleGet(Map<String, dynamic> request) => null;':
+          notCompatibleMatcher,
+      'Map<String, dynamic> handleGet(int request) => null;':
+          notCompatibleMatcher,
+      // Map return type is under-specified
+      'Map handleGet(Map<String, dynamic> request) => null;':
+          notCompatibleMatcher,
+      'int handleGet(int request) => null;': notCompatibleMatcher,
     };
 
     for (var shape in invalidShapes.entries) {
