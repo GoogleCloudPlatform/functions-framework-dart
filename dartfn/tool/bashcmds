@@ -12,7 +12,7 @@ fi
 
 # dart build - generates encoded templates from source
 function db() {
-  (cd $pubdir; pub run build_runner build --delete-conflicting-outputs "$@")
+  (cd $pubdir; dart run build_runner build --delete-conflicting-outputs "$@")
 }
 
 # dart run
