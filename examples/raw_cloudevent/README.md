@@ -53,7 +53,7 @@ for the function server app, which invokes the function in `lib/functions.dart`.
 Run the `build_runner` tool, as shown here:
 
 ```shell
-$ dart run build_runner build
+$ pub run build_runner build
 [INFO] Generating build script completed, took 337ms
 [INFO] Reading cached asset graph completed, took 48ms
 [INFO] Checking for updates since last build completed, took 426ms

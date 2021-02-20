@@ -26,7 +26,7 @@ CloudEvent requests. The output of this build process is `bin/server.dart`.
 To generate `bin/server.dart`, you need to run the Dart `build_runner` tool.
 
 ```shell
-$ dart run build_runner build --delete-conflicting-outputs
+$ pub run build_runner build --delete-conflicting-outputs
 [INFO] Generating build script completed, took 304ms
 [INFO] Reading cached asset graph completed, took 46ms
 [INFO] Checking for updates since last build completed, took 412ms
@@ -133,7 +133,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 Run `build_runner` to regenerate `bin/server.dart` from `lib/functions.dart`
 
 ```shell
-$ dart run build_runner build
+$ pub run build_runner build
 ...
 ```
 

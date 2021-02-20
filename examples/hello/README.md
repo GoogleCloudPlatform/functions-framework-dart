@@ -55,7 +55,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 Run the `build_runner` to regenerate `bin/server.dart` from `lib/functions.dart`
 
 ```shell
-$ dart run build_runner build
+$ pub run build_runner build
 [INFO] Generating build script completed, took 304ms
 [INFO] Reading cached asset graph completed, took 46ms
 [INFO] Checking for updates since last build completed, took 412ms
