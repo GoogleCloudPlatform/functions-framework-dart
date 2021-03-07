@@ -46,9 +46,31 @@ class _FunctionsFrameworkBuilder implements Builder {
 
   @override
   Future<void> build(BuildStep buildStep) async {
+    var customShelf = '';
+    var mainFunction = '''
+      Future<void> main(List<String> args) async {
+        await serve(args, _nameToFunctionTarget);
+      }
+      ''';
     final entries = <String, FactoryData>{};
 
     final input = buildStep.inputId;
+
+    final assetCustomShelf = AssetId(
+      buildStep.inputId.package,
+      path.join('lib', 'shelf_custom.dart'),
+    );
+
+    final hasCustomShelf = await buildStep.canRead(assetCustomShelf);
+
+    if (hasCustomShelf) {
+      customShelf = '''import '${assetCustomShelf.uri}' as shelf_server;''';
+      mainFunction = '''
+      Future<void> main(List<String> args) async {
+        await serve(args, _nameToFunctionTarget, shelf_server.shelfServer);
+      }
+      ''';
+    }
 
     final libraryElement = await buildStep.resolver.libraryFor(input);
     final validator = await FunctionTypeValidator.create(buildStep.resolver);
@@ -107,10 +129,9 @@ class _FunctionsFrameworkBuilder implements Builder {
 
 import 'package:functions_framework/serve.dart';
 import '${input.uri}' as $functionsLibraryPrefix;
+$customShelf
 
-Future<void> main(List<String> args) async {
-  await serve(args, _nameToFunctionTarget);
-}
+$mainFunction
 
 FunctionTarget _nameToFunctionTarget(String name) {
   switch (name) {
