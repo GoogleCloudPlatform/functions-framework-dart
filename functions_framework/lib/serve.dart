@@ -36,11 +36,10 @@ export 'src/function_target.dart'
 /// the process has received signal [ProcessSignal.sigterm] or
 /// [ProcessSignal.sigint].
 Future<void> serve(
-  List<String> args,
-  FunctionTarget Function(String) nameToFunctionTarget,
-) async {
+    List<String> args, FunctionTarget Function(String) nameToFunctionTarget,
+    [Function httpServer]) async {
   try {
-    await _serve(args, nameToFunctionTarget);
+    await _serve(args, nameToFunctionTarget, httpServer);
   } on BadConfigurationException catch (e) {
     stderr.writeln(red.wrap(e.message));
     if (e.details != null) {
@@ -51,9 +50,8 @@ Future<void> serve(
 }
 
 Future<void> _serve(
-  List<String> args,
-  FunctionTarget Function(String) nameToFunctionTarget,
-) async {
+    List<String> args, FunctionTarget Function(String) nameToFunctionTarget,
+    [Function httpServer]) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
   final config = FunctionConfig.fromArgs(
