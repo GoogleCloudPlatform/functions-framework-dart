@@ -112,6 +112,11 @@ Future<void> _serve(
     sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
   }
 
+  if (httpServer != null) {
+    final HttpServer server = await httpServer(functionTarget.handler);
+    return await runCustom(server, completer.future);
+  }
+
   await run(
       config.port, functionTarget.handler, completer.future, loggingMiddleware);
 }
