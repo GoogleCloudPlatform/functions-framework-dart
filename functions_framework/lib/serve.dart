@@ -113,8 +113,11 @@ Future<void> _serve(
   }
 
   if (httpServer != null) {
-    final HttpServer server = await httpServer(functionTarget.handler);
-    return await runCustom(server, completer.future);
+    return await httpServer(
+      config,
+      functionTarget.handler,
+      completer.future,
+    );
   }
 
   await run(
