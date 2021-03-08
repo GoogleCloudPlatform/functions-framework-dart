@@ -40,16 +40,6 @@ Future<void> run(
   await server.close(force: force);
 }
 
-Future<void> runCustom(
-  HttpServer server,
-  Future<bool> shutdownSignal,
-) async {
-  print('Listening on :${server.port}');
-
-  final force = await shutdownSignal;
-  await server.close(force: force);
-}
-
 const _forbiddenAssets = {'robots.txt', 'favicon.ico'};
 
 Handler _forbiddenAssetMiddleware(Handler innerHandler) => (Request request) {
