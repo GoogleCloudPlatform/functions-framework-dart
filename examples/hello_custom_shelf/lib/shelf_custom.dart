@@ -1,20 +1,26 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 
-FutureOr<HttpServer> shelfServer(Handler handler) async {
+void shelfServer(FunctionConfig config, Handler handler,
+    FutureOr<bool> shutdownSignal) async {
   final pipeline = const Pipeline()
       .addMiddleware(logRequests())
       .addMiddleware(_forbiddenAssetMiddleware)
       .addHandler(handler);
 
-  return await serve(
+  final server = await serve(
     pipeline,
     InternetAddress.anyIPv4,
     8090,
   );
+
+  print('Listening on ${server.address.host}:${server.port}');
+
+  final force = await shutdownSignal;
+  await server.close(force: force);
 }
 
 const _forbiddenAssets = {'robots.txt', 'favicon.ico'};
