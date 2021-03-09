@@ -35,10 +35,9 @@ export 'src/function_target.dart'
 /// If there are no configuration errors, this function will not return until
 /// the process has received signal [ProcessSignal.sigterm] or
 /// [ProcessSignal.sigint].
-Future<void> serve(
-    List<String> args,
-    FunctionTarget? Function(String) nameToFunctionTarget,
-    Function httpServer, [bool hasCustomShelf = false]]) async {
+Future<void> serve(List<String> args,
+    FunctionTarget? Function(String) nameToFunctionTarget, Function httpServer,
+    [bool hasCustomShelf = false]) async {
   try {
     await _serve(args, nameToFunctionTarget, httpServer, hasCustomShelf);
   } on BadConfigurationException catch (e) {
@@ -53,7 +52,8 @@ Future<void> serve(
 Future<void> _serve(
     List<String> args,
     FunctionTarget? Function(String) nameToFunctionTarget,
-    Function httpServer, bool hasCustomShelf) async {
+    Function httpServer,
+    bool hasCustomShelf) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
   final config = FunctionConfig.fromArgs(
