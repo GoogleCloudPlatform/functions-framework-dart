@@ -20,7 +20,7 @@ Future<void> main(List<String> args) async {
   await serve(args, _nameToFunctionTarget);
 }
 
-FunctionTarget _nameToFunctionTarget(String name) {
+FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
     case 'function':
       return FunctionTarget.http(
@@ -47,7 +47,16 @@ FunctionTarget _nameToFunctionTarget(String name) {
         function_library.pubSubHandler,
         (json) {
           if (json is Map<String, dynamic>) {
-            return function_library.PubSub.fromJson(json);
+            try {
+              return function_library.PubSub.fromJson(json);
+            } catch (e, stack) {
+              throw BadRequestException(
+                400,
+                'There was an error parsing the provided JSON data.',
+                innerError: e,
+                innerStack: stack,
+              );
+            }
           }
           throw BadRequestException(
             400,

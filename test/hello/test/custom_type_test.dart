@@ -23,12 +23,12 @@ import 'package:test_process/test_process.dart';
 import 'src/test_utils.dart';
 
 void main() {
-  TestProcess testProcess;
+  late TestProcess testProcess;
 
   Future<void> expectInvalid(
     Response response,
     String errorMessage, {
-    Object extraPrintMatcher,
+    Object? extraPrintMatcher,
   }) async {
     expect(response.statusCode, 400);
     expect(
@@ -78,9 +78,7 @@ void main() {
       final requestUrl = 'http://localhost:$autoPort/';
       final response = await post(
         requestUrl,
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-        },
+        headers: jsonContentType,
         body: 'not json!',
       );
 
@@ -94,9 +92,7 @@ void main() {
       final requestUrl = 'http://localhost:$autoPort/';
       final response = await post(
         requestUrl,
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-        },
+        headers: jsonContentType,
         body: '[]',
       );
 
@@ -106,10 +102,6 @@ void main() {
       );
     });
   }
-
-  tearDown(() {
-    testProcess = null;
-  });
 
   group('pubSubHandler handler', () {
     setUp(() async {
@@ -127,9 +119,7 @@ void main() {
         final requestUrl = 'http://localhost:$autoPort/';
         final response = await post(
           requestUrl,
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
+          headers: jsonContentType,
           body: jsonEncode(
             PubSub(
               PubSubMessage(
@@ -172,19 +162,13 @@ void main() {
         final requestUrl = 'http://localhost:$autoPort/';
         final response = await post(
           requestUrl,
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
+          headers: jsonContentType,
           body: '{"a":1}',
         );
 
         await expectInvalid(
           response,
-          'A message is required!',
-          extraPrintMatcher: emitsInOrder([
-            'subscription: null',
-            'INFO: subscription: null',
-          ]),
+          'There was an error parsing the provided JSON data.',
         );
       });
     });
@@ -205,9 +189,7 @@ void main() {
         final requestUrl = 'http://localhost:$autoPort/';
         final response = await post(
           requestUrl,
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
+          headers: jsonContentType,
           body: '{"a":1}',
         );
         expect(response.statusCode, 200);
@@ -235,9 +217,7 @@ void main() {
         final requestUrl = 'http://localhost:$autoPort/';
         final response = await post(
           requestUrl,
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
+          headers: jsonContentType,
           body: '{}',
         );
         expect(response.statusCode, 200);

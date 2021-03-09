@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Until pkg:build_verify is null-safe
+// @dart=2.9
+
 @Tags(['presubmit-only'])
 import 'package:build_verify/build_verify.dart';
 import 'package:test/test.dart';

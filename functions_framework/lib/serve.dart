@@ -35,8 +35,7 @@ export 'src/function_target.dart'
 /// If there are no configuration errors, this function will not return until
 /// the process has received signal [ProcessSignal.sigterm] or
 /// [ProcessSignal.sigint].
-Future<void> serve(
-    List<String> args, FunctionTarget Function(String) nameToFunctionTarget,
+Future<void> serve(List<String> args, FunctionTarget? Function(String) nameToFunctionTarget,
     [Function httpServer]) async {
   try {
     await _serve(args, nameToFunctionTarget, httpServer);
@@ -49,8 +48,7 @@ Future<void> serve(
   }
 }
 
-Future<void> _serve(
-    List<String> args, FunctionTarget Function(String) nameToFunctionTarget,
+Future<void> _serve(List<String> args, FunctionTarget? Function(String) nameToFunctionTarget,
     [Function httpServer]) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
@@ -86,7 +84,7 @@ Future<void> _serve(
 
   // sigIntSub is copied below to avoid a race condition - ignoring this lint
   // ignore: cancel_subscriptions
-  StreamSubscription sigIntSub, sigTermSub;
+  StreamSubscription? sigIntSub, sigTermSub;
 
   Future<void> signalHandler(ProcessSignal signal) async {
     print('Received signal $signal - closing');
@@ -97,7 +95,7 @@ Future<void> _serve(
       await subCopy.cancel();
       sigIntSub = null;
       if (sigTermSub != null) {
-        await sigTermSub.cancel();
+        await sigTermSub!.cancel();
         sigTermSub = null;
       }
       completer.complete(true);

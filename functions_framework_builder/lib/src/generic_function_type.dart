@@ -40,10 +40,10 @@ class GenericFunctionType implements SupportedFunctionType {
   String get typedefName => _typedefName;
 
   @override
-  String get typeDescription => _functionTypeAliasElement.function
+  String get typeDescription => _functionTypeAliasElement.aliasedElement
       .getDisplayString(withNullability: false);
 
-  final FunctionTypeAliasElement _functionTypeAliasElement;
+  final TypeAliasElement _functionTypeAliasElement;
   final bool _withContext;
 
   GenericFunctionType._(this._functionTypeAliasElement, this._withContext)
@@ -53,7 +53,7 @@ class GenericFunctionType implements SupportedFunctionType {
     final lib = await resolver.libraryFor(AssetId.resolve(_libraryUri));
 
     final handlerTypeAlias =
-        lib.exportNamespace.get(_typedefName) as FunctionTypeAliasElement;
+        lib.exportNamespace.get(_typedefName) as TypeAliasElement;
 
     return GenericFunctionType._(handlerTypeAlias, false);
   }
@@ -63,8 +63,8 @@ class GenericFunctionType implements SupportedFunctionType {
   ) async {
     final lib = await resolver.libraryFor(AssetId.resolve(_libraryUri));
 
-    final handlerTypeAlias = lib.exportNamespace.get(_typedefWithContextName)
-        as FunctionTypeAliasElement;
+    final handlerTypeAlias =
+        lib.exportNamespace.get(_typedefWithContextName) as TypeAliasElement;
 
     return GenericFunctionType._(handlerTypeAlias, true);
   }
@@ -153,13 +153,24 @@ class _GenericFactoryData implements FactoryData {
         : '$functionsLibraryPrefix.'
             '${info.paramType.getDisplayString(withNullability: false)}';
 
-    final returnStatement = info.paramType == null
-        ? _jsonParamName
-        : '$typeDisplayName.$fromJsonFactoryName($_jsonParamName)';
+    final returnBlock = info.paramType == null
+        ? 'return $_jsonParamName;'
+        : '''
+    try {
+      return $typeDisplayName.$fromJsonFactoryName($_jsonParamName);
+    } catch (e, stack) {
+      throw BadRequestException(
+        400,
+        'There was an error parsing the provided JSON data.',
+        innerError: e,
+        innerStack: stack,
+      );
+    }
+    ''';
 
     final body = '''
   if ($_jsonParamName is $jsonTypeDisplay) {
-    return $returnStatement;
+    $returnBlock
   }
   throw BadRequestException(
     400,

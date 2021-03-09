@@ -35,9 +35,9 @@ jobs:
           os:ubuntu-latest;pub-cache-hosted;dart:dev
           os:ubuntu-latest;pub-cache-hosted
           os:ubuntu-latest
-    - uses: cedx/setup-dart@v2
+    - uses: dart-lang/setup-dart@v1.0
       with:
-        release-channel: dev
+        sdk: stable
     - uses: actions/checkout@v2
     - run: dart --version
     - id: pub_upgrade

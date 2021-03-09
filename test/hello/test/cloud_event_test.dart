@@ -100,7 +100,7 @@ void main() {
       final stderrOutput = await _makeBadRequest(
         _pubSubJsonString,
         {
-          'Content-Type': 'application/json; charset=utf-8',
+          ...jsonContentType,
           'ce-specversion': '1.0',
           'ce-type': 'google.cloud.pubsub.topic.publish',
           'ce-time': 'bad time!',
@@ -136,7 +136,7 @@ void main() {
  }
 }''',
         {
-          'Content-Type': 'application/json; charset=utf-8',
+          ...jsonContentType,
           'ce-specversion': '1.0',
           'ce-type': 'google.cloud.pubsub.topic.publish',
           'ce-time': 'bad time!',
@@ -177,13 +177,13 @@ void main() {
       "attributes": {
         "attr1":"attr1-value"
       },
-      "data": "dGVzdCBtZXNzYWdlIDM="
+      "data": "dGVzdCBtZXNzYWdlIDM=",
+      "messageId": "12345",
+      "publishTime": "2020-09-05T03:56:24.000Z"
     }
   }
 }''';
-      final response = await _makeRequest(body, {
-        'Content-Type': 'application/json; charset=utf-8',
-      });
+      final response = await _makeRequest(body, jsonContentType);
       expect(response.statusCode, 200);
       expect(response.body, isEmpty);
       expect(

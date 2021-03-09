@@ -133,7 +133,7 @@ $customShelf
 
 $mainFunction
 
-FunctionTarget _nameToFunctionTarget(String name) {
+FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
 ${cases.join('\n')}
     default:

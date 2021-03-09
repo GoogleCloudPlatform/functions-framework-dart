@@ -2,8 +2,9 @@
 
 ## 0.4.0-dev
 
+- Generate null-safe code.
 - Support the latest `package:functions_framework` version.
-- Allow the latest version `package:shelf`.
+- Allow the latest, null-safe versions of a number of packages.
 
 ## 0.3.1
 

@@ -10,9 +10,7 @@ part of 'pub_sub_types.dart';
 
 PubSub _$PubSubFromJson(Map<String, dynamic> json) {
   return PubSub(
-    json['message'] == null
-        ? null
-        : PubSubMessage.fromJson(json['message'] as Map<String, dynamic>),
+    PubSubMessage.fromJson(json['message'] as Map<String, dynamic>),
     json['subscription'] as String,
   );
 }
@@ -26,12 +24,8 @@ PubSubMessage _$PubSubMessageFromJson(Map<String, dynamic> json) {
   return PubSubMessage(
     json['data'] as String,
     json['messageId'] as String,
-    json['publishTime'] == null
-        ? null
-        : DateTime.parse(json['publishTime'] as String),
-    (json['attributes'] as Map<String, dynamic>)?.map(
-      (k, e) => MapEntry(k, e as String),
-    ),
+    DateTime.parse(json['publishTime'] as String),
+    Map<String, String>.from(json['attributes'] as Map),
   );
 }
 
@@ -40,5 +34,5 @@ Map<String, dynamic> _$PubSubMessageToJson(PubSubMessage instance) =>
       'data': instance.data,
       'attributes': instance.attributes,
       'messageId': instance.messageId,
-      'publishTime': instance.publishTime?.toIso8601String(),
+      'publishTime': instance.publishTime.toIso8601String(),
     };
