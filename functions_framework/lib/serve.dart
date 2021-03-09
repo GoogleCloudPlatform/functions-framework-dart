@@ -35,10 +35,12 @@ export 'src/function_target.dart'
 /// If there are no configuration errors, this function will not return until
 /// the process has received signal [ProcessSignal.sigterm] or
 /// [ProcessSignal.sigint].
-Future<void> serve(List<String> args, FunctionTarget? Function(String) nameToFunctionTarget,
-    [Function httpServer]) async {
+Future<void> serve(
+    List<String> args,
+    FunctionTarget? Function(String) nameToFunctionTarget,
+    Function httpServer, [bool hasCustomShelf = false]]) async {
   try {
-    await _serve(args, nameToFunctionTarget, httpServer);
+    await _serve(args, nameToFunctionTarget, httpServer, hasCustomShelf);
   } on BadConfigurationException catch (e) {
     stderr.writeln(red.wrap(e.message));
     if (e.details != null) {
@@ -48,8 +50,10 @@ Future<void> serve(List<String> args, FunctionTarget? Function(String) nameToFun
   }
 }
 
-Future<void> _serve(List<String> args, FunctionTarget? Function(String) nameToFunctionTarget,
-    [Function httpServer]) async {
+Future<void> _serve(
+    List<String> args,
+    FunctionTarget? Function(String) nameToFunctionTarget,
+    Function httpServer, bool hasCustomShelf) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
   final config = FunctionConfig.fromArgs(
@@ -110,7 +114,7 @@ Future<void> _serve(List<String> args, FunctionTarget? Function(String) nameToFu
     sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
   }
 
-  if (httpServer != null) {
+  if (hasCustomShelf) {
     return await httpServer(
       config,
       functionTarget.handler,
