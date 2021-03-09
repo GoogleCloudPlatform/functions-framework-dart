@@ -14,16 +14,15 @@ CloudEvent _$CloudEventFromJson(Map<String, dynamic> json) {
         requiredKeys: const ['id', 'source', 'specversion', 'type']);
     final val = CloudEvent(
       id: $checkedConvert(json, 'id', (v) => v as String),
-      source: $checkedConvert(
-          json, 'source', (v) => v == null ? null : Uri.parse(v as String)),
+      source: $checkedConvert(json, 'source', (v) => Uri.parse(v as String)),
       specVersion: $checkedConvert(json, 'specversion', (v) => v as String),
       type: $checkedConvert(json, 'type', (v) => v as String),
       data: $checkedConvert(json, 'data', (v) => v),
       dataContentType:
-          $checkedConvert(json, 'datacontenttype', (v) => v as String),
+          $checkedConvert(json, 'datacontenttype', (v) => v as String?),
       dataSchema: $checkedConvert(
           json, 'dataschema', (v) => v == null ? null : Uri.parse(v as String)),
-      subject: $checkedConvert(json, 'subject', (v) => v as String),
+      subject: $checkedConvert(json, 'subject', (v) => v as String?),
       time: $checkedConvert(
           json, 'time', (v) => v == null ? null : DateTime.parse(v as String)),
     );
@@ -36,7 +35,12 @@ CloudEvent _$CloudEventFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$CloudEventToJson(CloudEvent instance) {
-  final val = <String, dynamic>{};
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'source': instance.source.toString(),
+    'specversion': instance.specVersion,
+    'type': instance.type,
+  };
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {
@@ -44,10 +48,6 @@ Map<String, dynamic> _$CloudEventToJson(CloudEvent instance) {
     }
   }
 
-  writeNotNull('id', instance.id);
-  writeNotNull('source', instance.source?.toString());
-  writeNotNull('specversion', instance.specVersion);
-  writeNotNull('type', instance.type);
   writeNotNull('datacontenttype', instance.dataContentType);
   writeNotNull('data', instance.data);
   writeNotNull('dataschema', instance.dataSchema?.toString());

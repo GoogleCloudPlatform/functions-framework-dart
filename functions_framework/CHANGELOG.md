@@ -2,6 +2,8 @@
 
 ## 0.4.0-dev
 
+- Now null-safe.
+- Requires Dart `2.12.0`.
 - **BREAKING** `RequestContext`: removed deprecated `headers` and `headersAll`
   properties.
 - **BREAKING** `serve.dart`:

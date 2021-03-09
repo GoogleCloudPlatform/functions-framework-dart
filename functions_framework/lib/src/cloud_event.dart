@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
 
 part 'cloud_event.g.dart';
 
@@ -30,19 +29,19 @@ class CloudEvent {
   final String type;
 
   @JsonKey(name: 'datacontenttype')
-  final String dataContentType;
-  final Object data;
+  final String? dataContentType;
+  final Object? data;
 
   @JsonKey(name: 'dataschema')
-  final Uri dataSchema;
-  final String subject;
-  final DateTime time;
+  final Uri? dataSchema;
+  final String? subject;
+  final DateTime? time;
 
   CloudEvent({
-    @required this.id,
-    @required this.source,
-    @required this.specVersion,
-    @required this.type,
+    required this.id,
+    required this.source,
+    required this.specVersion,
+    required this.type,
     this.data,
     this.dataContentType,
     this.dataSchema,

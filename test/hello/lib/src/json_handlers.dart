@@ -22,9 +22,6 @@ void pubSubHandler(PubSub pubSub, RequestContext context) {
   context.logger.info('subscription: ${pubSub.subscription}');
   context.responseHeaders['subscription'] = pubSub.subscription;
   context.responseHeaders['multi'] = ['item1', 'item2'];
-  if (pubSub.message == null) {
-    throw BadRequestException(400, 'A message is required!');
-  }
 }
 
 @CloudFunction()

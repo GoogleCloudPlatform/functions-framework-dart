@@ -14,7 +14,7 @@
 
 class BadConfigurationException implements Exception {
   final String message;
-  final String details;
+  final String? details;
 
   BadConfigurationException(this.message, {this.details});
 

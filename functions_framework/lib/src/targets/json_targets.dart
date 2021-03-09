@@ -23,7 +23,7 @@ import '../request_context.dart';
 import '../typedefs.dart';
 
 abstract class _JsonFunctionTargetBase<RequestType> extends FunctionTarget {
-  final RequestType Function(Object) _fromJson;
+  final RequestType Function(Object?) _fromJson;
 
   _JsonFunctionTargetBase(this._fromJson);
 
@@ -41,17 +41,17 @@ abstract class JsonFunctionTarget<RequestType, ResponseType>
 
   JsonFunctionTarget._(
     this._function,
-    RequestType Function(Object) fromJson,
+    RequestType Function(Object?) fromJson,
   ) : super(fromJson);
 
   factory JsonFunctionTarget(
     JsonHandler<RequestType, ResponseType> function,
-    RequestType Function(Object) fromJson,
+    RequestType Function(Object?) fromJson,
   ) = _JsonFunctionTarget<RequestType, ResponseType>;
 
   factory JsonFunctionTarget.voidResult(
     JsonHandler<RequestType, ResponseType> function,
-    RequestType Function(Object) fromJson,
+    RequestType Function(Object?) fromJson,
   ) = _VoidJsonFunctionTarget<RequestType, ResponseType>;
 }
 
@@ -59,7 +59,7 @@ class _JsonFunctionTarget<RequestType, ResponseType>
     extends JsonFunctionTarget<RequestType, ResponseType> {
   _JsonFunctionTarget(
     JsonHandler<RequestType, ResponseType> function,
-    RequestType Function(Object) fromJson,
+    RequestType Function(Object?) fromJson,
   ) : super._(function, fromJson);
 
   @override
@@ -79,7 +79,7 @@ class _VoidJsonFunctionTarget<RequestType, ResponseType>
     extends JsonFunctionTarget<RequestType, ResponseType> {
   _VoidJsonFunctionTarget(
     JsonHandler<RequestType, ResponseType> function,
-    RequestType Function(Object) fromJson,
+    RequestType Function(Object?) fromJson,
   ) : super._(function, fromJson);
 
   @override
@@ -96,17 +96,17 @@ abstract class JsonWithContextFunctionTarget<RequestType, ResponseType>
 
   JsonWithContextFunctionTarget._(
     this._function,
-    RequestType Function(Object) fromJson,
+    RequestType Function(Object?) fromJson,
   ) : super(fromJson);
 
   factory JsonWithContextFunctionTarget(
     JsonWithContextHandler<RequestType, ResponseType> function,
-    RequestType Function(Object) fromJson,
+    RequestType Function(Object?) fromJson,
   ) = _JsonWithContextFunctionTarget<RequestType, ResponseType>;
 
   factory JsonWithContextFunctionTarget.voidResult(
     JsonWithContextHandler<RequestType, ResponseType> function,
-    RequestType Function(Object) fromJson,
+    RequestType Function(Object?) fromJson,
   ) = _VoidJsonWithContextFunctionTarget<RequestType, ResponseType>;
 }
 
@@ -114,7 +114,7 @@ class _JsonWithContextFunctionTarget<RequestType, ResponseType>
     extends JsonWithContextFunctionTarget<RequestType, ResponseType> {
   _JsonWithContextFunctionTarget(
     JsonWithContextHandler<RequestType, ResponseType> function,
-    RequestType Function(Object) fromJson,
+    RequestType Function(Object?) fromJson,
   ) : super._(function, fromJson);
 
   @override
@@ -140,7 +140,7 @@ class _VoidJsonWithContextFunctionTarget<RequestType, ResponseType>
     extends JsonWithContextFunctionTarget<RequestType, ResponseType> {
   _VoidJsonWithContextFunctionTarget(
     JsonWithContextHandler<RequestType, ResponseType> function,
-    RequestType Function(Object) fromJson,
+    RequestType Function(Object?) fromJson,
   ) : super._(function, fromJson);
 
   @override

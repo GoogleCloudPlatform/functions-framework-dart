@@ -89,7 +89,7 @@ Future<CloudEvent> _decodeBinary(Request request) async {
   final type = mediaTypeFromRequest(request);
   mustBeJson(type);
 
-  final map = <String, Object>{
+  final map = <String, Object?>{
     for (var e in request.headers.entries
         .where((element) => element.key.startsWith(_cloudEventPrefix)))
       e.key.substring(_clientEventPrefixLength): e.value,

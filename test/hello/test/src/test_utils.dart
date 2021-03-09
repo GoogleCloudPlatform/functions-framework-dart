@@ -18,13 +18,13 @@ import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
-Future<http.Response> get(Object url, {Map<String, String> headers}) =>
+Future<http.Response> get(Object url, {Map<String, String>? headers}) =>
     http.get(url is String ? Uri.parse(url) : url as Uri, headers: headers);
 
 Future<http.Response> post(
   Object url, {
-  Map<String, String> headers,
-  Object body,
+  Map<String, String>? headers,
+  Object? body,
 }) =>
     http.post(
       url is String ? Uri.parse(url) : url as Uri,
@@ -34,14 +34,14 @@ Future<http.Response> post(
 
 const defaultPort = 8080;
 
-int _autoPort;
+late int _autoPort;
 
 int get autoPort => _autoPort;
 
 Future<TestProcess> startServerTest({
   bool shouldFail = false,
   int expectedListeningPort = defaultPort,
-  Map<String, String> env,
+  Map<String, String>? env,
   Iterable<String> arguments = const <String>[],
 }) async {
   if (expectedListeningPort == 0) {
@@ -59,9 +59,9 @@ Future<TestProcess> startServerTest({
 
   if (!shouldFail) {
     final output = await proc.stdout.next;
-    final match = _listeningPattern.firstMatch(output);
+    final match = _listeningPattern.firstMatch(output)!;
     expect(match, isNotNull);
-    _autoPort = int.parse(match[1]);
+    _autoPort = int.parse(match[1]!);
     if (expectedListeningPort == 0) {
       expect(_autoPort, greaterThan(0));
     } else {
@@ -77,7 +77,7 @@ final _listeningPattern = RegExp(r'Listening on :(\d+)');
 Future<void> finishServerTest(
   TestProcess proc, {
   ProcessSignal signal = ProcessSignal.sigterm,
-  Object requestOutput,
+  Object? requestOutput,
 }) async {
   requestOutput ??= endsWith('GET     [200] /');
   await expectLater(

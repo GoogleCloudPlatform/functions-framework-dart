@@ -27,15 +27,15 @@ import 'package:stack_trace/stack_trace.dart';
 class BadRequestException implements Exception {
   final int statusCode;
   final String message;
-  final Object innerError;
-  final StackTrace innerStack;
+  final Object? innerError;
+  final StackTrace? innerStack;
 
   BadRequestException(
     this.statusCode,
     this.message, {
     this.innerError,
     this.innerStack,
-  }) : assert(message != null && message.isNotEmpty) {
+  }) : assert(message.isNotEmpty) {
     if (statusCode < 400 || statusCode > 499) {
       throw ArgumentError.value(
         statusCode,

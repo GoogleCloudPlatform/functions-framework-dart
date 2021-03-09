@@ -37,7 +37,7 @@ export 'src/function_target.dart'
 /// [ProcessSignal.sigint].
 Future<void> serve(
   List<String> args,
-  FunctionTarget Function(String) nameToFunctionTarget,
+  FunctionTarget? Function(String) nameToFunctionTarget,
 ) async {
   try {
     await _serve(args, nameToFunctionTarget);
@@ -52,7 +52,7 @@ Future<void> serve(
 
 Future<void> _serve(
   List<String> args,
-  FunctionTarget Function(String) nameToFunctionTarget,
+  FunctionTarget? Function(String) nameToFunctionTarget,
 ) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
@@ -88,7 +88,7 @@ Future<void> _serve(
 
   // sigIntSub is copied below to avoid a race condition - ignoring this lint
   // ignore: cancel_subscriptions
-  StreamSubscription sigIntSub, sigTermSub;
+  StreamSubscription? sigIntSub, sigTermSub;
 
   Future<void> signalHandler(ProcessSignal signal) async {
     print('Received signal $signal - closing');
@@ -99,7 +99,7 @@ Future<void> _serve(
       await subCopy.cancel();
       sigIntSub = null;
       if (sigTermSub != null) {
-        await sigTermSub.cancel();
+        await sigTermSub!.cancel();
         sigTermSub = null;
       }
       completer.complete(true);

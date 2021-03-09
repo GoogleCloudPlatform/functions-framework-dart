@@ -177,7 +177,9 @@ void main() {
       "attributes": {
         "attr1":"attr1-value"
       },
-      "data": "dGVzdCBtZXNzYWdlIDM="
+      "data": "dGVzdCBtZXNzYWdlIDM=",
+      "messageId": "12345",
+      "publishTime": "2020-09-05T03:56:24.000Z"
     }
   }
 }''';

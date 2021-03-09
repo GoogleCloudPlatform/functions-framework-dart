@@ -39,12 +39,12 @@ void main() {
     }
   }
 
-  Completer<bool> completionSignal;
-  Future<void> runFuture;
-  int port;
-  Map<String, String> headers;
+  late Completer<bool> completionSignal;
+  late Future<void> runFuture;
+  late int port;
+  late Map<String, String> headers;
   var count = 0;
-  String traceStart;
+  late String traceStart;
 
   Future<void> doSetup(FunctionTarget endpoint) async {
     lines.clear();
@@ -162,9 +162,9 @@ void main() {
 
     Future<void> _post(
       String path, {
-      String requestBody,
+      String? requestBody,
       int expectedStatusCode = 200,
-      String expectedBody,
+      String? expectedBody,
     }) async {
       final response = await post(
         'http://localhost:$port/$path',
@@ -249,7 +249,7 @@ void main() {
     Future<void> _get(
       String path, {
       int expectedStatusCode = 200,
-      Object bodyMatcher,
+      Object? bodyMatcher,
     }) async {
       if (bodyMatcher == null && expectedStatusCode == 500) {
         bodyMatcher = 'Internal Server Error';
@@ -336,7 +336,7 @@ void main() {
     Future<void> _get(
       String path, {
       int expectedStatusCode = 200,
-      Object bodyMatcher,
+      Object? bodyMatcher,
     }) async {
       if (bodyMatcher == null && expectedStatusCode == 500) {
         bodyMatcher = 'Internal Server Error';

@@ -12,5 +12,5 @@
 
 import 'dart:convert';
 
-String encodeJsonPretty(Object object) =>
+String encodeJsonPretty(Object? object) =>
     const JsonEncoder.withIndent(' ').convert(object);

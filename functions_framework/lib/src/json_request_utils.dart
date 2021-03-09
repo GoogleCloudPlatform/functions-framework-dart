@@ -47,7 +47,7 @@ void mustBeJson(MediaType type) {
   }
 }
 
-Future<Object> decodeJson(Request request) async {
+Future<Object?> decodeJson(Request request) async {
   final content = await request.readAsString();
   try {
     final value = jsonDecode(content);

@@ -37,7 +37,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-FunctionTarget _nameToFunctionTarget(String name) {
+FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
     case 'handleGet':
       return FunctionTarget.http(
@@ -62,7 +62,7 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-FunctionTarget _nameToFunctionTarget(String name) {
+FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
     case 'some function':
       return FunctionTarget.http(
@@ -97,7 +97,7 @@ FunctionTarget _nameToFunctionTarget(String name) {
       file.readAsStringSync(),
       '''
 $_outputHeader
-FunctionTarget _nameToFunctionTarget(String name) {
+FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
 $lines
     default:
@@ -126,7 +126,7 @@ $lines
       file.readAsStringSync(),
       '''
 $_outputHeader
-FunctionTarget _nameToFunctionTarget(String name) {
+FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
 $lines
     default:
@@ -158,7 +158,16 @@ $lines
         function_library.$e,
         (json) {
           if (json is Map<String, dynamic>) {
-            return function_library.JsonType.fromJson(json);
+            try {
+              return function_library.JsonType.fromJson(json);
+            } catch (e, stack) {
+              throw BadRequestException(
+                400,
+                'There was an error parsing the provided JSON data.',
+                innerError: e,
+                innerStack: stack,
+              );
+            }
           }
           throw BadRequestException(
             400,
@@ -195,7 +204,16 @@ $lines
         function_library.$e,
         (json) {
           if (json is Map<String, dynamic>) {
-            return function_library.JsonType.fromJson(json);
+            try {
+              return function_library.JsonType.fromJson(json);
+            } catch (e, stack) {
+              throw BadRequestException(
+                400,
+                'There was an error parsing the provided JSON data.',
+                innerError: e,
+                innerStack: stack,
+              );
+            }
           }
           throw BadRequestException(
             400,
@@ -226,7 +244,16 @@ $lines
         function_library.$e,
         (json) {
           if (json is Map<String, dynamic>) {
-            return function_library.JsonType.fromJson(json);
+            try {
+              return function_library.JsonType.fromJson(json);
+            } catch (e, stack) {
+              throw BadRequestException(
+                400,
+                'There was an error parsing the provided JSON data.',
+                innerError: e,
+                innerStack: stack,
+              );
+            }
           }
           throw BadRequestException(
             400,
@@ -257,7 +284,16 @@ $lines
         function_library.$e,
         (json) {
           if (json is Map<String, dynamic>) {
-            return function_library.JsonType.fromJson(json);
+            try {
+              return function_library.JsonType.fromJson(json);
+            } catch (e, stack) {
+              throw BadRequestException(
+                400,
+                'There was an error parsing the provided JSON data.',
+                innerError: e,
+                innerStack: stack,
+              );
+            }
           }
           throw BadRequestException(
             400,
@@ -288,7 +324,16 @@ $lines
         function_library.$e,
         (json) {
           if (json is Map<String, dynamic>) {
-            return function_library.JsonType.fromJson(json);
+            try {
+              return function_library.JsonType.fromJson(json);
+            } catch (e, stack) {
+              throw BadRequestException(
+                400,
+                'There was an error parsing the provided JSON data.',
+                innerError: e,
+                innerStack: stack,
+              );
+            }
           }
           throw BadRequestException(
             400,
@@ -549,7 +594,7 @@ Future<void> _testItems(String inputContent, List<String> functions,
     inputContent,
     '''
 $_outputHeader
-FunctionTarget _nameToFunctionTarget(String name) {
+FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
 $entries
     default:

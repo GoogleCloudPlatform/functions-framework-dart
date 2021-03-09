@@ -47,7 +47,7 @@ class SupportedFunctionType {
     );
 
     final handlerTypeAlias =
-        lib.exportNamespace.get(typeDefName) as FunctionTypeAliasElement;
+        lib.exportNamespace.get(typeDefName) as TypeAliasElement;
 
     final functionType = handlerTypeAlias.instantiate(
       typeArguments: [],
@@ -57,7 +57,7 @@ class SupportedFunctionType {
     return SupportedFunctionType._(
       libraryUri,
       typeDefName,
-      functionType,
+      functionType as FunctionType,
       constructor: constructor,
     );
   }

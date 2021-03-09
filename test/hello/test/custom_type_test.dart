@@ -23,12 +23,12 @@ import 'package:test_process/test_process.dart';
 import 'src/test_utils.dart';
 
 void main() {
-  TestProcess testProcess;
+  late TestProcess testProcess;
 
   Future<void> expectInvalid(
     Response response,
     String errorMessage, {
-    Object extraPrintMatcher,
+    Object? extraPrintMatcher,
   }) async {
     expect(response.statusCode, 400);
     expect(
@@ -107,10 +107,6 @@ void main() {
     });
   }
 
-  tearDown(() {
-    testProcess = null;
-  });
-
   group('pubSubHandler handler', () {
     setUp(() async {
       testProcess = await startServerTest(
@@ -180,11 +176,7 @@ void main() {
 
         await expectInvalid(
           response,
-          'A message is required!',
-          extraPrintMatcher: emitsInOrder([
-            'subscription: null',
-            'INFO: subscription: null',
-          ]),
+          'There was an error parsing the provided JSON data.',
         );
       });
     });

@@ -25,7 +25,7 @@ class CloudMetadata {
 
   final _client = IOClient();
 
-  final String cloudTraceContext;
+  final String? cloudTraceContext;
 
   CloudMetadata({this.cloudTraceContext});
 
@@ -50,7 +50,7 @@ class CloudMetadata {
       headers: {
         ..._requestHeaders,
         if (cloudTraceContext != null)
-          cloudTraceContextHeader: cloudTraceContext,
+          cloudTraceContextHeader: cloudTraceContext!,
       },
     );
 
@@ -74,7 +74,7 @@ class CloudMetadata {
   /// metadata service available.
   ///
   /// Otherwise, `null`.
-  static Future<String> projectId() async {
+  static Future<String?> projectId() async {
     if (_isHosted) {
       // Only attempt to get instance metadata if it seems we're running in a
       // hosted environment.

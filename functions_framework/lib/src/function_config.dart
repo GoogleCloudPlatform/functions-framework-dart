@@ -52,7 +52,7 @@ class FunctionConfig {
 
     if (Platform.environment.containsKey('PORT')) {
       try {
-        port = int.parse(Platform.environment['PORT']);
+        port = int.parse(Platform.environment['PORT']!);
       } on FormatException catch (e) {
         throw BadConfigurationException(
           'Bad value for environment variable "PORT" – '
@@ -78,7 +78,7 @@ class FunctionConfig {
   // https://github.com/GoogleCloudPlatform/functions-framework#specification-summary
   factory FunctionConfig.fromArgs(
     List<String> args, {
-    FunctionConfig defaults,
+    FunctionConfig? defaults,
   }) {
     final parser = ArgParser(usageLineLength: 80)
       ..addOption(
@@ -124,11 +124,11 @@ class FunctionConfig {
       port = defaults?.port ?? defaultPort;
     }
 
-    final functionTypeOptionValue = options[_functionTypeOpt] as String;
+    final functionTypeOptionValue = options[_functionTypeOpt] as String?;
 
     return FunctionConfig(
       port: port,
-      target: options[_targetOpt] as String ??
+      target: options[_targetOpt] as String? ??
           defaults?.target ??
           defaultFunctionTarget,
       functionType: functionTypeOptionValue == null

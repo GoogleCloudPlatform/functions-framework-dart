@@ -16,6 +16,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:shelf/shelf.dart';
 import 'package:stack_trace/stack_trace.dart';
 
@@ -28,7 +29,7 @@ RequestLogger loggerForRequest(Request request) =>
 
 final _requestExpando = Expando<RequestLogger>('request logger expando');
 
-Middleware createLoggingMiddleware(String projectId) =>
+Middleware createLoggingMiddleware(String? projectId) =>
     projectId == null ? _logSimple : cloudLoggingMiddleware(projectId);
 
 /// Logging middleware that "does the right thing" when not hosted on
@@ -74,7 +75,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
         // Add log correlation to nest all log messages beneath request log in
         // Log Viewer.
 
-        String traceValue;
+        String? traceValue;
 
         final traceHeader = request.headers[cloudTraceContextHeader];
         if (traceHeader != null) {
@@ -84,11 +85,10 @@ Middleware cloudLoggingMiddleware(String projectId) {
 
         String createErrorLogEntry(
           Object error,
-          StackTrace stackTrace,
+          StackTrace? stackTrace,
           LogSeverity logSeverity, {
-          bool Function(Frame) predicate,
+          bool Function(Frame)? predicate,
         }) {
-          assert(error != null);
           // Collect and format error information as described here
           // https://cloud.google.com/functions/docs/monitoring/logging#writing_structured_logs
 
@@ -182,7 +182,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
 }
 
 /// Returns a [Frame] from [chain] if possible, otherwise, `null`.
-Frame _frameFromChain(Chain chain) {
+Frame? _frameFromChain(Chain? chain) {
   if (chain == null || chain.traces.isEmpty) return null;
 
   final trace = chain.traces.first;
@@ -190,9 +190,9 @@ Frame _frameFromChain(Chain chain) {
 
   // Try to exclude frames in `package:json_annotation`
   // These are likely the checked-yaml logic, which isn't helpful for debugging
-  final frame = trace.frames.firstWhere(
-      (element) => element.package != 'json_annotation',
-      orElse: () => null);
+  final frame = trace.frames.firstWhereOrNull(
+    (element) => element.package != 'json_annotation',
+  );
 
   return frame ?? trace.frames.first;
 }
@@ -227,7 +227,7 @@ class _DefaultLogger extends RequestLogger {
 /// logging.
 class _CloudLogger extends RequestLogger {
   final Zone _zone;
-  final String _traceId;
+  final String? _traceId;
 
   _CloudLogger(this._zone, this._traceId);
 
@@ -237,10 +237,10 @@ class _CloudLogger extends RequestLogger {
 }
 
 String _createLogEntry(
-  String traceValue,
+  String? traceValue,
   String message,
   LogSeverity severity, {
-  Frame stackFrame,
+  Frame? stackFrame,
 }) {
   // https://cloud.google.com/logging/docs/agent/configuration#special-fields
   final logContent = {

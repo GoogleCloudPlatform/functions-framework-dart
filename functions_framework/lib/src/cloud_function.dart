@@ -24,7 +24,7 @@ class CloudFunction {
   /// The name used to register the function in the function framework.
   ///
   /// If `null`, the name of the [Function] is used.
-  final String target;
+  final String? target;
 
   const CloudFunction({this.target});
 }
