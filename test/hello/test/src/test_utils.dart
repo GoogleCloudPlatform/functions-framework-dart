@@ -18,6 +18,10 @@ import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
+const jsonContentType = {
+  'Content-Type': 'application/json; charset=utf-8',
+};
+
 Future<http.Response> get(Object url, {Map<String, String>? headers}) =>
     http.get(url is String ? Uri.parse(url) : url as Uri, headers: headers);
 

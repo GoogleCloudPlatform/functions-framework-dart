@@ -78,9 +78,7 @@ void main() {
       final requestUrl = 'http://localhost:$autoPort/';
       final response = await post(
         requestUrl,
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-        },
+        headers: jsonContentType,
         body: 'not json!',
       );
 
@@ -94,9 +92,7 @@ void main() {
       final requestUrl = 'http://localhost:$autoPort/';
       final response = await post(
         requestUrl,
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8',
-        },
+        headers: jsonContentType,
         body: '[]',
       );
 
@@ -123,9 +119,7 @@ void main() {
         final requestUrl = 'http://localhost:$autoPort/';
         final response = await post(
           requestUrl,
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
+          headers: jsonContentType,
           body: jsonEncode(
             PubSub(
               PubSubMessage(
@@ -168,9 +162,7 @@ void main() {
         final requestUrl = 'http://localhost:$autoPort/';
         final response = await post(
           requestUrl,
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
+          headers: jsonContentType,
           body: '{"a":1}',
         );
 
@@ -197,9 +189,7 @@ void main() {
         final requestUrl = 'http://localhost:$autoPort/';
         final response = await post(
           requestUrl,
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
+          headers: jsonContentType,
           body: '{"a":1}',
         );
         expect(response.statusCode, 200);
@@ -227,9 +217,7 @@ void main() {
         final requestUrl = 'http://localhost:$autoPort/';
         final response = await post(
           requestUrl,
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
+          headers: jsonContentType,
           body: '{}',
         );
         expect(response.statusCode, 200);
