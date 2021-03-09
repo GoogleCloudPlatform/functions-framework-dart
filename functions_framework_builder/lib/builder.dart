@@ -49,7 +49,7 @@ class _FunctionsFrameworkBuilder implements Builder {
     var customShelf = '';
     var mainFunction = '''
       Future<void> main(List<String> args) async {
-        await serve(args, _nameToFunctionTarget);
+        await serve(args, _nameToFunctionTarget, () {});
       }
       ''';
     final entries = <String, FactoryData>{};
@@ -67,7 +67,7 @@ class _FunctionsFrameworkBuilder implements Builder {
       customShelf = '''import '${assetCustomShelf.uri}' as shelf_server;''';
       mainFunction = '''
       Future<void> main(List<String> args) async {
-        await serve(args, _nameToFunctionTarget, shelf_server.shelfServer);
+        await serve(args, _nameToFunctionTarget, shelf_server.shelfServer, true);
       }
       ''';
     }
@@ -133,7 +133,7 @@ $customShelf
 
 $mainFunction
 
-FunctionTarget? _nameToFunctionTarget(String name) {
+FunctionTarget _nameToFunctionTarget(String name) {
   switch (name) {
 ${cases.join('\n')}
     default:
