@@ -17,7 +17,7 @@ import 'package:functions_framework/serve.dart';
 import 'package:hello_world_function_test/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _nameToFunctionTarget);
+  await serve(args, _nameToFunctionTarget, () {});
 }
 
 FunctionTarget? _nameToFunctionTarget(String name) {
@@ -80,6 +80,8 @@ FunctionTarget? _nameToFunctionTarget(String name) {
         },
       );
     default:
-      return null;
+      return FunctionTarget.http(
+        function_library.function,
+      );
   }
 }
