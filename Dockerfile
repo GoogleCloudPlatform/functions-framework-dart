@@ -1,5 +1,5 @@
 ################
-FROM google/dart:2.10
+FROM google/dart:2.12
 
 # cache deps
 WORKDIR /app
