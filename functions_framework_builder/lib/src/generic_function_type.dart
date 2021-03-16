@@ -22,7 +22,8 @@ import 'supported_function_type.dart';
 import 'utils.dart';
 import 'valid_json_utils.dart';
 
-const _libraryUri = 'package:functions_framework/functions_framework.dart';
+const _libraryUrl = 'package:functions_framework/functions_framework.dart';
+final _libraryUri = Uri.parse(_libraryUrl);
 const _typedefName = 'JsonHandler';
 const _typedefWithContextName = 'JsonWithContextHandler';
 
@@ -34,7 +35,7 @@ const _voidWithContextConstructorName =
 
 class GenericFunctionType implements SupportedFunctionType {
   @override
-  String get libraryUri => _libraryUri;
+  String get libraryUri => _libraryUrl;
 
   @override
   String get typedefName => _typedefName;
