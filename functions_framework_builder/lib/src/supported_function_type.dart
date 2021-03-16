@@ -43,7 +43,7 @@ class SupportedFunctionType {
     String constructor,
   ) async {
     final lib = await resolver.libraryFor(
-      AssetId.resolve(libraryUri),
+      AssetId.resolve(Uri.parse(libraryUri)),
     );
 
     final handlerTypeAlias =
