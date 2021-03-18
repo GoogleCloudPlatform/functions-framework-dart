@@ -58,10 +58,10 @@ your function in a single step.
 
 ```shell
 gcloud beta run deploy NAME \
-  --source=PATH` \         # can use $PWD or . for current dir
+  --source=PATH \          # can use $PWD or . for current dir
   --project=PROJECT \      # the Google Cloud project ID
   --region=REGION  \       # ex: us-central1
-  --platform managed \     # for Cloud Run
+  --platform=managed \     # for Cloud Run
   --allow-unauthenticated  # for public access
 ```
 
