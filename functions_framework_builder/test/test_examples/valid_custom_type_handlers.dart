@@ -26,10 +26,11 @@ Future<void> asyncFunction(JsonType request) => throw UnimplementedError();
 FutureOr<void> futureOrFunction(JsonType request) => throw UnimplementedError();
 
 @CloudFunction()
-void extraParam(JsonType request, [int other]) => throw UnimplementedError();
+void extraParam(JsonType request, [int? other]) => throw UnimplementedError();
 
 @CloudFunction()
-void optionalParam([JsonType request, int other]) => throw UnimplementedError();
+void optionalParam([JsonType? request, int? other]) =>
+    throw UnimplementedError();
 
 class JsonType {
   // ignore: avoid_unused_constructor_parameters

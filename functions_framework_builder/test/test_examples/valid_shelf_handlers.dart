@@ -28,10 +28,11 @@ FutureOr<Response> futureOrFunction(Request request) =>
     throw UnimplementedError();
 
 @CloudFunction()
-Response extraParam(Request request, [int other]) => throw UnimplementedError();
+Response extraParam(Request request, [int? other]) =>
+    throw UnimplementedError();
 
 @CloudFunction()
-Response optionalParam([Request request, int other]) =>
+Response optionalParam([Request? request, int? other]) =>
     throw UnimplementedError();
 
 @CloudFunction()

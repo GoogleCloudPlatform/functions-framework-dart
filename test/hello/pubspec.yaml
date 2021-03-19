@@ -19,7 +19,7 @@ dev_dependencies:
   io: ^1.0.0
   json_serializable: ^4.0.0
   # Because we use the ignore_for_file build.yaml config
-  source_gen: ^0.9.5
+  source_gen: ^1.0.0
   test: ^1.15.0
   test_process: ^2.0.0
 

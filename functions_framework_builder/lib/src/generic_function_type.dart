@@ -41,14 +41,13 @@ class GenericFunctionType implements SupportedFunctionType {
   String get typedefName => _typedefName;
 
   @override
-  String get typeDescription => _functionTypeAliasElement.aliasedElement
+  String get typeDescription => _functionTypeAliasElement.aliasedElement!
       .getDisplayString(withNullability: false);
 
   final TypeAliasElement _functionTypeAliasElement;
   final bool _withContext;
 
-  GenericFunctionType._(this._functionTypeAliasElement, this._withContext)
-      : assert(_functionTypeAliasElement != null);
+  GenericFunctionType._(this._functionTypeAliasElement, this._withContext);
 
   static Future<GenericFunctionType> create(Resolver resolver) async {
     final lib = await resolver.libraryFor(AssetId.resolve(_libraryUri));
@@ -71,7 +70,7 @@ class GenericFunctionType implements SupportedFunctionType {
   }
 
   @override
-  FactoryData createReference(
+  FactoryData? createReference(
     LibraryElement library,
     String targetName,
     FunctionElement element,
@@ -101,11 +100,11 @@ class GenericFunctionType implements SupportedFunctionType {
 
     if (library.typeSystem.isSubtypeOf(element.type, functionType)) {
       if (paramInfo.paramType != null) {
-        if (library.exportNamespace.get(paramInfo.paramType.element.name) ==
+        if (library.exportNamespace.get(paramInfo.paramType!.element.name) ==
             null) {
           // TODO: add a test for this!
           throw InvalidGenerationSourceError(
-            'The type `${paramInfo.paramType.element.name}` is not exposed by '
+            'The type `${paramInfo.paramType!.element.name}` is not exposed by '
             'the function library `${library.source.uri}` so it cannot '
             'be used.',
           );
@@ -152,7 +151,7 @@ class _GenericFactoryData implements FactoryData {
     final typeDisplayName = info.paramType == null
         ? jsonTypeDisplay
         : '$functionsLibraryPrefix.'
-            '${info.paramType.getDisplayString(withNullability: false)}';
+            '${info.paramType!.getDisplayString(withNullability: false)}';
 
     final returnBlock = info.paramType == null
         ? 'return $_jsonParamName;'

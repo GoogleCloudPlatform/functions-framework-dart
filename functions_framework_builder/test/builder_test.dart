@@ -185,8 +185,8 @@ $lines
             '(JsonType request, RequestContext context)',
           )
           .replaceAll(
-            'int other',
-            'RequestContext context, int other',
+            'int? other',
+            'RequestContext context, int? other',
           );
 
       await _testItems(
@@ -445,8 +445,8 @@ $lines
             '(num request, RequestContext context)',
           )
           .replaceAll(
-            'int other',
-            'RequestContext context, int other',
+            'int? other',
+            'RequestContext context, int? other',
           );
 
       await _testItems(
@@ -607,7 +607,7 @@ $entries
 
 Future<void> _generateTest(
   String inputLibrary,
-  String expectedContent, {
+  String? expectedContent, {
   bool validateLog = true,
 }) async {
   final srcs = {'$_pkgName|lib/functions.dart': inputLibrary};
@@ -633,7 +633,7 @@ Future<void> _generateTest(
       }
       addTearDown(() {
         var output = 'Unexpected log message: "${log.message}"';
-        if ((log.message == null || log.message.isEmpty) && log.error != null) {
+        if ((log.message.isEmpty) && log.error != null) {
           output = '$output (${log.error})';
         }
         fail(output);

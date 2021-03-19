@@ -33,7 +33,7 @@ import 'src/constants.dart';
 import 'src/function_type_validator.dart';
 import 'src/supported_function_type.dart';
 
-Builder functionsFrameworkBuilder([BuilderOptions options]) =>
+Builder functionsFrameworkBuilder([BuilderOptions? options]) =>
     const _FunctionsFrameworkBuilder();
 
 class _FunctionsFrameworkBuilder implements Builder {
@@ -62,12 +62,10 @@ class _FunctionsFrameworkBuilder implements Builder {
         );
       }
 
-      final function = element as FunctionElement;
-
       final targetReader = annotatedElement.annotation.read('target');
 
       final targetName =
-          targetReader.isNull ? function.name : targetReader.stringValue;
+          targetReader.isNull ? element.name : targetReader.stringValue;
 
       if (entries.containsKey(targetName)) {
         throw InvalidGenerationSourceError(
@@ -79,7 +77,7 @@ class _FunctionsFrameworkBuilder implements Builder {
       final invokeExpression = validator.validate(
         libraryElement,
         targetName,
-        function,
+        element,
       );
 
       entries[targetName] = invokeExpression;

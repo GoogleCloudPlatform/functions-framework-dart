@@ -3,6 +3,7 @@
 ## 0.4.0-dev
 
 - Generate null-safe code.
+- Migrate implementation to null safety.
 - Support the latest `package:functions_framework` version.
 - Allow the latest, null-safe versions of a number of packages.
 

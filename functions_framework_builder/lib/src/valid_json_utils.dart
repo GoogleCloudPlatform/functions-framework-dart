@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:analyzer/dart/element/type.dart';
+import 'package:collection/collection.dart';
 
 const fromJsonFactoryName = 'fromJson';
 
@@ -49,17 +50,16 @@ bool _validJsonType(DartType type, bool allowComplexMembers) {
 
 class JsonParamInfo {
   final DartType jsonType;
-  final InterfaceType paramType;
+  final InterfaceType? paramType;
 
   JsonParamInfo._(this.jsonType, this.paramType);
 }
 
-JsonParamInfo validJsonParamType(DartType type) {
+JsonParamInfo? validJsonParamType(DartType type) {
   // Look for a `fromJson` factory that takes a JSON-able type
   if (type is InterfaceType) {
-    final fromJsonCtor = type.constructors.singleWhere(
+    final fromJsonCtor = type.constructors.singleWhereOrNull(
       (element) => element.name == fromJsonFactoryName,
-      orElse: () => null,
     );
     if (fromJsonCtor != null) {
       final requiredParams = fromJsonCtor.parameters
@@ -99,8 +99,7 @@ JsonReturnKind _validJsonReturnTypeCore(DartType type) {
 
   // Look for a `toJson` function that returns a JSON-able type
   if (type is InterfaceType) {
-    final interfaceType = type as InterfaceType;
-    final toJsonMethod = interfaceType.getMethod('toJson');
+    final toJsonMethod = type.getMethod('toJson');
     if (toJsonMethod != null &&
         toJsonMethod.parameters.every((element) => element.isOptional)) {
       type = toJsonMethod.returnType;
