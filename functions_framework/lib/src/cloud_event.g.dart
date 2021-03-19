@@ -20,7 +20,8 @@ CloudEvent<T> _$CloudEventFromJson<T>(
       source: $checkedConvert(json, 'source', (v) => Uri.parse(v as String)),
       specVersion: $checkedConvert(json, 'specversion', (v) => v as String),
       type: $checkedConvert(json, 'type', (v) => v as String),
-      data: $checkedConvert(json, 'data', (v) => fromJsonT(v)),
+      data: $checkedConvert(
+          json, 'data', (v) => _$nullableGenericFromJson(v, fromJsonT)),
       dataContentType:
           $checkedConvert(json, 'datacontenttype', (v) => v as String?),
       dataSchema: $checkedConvert(
@@ -55,9 +56,21 @@ Map<String, dynamic> _$CloudEventToJson<T>(
   }
 
   writeNotNull('datacontenttype', instance.dataContentType);
-  writeNotNull('data', toJsonT(instance.data));
+  writeNotNull('data', _$nullableGenericToJson(instance.data, toJsonT));
   writeNotNull('dataschema', instance.dataSchema?.toString());
   writeNotNull('subject', instance.subject);
   writeNotNull('time', instance.time?.toIso8601String());
   return val;
 }
+
+T? _$nullableGenericFromJson<T>(
+  Object? input,
+  T Function(Object? json) fromJson,
+) =>
+    input == null ? null : fromJson(input);
+
+Object? _$nullableGenericToJson<T>(
+  T? input,
+  Object? Function(T value) toJson,
+) =>
+    input == null ? null : toJson(input);

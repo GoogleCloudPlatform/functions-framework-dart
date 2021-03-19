@@ -21,7 +21,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^1.10.7
   build_verify: ^2.0.0
-  json_serializable: ^4.0.0
+  json_serializable: ^4.0.1
   # Because we use the ignore_for_file build.yaml config
   source_gen: ^1.0.0
   test: ^1.15.7
