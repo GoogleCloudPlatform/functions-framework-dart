@@ -26,13 +26,13 @@ class SupportedFunctionType {
   final String typeDescription;
 
   final FunctionType _type;
-  final String _constructor;
+  final String? _constructor;
 
   SupportedFunctionType._(
     this.libraryUri,
     this.typedefName,
     this._type, {
-    String constructor,
+    String? constructor,
   })  : _constructor = constructor,
         typeDescription = _type.getDisplayString(withNullability: false);
 
@@ -62,7 +62,7 @@ class SupportedFunctionType {
     );
   }
 
-  FactoryData createReference(
+  FactoryData? createReference(
     LibraryElement library,
     String targetName,
     FunctionElement element,

@@ -27,7 +27,7 @@ FutureOr<void> futureOrFunction(CloudEvent request) =>
     throw UnimplementedError();
 
 @CloudFunction()
-void optionalParam([CloudEvent request]) => throw UnimplementedError();
+void optionalParam([CloudEvent? request]) => throw UnimplementedError();
 
 @CloudFunction()
 void objectParam(Object request) => throw UnimplementedError();

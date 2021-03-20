@@ -26,7 +26,7 @@ Future<void> asyncFunction(num request) => throw UnimplementedError();
 FutureOr<void> futureOrFunction(num request) => throw UnimplementedError();
 
 @CloudFunction()
-void extraParam(num request, [int other]) => throw UnimplementedError();
+void extraParam(num request, [int? other]) => throw UnimplementedError();
 
 @CloudFunction()
-void optionalParam([num request, int other]) => throw UnimplementedError();
+void optionalParam([num? request, int? other]) => throw UnimplementedError();
