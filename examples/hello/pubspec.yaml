@@ -1,16 +1,25 @@
 name: hello_world_function
+version: 0.4.0-dev
+description: Dart Functions Framework simple function example.
+repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
 publish_to: none
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  functions_framework: ^0.3.0
-  shelf: ^0.7.9
+  functions_framework: ^0.4.0
+  shelf: ^1.1.0
 
 dev_dependencies:
   build_runner: ^1.10.2
-  functions_framework_builder: ^0.3.0
-  http: ^0.12.0
-  test: ^1.15.0
-  test_process: ^1.0.0
+  functions_framework_builder: ^0.4.0
+  http: ^0.13.1
+  test: ^1.16.8
+  test_process: ^2.0.0
+
+dependency_overrides:
+  functions_framework:
+    path: ../../functions_framework
+  functions_framework_builder:
+    path: ../../functions_framework_builder
