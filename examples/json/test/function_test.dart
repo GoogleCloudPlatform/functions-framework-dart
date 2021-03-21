@@ -38,8 +38,11 @@ void main() {
 
     const headers = {'content-type': 'application/json'};
 
-    final response =
-        await post('http://localhost:8080', headers: headers, body: body);
+    final response = await post(
+      Uri.parse('http://localhost:8080'),
+      headers: headers,
+      body: body,
+    );
     expect(response.statusCode, 200);
 
     final data = json.decode(response.body) as Map<String, dynamic>;

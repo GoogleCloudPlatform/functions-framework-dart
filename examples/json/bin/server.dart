@@ -17,23 +17,26 @@ import 'package:functions_framework/serve.dart';
 import 'package:example_json_function/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functionTargets);
+  await serve(args, _nameToFunctionTarget);
 }
 
-const _functionTargets = <FunctionTarget>{
-  JsonFunctionTarget(
-    'function',
-    function_library.function,
-    _factory0,
-  ),
-};
-
-Map<String, dynamic> _factory0(Object json) {
-  if (json is Map<String, dynamic>) {
-    return json;
+FunctionTarget? _nameToFunctionTarget(String name) {
+  switch (name) {
+    case 'function':
+      return JsonFunctionTarget(
+        function_library.function,
+        (json) {
+          if (json is Map<String, dynamic>) {
+            return json;
+          }
+          throw BadRequestException(
+            400,
+            'The provided JSON is not the expected type '
+            '`Map<String, dynamic>`.',
+          );
+        },
+      );
+    default:
+      return null;
   }
-  throw BadRequestException(
-    400,
-    'The provided JSON is not the expected type `Map<String, dynamic>`.',
-  );
 }
