@@ -202,7 +202,7 @@ void main() {
           ),
         );
         final jsonBody = jsonDecode(response.body);
-        expect(jsonBody, false);
+        expect(jsonBody, {'isEmpty': false});
 
         await finishServerTest(
           testProcess,
@@ -230,7 +230,7 @@ void main() {
           ),
         );
         final jsonBody = jsonDecode(response.body);
-        expect(jsonBody, true);
+        expect(jsonBody, {'isEmpty': true});
 
         await finishServerTest(
           testProcess,
