@@ -17,12 +17,31 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'functions.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
+class GreetingRequest {
+  final String? name;
+
+  GreetingRequest({this.name});
+
+  factory GreetingRequest.fromJson(Map<String, dynamic> json) =>
+      _$GreetingRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GreetingRequestToJson(this);
+
+  @override
+  bool operator ==(Object other) =>
+      other is GreetingRequest && other.name == name;
+
+  @override
+  int get hashCode => name.hashCode;
+}
+
+@JsonSerializable()
 class GreetingResponse {
   final String salutation;
   final String name;
 
-  GreetingResponse({this.salutation, this.name});
+  GreetingResponse({required this.salutation, required this.name});
 
   factory GreetingResponse.fromJson(Map<String, dynamic> json) =>
       _$GreetingResponseFromJson(json);
@@ -40,8 +59,8 @@ class GreetingResponse {
 }
 
 @CloudFunction()
-GreetingResponse function(Map<String, dynamic> request) {
-  final name = request['name'] as String ?? 'World';
+GreetingResponse function(GreetingRequest request) {
+  final name = request.name ?? 'World';
   final json = GreetingResponse(salutation: 'Hello', name: name);
   return json;
 }
