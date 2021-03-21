@@ -38,7 +38,7 @@ class CloudEvent<T> {
 
   @JsonKey(name: 'datacontenttype')
   final String? dataContentType;
-  final T? data;
+  final T data;
 
   @JsonKey(name: 'dataschema')
   final Uri? dataSchema;
@@ -50,7 +50,7 @@ class CloudEvent<T> {
     required this.source,
     required this.specVersion,
     required this.type,
-    this.data,
+    required this.data,
     this.dataContentType,
     this.dataSchema,
     this.subject,
@@ -62,7 +62,9 @@ class CloudEvent<T> {
     FromJson<T> fromJsonT,
   ) =>
       _$CloudEventFromJson(
-          json, (value) => fromJsonT(value as Map<String, dynamic>));
+        json,
+        (value) => fromJsonT(value as Map<String, dynamic>),
+      );
 
   Map<String, dynamic> toJson() => _$CloudEventToJson(this, (val) => val);
 }
