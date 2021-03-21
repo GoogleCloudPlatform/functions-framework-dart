@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0-dev
+## 0.4.0
 
 - Generate null-safe code.
 - Migrate implementation to null safety.
