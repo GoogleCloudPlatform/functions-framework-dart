@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+- Updated templates for functions_framework 0.4.0
+
 ## 0.3.1
 
 - Renamed the package to `dartfn` so `dart pub global activate dartfn` works.
