@@ -21,14 +21,14 @@ const defaultPort = 8080;
 
 final _listeningPattern = RegExp(r'Listening on :(\d+)');
 
-int _autoPort;
+late int _autoPort;
 
 int get autoPort => _autoPort;
 
 Future<TestProcess> startServerTest({
   bool shouldFail = false,
   int expectedListeningPort = defaultPort,
-  Map<String, String> env,
+  Map<String, String>? env,
   Iterable<String> arguments = const <String>[],
 }) async {
   if (expectedListeningPort == 0) {
@@ -46,9 +46,8 @@ Future<TestProcess> startServerTest({
 
   if (!shouldFail) {
     final output = await proc.stdout.next;
-    final match = _listeningPattern.firstMatch(output);
-    expect(match, isNotNull);
-    _autoPort = int.parse(match[1]);
+    final match = _listeningPattern.firstMatch(output)!;
+    _autoPort = int.parse(match[1]!);
     if (expectedListeningPort == 0) {
       expect(_autoPort, greaterThan(0));
     } else {
@@ -62,7 +61,7 @@ Future<TestProcess> startServerTest({
 Future<void> finishServerTest(
   TestProcess proc, {
   ProcessSignal signal = ProcessSignal.sigterm,
-  Object requestOutput,
+  Object? requestOutput,
 }) async {
   requestOutput ??= finishedPattern('GET', 200);
   await expectLater(

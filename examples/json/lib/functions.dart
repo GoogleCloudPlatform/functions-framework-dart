@@ -17,12 +17,12 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'functions.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
 class GreetingResponse {
   final String salutation;
   final String name;
 
-  GreetingResponse({this.salutation, this.name});
+  GreetingResponse({required this.salutation, required this.name});
 
   factory GreetingResponse.fromJson(Map<String, dynamic> json) =>
       _$GreetingResponseFromJson(json);
@@ -41,7 +41,7 @@ class GreetingResponse {
 
 @CloudFunction()
 GreetingResponse function(Map<String, dynamic> request) {
-  final name = request['name'] as String ?? 'World';
+  final name = request['name'] as String? ?? 'World';
   final json = GreetingResponse(salutation: 'Hello', name: name);
   return json;
 }
