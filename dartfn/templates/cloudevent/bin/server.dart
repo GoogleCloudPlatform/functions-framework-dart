@@ -14,15 +14,19 @@
 // limitations under the License.
 
 import 'package:functions_framework/serve.dart';
-import 'package:/__projectName__/functions.dart' as function_library;
+import 'package:__projectName__/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functionTargets);
+  await serve(args, _nameToFunctionTarget);
 }
 
-const _functionTargets = <FunctionTarget>{
-  FunctionTarget.cloudEventWithContext(
-    'function',
-    function_library.function,
-  ),
-};
+FunctionTarget? _nameToFunctionTarget(String name) {
+  switch (name) {
+    case 'function':
+      return FunctionTarget.cloudEventWithContext(
+        function_library.function,
+      );
+    default:
+      return null;
+  }
+}

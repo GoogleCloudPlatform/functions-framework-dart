@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:__projectName__/functions.dart';
 import 'package:http/http.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
+
+import 'package:__projectName__/functions.dart';
 
 const defaultTimeout = Timeout(Duration(seconds: 3));
 
@@ -24,8 +25,11 @@ void main() {
 
     const headers = {'content-type': 'application/json'};
 
-    final response =
-        await post('http://localhost:8080', headers: headers, body: body);
+    final response = await post(
+      Uri.parse('http://localhost:8080'),
+      headers: headers,
+      body: body,
+    );
     expect(response.statusCode, 200);
 
     final data = json.decode(response.body) as Map<String, dynamic>;
