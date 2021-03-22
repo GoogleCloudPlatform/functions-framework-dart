@@ -8,6 +8,17 @@ part of 'functions.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+GreetingRequest _$GreetingRequestFromJson(Map<String, dynamic> json) {
+  return GreetingRequest(
+    name: json['name'] as String?,
+  );
+}
+
+Map<String, dynamic> _$GreetingRequestToJson(GreetingRequest instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+    };
+
 GreetingResponse _$GreetingResponseFromJson(Map<String, dynamic> json) {
   return GreetingResponse(
     salutation: json['salutation'] as String,

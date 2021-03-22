@@ -27,7 +27,16 @@ FunctionTarget? _nameToFunctionTarget(String name) {
         function_library.function,
         (json) {
           if (json is Map<String, dynamic>) {
-            return json;
+            try {
+              return function_library.GreetingRequest.fromJson(json);
+            } catch (e, stack) {
+              throw BadRequestException(
+                400,
+                'There was an error parsing the provided JSON data.',
+                innerError: e,
+                innerStack: stack,
+              );
+            }
           }
           throw BadRequestException(
             400,
