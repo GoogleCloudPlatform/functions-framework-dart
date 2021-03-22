@@ -110,7 +110,7 @@ void main() {
 }
 
 Future<Response> _makeRequest(String body, Map<String, String> headers) async {
-  final requestUrl = 'http://localhost:$autoPort/';
+  final requestUrl = Uri.parse('http://localhost:$autoPort/');
 
   final response = await post(
     requestUrl,
