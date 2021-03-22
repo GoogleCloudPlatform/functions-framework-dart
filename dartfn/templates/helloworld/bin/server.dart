@@ -14,14 +14,19 @@
 // limitations under the License.
 
 import 'package:functions_framework/serve.dart';
-import 'package:shelf/shelf.dart';
-
 import 'package:__projectName__/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _functions);
+  await serve(args, _nameToFunctionTarget);
 }
 
-const _functions = <String, Handler>{
-  'function': function_library.function,
-};
+FunctionTarget? _nameToFunctionTarget(String name) {
+  switch (name) {
+    case 'function':
+      return FunctionTarget.http(
+        function_library.function,
+      );
+    default:
+      return null;
+  }
+}
