@@ -6,7 +6,7 @@ The basic shape of the function handler looks like this:
 
 ```dart
 @CloudFunction()
-GreetingResponse function(Map<String, dynamic> request) {
+GreetingResponse function(GreetingRequest request) {
 }
 ```
 
@@ -29,15 +29,14 @@ response after receiving the above request:
 }
 ```
 
-The function handler actually receives the JSON request parsed as a map by the
-Functions Framework. To access the expected `name` field of the request
-document (and provide a default value in case the `name` field is empty), the
-code looks like this:
+The Functions Framework parses the request data to fit the shape of a
+GreetingRequest object for you. Because a name might not have been sent with
+the request, the function implementation provides a default name ('World').
 
 ```dart
 @CloudFunction()
-GreetingResponse function(Map<String, dynamic> request) {
-  final name = request['name'] as String ?? 'World';
+GreetingResponse function(GreetingRequest request) {
+  final name = request.name ?? 'World';
 }
 ```
 
@@ -68,19 +67,36 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'functions.g.dart';
 
-@JsonSerializable(nullable: false)
+@JsonSerializable()
+class GreetingRequest {
+  final String? name;
+
+  GreetingRequest({this.name});
+
+  // The implementation also includes two marshalling methods that are
+  // standard boilerplate that depend on generated code in 'functions.g.dart'
+  
+  // To help with testing, the implementation also overrides the equality
+  // operator (and therefore also hashcode).
+}
+
+@JsonSerializable()
 class GreetingResponse {
   final String salutation;
   final String name;
 
-  GreetingResponse({this.salutation, this.name});
+  GreetingResponse({required this.salutation, required this.name});
 
-  Map<String, dynamic> toJson() => _$GreetingResponseToJson(this);
+  // The following two marshalling methods are standard boilerplate that
+  //depend on generated code in 'functions.g.dart' ...
+
+  // To help with testing, the implementation also overrides the equality
+  // operator (and therefore also hashcode).
 }
 
 @CloudFunction()
-GreetingResponse function(Map<String, dynamic> request) {
-  final name = request['name'] as String ?? 'World';
+GreetingResponse function(GreetingRequest request) {
+  final name = request.name ?? 'World';
   final json = GreetingResponse(salutation: 'Hello', name: name);
   return json;
 }
