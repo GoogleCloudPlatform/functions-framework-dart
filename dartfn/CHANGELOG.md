@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1-dev
+
+- Require Dart 2.12
+
 ## 0.4.0
 
 - Updated templates for functions_framework 0.4.0

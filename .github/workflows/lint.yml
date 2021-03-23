@@ -107,22 +107,22 @@ jobs:
         working-directory: test/hello
         run: dartanalyzer --fatal-infos .
   job_003:
-    name: "analyze_format; Dart 2.10.0; PKG: dartfn; `dartanalyzer .`"
+    name: "analyze_format; Dart 2.12.0; PKGS: dartfn, functions_framework, functions_framework_builder, test/hello; `dartanalyzer .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@v2
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:dartfn;commands:dartanalyzer_1"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:dartfn-functions_framework-functions_framework_builder-test/hello;commands:dartanalyzer_1"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;packages:dartfn
-            os:ubuntu-latest;pub-cache-hosted;dart:2.10.0
+            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:dartfn-functions_framework-functions_framework_builder-test/hello
+            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - uses: dart-lang/setup-dart@v1.0
         with:
-          sdk: "2.10.0"
+          sdk: "2.12.0"
       - id: checkout
         uses: actions/checkout@v2
       - id: dartfn_pub_upgrade
@@ -134,25 +134,6 @@ jobs:
         if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
         working-directory: dartfn
         run: dartanalyzer .
-  job_004:
-    name: "analyze_format; Dart 2.12.0; PKGS: functions_framework, functions_framework_builder, test/hello; `dartanalyzer .`"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache Pub hosted dependencies
-        uses: actions/cache@v2
-        with:
-          path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:functions_framework-functions_framework_builder-test/hello;commands:dartanalyzer_1"
-          restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:functions_framework-functions_framework_builder-test/hello
-            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0
-            os:ubuntu-latest;pub-cache-hosted
-            os:ubuntu-latest
-      - uses: dart-lang/setup-dart@v1.0
-        with:
-          sdk: "2.12.0"
-      - id: checkout
-        uses: actions/checkout@v2
       - id: functions_framework_pub_upgrade
         name: "functions_framework; pub upgrade --no-precompile"
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -180,7 +161,7 @@ jobs:
         if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
         run: dartanalyzer .
-  job_005:
+  job_004:
     name: Notify failure
     runs-on: ubuntu-latest
     if: "(github.event_name == 'push' || github.event_name == 'schedule') && failure()"
@@ -195,4 +176,3 @@ jobs:
       - job_001
       - job_002
       - job_003
-      - job_004
