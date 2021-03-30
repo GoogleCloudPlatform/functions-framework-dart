@@ -105,24 +105,28 @@ The following assumes running on the macOS desktop. See Flutter docs for
 building for Windows or Linux desktops.
 
 If you have not enabled desktop support for your Flutter installation,
-do so now:
+do so now with one of the following commands, as appropriate for your system:
 
 ```shell
+flutter config --enable-windows-desktop
 flutter config --enable-macos-desktop
+flutter config --enable-linux-desktop
 ```
 
 Output:
 
 ```text
-Setting "enable-macos-desktop" value to "true".
+Setting "enable-{DESKTOP}-desktop" value to "true".
 
 You may need to restart any open editors for them to read new settings.
 ```
 
 ### Connect frontend to backend running on local machine
 
+Replace {DESKTOP} with `windows`, `macos`, or `linux`.
+
 ```shell
-flutter run -d macos
+flutter run -d {DESKTOP}
 ```
 
 ### Connect frontend to backend running on Cloud Run
@@ -135,10 +139,11 @@ ServiceURL in `frontend/assets/config/prod.json` (note that this file
 is in `frontend/.gitignore`; if you want to commit your change you
 will need to remove or comment out the entry).
 
-Then when running `flutter run` define our environment as `prod`:
+Then when running `flutter run` define our environment as `prod` and
+replace {DESKTOP} with `windows`, `macos`, or `linux`:
 
 ```shell
-flutter run -d macos --dart-define=ENV=prod
+flutter run -d {DESKTOP} --dart-define=ENV=prod
 ```
 
 ### Try it out
