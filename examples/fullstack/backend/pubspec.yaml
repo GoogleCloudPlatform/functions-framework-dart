@@ -1,0 +1,21 @@
+name: backend
+description: A sample Functions Framework project for handling JSON.
+# version: 0.1.0
+# homepage: https://www.example.com
+publish_to: none
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  functions_framework: ^0.4.0
+  json_annotation: ^4.0.0
+  shelf: ^1.0.0
+
+dev_dependencies:
+  build_runner: ^1.10.7
+  functions_framework_builder: ^0.4.0
+  http: ^0.13.0
+  json_serializable: ^4.0.0
+  test: ^1.15.7
+  test_process: ^2.0.0
