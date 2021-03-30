@@ -44,7 +44,7 @@ class Greeting {
       return greetingResponse;
     }
 
-    throw Future.error(Exception(
-        'Error: unexpected HTTP status code: ${res.statusCode.toString()}'));
+    throw Exception(
+        'Error: unexpected HTTP status code: ${res.statusCode.toString()}');
   }
 }
