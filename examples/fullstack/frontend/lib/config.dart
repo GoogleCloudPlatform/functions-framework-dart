@@ -22,21 +22,17 @@ enum Environment {
 }
 
 extension EnumToString on Environment {
-  String toName() {
-    return toString().split('.').last;
-  }
+  String toName() => toString().split('.').last;
 }
 
-extension stringToEnvironment on String {
-  Environment parseEnvironment() {
-    switch (this) {
-      case 'dev':
-        return Environment.dev;
-      case 'prod':
-        return Environment.prod;
-      default:
-        throw Exception('Parsing as Environment enum exception: ${this}');
-    }
+Environment parseEnvironment(String env) {
+  switch (env) {
+    case 'dev':
+      return Environment.dev;
+    case 'prod':
+      return Environment.prod;
+    default:
+      throw Exception("Parsing as Environment enum exception: '$env'");
   }
 }
 
@@ -53,7 +49,7 @@ class Config {
   }
 
   static Future<Config> parse(String environment) async {
-    final env = environment.parseEnvironment();
+    final env = parseEnvironment(environment);
     return await load(env);
   }
 }
