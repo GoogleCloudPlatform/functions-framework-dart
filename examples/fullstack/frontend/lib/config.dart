@@ -21,7 +21,7 @@ enum Environment {
   prod,
 }
 
-extension enumToString on Environment {
+extension EnumToString on Environment {
   String toName() {
     return toString().split('.').last;
   }
