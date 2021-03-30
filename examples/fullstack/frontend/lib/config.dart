@@ -49,7 +49,7 @@ class Config {
     var file = 'assets/config/${env.toName()}.json';
     final data = await rootBundle.loadString(file);
     final json = jsonDecode(data);
-    return Config(greetingsUrl: json['greetingUrl']);
+    return Config(greetingsUrl: json['greetingUrl'] as String);
   }
 
   static Future<Config> parse(String environment) async {
