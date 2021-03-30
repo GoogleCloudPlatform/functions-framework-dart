@@ -13,13 +13,13 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
-import 'package:fullstack_demo_frontend/services/api_types.dart';
+import '../services/api_types.dart';
 
 import '../config.dart';
 import '../services/api.dart';
 
 class AppModel with ChangeNotifier {
-  Config _config;
+  final Config _config;
   late Greeting _greeting;
 
   String? name;
@@ -33,10 +33,10 @@ class AppModel with ChangeNotifier {
 
   Future<void> greet(String? name) async {
     try {
-      var greetingResponse = await _greeting.getGreeting(name);
+      final greetingResponse = await _greeting.getGreeting(name);
       pastGreetings.add(greetingResponse);
       this.name = greetingResponse.name;
-      this.salutation = greetingResponse.salutation;
+      salutation = greetingResponse.salutation;
       notifyListeners();
     } on Exception catch (e) {
       // TODO: actual error handling strategy

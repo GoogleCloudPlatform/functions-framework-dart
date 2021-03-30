@@ -28,18 +28,19 @@ class Greeting {
 
   // TODO: better strategy for surfacing errors, http statuscodes
   Future<GreetingResponse> getGreeting(String? name) async {
-    var greetingRequest = GreetingRequest(name: name);
+    final greetingRequest = GreetingRequest(name: name);
 
-    var body = jsonEncode(greetingRequest.toJson());
+    final body = jsonEncode(greetingRequest.toJson());
 
-    var res = await http.post(
+    final res = await http.post(
       _uri,
       headers: {'content-type': 'application/json'},
       body: body,
     );
 
     if (res.statusCode == HttpStatus.ok) {
-      var greetingResponse = GreetingResponse.fromJson(jsonDecode(res.body));
+      final greetingResponse = GreetingResponse.fromJson(
+          jsonDecode(res.body) as Map<String, dynamic>);
       return greetingResponse;
     }
 

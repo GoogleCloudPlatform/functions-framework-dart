@@ -6,10 +6,10 @@ import '../models/app_model.dart';
 class HistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<AppModel>();
+    final model = context.watch<AppModel>();
     return Scaffold(
       appBar: AppBar(
-        title: Text("History"),
+        title: Text('History'),
       ),
       body: ListView.builder(
         itemCount: model.pastGreetings.length,

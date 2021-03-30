@@ -83,7 +83,7 @@ class GreetingState extends State<Greeting> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      var model = context.read<AppModel>();
+      final model = context.read<AppModel>();
       await model.greet(_name);
 
       final sm = ScaffoldMessenger.of(context);

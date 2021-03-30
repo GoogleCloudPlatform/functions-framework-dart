@@ -23,7 +23,7 @@ enum Environment {
 
 extension enumToString on Environment {
   String toName() {
-    return this.toString().split('.').last;
+    return toString().split('.').last;
   }
 }
 
@@ -46,14 +46,14 @@ class Config {
   Config({required this.greetingsUrl});
 
   static Future<Config> load(Environment env) async {
-    var file = 'assets/config/${env.toName()}.json';
+    final file = 'assets/config/${env.toName()}.json';
     final data = await rootBundle.loadString(file);
     final json = jsonDecode(data);
     return Config(greetingsUrl: json['greetingUrl'] as String);
   }
 
   static Future<Config> parse(String environment) async {
-    final Environment env = environment.parseEnvironment();
+    final env = environment.parseEnvironment();
     return await load(env);
   }
 }
