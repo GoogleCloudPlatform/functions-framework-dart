@@ -21,6 +21,8 @@ jobs:
           - examples/hello
           - examples/json
           - examples/raw_cloudevent
+          - examples/fullstack/backend
+          - examples/fullstack/frontend
     defaults:
       run:
         working-directory: ${{ matrix.example_directory }}
