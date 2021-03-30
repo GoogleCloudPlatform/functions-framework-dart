@@ -9,7 +9,7 @@ class HistoryPage extends StatelessWidget {
     final model = context.watch<AppModel>();
     return Scaffold(
       appBar: AppBar(
-        title: Text('History'),
+        title: const Text('History'),
       ),
       body: ListView.builder(
         itemCount: model.pastGreetings.length,

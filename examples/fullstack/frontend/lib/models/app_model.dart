@@ -13,10 +13,10 @@
 // limitations under the License.
 
 import 'package:flutter/material.dart';
-import '../services/api_types.dart';
 
 import '../config.dart';
 import '../services/api.dart';
+import '../services/api_types.dart';
 
 class AppModel with ChangeNotifier {
   final Config _config;

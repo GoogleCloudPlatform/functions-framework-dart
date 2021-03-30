@@ -19,9 +19,7 @@ import '../models/app_model.dart';
 
 class Greeting extends StatefulWidget {
   @override
-  GreetingState createState() {
-    return GreetingState();
-  }
+  GreetingState createState() => GreetingState();
 }
 
 class GreetingState extends State<Greeting> {
@@ -42,42 +40,40 @@ class GreetingState extends State<Greeting> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFormField(
-              autofocus: true,
-              focusNode: _focusNameNode,
-              decoration: InputDecoration(
-                labelText: 'Name',
-                hintText: 'Enter your name...',
+  Widget build(BuildContext context) => Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                autofocus: true,
+                focusNode: _focusNameNode,
+                decoration: const InputDecoration(
+                  labelText: 'Name',
+                  hintText: 'Enter your name...',
+                ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                onFieldSubmitted: (_) => _submit(context),
+                onSaved: (input) => _name = input,
               ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
-              onFieldSubmitted: (_) => _submit(context),
-              onSaved: (input) => _name = input,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: ElevatedButton(
-                onPressed: () => _submit(context),
-                child: Text('Submit'),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: ElevatedButton(
+                  onPressed: () => _submit(context),
+                  child: const Text('Submit'),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
 
   Future<void> _submit(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -86,10 +82,11 @@ class GreetingState extends State<Greeting> {
       final model = context.read<AppModel>();
       await model.greet(_name);
 
-      final sm = ScaffoldMessenger.of(context);
-      // clear queued snackbars from clicking too fast
-      sm.clearSnackBars();
-      sm.showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context)
+          // clear queued snackbars from clicking too fast (only supported
+          // in dev channel though)
+          // .clearSnackBars()
+          .showSnackBar(SnackBar(
         content: Text('${model.salutation}, ${model.name}'),
       ));
 
