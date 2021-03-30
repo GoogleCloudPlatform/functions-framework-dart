@@ -120,7 +120,7 @@ following targets are supported:
 * `make build` - this is the default target and will generate `bin/server.dart`
 * `make clean` - clears build_runner cache and removes the `bin/server.dart`
 * `make test`  - runs `clean` and `build` targets, then runs tests
-* `make run ` - runs the `build` target and then starts the Dart function
+* `make run` - runs the `build` target and then starts the Dart function
   server locally
 
 ## Quickstarts
