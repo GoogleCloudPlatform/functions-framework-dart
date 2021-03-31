@@ -1,12 +1,10 @@
 # Functions Framework for Dart
 
-> DISCLAIMER: This is not ready for production. Expect breaking changes.
-> We're sharing our progress with the developer community and appreciate
-> your feedback. Feel free to start a
-> [discussion](https://github.com/GoogleCloudPlatform/functions-framework-dart/discussions)
-> to share thoughts or open
-> [issues](https://github.com/GoogleCloudPlatform/functions-framework-dart/issues)
-> for bugs.
+> This is a **community-supported project**, meaning there is no official
+> level of support. The code is not covered by any SLA or deprecation policy.
+>
+> Feel free to start a [discussion] to share thoughts or open [issues] for
+> bugs and feature requests.
 
 |Functions Framework|Unit Tests|Lint Test|Conformance Tests|
 |---|---|---|---|
@@ -117,6 +115,7 @@ https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=wo
 [buildpacks]: https://github.com/GoogleCloudPlatform/buildpacks
 [CloudEvents]: https://cloudevents.io/
 [Dart quickstart]: docs/quickstarts/01-quickstart-dart.md
+[discussion]: https://github.com/GoogleCloudPlatform/functions-framework-dart/discussions
 [docs]: docs
 [examples]: examples
 [examples/hello/lib/functions.dart]: examples/hello/lib/functions.dart
@@ -124,6 +123,7 @@ https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=wo
 https://cloud.google.com/run/docs/quickstarts/build-and-deploy
 [Google App Engine]: https://cloud.google.com/appengine/docs/go/
 [Google Cloud Functions]: https://cloud.google.com/functions/
+[issues]: https://github.com/GoogleCloudPlatform/functions-framework-dart/issues
 [Knative]: https://github.com/knative/
 [quickstart]: docs/quickstarts/03-quickstart-cloudrun.md
 [quickstarts]: docs
