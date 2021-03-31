@@ -19,7 +19,7 @@ import 'config.dart';
 import 'models/app_model.dart';
 import 'views/home_page.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   const env = String.fromEnvironment('ENV', defaultValue: 'dev');
   final config = await Config.parse(env);
