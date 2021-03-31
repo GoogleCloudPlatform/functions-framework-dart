@@ -14,7 +14,7 @@ demo.
 
 Before beginning, enable macos development:
 
-```
+```shell
 flutter config --enable-macos-desktop
 ```
 
