@@ -13,6 +13,10 @@ JSON-encoded request body and returns a JSON-encoded response body. For the
 demo, the function is hosted on `localhost` and on [Cloud Run], a fully
 managed serverless platform on [Google Cloud].
 
+## Requirements
+
+- Dart: >=2.12.0 <3.0.0
+
 ## Build and deploy the backend
 
 Change directory to `backend`.
