@@ -14,7 +14,7 @@
   - `FunctionTarget` no longer has a `const` constructor. The `name` parameter
     has also been removed.
 
-- Allow the latest versions of `args`, `http`, `http_parser`, and `shelf` 
+- Allow the latest versions of `args`, `http`, `http_parser`, and `shelf`
   packages.
 
 ## 0.3.1
