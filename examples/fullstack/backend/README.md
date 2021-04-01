@@ -77,7 +77,8 @@ Listening on :8080
 From another terminal, send a JSON request:
 
 ```shell
-$ curl -X POST -H "content-type: application/json" -d '{ "name": "World" }' -i -w "\n" localhost:8080
+$ curl -X POST -H "content-type: application/json" \
+  -d '{ "name": "World" }' -i -w "\n" localhost:8080
 HTTP/1.1 200 OK
 date: Sat, 19 Dec 2020 02:17:42 GMT
 content-length: 37

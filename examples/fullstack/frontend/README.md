@@ -77,4 +77,3 @@ Output:
 > Note: the JSON serializer code is maintained separately from the code in the
 > backend. Tightly coupling client and server code through shared libraries
 > (packages) is considered an anti-pattern with microservice architecture.
-
