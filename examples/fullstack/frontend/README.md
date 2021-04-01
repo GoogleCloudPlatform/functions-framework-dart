@@ -21,10 +21,8 @@ flutter config --enable-macos-desktop
 flutter config --enable-linux-desktop
 ```
 
-
 > In any of the commands below, replace DESKTOP with `windows`, `macos`, or
 > `linux`.
-
 
 ### dev and prod environments
 
