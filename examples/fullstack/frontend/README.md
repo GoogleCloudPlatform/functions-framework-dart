@@ -6,7 +6,19 @@ demo.
 > NOTE: The desktop app currently has only been tested on macOS. Testing on
 > Linux or Windows and help with updating docs is appreciated!
 
+## Requirements
+
+- [Flutter](https://flutter.dev/docs/get-started/install)
+
 ## Environment
+
+Before beginning, enable macos development:
+
+```shell
+flutter config --enable-windows-desktop
+flutter config --enable-macos-desktop
+flutter config --enable-linux-desktop
+```
 
 Configuration for `dev` and `prod` environments is stored under `assets/config`.
 
