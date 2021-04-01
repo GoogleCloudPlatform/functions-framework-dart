@@ -28,9 +28,9 @@ GreetingResponse function(GreetingRequest request) {
   return json;
 }
 
-Random rng = Random(DateTime.now().millisecondsSinceEpoch);
+final Random rng = Random(DateTime.now().millisecondsSinceEpoch);
 
-List<String> salutations = [
+final List<String> salutations = [
   '안녕하세요', // annyeonghaseyo
   'こんにちは', // Kon'nichiwa
   '你好', // Nǐ hǎo

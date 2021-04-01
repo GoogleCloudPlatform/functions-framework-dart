@@ -3,9 +3,6 @@
 This is a Flutter desktop app that provides the frontend for the Dart full-stack
 demo.
 
-> NOTE: The desktop app currently has only been tested on macOS. Testing on
-> Linux or Windows and help with updating docs is appreciated!
-
 ## Requirements
 
 - [Flutter](https://flutter.dev/docs/get-started/install)
