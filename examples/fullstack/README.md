@@ -150,6 +150,11 @@ replace {DESKTOP} with `windows`, `macos`, or `linux`:
 flutter run -d {DESKTOP} --dart-define=ENV=prod
 ```
 
+## frontend_cli
+
+For a very simple command-line client to access the backend, see
+[frontend_cli].
+
 ### Try it out
 
 ![flutter_demo.png](images/flutter_demo.png)
@@ -164,6 +169,9 @@ https://cloud.google.com/run
 
 [Dart]:
 https://dart.dev
+
+[frontend_cli]:
+./frontend/
 
 [Google Cloud]:
 https://cloud.google.com/
