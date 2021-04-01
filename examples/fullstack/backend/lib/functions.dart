@@ -24,14 +24,17 @@ export 'api_types.dart';
 @CloudFunction()
 GreetingResponse function(GreetingRequest request, RequestContext context) {
   final name = request.name ?? 'World';
-  final response = GreetingResponse(salutation: getSalutation(), name: name);
+  final response =
+      GreetingResponse(salutation: _randomSalutation(), name: name);
   context.logger.info('greetingResponse: ${response.toJson()}');
   return response;
 }
 
-final Random rng = Random(DateTime.now().millisecondsSinceEpoch);
+String _randomSalutation() => salutations[_random.nextInt(salutations.length)];
 
-final List<String> salutations = [
+final _random = Random();
+
+const salutations = [
   '안녕하세요', // annyeonghaseyo
   'こんにちは', // Kon'nichiwa
   '你好', // Nǐ hǎo
@@ -50,7 +53,3 @@ final List<String> salutations = [
   'Shalom',
   'Tena koutou',
 ];
-
-String getSalutation() {
-  return salutations[rng.nextInt(salutations.length)];
-}
