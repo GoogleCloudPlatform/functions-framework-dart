@@ -51,7 +51,11 @@ The Dart `build_runner` tool generates the following files
 Run the `build_runner` tool, as shown here:
 
 ```shell
-$ dart run build_runner build
+dart run build_runner build --delete-conflicting-outputs
+```
+
+Output
+```text
 [INFO] Generating build script completed, took 337ms
 [INFO] Reading cached asset graph completed, took 48ms
 [INFO] Checking for updates since last build completed, took 426ms
@@ -63,21 +67,34 @@ $ dart run build_runner build
 ## Test the function
 
 ```shell
-$ dart test
+dart test
+```
+
+Output
+```text
 00:02 +1: All tests passed!
 ```
 
 ## Run the function
 
 ```shell
-$ dart run bin/server.dart
+dart run bin/server.dart
+```
+
+Output
+```text
 Listening on :8080
 ```
 
 From another terminal, send a JSON request:
 
 ```shell
-$ curl -X POST -H "content-type: application/json" -d '{ "name": "World" }' -i -w "\n" localhost:8080
+curl -X POST -H "content-type: application/json" \
+  -d '{ "name": "World" }' -i -w "\n" localhost:8080
+```
+
+Output
+```text
 HTTP/1.1 200 OK
 date: Sat, 19 Dec 2020 02:17:42 GMT
 content-length: 37

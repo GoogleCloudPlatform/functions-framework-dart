@@ -63,11 +63,12 @@ gcloud beta run deploy greeting --allow-unauthenticated --source=.
 Output:
 
 ```text
-Building using Dockerfile and deploying container to Cloud Run service [greeting] in project [dart-demo] region [us-central1]
+Building using Dockerfile and deploying container to Cloud Run service [greeting]
+in project [dart-demo] region [us-central1]
 ✓ Building and deploying new service... Done.
   ✓ Uploading sources...
-  ✓ Building Container... Logs are available at [https://console.cloud.google.com/cloud-build/builds/df7f07d1-d88b-4443-a2b1-bdfd3cdab15b?project=700116488077].
-  ✓ Creating Revision... Revision deployment finished. Waiting for health check to begin.
+  ✓ Building Container... Logs are available at [https://...].
+  ✓ Creating Revision... Revision deployment finished. Waiting for health.
   ✓ Routing traffic...
   ✓ Setting IAM Policy...
 Done.
@@ -88,7 +89,8 @@ If you have `curl` installed on your system, you can enter the following:
 
 ```shell
 URL=http://localhost:8080  # or your Cloud Run service URL
-curl -X POST -H "content-type: application/json" -d '{ "name": "World" }' -w "\n" $URL
+curl -X POST -H "content-type: application/json" \
+     -d '{ "name": "World" }' -w "\n" $URL
 ````
 
 Output (example):
@@ -150,6 +152,11 @@ replace {DESKTOP} with `windows`, `macos`, or `linux`:
 flutter run -d {DESKTOP} --dart-define=ENV=prod
 ```
 
+## frontend_cli
+
+For a very simple command-line client to access the backend, see
+[frontend_cli].
+
 ### Try it out
 
 ![flutter_demo.png](images/flutter_demo.png)
@@ -164,6 +171,9 @@ https://cloud.google.com/run
 
 [Dart]:
 https://dart.dev
+
+[frontend_cli]:
+./frontend/
 
 [Google Cloud]:
 https://cloud.google.com/
