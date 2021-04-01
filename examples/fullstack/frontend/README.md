@@ -12,7 +12,8 @@ demo.
 
 ## Environment
 
-Before beginning, enable macos development:
+If you have not enabled desktop support for your Flutter installation,
+do so now with one of the following commands, as appropriate for your system:
 
 ```shell
 flutter config --enable-windows-desktop
@@ -20,21 +21,28 @@ flutter config --enable-macos-desktop
 flutter config --enable-linux-desktop
 ```
 
+
+> In any of the commands below, replace DESKTOP with `windows`, `macos`, or
+> `linux`.
+
+
+### dev and prod environments
+
 Configuration for `dev` and `prod` environments is stored under `assets/config`.
 
 By default running `flutter run` will use `dev`:
 
 ```shell
-flutter run -d macos
+flutter run -d DESKTOP
 ```
 
 To use `prod` specify your environment when running `flutter run`:
 
 ```shell
-flutter run -d macos --dart-define=ENV=prod
+flutter run -d DESKTOP --dart-define=ENV=prod
 ```
 
-### Calling the backend API
+## Calling the backend API
 
 The `Greeting` class for invoking the backend API is in `lib/services/api.dart`.
 
@@ -74,3 +82,4 @@ Output:
 > Note: the JSON serializer code is maintained separately from the code in the
 > backend. Tightly coupling client and server code through shared libraries
 > (packages) is considered an anti-pattern with microservice architecture.
+
