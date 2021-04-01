@@ -23,7 +23,7 @@ Future<void> main(List<String> args) async {
 FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
     case 'function':
-      return JsonFunctionTarget(
+      return JsonWithContextFunctionTarget(
         function_library.function,
         (json) {
           if (json is Map<String, dynamic>) {
