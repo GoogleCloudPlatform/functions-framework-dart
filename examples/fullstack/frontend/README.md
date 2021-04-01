@@ -15,7 +15,9 @@ demo.
 Before beginning, enable macos development:
 
 ```shell
+flutter config --enable-windows-desktop
 flutter config --enable-macos-desktop
+flutter config --enable-linux-desktop
 ```
 
 Configuration for `dev` and `prod` environments is stored under `assets/config`.
