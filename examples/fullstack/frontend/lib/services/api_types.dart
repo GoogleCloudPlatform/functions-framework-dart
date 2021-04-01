@@ -26,13 +26,6 @@ class GreetingRequest {
       _$GreetingRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$GreetingRequestToJson(this);
-
-  @override
-  bool operator ==(Object other) =>
-      other is GreetingRequest && other.name == name;
-
-  @override
-  int get hashCode => name.hashCode;
 }
 
 @JsonSerializable()
@@ -46,13 +39,4 @@ class GreetingResponse {
       _$GreetingResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$GreetingResponseToJson(this);
-
-  @override
-  bool operator ==(Object other) =>
-      other is GreetingResponse &&
-      other.salutation == salutation &&
-      other.name == name;
-
-  @override
-  int get hashCode => salutation.hashCode ^ name.hashCode;
 }
