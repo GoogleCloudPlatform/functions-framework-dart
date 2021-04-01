@@ -22,10 +22,11 @@ import 'api_types.dart';
 export 'api_types.dart';
 
 @CloudFunction()
-GreetingResponse function(GreetingRequest request) {
+GreetingResponse function(GreetingRequest request, RequestContext context) {
   final name = request.name ?? 'World';
-  final json = GreetingResponse(salutation: getSalutation(), name: name);
-  return json;
+  final response = GreetingResponse(salutation: getSalutation(), name: name);
+  context.logger.info('greetingResponse: ${response.toJson()}');
+  return response;
 }
 
 final Random rng = Random(DateTime.now().millisecondsSinceEpoch);
