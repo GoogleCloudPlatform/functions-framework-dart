@@ -16,9 +16,9 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
+import 'package:source_helper/source_helper.dart';
 
 import 'constants.dart';
-import 'utils.dart';
 
 class SupportedFunctionType {
   final String libraryUri;
