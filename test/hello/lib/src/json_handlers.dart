@@ -25,12 +25,12 @@ void pubSubHandler(PubSub pubSub, RequestContext context) {
 }
 
 @CloudFunction()
-FutureOr<bool> jsonHandler(
+FutureOr<Map<String, dynamic>> jsonHandler(
   Map<String, dynamic> request,
   RequestContext context,
 ) {
   print('Keys: ${request.keys.join(', ')}');
   context.responseHeaders['key_count'] = request.keys.length.toString();
   context.responseHeaders['multi'] = ['item1', 'item2'];
-  return request.isEmpty;
+  return {'isEmpty': request.isEmpty};
 }

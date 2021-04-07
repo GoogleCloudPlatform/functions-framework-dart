@@ -50,7 +50,9 @@ class SupportedFunctionType {
         lib.exportNamespace.get(typeDefName) as TypeAliasElement;
 
     final functionType = handlerTypeAlias.instantiate(
-      typeArguments: [],
+      typeArguments: handlerTypeAlias.typeParameters
+          .map((e) => e.instantiate(nullabilitySuffix: NullabilitySuffix.none))
+          .toList(),
       nullabilitySuffix: NullabilitySuffix.none,
     );
 
