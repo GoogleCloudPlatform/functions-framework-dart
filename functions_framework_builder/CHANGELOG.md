@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1
+
+- Allow the latest version of `package:build_config`.
+
 ## 0.4.0
 
 - Generate null-safe code.
