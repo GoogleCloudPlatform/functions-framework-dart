@@ -5,7 +5,7 @@ normal developer workflow.
 
 ## Prerequisites
 
-* [Dart SDK] v2.10+
+* [Dart SDK] v2.12+
 * Optional: [curl]
 
 ## Get a copy of the `hello` example
