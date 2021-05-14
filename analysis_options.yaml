@@ -7,6 +7,7 @@ linter:
   - always_declare_return_types
   - always_require_non_null_named_parameters
   - annotate_overrides
+  - avoid_dynamic_calls
   - avoid_bool_literals_in_conditional_expressions
   - avoid_catching_errors
   - avoid_classes_with_only_static_members
