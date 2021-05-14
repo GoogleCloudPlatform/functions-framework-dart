@@ -16,6 +16,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'cloud_event.g.dart';
 
+/// Represents [CloudEvents](https://cloudevents.io/) data.
+///
+/// Use this as the parameter in a function you wish to use as a handler for
+/// CloudEvents.
 @JsonSerializable(includeIfNull: false, checked: true)
 class CloudEvent {
   @JsonKey(required: true)
