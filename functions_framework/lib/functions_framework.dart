@@ -21,7 +21,7 @@
 ///
 /// @CloudFunction()
 /// Response function(Request request) => Response.ok('Hello, World!');
-// ```
+/// ```
 library functions_framework;
 
 export 'src/bad_request_exception.dart' show BadRequestException;
