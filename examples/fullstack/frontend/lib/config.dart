@@ -44,7 +44,7 @@ class Config {
   static Future<Config> load(Environment env) async {
     final file = 'assets/config/${env.toName()}.json';
     final data = await rootBundle.loadString(file);
-    final json = jsonDecode(data);
+    final json = jsonDecode(data) as Map<String, dynamic>;
     return Config(greetingsUrl: json['greetingUrl'] as String);
   }
 
