@@ -15,9 +15,15 @@
 import 'package:meta/meta.dart';
 import 'package:shelf/shelf.dart';
 
+import 'cloud_event.dart';
 import 'log_severity.dart';
 import 'logging.dart';
 
+/// Provides access to a [RequestLogger], the source [Request] and response
+/// headers for a typed function handler.
+///
+/// Can be used as an optional second parameter in a function definition that
+/// accepts a [CloudEvent] or a custom type.
 class RequestContext {
   final RequestLogger logger;
 

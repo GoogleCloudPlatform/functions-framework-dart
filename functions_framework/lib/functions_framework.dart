@@ -12,6 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// Provides the features needed to *define* Cloud Functions.
+///
+/// ```dart
+/// // lib/functions.dart
+/// import 'package:functions_framework/functions_framework.dart';
+/// import 'package:shelf/shelf.dart';
+///
+/// @CloudFunction()
+/// Response function(Request request) => Response.ok('Hello, World!');
+// ```
+library functions_framework;
+
 export 'src/bad_request_exception.dart' show BadRequestException;
 export 'src/cloud_event.dart' show CloudEvent;
 export 'src/cloud_function.dart' show CloudFunction;

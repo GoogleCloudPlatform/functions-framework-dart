@@ -20,22 +20,43 @@ import 'cloud_event.dart';
 import 'log_severity.dart';
 import 'request_context.dart';
 
+/// The shape of a handler for [CloudEvent] types.
 typedef CloudEventHandler = FutureOr<void> Function(CloudEvent request);
 
+/// The shape of a handler for [CloudEvent] types while also providing a
+/// [RequestContext].
 typedef CloudEventWithContextHandler = FutureOr<void> Function(
   CloudEvent request,
   RequestContext context,
 );
 
+/// The shape of a handler that supports a custom [RequestType] and
+/// [ResponseType].
+///
+/// The [RequestType] must be either a type compatible with a JSON literal or
+/// have a `fromJson` constructor with a single, positional parameter that is
+/// compatible with a JSON literal.
+///
+/// The [ResponseType] must be either a type compatible with a JSON literal or
+/// have a `toJson()` function with a returns type compatible with a JSON
+/// literal.
 typedef JsonHandler<RequestType, ResponseType> = FutureOr<ResponseType>
     Function(RequestType request);
 
+/// The shape of a handler that supports a custom [RequestType] and
+/// [ResponseType] and while also providing a [RequestContext].
+///
+/// See [JsonHandler] for the type requirements for [RequestType] and
+/// [ResponseType].
 typedef JsonWithContextHandler<RequestType, ResponseType>
     = FutureOr<ResponseType> Function(
   RequestType request,
   RequestContext context,
 );
 
+/// The shape of a basic handler that follows the
+/// [package:shelf](https://pub.dev/packages/shelf) [Handler] pattern while also
+/// providing a [RequestLogger].
 typedef HandlerWithLogger = FutureOr<Response> Function(
   Request request,
   RequestLogger logger,

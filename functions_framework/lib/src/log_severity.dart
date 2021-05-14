@@ -12,6 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'request_context.dart';
+import 'typedefs.dart';
+
+/// Allows logging at a specified severity.
+///
+/// Can be used as the second parameter in functions shaped like
+/// [HandlerWithLogger]. Also exposed by [RequestContext].
+///
+/// Compatible with the
+/// [log severities](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity)
+/// support by Google Cloud.
 abstract class RequestLogger {
   const RequestLogger();
 

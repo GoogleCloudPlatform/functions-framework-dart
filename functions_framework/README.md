@@ -86,7 +86,7 @@ properly format your code.
 
 ## Licensing
 
-Apache 2.0; see [`LICENSE`](LICENSE) for details.
+Apache 2.0; see [`LICENSE`][license] for details.
 
 <!-- Repo links -->
 [ff_dart]: https://github.com/GoogleCloudPlatform/functions-framework-dart
@@ -123,3 +123,4 @@ https://github.com/GoogleCloudPlatform/functions-framework-dart/actions?query=wo
 [cloud run quickstart]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/docs/quickstarts/03-quickstart-cloudrun.md
 [quickstarts]: https://github.com/GoogleCloudPlatform/functions-framework-dart/tree/main/docs/quickstarts
 [contributing]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/CONTRIBUTING.md
+[license]: https://github.com/GoogleCloudPlatform/functions-framework-dart/blob/main/functions_framework/LICENSE

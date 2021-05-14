@@ -12,6 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// Provides the features needed to *execute* Cloud Functions.
+///
+/// Typically, this library is imported in `bin/server.dart` or similar.
+///
+/// While it's possible to use this library from hand-written code, you should
+/// use
+/// [package:functions_framework_builder](https://pub.dev/packages/functions_framework_builder)
+/// to generate server code instead.
+library serve;
+
 import 'dart:async';
 import 'dart:io';
 
