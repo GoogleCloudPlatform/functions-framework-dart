@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1-dev
+
+- Improve package documentation.
+
 ## 0.4.0
 
 - Now null-safe.
