@@ -10,7 +10,7 @@ projects from templates. Currently there are three templates:
 
 ## Prerequisites
 
-- [Dart SDK] v2.10+
+- [Dart SDK] v2.12+
 
 ## Install dartfn
 
