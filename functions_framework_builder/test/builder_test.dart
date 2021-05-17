@@ -502,6 +502,20 @@ package:$_pkgName/functions.dart:8:10
     );
   });
 
+  test('freezed style mixed in json types are allowed', () async {
+    final inputContent =
+        File('test/test_examples/freezed_style_json_mixin_handler.dart')
+            .readAsStringSync();
+
+    final srcs = {'$_pkgName|lib/functions.dart': inputContent};
+
+    await testBuilder(
+      functionsFrameworkBuilder(),
+      srcs,
+      reader: await PackageAssetReader.currentIsolate(),
+    );
+  });
+
   group('invalid function shapes are not allowed', () {
     final onlyFunctionMatcher =
         startsWith('Only top-level, public functions are supported.');
