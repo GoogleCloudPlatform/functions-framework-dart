@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.2
+
+- Support classes with `toJson` methods defined via mix-in.
+- Allow the latest `package:functions_framework`.
+
 ## 0.4.1
 
 - Allow the latest version of `package:build_config`.
