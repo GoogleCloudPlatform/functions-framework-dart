@@ -99,15 +99,12 @@ JsonReturnKind _validJsonReturnTypeCore(DartType type) {
 
   // Look for a `toJson` function that returns a JSON-able type
   if (type is InterfaceType) {
-    final toJsonMethod = [
-      type.getMethod('toJson'),
-      ...type.mixins.map((mixin) => mixin.getMethod('toJson'))
-    ].firstWhere(
-        (element) =>
-            element != null &&
-            element.parameters.every((element) => element.isOptional),
-        orElse: () => null);
-    if (toJsonMethod != null) type = toJsonMethod.returnType;
+    final toJsonMethod =
+        type.element.lookUpMethod('toJson', type.element.library);
+    if (toJsonMethod != null &&
+        toJsonMethod.parameters.every((element) => element.isOptional)) {
+      type = toJsonMethod.returnType;
+    }
   }
 
   return _validJsonType(type, true)
