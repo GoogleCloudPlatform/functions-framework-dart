@@ -40,15 +40,15 @@ jobs:
         sdk: stable
     - uses: actions/checkout@v2
     - run: dart --version
-    - id: pub_upgrade
-      run: pub upgrade
-    - if: "always() && steps.pub_upgrade.conclusion == 'success'"
+    - id: pub_get
+      run: dart pub get
+    - if: "always() && steps.pub_get.conclusion == 'success'"
       run: dartfmt -n --set-exit-if-changed .
-    - if: "always() && steps.pub_upgrade.conclusion == 'success'"
+    - if: "always() && steps.pub_get.conclusion == 'success'"
       run: dartanalyzer --fatal-infos .
-    - if: "always() && steps.pub_upgrade.conclusion == 'success'"
+    - if: "always() && steps.pub_get.conclusion == 'success'"
       run: pub run test
-    - if: "always() && steps.pub_upgrade.conclusion == 'success'"
+    - if: "always() && steps.pub_get.conclusion == 'success'"
       run: |
         pub run build_runner build  --delete-conflicting-outputs
         export DIFF_OUTPUT="$(git diff)"
