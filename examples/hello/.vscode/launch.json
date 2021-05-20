@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "name": "Launch Function",
+      "type": "dart",
+      "request": "launch",
+      "program": "bin/server.dart"
+    }
+  ]
+}
