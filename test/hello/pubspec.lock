@@ -63,7 +63,7 @@ packages:
       name: build_resolvers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   build_runner:
     dependency: "direct dev"
     description:
@@ -196,7 +196,7 @@ packages:
       path: "../../functions_framework_builder"
       relative: true
     source: path
-    version: "0.4.1"
+    version: "0.4.2"
   glob:
     dependency: transitive
     description:
