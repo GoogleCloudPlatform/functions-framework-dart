@@ -1,4 +1,4 @@
-# Created with package:mono_repo v4.1.0
+# Created with package:mono_repo v5.0.0
 name: Dart Unit CI
 on:
   push:
@@ -34,10 +34,10 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: dartfn_pub_upgrade
-        name: dartfn; pub upgrade
+        name: dartfn; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: dartfn
-        run: pub upgrade
+        run: dart pub upgrade
       - name: dartfn; dart test
         if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
         working-directory: dartfn
@@ -62,10 +62,10 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: functions_framework_builder_pub_upgrade
-        name: functions_framework_builder; pub upgrade
+        name: functions_framework_builder; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework_builder
-        run: pub upgrade
+        run: dart pub upgrade
       - name: functions_framework_builder; dart test
         if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
@@ -90,10 +90,10 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: test_hello_pub_upgrade
-        name: test/hello; pub upgrade
+        name: test/hello; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
-        run: pub upgrade
+        run: dart pub upgrade
       - name: "test/hello; dart test --run-skipped -t presubmit-only"
         if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
@@ -118,10 +118,10 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: test_hello_pub_upgrade
-        name: test/hello; pub upgrade
+        name: test/hello; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
-        run: pub upgrade
+        run: dart pub upgrade
       - name: "test/hello; dart test -x presubmit-only"
         if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
@@ -146,10 +146,10 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: dartfn_pub_upgrade
-        name: dartfn; pub upgrade
+        name: dartfn; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: dartfn
-        run: pub upgrade
+        run: dart pub upgrade
       - name: "dartfn; dart test --run-skipped -t presubmit-only"
         if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
         working-directory: dartfn
@@ -174,10 +174,10 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: functions_framework_pub_upgrade
-        name: functions_framework; pub upgrade
+        name: functions_framework; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework
-        run: pub upgrade
+        run: dart pub upgrade
       - name: "functions_framework; dart test --run-skipped -t presubmit-only"
         if: "always() && steps.functions_framework_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework
@@ -202,10 +202,10 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: test_hello_pub_upgrade
-        name: test/hello; pub upgrade
+        name: test/hello; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
-        run: pub upgrade
+        run: dart pub upgrade
       - name: "test/hello; dart test --run-skipped -t presubmit-only"
         if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
@@ -230,10 +230,10 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: dartfn_pub_upgrade
-        name: dartfn; pub upgrade
+        name: dartfn; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: dartfn
-        run: pub upgrade
+        run: dart pub upgrade
       - name: dartfn; dart test
         if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
         working-directory: dartfn
@@ -258,10 +258,10 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: functions_framework_builder_pub_upgrade
-        name: functions_framework_builder; pub upgrade
+        name: functions_framework_builder; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework_builder
-        run: pub upgrade
+        run: dart pub upgrade
       - name: functions_framework_builder; dart test
         if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
@@ -286,10 +286,10 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: test_hello_pub_upgrade
-        name: test/hello; pub upgrade
+        name: test/hello; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
-        run: pub upgrade
+        run: dart pub upgrade
       - name: "test/hello; dart test -x presubmit-only"
         if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello

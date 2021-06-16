@@ -1,4 +1,4 @@
-# Created with package:mono_repo v4.1.0
+# Created with package:mono_repo v5.0.0
 name: Dart Lint CI
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - name: mono_repo self validate
-        run: dart pub global activate mono_repo 4.1.0
+        run: dart pub global activate mono_repo 5.0.0
       - name: mono_repo self validate
         run: dart pub global run mono_repo generate --validate
   job_002:
@@ -43,7 +43,7 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:dartfn-functions_framework-functions_framework_builder-test/hello;commands:dartanalyzer_1"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:dartfn-functions_framework-functions_framework_builder-test/hello;commands:analyze_1"
           restore-keys: |
             os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:dartfn-functions_framework-functions_framework_builder-test/hello
             os:ubuntu-latest;pub-cache-hosted;dart:2.12.0
@@ -55,37 +55,37 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: dartfn_pub_upgrade
-        name: dartfn; pub upgrade
+        name: dartfn; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: dartfn
-        run: pub upgrade
+        run: dart pub upgrade
       - name: dartfn; dart analyze .
         if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
         working-directory: dartfn
         run: dart analyze .
       - id: functions_framework_pub_upgrade
-        name: functions_framework; pub upgrade
+        name: functions_framework; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework
-        run: pub upgrade
+        run: dart pub upgrade
       - name: functions_framework; dart analyze .
         if: "always() && steps.functions_framework_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework
         run: dart analyze .
       - id: functions_framework_builder_pub_upgrade
-        name: functions_framework_builder; pub upgrade
+        name: functions_framework_builder; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework_builder
-        run: pub upgrade
+        run: dart pub upgrade
       - name: functions_framework_builder; dart analyze .
         if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: dart analyze .
       - id: test_hello_pub_upgrade
-        name: test/hello; pub upgrade
+        name: test/hello; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
-        run: pub upgrade
+        run: dart pub upgrade
       - name: test/hello; dart analyze .
         if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
@@ -98,7 +98,7 @@ jobs:
         uses: actions/cache@v2.1.6
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:dartfn-functions_framework-functions_framework_builder-test/hello;commands:dartfmt-dartanalyzer_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:dartfn-functions_framework-functions_framework_builder-test/hello;commands:format-analyze_0"
           restore-keys: |
             os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:dartfn-functions_framework-functions_framework_builder-test/hello
             os:ubuntu-latest;pub-cache-hosted;dart:dev
@@ -110,10 +110,10 @@ jobs:
       - id: checkout
         uses: actions/checkout@v2.3.4
       - id: dartfn_pub_upgrade
-        name: dartfn; pub upgrade
+        name: dartfn; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: dartfn
-        run: pub upgrade
+        run: dart pub upgrade
       - name: "dartfn; dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
         working-directory: dartfn
@@ -123,10 +123,10 @@ jobs:
         working-directory: dartfn
         run: dart analyze --fatal-infos .
       - id: functions_framework_pub_upgrade
-        name: functions_framework; pub upgrade
+        name: functions_framework; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework
-        run: pub upgrade
+        run: dart pub upgrade
       - name: "functions_framework; dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.functions_framework_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework
@@ -136,10 +136,10 @@ jobs:
         working-directory: functions_framework
         run: dart analyze --fatal-infos .
       - id: functions_framework_builder_pub_upgrade
-        name: functions_framework_builder; pub upgrade
+        name: functions_framework_builder; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: functions_framework_builder
-        run: pub upgrade
+        run: dart pub upgrade
       - name: "functions_framework_builder; dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
@@ -149,10 +149,10 @@ jobs:
         working-directory: functions_framework_builder
         run: dart analyze --fatal-infos .
       - id: test_hello_pub_upgrade
-        name: test/hello; pub upgrade
+        name: test/hello; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: test/hello
-        run: pub upgrade
+        run: dart pub upgrade
       - name: "test/hello; dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
         working-directory: test/hello
