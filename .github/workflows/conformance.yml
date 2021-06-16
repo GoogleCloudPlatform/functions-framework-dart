@@ -36,7 +36,7 @@ jobs:
     - run: dart --version
 
     - uses: actions/checkout@v2
-    - run: pub upgrade
+    - run: dart pub upgrade
       working-directory: test/hello
 
     - name: Run HTTP conformance tests
