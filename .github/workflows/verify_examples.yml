@@ -50,7 +50,7 @@ jobs:
       run: dart test
     - if: "always() && steps.pub_get.conclusion == 'success'"
       run: |
-        pub run build_runner build  --delete-conflicting-outputs
+        dart run build_runner build  --delete-conflicting-outputs
         export DIFF_OUTPUT="$(git diff)"
         if [[ $DIFF_OUTPUT ]]; then
           echo "::error::Build needs to be re-run!"
