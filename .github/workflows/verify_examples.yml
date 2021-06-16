@@ -43,11 +43,11 @@ jobs:
     - id: pub_get
       run: dart pub get
     - if: "always() && steps.pub_get.conclusion == 'success'"
-      run: dart format -n --set-exit-if-changed .
+      run: dart format --output=none --set-exit-if-changed .
     - if: "always() && steps.pub_get.conclusion == 'success'"
       run: dart analyze --fatal-infos .
     - if: "always() && steps.pub_get.conclusion == 'success'"
-      run: pub run test
+      run: dart run testdart
     - if: "always() && steps.pub_get.conclusion == 'success'"
       run: |
         pub run build_runner build  --delete-conflicting-outputs
