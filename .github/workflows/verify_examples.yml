@@ -47,7 +47,7 @@ jobs:
     - if: "always() && steps.pub_get.conclusion == 'success'"
       run: dart analyze --fatal-infos .
     - if: "always() && steps.pub_get.conclusion == 'success'"
-      run: dart run testdart
+      run: dart test
     - if: "always() && steps.pub_get.conclusion == 'success'"
       run: |
         pub run build_runner build  --delete-conflicting-outputs
