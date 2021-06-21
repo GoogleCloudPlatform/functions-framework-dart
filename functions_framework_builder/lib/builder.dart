@@ -31,6 +31,7 @@ import 'package:source_gen/source_gen.dart';
 
 import 'src/constants.dart';
 import 'src/function_type_validator.dart';
+import 'src/middleware_validator.dart';
 import 'src/supported_function_type.dart';
 
 Builder functionsFrameworkBuilder([BuilderOptions? options]) =>
