@@ -76,3 +76,38 @@ ${_types.map((e) => '  ${e.typedefName} [${e.typeDescription}] from ${e.libraryU
         ],
       );
 }
+
+class MiddlewareValiator {
+  final SupportedMiddlewareType _type;
+
+  MiddlewareValiator._(this._type);
+
+  FactoryData validate(
+    LibraryElement library,
+    String targetName,
+    FunctionElement element,
+  ) {
+    final reference = _type.createReference(library, targetName, element);
+    if (reference != null) {
+      return reference;
+    }
+
+    throw InvalidGenerationSourceError(
+      '''
+Not compatible with a supported function shape:
+${_type.typedefName} [${_type.typeDescription}] from ${_type.libraryUri}
+''',
+      element: element,
+    );
+  }
+
+  static Future<MiddlewareValiator> create(Resolver resolver) async =>
+      MiddlewareValiator._(
+        await SupportedMiddlewareType.create(
+          resolver,
+          'package:shelf/shelf.dart',
+          'Middleware',
+          'MiddlewareTarget',
+        ),
+      );
+}

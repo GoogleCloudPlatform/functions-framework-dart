@@ -23,14 +23,20 @@ Future<void> run(
   Handler handler,
   Future<bool> shutdownSignal,
   Middleware loggingMiddleware,
+  List<Middleware> middleware,
 ) async {
-  final pipeline = const Pipeline()
+  var middlewarePipeline = const Pipeline()
       .addMiddleware(loggingMiddleware)
-      .addMiddleware(_forbiddenAssetMiddleware)
-      .addHandler(handler);
+      .addMiddleware(_forbiddenAssetMiddleware);
+
+  for (final middleware in middleware) {
+    middlewarePipeline = middlewarePipeline.addMiddleware(middleware);
+  }
+
+  final handlerPipeline = middlewarePipeline.addHandler(handler);
 
   final server = await shelf_io.serve(
-    pipeline,
+    handlerPipeline,
     InternetAddress.anyIPv4,
     port,
   );

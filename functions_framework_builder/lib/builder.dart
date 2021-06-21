@@ -47,13 +47,53 @@ class _FunctionsFrameworkBuilder implements Builder {
   @override
   Future<void> build(BuildStep buildStep) async {
     final entries = <String, FactoryData>{};
+    final middleware = <String, FactoryData>{};
 
     final input = buildStep.inputId;
 
     final libraryElement = await buildStep.resolver.libraryFor(input);
     final validator = await FunctionTypeValidator.create(buildStep.resolver);
+    final middlewareValidator =
+        await MiddlewareValiator.create(buildStep.resolver);
 
-    for (var annotatedElement in _fromLibrary(libraryElement)) {
+    for (final annotatedElement in _fromLibrary(
+      libraryElement,
+      _cloudFunctionMiddlewareChecker,
+    )) {
+      final element = annotatedElement.element;
+
+      if (element is! FunctionElement || element.isPrivate) {
+        throw InvalidGenerationSourceError(
+          'Only top-level, public functions are supported.',
+          element: element,
+        );
+      }
+
+      final targetReader = annotatedElement.annotation.read('target');
+
+      final targetName =
+          targetReader.isNull ? element.name : targetReader.stringValue;
+
+      if (middleware.containsKey(targetName)) {
+        throw InvalidGenerationSourceError(
+          'A function has already been annotated with target "$targetName".',
+          element: element,
+        );
+      }
+
+      final invokeExpression = middlewareValidator.validate(
+        libraryElement,
+        targetName,
+        element,
+      );
+
+      middleware[targetName] = invokeExpression;
+    }
+
+    for (var annotatedElement in _fromLibrary(
+      libraryElement,
+      _cloudFunctionChecker,
+    )) {
       final element = annotatedElement.element;
       if (element is! FunctionElement || element.isPrivate) {
         throw InvalidGenerationSourceError(
@@ -107,7 +147,13 @@ import 'package:functions_framework/serve.dart';
 import '${input.uri}' as $functionsLibraryPrefix;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _nameToFunctionTarget);
+  await serve(
+    args,
+    _nameToFunctionTarget,
+    [
+      ${middleware.values.map((m) => m.expression).join(', ')},
+    ]
+  );
 }
 
 FunctionTarget? _nameToFunctionTarget(String name) {
@@ -135,7 +181,10 @@ ${cases.join('\n')}
   }
 }
 
-Iterable<AnnotatedElement> _fromLibrary(LibraryElement library) sync* {
+Iterable<AnnotatedElement> _fromLibrary(
+  LibraryElement library,
+  TypeChecker checker,
+) sync* {
   // Merging the `topLevelElements` picks up private elements and fields.
   // While neither is supported, it allows us to provide helpful errors if devs
   // are using the annotations incorrectly.
@@ -145,7 +194,7 @@ Iterable<AnnotatedElement> _fromLibrary(LibraryElement library) sync* {
   };
 
   for (var element in mergedElements) {
-    final annotations = _checker.annotationsOf(element).toList();
+    final annotations = checker.annotationsOf(element).toList();
 
     if (annotations.isEmpty) {
       continue;
@@ -160,4 +209,6 @@ Iterable<AnnotatedElement> _fromLibrary(LibraryElement library) sync* {
   }
 }
 
-const _checker = TypeChecker.fromRuntime(CloudFunction);
+const _cloudFunctionChecker = TypeChecker.fromRuntime(CloudFunction);
+const _cloudFunctionMiddlewareChecker =
+    TypeChecker.fromRuntime(CloudFunctionMiddleware);

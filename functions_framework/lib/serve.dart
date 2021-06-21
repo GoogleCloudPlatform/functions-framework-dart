@@ -27,6 +27,7 @@ import 'dart:io';
 
 import 'package:io/ansi.dart';
 import 'package:io/io.dart';
+import 'package:shelf/shelf.dart';
 
 import 'src/bad_configuration.dart';
 import 'src/cloud_metadata.dart';
@@ -38,6 +39,7 @@ import 'src/run.dart';
 export 'src/bad_request_exception.dart' show BadRequestException;
 export 'src/function_target.dart'
     show FunctionTarget, JsonFunctionTarget, JsonWithContextFunctionTarget;
+export 'src/middleware_target.dart' show MiddlewareTarget;
 
 /// If there is an invalid configuration, [BadConfigurationException] will be
 /// thrown.
@@ -47,10 +49,11 @@ export 'src/function_target.dart'
 /// [ProcessSignal.sigint].
 Future<void> serve(
   List<String> args,
-  FunctionTarget? Function(String) nameToFunctionTarget,
-) async {
+  FunctionTarget? Function(String) nameToFunctionTarget, [
+  List<Middleware> middleware = const [],
+]) async {
   try {
-    await _serve(args, nameToFunctionTarget);
+    await _serve(args, nameToFunctionTarget, middleware);
   } on BadConfigurationException catch (e) {
     stderr.writeln(red.wrap(e.message));
     if (e.details != null) {
@@ -63,6 +66,7 @@ Future<void> serve(
 Future<void> _serve(
   List<String> args,
   FunctionTarget? Function(String) nameToFunctionTarget,
+  List<Middleware> middleware,
 ) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
@@ -125,5 +129,10 @@ Future<void> _serve(
   }
 
   await run(
-      config.port, functionTarget.handler, completer.future, loggingMiddleware);
+    config.port,
+    functionTarget.handler,
+    completer.future,
+    loggingMiddleware,
+    middleware,
+  );
 }
