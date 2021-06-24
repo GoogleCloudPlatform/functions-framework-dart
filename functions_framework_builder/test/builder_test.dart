@@ -37,6 +37,13 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
+Future<void> main(List<String> args) async {
+  await serve(
+    args,
+    _nameToFunctionTarget,
+  );
+}
+
 FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
     case 'handleGet':
@@ -62,6 +69,13 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
+Future<void> main(List<String> args) async {
+  await serve(
+    args,
+    _nameToFunctionTarget,
+  );
+}
+
 FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
     case 'some function':
@@ -97,6 +111,13 @@ FunctionTarget? _nameToFunctionTarget(String name) {
       file.readAsStringSync(),
       '''
 $_outputHeader
+Future<void> main(List<String> args) async {
+  await serve(
+    args,
+    _nameToFunctionTarget,
+  );
+}
+
 FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
 $lines
@@ -126,6 +147,13 @@ $lines
       file.readAsStringSync(),
       '''
 $_outputHeader
+Future<void> main(List<String> args) async {
+  await serve(
+    args,
+    _nameToFunctionTarget,
+  );
+}
+
 FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
 $lines
@@ -591,6 +619,139 @@ ${shape.key}
       });
     }
   });
+
+  group('Middleware', () {
+    test('with one middleware', () async {
+      await _generateTest(
+        r'''
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
+
+@CloudFunctionMiddleware()
+Handler middleware(Handler innerHandler) => (req) => innerHandler(req);
+''',
+        '''
+$_outputHeader
+Future<void> main(List<String> args) async {
+  await serve(
+    args,
+    _nameToFunctionTarget,
+    [
+      function_library.middleware,
+    ],
+  );
+}
+
+FunctionTarget? _nameToFunctionTarget(String name) {
+  switch (name) {
+    default:
+      return null;
+  }
+}
+''',
+      );
+    });
+
+    test('with multiple middlewares', () async {
+      await _generateTest(
+        r'''
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
+
+@CloudFunctionMiddleware()
+Handler middleware(Handler innerHandler) => (req) => innerHandler(req);
+
+@CloudFunctionMiddleware()
+Handler middleware2(Handler innerHandler) => (req) => innerHandler(req);
+''',
+        '''
+$_outputHeader
+Future<void> main(List<String> args) async {
+  await serve(
+    args,
+    _nameToFunctionTarget,
+    [
+      function_library.middleware,
+      function_library.middleware2,
+    ],
+  );
+}
+
+FunctionTarget? _nameToFunctionTarget(String name) {
+  switch (name) {
+    default:
+      return null;
+  }
+}
+''',
+      );
+    });
+
+    group('invalid function shapes are not allowed', () {
+      final onlyFunctionMatcher =
+          startsWith('Only top-level, public functions are supported.');
+      final notCompatibleMatcher = startsWith(
+        'Not compatible with a supported function shape:',
+      );
+
+      final invalidShapes = {
+        //
+        // Not functions
+        //
+        'class AClass{}': onlyFunctionMatcher,
+        'int field = 5;': onlyFunctionMatcher,
+        'int get getter => 5;': onlyFunctionMatcher,
+
+        //
+        // Double-annotated functions are not allowed
+        //
+        '''@CloudFunctionMiddleware() Response function(Request request) 
+        => null;''': startsWith(
+          'Cannot be annotated with `CloudFunctionMiddleware` more than once.',
+        ),
+
+        // Not enough params
+        'Handler handleGet() => null;': notCompatibleMatcher,
+        // First param is not positional
+        'Handler handleGet({Handler innerHandler}) => null;':
+            notCompatibleMatcher,
+        // Too many required params
+        'Handler handleGet(Handler innerHandler, int other) => null;':
+            notCompatibleMatcher,
+        // Param is wrong type
+        'Handler handleGet(int innerHandler) => null;': notCompatibleMatcher,
+        // Return type is wrong
+        'int handleGet(Handler innerHandler) => null;': notCompatibleMatcher,
+        // Return type is wrong
+        'Future<int> handleGet(Handler innerHandler) => null;':
+            notCompatibleMatcher,
+        // Return type is wrong
+        'FutureOr<int> handleGet(Handler innerHandler) => null;':
+            notCompatibleMatcher,
+        // Private functions do not work
+        'Handler _function(Handler innerHandler) => null;': onlyFunctionMatcher,
+      };
+
+      for (var shape in invalidShapes.entries) {
+        test('"${shape.key}"', () async {
+          await _generateThrows(
+            '''
+import 'package:functions_framework/functions_framework.dart';
+import 'package:shelf/shelf.dart';
+
+@CloudFunctionMiddleware()
+${shape.key}
+''',
+            isA<InvalidGenerationSourceError>().having(
+              (e) => e.toString(),
+              'toString()',
+              shape.value,
+            ),
+          );
+        });
+      }
+    });
+  });
 }
 
 Future<void> _generateThrows(String inputLibrary, Object matcher) async {
@@ -608,6 +769,13 @@ Future<void> _testItems(String inputContent, List<String> functions,
     inputContent,
     '''
 $_outputHeader
+Future<void> main(List<String> args) async {
+  await serve(
+    args,
+    _nameToFunctionTarget,
+  );
+}
+
 FunctionTarget? _nameToFunctionTarget(String name) {
   switch (name) {
 $entries
@@ -685,8 +853,4 @@ String get _outputHeader => '''
 
 import 'package:functions_framework/serve.dart';
 import 'package:$_pkgName/functions.dart' as function_library;
-
-Future<void> main(List<String> args) async {
-  await serve(args, _nameToFunctionTarget);
-}
 ''';

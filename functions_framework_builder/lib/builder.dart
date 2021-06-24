@@ -59,7 +59,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
     for (final annotatedElement in _fromLibrary(
       libraryElement,
-      _cloudFunctionMiddlewareChecker,
+      CloudFunctionMiddleware,
     )) {
       final element = annotatedElement.element;
 
@@ -93,7 +93,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
     for (var annotatedElement in _fromLibrary(
       libraryElement,
-      _cloudFunctionChecker,
+      CloudFunction,
     )) {
       final element = annotatedElement.element;
       if (element is! FunctionElement || element.isPrivate) {
@@ -128,6 +128,9 @@ class _FunctionsFrameworkBuilder implements Builder {
       for (var e in entries.values) '  case ${e.name}:return ${e.expression};',
     ];
 
+    final middlewareValues =
+        '[${middleware.values.map((m) => '${m.expression},').join()}],';
+
     var output = '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
@@ -148,13 +151,7 @@ import 'package:functions_framework/serve.dart';
 import '${input.uri}' as $functionsLibraryPrefix;
 
 Future<void> main(List<String> args) async {
-  await serve(
-    args,
-    _nameToFunctionTarget,
-    [
-      ${middleware.values.map((m) => m.expression).join(', ')},
-    ]
-  );
+  await serve(args, _nameToFunctionTarget, ${middleware.isNotEmpty ? middlewareValues : ''});
 }
 
 FunctionTarget? _nameToFunctionTarget(String name) {
@@ -184,7 +181,7 @@ ${cases.join('\n')}
 
 Iterable<AnnotatedElement> _fromLibrary(
   LibraryElement library,
-  TypeChecker checker,
+  Type searchType,
 ) sync* {
   // Merging the `topLevelElements` picks up private elements and fields.
   // While neither is supported, it allows us to provide helpful errors if devs
@@ -195,21 +192,18 @@ Iterable<AnnotatedElement> _fromLibrary(
   };
 
   for (var element in mergedElements) {
-    final annotations = checker.annotationsOf(element).toList();
+    final annotations =
+        TypeChecker.fromRuntime(searchType).annotationsOf(element).toList();
 
     if (annotations.isEmpty) {
       continue;
     }
     if (annotations.length > 1) {
       throw InvalidGenerationSourceError(
-        'Cannot be annotated with `CloudFunction` more than once.',
+        'Cannot be annotated with `$searchType` more than once.',
         element: element,
       );
     }
     yield AnnotatedElement(ConstantReader(annotations.single), element);
   }
 }
-
-const _cloudFunctionChecker = TypeChecker.fromRuntime(CloudFunction);
-const _cloudFunctionMiddlewareChecker =
-    TypeChecker.fromRuntime(CloudFunctionMiddleware);
