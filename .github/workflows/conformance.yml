@@ -40,7 +40,7 @@ jobs:
       working-directory: test/hello
 
     - name: Run HTTP conformance tests
-      uses: GoogleCloudPlatform/functions-framework-conformance/action@v0.3.10
+      uses: GoogleCloudPlatform/functions-framework-conformance/action@v0.3.12
       with:
         functionType: 'http'
         useBuildpacks: false
