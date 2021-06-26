@@ -43,14 +43,14 @@ jobs:
     - id: pub_get
       run: dart pub get
     - if: "always() && steps.pub_get.conclusion == 'success'"
-      run: dartfmt -n --set-exit-if-changed .
+      run: dart format --output=none --set-exit-if-changed .
     - if: "always() && steps.pub_get.conclusion == 'success'"
-      run: dartanalyzer --fatal-infos .
+      run: dart analyze --fatal-infos .
     - if: "always() && steps.pub_get.conclusion == 'success'"
-      run: pub run test
+      run: dart test
     - if: "always() && steps.pub_get.conclusion == 'success'"
       run: |
-        pub run build_runner build  --delete-conflicting-outputs
+        dart run build_runner build  --delete-conflicting-outputs
         export DIFF_OUTPUT="$(git diff)"
         if [[ $DIFF_OUTPUT ]]; then
           echo "::error::Build needs to be re-run!"
