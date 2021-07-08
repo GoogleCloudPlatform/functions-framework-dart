@@ -242,7 +242,7 @@ String _createLogEntry(
   LogSeverity severity, {
   Frame? stackFrame,
 }) {
-  // https://cloud.google.com/logging/docs/agent/configuration#special-fields
+  // https://cloud.google.com/logging/docs/agent/logging/configuration#special-fields
   final logContent = {
     'message': message,
     'severity': severity,
