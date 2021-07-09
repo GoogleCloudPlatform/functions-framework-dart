@@ -34,10 +34,7 @@ Middleware createLoggingMiddleware(String? projectId) =>
 
 /// Logging middleware that "does the right thing" when not hosted on
 /// Google Cloud.
-Middleware get _logSimple => const Pipeline()
-    .addMiddleware(logRequests())
-    .addMiddleware(_handleBadRequest)
-    .middleware;
+Middleware get _logSimple => logRequests().addMiddleware(_handleBadRequest);
 
 /// Wraps [innerHandler], but catches any errors of type [BadRequestException].
 ///

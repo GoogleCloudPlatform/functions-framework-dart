@@ -15,7 +15,7 @@ dependencies:
   io: ^1.0.0
   json_annotation: ^4.0.0
   meta: ^1.2.3
-  shelf: ^1.0.0
+  shelf: ^1.2.0
   stack_trace: ^1.9.6
 
 dev_dependencies:
