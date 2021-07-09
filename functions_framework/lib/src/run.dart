@@ -24,13 +24,10 @@ Future<void> run(
   Future<bool> shutdownSignal,
   Middleware loggingMiddleware,
 ) async {
-  final pipeline = const Pipeline()
-      .addMiddleware(loggingMiddleware)
-      .addMiddleware(_forbiddenAssetMiddleware)
-      .addHandler(handler);
-
   final server = await shelf_io.serve(
-    pipeline,
+    loggingMiddleware
+        .addMiddleware(_forbiddenAssetMiddleware)
+        .addHandler(handler),
     InternetAddress.anyIPv4,
     port,
   );
