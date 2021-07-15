@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.3
+
+- Support the latest `package:analyzer`.
+
 ## 0.4.2
 
 - Support classes with `toJson` methods defined via mix-in.
