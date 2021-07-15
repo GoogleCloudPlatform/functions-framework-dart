@@ -24,7 +24,7 @@ abstract class Command extends cr.Command {
 
   Command(this.context);
 
-  void write([Object obj]) {
+  void write([Object? obj]) {
     context.console.write(obj);
   }
 
@@ -46,7 +46,11 @@ class CommandContext {
   final Console console;
   final GeneratorConfig generator;
 
-  CommandContext({this.app, this.console, this.generator});
+  CommandContext({
+    required this.app,
+    required this.console,
+    required this.generator,
+  });
 }
 
 class AppInfo {
@@ -59,7 +63,7 @@ class AppInfo {
 class GeneratorConfig {
   final List<Generator> generators;
   final io.Directory cwd;
-  final GeneratorTarget target;
+  final GeneratorTarget? target;
 
-  GeneratorConfig({this.generators, this.cwd, this.target});
+  GeneratorConfig({required this.generators, required this.cwd, this.target});
 }

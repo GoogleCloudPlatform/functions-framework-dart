@@ -16,6 +16,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:collection/collection.dart';
+
 import '../../stagehand/common.dart';
 import '../../stagehand/stagehand.dart' as stagehand;
 import '../command.dart';
@@ -47,13 +49,13 @@ class GenerateCommand extends Command {
   @override
   Future<void> run() async {
     final generators = context.generator.generators;
-    final options = argResults;
+    final options = argResults!;
 
     if (options['machine']) {
       return write(_createMachineInfo(generators));
     }
 
-    if (argResults['list']) {
+    if (options['list']!) {
       return _listGenerators(generators);
     }
 
@@ -64,8 +66,7 @@ class GenerateCommand extends Command {
     }
 
     if (options.rest.length >= 2) {
-      return usageException(
-          'Too many arguments (should only be one generator).');
+      usageException('Too many arguments (should only be one generator).');
     }
 
     var generatorName = options.rest.first;
@@ -103,7 +104,7 @@ class GenerateCommand extends Command {
       write('${generator.numFiles()} files written.');
 
       var message = generator.getInstallInstructions();
-      if (message != null && message.isNotEmpty) {
+      if (message.isNotEmpty) {
         message = message.trim();
         message = message.split('\n').map((line) => '--> $line').join('\n');
         write('\n$message');
@@ -121,7 +122,7 @@ class GenerateCommand extends Command {
       };
 
       if (generator.entrypoint != null) {
-        m['entrypoint'] = generator.entrypoint.path;
+        m['entrypoint'] = generator.entrypoint!.path;
       }
 
       return m;
@@ -139,8 +140,6 @@ class GenerateCommand extends Command {
         .forEach(write);
   }
 
-  stagehand.Generator _getGenerator(String id) {
-    return context.generator.generators
-        .firstWhere((g) => g.id == id, orElse: () => null);
-  }
+  stagehand.Generator? _getGenerator(String id) =>
+      context.generator.generators.singleWhereOrNull((g) => g.id == id);
 }

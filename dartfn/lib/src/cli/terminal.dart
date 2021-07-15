@@ -23,7 +23,7 @@ class TerminalPrinter extends Printer {
   TerminalPrinter.fromPrinter(Printer printer) : super.fromPrinter(printer);
 
   @override
-  void write([Object obj]) {
+  void write([Object? obj]) {
     stdout(obj ?? '');
   }
 

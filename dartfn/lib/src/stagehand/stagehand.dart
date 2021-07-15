@@ -41,14 +41,18 @@ abstract class Generator implements Comparable<Generator> {
   final List<String> categories;
 
   final List<TemplateFile> files = [];
-  TemplateFile _entrypoint;
+  TemplateFile? _entrypoint;
 
-  Generator(this.id, this.label, this.description,
-      {this.categories = const []});
+  Generator(
+    this.id,
+    this.label,
+    this.description, {
+    this.categories = const [],
+  });
 
   /// The entrypoint of the application; the main file for the project, which an
   /// IDE might open after creating the project.
-  TemplateFile get entrypoint => _entrypoint;
+  TemplateFile? get entrypoint => _entrypoint;
 
   /// Add a new template file.
   TemplateFile addTemplateFile(TemplateFile file) {
@@ -58,21 +62,20 @@ abstract class Generator implements Comparable<Generator> {
 
   /// Return the template file wih the given [path].
   TemplateFile getFile(String path) =>
-      files.firstWhere((file) => file.path == path, orElse: () => null);
+      files.firstWhere((file) => file.path == path);
 
   /// Set the main entrypoint of this template. This is the 'most important'
   /// file of this template. An IDE might use this information to open this file
   /// after the user's project is generated.
   void setEntrypoint(TemplateFile entrypoint) {
     if (_entrypoint != null) throw StateError('entrypoint already set');
-    if (entrypoint == null) throw StateError('entrypoint is null');
     _entrypoint = entrypoint;
   }
 
   Future generate(
     String projectName,
     GeneratorTarget target, {
-    Map<String, String> additionalVars,
+    Map<String, String>? additionalVars,
   }) {
     final vars = {
       'projectName': normalizeProjectName(projectName),
@@ -116,11 +119,11 @@ abstract class GeneratorTarget {
 /// variables that can be substituted (`__myVar__`).
 class TemplateFile {
   final String path;
-  final String content;
+  final String? content;
 
-  List<int> _binaryData;
+  final List<int>? _binaryData;
 
-  TemplateFile(this.path, this.content);
+  TemplateFile(this.path, this.content) : _binaryData = null;
 
   TemplateFile.fromBinary(this.path, this._binaryData) : content = null;
 
@@ -140,9 +143,9 @@ class TemplateFile {
 
   List<int> _createContent(Map<String, String> vars) {
     if (isBinary) {
-      return _binaryData;
+      return _binaryData!;
     } else {
-      return utf8.encode(substituteVars(content, vars));
+      return utf8.encode(substituteVars(content!, vars));
     }
   }
 }

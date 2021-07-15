@@ -27,27 +27,26 @@ import 'console.dart';
 
 export 'terminal.dart' show TerminalPrinter;
 
-const String appName = 'dartfn';
-const String appDescription =
-    '$appName is a tool for managing Dart Functions-as-a-Service (FaaS) projects.';
+const String _appName = 'dartfn';
+const String _appDescription =
+    '$_appName is a tool for managing Dart Functions-as-a-Service (FaaS) projects.';
 
 /// App is a CLI tool for running in a user's terminal.
 class App extends Console {
-  CommandContext _context;
-  CommandRunner _runner;
+  late final CommandContext _context;
+  late final CommandRunner _runner;
 
-  App(List<Generator> generators, [Printer out, GeneratorTarget target])
-      : assert(generators != null),
-        super(out) {
+  App(List<Generator> generators, [Printer? out, GeneratorTarget? target])
+      : super(out) {
     generators.sort();
 
     _context = CommandContext(
-        app: AppInfo(appName, packageVersion),
+        app: AppInfo(_appName, packageVersion),
         console: this,
         generator: GeneratorConfig(
             generators: generators, cwd: io.Directory.current, target: target));
 
-    _runner = CommandRunner(appName, appDescription)
+    _runner = CommandRunner(_appName, _appDescription)
       ..addCommand(GenerateCommand(context))
       ..addCommand(VersionCommand(context));
   }

@@ -17,6 +17,7 @@
 @TestOn('vm')
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:dartfn/src/generators.dart';
 import 'package:dartfn/src/stagehand/stagehand.dart' as stagehand;
 import 'package:grinder/grinder.dart' hide fail;
@@ -52,16 +53,12 @@ final String _expectedAngularAnalysisOptions = [
 ].expand((e) => e is Iterable ? e : [e]).join('\n');
 
 void main() {
-  Directory dir;
+  late Directory dir;
 
   setUp(() async {
     dir = await Directory.systemTemp.createTemp('stagehand.test.');
-  });
 
-  tearDown(() async {
-    if (dir != null) {
-      await dir.delete(recursive: true);
-    }
+    addTearDown(() => dir.delete(recursive: true));
   });
 
   test('Meta-template .gitignore exists',
@@ -111,14 +108,14 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
 
   Pub.get(runOptions: RunOptions(workingDirectory: tempDir.path));
 
-  var filePath = path.join(tempDir.path, generator.entrypoint.path);
+  String? filePath = path.join(tempDir.path, generator.entrypoint!.path);
 
   if (path.extension(filePath) != '.dart' ||
       !FileSystemEntity.isFileSync(filePath)) {
     var parent = Directory(path.dirname(filePath));
 
-    var file = _listSync(parent)
-        .firstWhere((f) => f.path.endsWith('.dart'), orElse: () => null);
+    var file =
+        _listSync(parent).firstWhereOrNull((f) => f.path.endsWith('.dart'));
 
     if (file == null) {
       filePath = null;
@@ -154,7 +151,7 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
   );
 
   // Run package tests, if `test` is included.
-  var devDeps = pubspecContent['dev_dependencies'] as Map;
+  var devDeps = pubspecContent['dev_dependencies'] as Map?;
   if (devDeps != null) {
     if (devDeps.containsKey('test')) {
       if (devDeps.containsKey('build_test')) {

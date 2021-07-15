@@ -18,7 +18,7 @@ import 'terminal.dart';
 /// Console provides input and output support for the tool running in a
 /// terminal.
 class Console extends ConsoleBase with ConsolePrinter, ConsoleInput {
-  Console([Printer out]) : super(out ?? TerminalPrinter());
+  Console([Printer? out]) : super(out ?? TerminalPrinter());
 
   @override
   PrintFunc get stderr => out.stdout;
@@ -30,14 +30,12 @@ class Console extends ConsoleBase with ConsolePrinter, ConsoleInput {
 abstract class ConsoleBase {
   final Printer out;
 
-  ConsoleBase(this.out) {
-    assert(out != null);
-  }
+  ConsoleBase(this.out);
 }
 
 mixin ConsolePrinter on ConsoleBase implements Printer {
   @override
-  void write([Object obj]) {
+  void write([Object? obj]) {
     out.write(obj);
   }
 

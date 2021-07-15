@@ -75,7 +75,7 @@ String substituteVars(String str, Map<String, String> vars) {
     final item = vars[match[1]];
 
     if (item == null) {
-      return match[0];
+      return match[0]!;
     } else {
       return item;
     }
@@ -92,11 +92,6 @@ abstract class DefaultGenerator extends Generator {
       addTemplateFile(TemplateFile(path, contents));
 
   @override
-  String getInstallInstructions() {
-    if (getFile('pubspec.yaml') != null) {
-      return "to provision required packages, run 'pub get'";
-    } else {
-      return '';
-    }
-  }
+  String getInstallInstructions() =>
+      "to provision required packages, run 'pub get'";
 }
