@@ -16,9 +16,9 @@ import 'dart:async';
 import 'dart:io' as io;
 
 import 'package:path/path.dart' as path;
-import 'package:stagehand/stagehand.dart';
 
 import '../printer.dart';
+import '../stagehand/stagehand.dart';
 
 class DirectoryGeneratorTarget extends GeneratorTarget {
   final Printer printer;

@@ -17,9 +17,10 @@
 @TestOn('vm')
 import 'dart:io';
 
+import 'package:dartfn/src/generators.dart';
+import 'package:dartfn/src/stagehand/stagehand.dart' as stagehand;
 import 'package:grinder/grinder.dart' hide fail;
 import 'package:path/path.dart' as path;
-import 'package:stagehand/stagehand.dart' as stagehand;
 import 'package:test/test.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
@@ -76,7 +77,7 @@ void main() {
   });
 
   group('generator', () {
-    for (var generator in stagehand.generators) {
+    for (var generator in generators) {
       test(generator.id, () {
         _testGenerator(generator, dir);
       });

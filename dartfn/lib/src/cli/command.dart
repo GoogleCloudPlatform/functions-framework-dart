@@ -15,8 +15,8 @@
 import 'dart:io' as io;
 
 import 'package:args/command_runner.dart' as cr;
-import 'package:stagehand/stagehand.dart';
 
+import '../stagehand/stagehand.dart';
 import 'console.dart';
 
 abstract class Command extends cr.Command {

@@ -16,14 +16,14 @@ import 'dart:async';
 import 'dart:io' as io;
 
 import 'package:args/command_runner.dart';
-import 'package:stagehand/stagehand.dart';
 
 import '../printer.dart';
+import '../stagehand/stagehand.dart';
 import '../version.dart';
 import 'command/generate.dart';
 import 'command/version.dart';
-import 'console.dart';
 import 'command.dart';
+import 'console.dart';
 
 export 'terminal.dart' show TerminalPrinter;
 
