@@ -1,30 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: prefer_expression_function_bodies
-
 part of 'functions.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-GreetingRequest _$GreetingRequestFromJson(Map<String, dynamic> json) {
-  return GreetingRequest(
-    name: json['name'] as String?,
-  );
-}
+GreetingRequest _$GreetingRequestFromJson(Map<String, dynamic> json) =>
+    GreetingRequest(
+      name: json['name'] as String?,
+    );
 
 Map<String, dynamic> _$GreetingRequestToJson(GreetingRequest instance) =>
     <String, dynamic>{
       'name': instance.name,
     };
 
-GreetingResponse _$GreetingResponseFromJson(Map<String, dynamic> json) {
-  return GreetingResponse(
-    salutation: json['salutation'] as String,
-    name: json['name'] as String,
-  );
-}
+GreetingResponse _$GreetingResponseFromJson(Map<String, dynamic> json) =>
+    GreetingResponse(
+      salutation: json['salutation'] as String,
+      name: json['name'] as String,
+    );
 
 Map<String, dynamic> _$GreetingResponseToJson(GreetingResponse instance) =>
     <String, dynamic>{

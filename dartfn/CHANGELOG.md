@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.4.1-dev
+## 0.4.1
 
 - Require Dart 2.12
+- Support the latest `package:json_serializable` in the JSON template.
 
 ## 0.4.0
 

@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: prefer_expression_function_bodies
-
 part of 'cloud_event.dart';
 
 // **************************************************************************
