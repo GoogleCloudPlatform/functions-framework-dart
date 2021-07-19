@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:stagehand/stagehand.dart';
-
+import 'generators/cloudevent.dart';
 import 'generators/helloworld.dart';
 import 'generators/json.dart';
-import 'generators/cloudevent.dart';
+import 'stagehand/stagehand.dart';
 
 /// A sorted list of Dart Functions Framework project generators.
 final List<Generator> generators = [
@@ -24,3 +23,6 @@ final List<Generator> generators = [
   JsonFunctionGenerator(),
   CloudEventFunctionGenerator(),
 ]..sort();
+
+Generator getGenerator(String id) =>
+    generators.firstWhere((g) => g.id == id, orElse: () => null);

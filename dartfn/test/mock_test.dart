@@ -15,7 +15,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:stagehand/stagehand.dart';
+import 'package:dartfn/src/generators.dart';
+import 'package:dartfn/src/stagehand/stagehand.dart';
 import 'package:test/test.dart';
 
 void main() {

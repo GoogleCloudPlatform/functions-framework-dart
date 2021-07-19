@@ -16,10 +16,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-// ignore: implementation_imports
-import 'package:stagehand/src/common.dart';
-import 'package:stagehand/stagehand.dart' as stagehand;
-
+import '../../stagehand/common.dart';
+import '../../stagehand/stagehand.dart' as stagehand;
 import '../command.dart';
 import '../directory.dart';
 

@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:stagehand/stagehand.dart';
+import 'package:dartfn/src/generators.dart';
+import 'package:dartfn/src/stagehand/stagehand.dart';
 import 'package:test/test.dart';
 
 void main() {
