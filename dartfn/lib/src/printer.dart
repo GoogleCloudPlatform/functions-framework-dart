@@ -19,18 +19,18 @@ class Printer {
   final PrintFunc stdout;
   final PrintFunc stderr;
 
-  Printer([PrintFunc stdout, PrintFunc stderr])
+  Printer([PrintFunc? stdout, PrintFunc? stderr])
       : stdout = stdout ?? print,
-        stderr = stderr ?? stdout {
+        stderr = stderr ?? stdout ?? print {
     assert(stdout != null);
     assert(stderr != null);
   }
 
   Printer.fromPrinter(Printer printer)
-      : stdout = printer?.stdout,
-        stderr = printer?.stderr;
+      : stdout = printer.stdout,
+        stderr = printer.stderr;
 
-  void write([Object obj]) {
+  void write([Object? obj]) {
     stdout(obj ?? '');
   }
 

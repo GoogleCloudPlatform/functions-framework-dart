@@ -24,5 +24,4 @@ final List<Generator> generators = [
   CloudEventFunctionGenerator(),
 ]..sort();
 
-Generator getGenerator(String id) =>
-    generators.firstWhere((g) => g.id == id, orElse: () => null);
+Generator getGenerator(String id) => generators.singleWhere((g) => g.id == id);

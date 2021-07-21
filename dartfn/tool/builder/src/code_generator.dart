@@ -17,8 +17,8 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:build/build.dart';
-import 'package:path/path.dart' as p;
 import 'package:glob/glob.dart';
+import 'package:path/path.dart' as p;
 import 'package:source_gen/source_gen.dart';
 
 const List<String> _allowedDotFiles = <String>['.gitignore'];
@@ -28,7 +28,7 @@ final RegExp _binaryFileTypes = RegExp(
 
 class DataGenerator extends Generator {
   @override
-  FutureOr<String> generate(LibraryReader library, BuildStep buildStep) async {
+  FutureOr<String?> generate(LibraryReader library, BuildStep buildStep) async {
     if (!p.isWithin('lib/src/generators', buildStep.inputId.path)) {
       return null;
     }

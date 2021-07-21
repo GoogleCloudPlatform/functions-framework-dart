@@ -21,15 +21,12 @@ Future<http.Response> _getPubInfo(String appName) async {
   return await http.get(pubInfo);
 }
 
-List _getPubVersions(http.Response resp) {
-  return jsonDecode(resp.body)['versions'];
-}
+List _getPubVersions(http.Response resp) => jsonDecode(resp.body)['versions'];
 
 /// Check pub.dev for newer versions.
-Future<String> checkPubForLaterVersion(String appName, String version) async {
-  return Future<String>(() async {
-    var resp = await _getPubInfo(appName);
-    var versions = _getPubVersions(resp);
-    return (version != versions.last) ? versions.last as String : null;
-  }).catchError((e) => null);
-}
+Future<String?> checkPubForLaterVersion(String appName, String version) async =>
+    Future<String?>(() async {
+      var resp = await _getPubInfo(appName);
+      var versions = _getPubVersions(resp);
+      return (version != versions.last) ? versions.last as String : null;
+    }).catchError((e) => null);

@@ -48,8 +48,8 @@ class MockTarget extends GeneratorTarget {
 
   bool hasFile(String path) => _files.containsKey(path);
 
-  String getFileContentsAsString(String path) {
+  String? getFileContentsAsString(String path) {
     if (!hasFile(path)) return null;
-    return utf8.decode(_files[path]);
+    return utf8.decode(_files[path]!);
   }
 }

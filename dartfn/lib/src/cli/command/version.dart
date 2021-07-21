@@ -31,7 +31,8 @@ class VersionCommand extends Command {
 
   @override
   Future<void> run() async {
-    await printVersion(context, short: argResults['short'], checkUpdates: true);
+    await printVersion(context,
+        short: argResults!['short'], checkUpdates: true);
   }
 }
 
@@ -39,8 +40,11 @@ class VersionCommand extends Command {
 ///
 /// If [short] is true, prints just the version number.
 /// If [checkUpdates] is true, also checks pub.dev for newer versions.
-FutureOr<void> printVersion(CommandContext context,
-    {bool short, bool checkUpdates}) async {
+Future<void> printVersion(
+  CommandContext context, {
+  bool short = false,
+  bool checkUpdates = false,
+}) async {
   final name = context.app.name;
   final version = context.app.version;
 

@@ -61,7 +61,5 @@ extension DirectoryHelpers on io.Directory {
         .isEmpty;
   }
 
-  String basename() {
-    return path.basename(this.path);
-  }
+  String basename() => path.basename(this.path);
 }
