@@ -39,11 +39,11 @@ export 'src/bad_request_exception.dart' show BadRequestException;
 export 'src/function_target.dart'
     show FunctionTarget, JsonFunctionTarget, JsonWithContextFunctionTarget;
 
-/// If there is an invalid configuration, [BadConfigurationException] will be
-/// thrown.
+/// If there is an invalid configuration, [exitCode] will be set to a non-zero
+/// value and the returned [Future] will completes quickly.
 ///
-/// If there are no configuration errors, this function will not return until
-/// the process has received signal [ProcessSignal.sigterm] or
+/// If there are no configuration errors, the returned [Future] will not
+/// complete until the process has received signal [ProcessSignal.sigterm] or
 /// [ProcessSignal.sigint].
 Future<void> serve(
   List<String> args,
@@ -82,13 +82,11 @@ Future<void> _serve(
   if (functionTarget.type == FunctionType.cloudevent &&
       config.functionType == FunctionType.http) {
     // See https://github.com/GoogleCloudPlatform/functions-framework-conformance/issues/58
-    stderr.writeln(
+    throw BadConfigurationException(
       'The configured $environmentKeyFunctionTarget `${config.target}` has a '
       'function type of `cloudevent` which is not compatible with the '
       'configured $environmentKeyFunctionSignatureType of `http`.',
     );
-    exitCode = ExitCode.usage.code;
-    return;
   }
 
   final projectId = await CloudMetadata.projectId();

@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.4.2-dev
+
 ## 0.4.1
 
 - Improve package documentation.
