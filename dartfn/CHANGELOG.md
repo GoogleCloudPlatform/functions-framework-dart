@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.2-dev
+
+- Update templates to use `package:lints`.
+
 ## 0.4.1
 
 - Require Dart 2.12
