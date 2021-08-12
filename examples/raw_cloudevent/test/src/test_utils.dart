@@ -79,4 +79,4 @@ Future<void> finishServerTest(
 }
 
 RegExp finishedPattern(String method, int statusCode) =>
-    RegExp('$method.+\[${statusCode.toString()}\]');
+    RegExp('$method.+\\[${statusCode.toString()}\\]');

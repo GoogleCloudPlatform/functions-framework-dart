@@ -15,7 +15,7 @@
 import 'dart:async';
 import 'dart:io' as io;
 
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as p;
 
 import '../printer.dart';
 import '../stagehand/stagehand.dart';
@@ -29,8 +29,8 @@ class DirectoryGeneratorTarget extends GeneratorTarget {
   }
 
   @override
-  Future createFile(String filePath, List<int> contents) {
-    var file = io.File(path.join(dir.path, filePath));
+  Future createFile(String path, List<int> contents) {
+    var file = io.File(p.join(dir.path, path));
 
     printer.write('  ${file.path}');
 
@@ -53,7 +53,8 @@ extension DirectoryHelpers on io.Directory {
   /// Returns true if the given directory does not contain non-symlinked,
   /// non-hidden subdirectories.
   Future<bool> isEmpty() async {
-    var isHiddenDir = (dir) => path.basename(dir.path).startsWith('.');
+    bool isHiddenDir(io.FileSystemEntity dir) =>
+        p.basename(dir.path).startsWith('.');
 
     return list(followLinks: false)
         .where((entity) => entity is io.Directory)
@@ -61,5 +62,5 @@ extension DirectoryHelpers on io.Directory {
         .isEmpty;
   }
 
-  String basename() => path.basename(this.path);
+  String basename() => p.basename(path);
 }
