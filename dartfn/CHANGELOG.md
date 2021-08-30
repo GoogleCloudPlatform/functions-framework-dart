@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.2-dev
+## 0.4.2
 
 - Update templates to use official Dart Docker images.
 - Update templates to use `package:lints`.
