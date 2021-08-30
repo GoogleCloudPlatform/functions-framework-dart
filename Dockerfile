@@ -1,5 +1,6 @@
-################
-FROM google/dart:2.12
+# Official Dart image: https://hub.docker.com/_/dart
+# Specify the Dart SDK base image version using dart:<version> (ex: dart:2.12)
+FROM dart:stable AS build
 
 # cache deps
 WORKDIR /app
@@ -19,7 +20,7 @@ RUN dart pub run build_runner build --delete-conflicting-outputs
 RUN dart compile exe bin/server.dart -o bin/server
 
 ########################
-FROM subfuzion/dart:slim
+FROM scratch
 COPY --from=0 /app/test/hello/bin/server /app/bin/server
 EXPOSE 8080
 ENTRYPOINT ["/app/bin/server"]
