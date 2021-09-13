@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.3
+
+- Fix template Dockerfiles ([#268](
+https://github.com/GoogleCloudPlatform/functions-framework-dart/issues/268
+))
+
 ## 0.4.2
 
 - Update templates to use official Dart Docker images.

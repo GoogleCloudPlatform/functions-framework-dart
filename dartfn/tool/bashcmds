@@ -7,6 +7,8 @@ bindir="${pubdir}/bin"
 if [[ "${BASH_SOURCE[0]}" = "${0}" ]]; then
   echo "This bash shell script (${BASH_SOURCE[0]}) is meant to be sourced in, not executed. Try:"
   echo "  source bashcmds"
+  echo "or from the repo root:"
+  echo "  source tools/bashcmds"
   exit 1;
 fi
 
@@ -15,14 +17,39 @@ function db() {
   (cd $pubdir; dart run build_runner build --delete-conflicting-outputs "$@")
 }
 
-# dart run
-function dr() {
-  dart run "${bindir}/gfn.dart" "$@"
+# run -> dart run bin/dartfn
+function run() {
+  dart run "${bindir}/dartfn.dart" "$@"
 }
 
-# dart activate
+# activate
 function da() {
   local p=${1:-$pubdir}
   dart pub global activate --overwrite -s path $p
 }
 
+# deactivate
+function dx() {
+  dart pub global deactivate dartfn
+}
+
+# reset env
+function clean() {
+  unset -f db
+  unset -f run
+  unset -f da
+  unset -f dx
+  unset -f clean
+}
+
+# print help
+function dh() {
+  echo "db    -  (re)build bin/dartfn with updated templates"
+  echo "run   -  run updated bin/dartfn"
+  echo "da    -  activate bin/dartfn"
+  echo "dx    -  deactivate bin/dartfn"
+  echo "clean -  remove these commands from the environment"
+  echo "dh    -  print this help"
+}
+
+dh

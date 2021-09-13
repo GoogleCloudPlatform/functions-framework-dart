@@ -30,8 +30,8 @@ response after receiving the above request:
 ```
 
 The Functions Framework parses the request data to fit the shape of a
-GreetingRequest object for you. Because a name might not have been sent with
-the request, the function implementation provides a default name ('World').
+`GreetingRequest` object for you. Because a name might not have been sent with
+the request, the function implementation provides a default name: `World`.
 
 ```dart
 @CloudFunction()
@@ -73,11 +73,11 @@ class GreetingRequest {
 
   GreetingRequest({this.name});
 
-  // The implementation also includes two marshalling methods that are
-  // standard boilerplate that depend on generated code in 'functions.g.dart'
-  
-  // To help with testing, the implementation also overrides the equality
-  // operator (and therefore also hashcode).
+// This class also includes two marshalling methods that are
+// standard boilerplate that depend on generated code in 'functions.g.dart'
+
+// To help with testing, this class also overrides the equality (`==`)
+// operator, and therefore also `hashCode`.
 }
 
 @JsonSerializable()
@@ -87,11 +87,11 @@ class GreetingResponse {
 
   GreetingResponse({required this.salutation, required this.name});
 
-  // The following two marshalling methods are standard boilerplate that
-  //depend on generated code in 'functions.g.dart' ...
+// This  class also includes two marshalling methods that are
+// standard boilerplate that depend on generated code in 'functions.g.dart'
 
-  // To help with testing, the implementation also overrides the equality
-  // operator (and therefore also hashcode).
+// To help with testing, this class also overrides the equality (`==`)
+// operator, and therefore also `hashCode`.
 }
 
 @CloudFunction()
