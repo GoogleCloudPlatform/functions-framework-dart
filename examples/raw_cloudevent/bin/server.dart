@@ -13,9 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:example_raw_cloudevent_function/functions.dart' as function_library;
 import 'package:functions_framework/serve.dart';
-import 'package:example_raw_cloudevent_function/functions.dart'
-    as function_library;
 
 Future<void> main(List<String> args) async {
   await serve(args, _nameToFunctionTarget);
