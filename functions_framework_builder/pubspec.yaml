@@ -1,5 +1,5 @@
 name: functions_framework_builder
-version: 0.4.3
+version: 0.4.4
 description: Builder for package:functions_framework
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
