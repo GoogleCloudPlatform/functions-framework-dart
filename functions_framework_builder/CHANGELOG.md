@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.4
+
+- Sort directives in generated `bin/server.dart`.
+
 ## 0.4.3
 
 - Support the latest `package:analyzer`.

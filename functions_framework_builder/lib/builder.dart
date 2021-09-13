@@ -87,6 +87,11 @@ class _FunctionsFrameworkBuilder implements Builder {
       for (var e in entries.values) '  case ${e.name}:return ${e.expression};',
     ];
 
+    final importDirectives = [
+      "'package:functions_framework/serve.dart'",
+      "'${input.uri}' as $functionsLibraryPrefix"
+    ]..sort();
+
     var output = '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
@@ -103,8 +108,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:functions_framework/serve.dart';
-import '${input.uri}' as $functionsLibraryPrefix;
+${importDirectives.map((e) => 'import $e;').join('\n')}
 
 Future<void> main(List<String> args) async {
   await serve(args, _nameToFunctionTarget);
