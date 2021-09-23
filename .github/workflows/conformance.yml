@@ -37,7 +37,7 @@ jobs:
 
     - uses: actions/checkout@v2
     - run: dart pub upgrade
-      working-directory: test/hello
+      working-directory: integration_test
 
     - name: Run HTTP conformance tests
       uses: GoogleCloudPlatform/functions-framework-conformance/action@v1.0.0
@@ -45,7 +45,7 @@ jobs:
         functionType: 'http'
         useBuildpacks: false
         # Coordinate changes here with the documentation in `CONTRIBUTING.MD`
-        cmd: '"dart test/hello/bin/server.dart --target conformanceHttp"'
+        cmd: '"dart integration_test/bin/server.dart --target conformanceHttp"'
         startDelay: 3
 
     - name: Run CloudEvent conformance tests
@@ -54,6 +54,6 @@ jobs:
         functionType: 'cloudevent'
         useBuildpacks: false
         # Coordinate changes here with the documentation in `CONTRIBUTING.MD`
-        cmd: '"dart test/hello/bin/server.dart --target conformanceCloudEvent --signature-type cloudevent"'
+        cmd: '"dart integration_test/bin/server.dart --target conformanceCloudEvent --signature-type cloudevent"'
         validateMapping: false
         startDelay: 3
