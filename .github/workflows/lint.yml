@@ -36,16 +36,16 @@ jobs:
       - name: mono_repo self validate
         run: dart pub global run mono_repo generate --validate
   job_002:
-    name: "analyze_format; Dart 2.12.0; PKGS: dartfn, functions_framework, functions_framework_builder, test/hello; `dart analyze .`"
+    name: "analyze_format; Dart 2.12.0; PKGS: dartfn, functions_framework, functions_framework_builder, integration_test; `dart analyze .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@v2.1.6
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:dartfn-functions_framework-functions_framework_builder-test/hello;commands:analyze_1"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:dartfn-functions_framework-functions_framework_builder-integration_test;commands:analyze_1"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:dartfn-functions_framework-functions_framework_builder-test/hello
+            os:ubuntu-latest;pub-cache-hosted;dart:2.12.0;packages:dartfn-functions_framework-functions_framework_builder-integration_test
             os:ubuntu-latest;pub-cache-hosted;dart:2.12.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -81,26 +81,26 @@ jobs:
         if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: dart analyze .
-      - id: test_hello_pub_upgrade
-        name: test/hello; dart pub upgrade
+      - id: integration_test_pub_upgrade
+        name: integration_test; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: test/hello
+        working-directory: integration_test
         run: dart pub upgrade
-      - name: test/hello; dart analyze .
-        if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
-        working-directory: test/hello
+      - name: integration_test; dart analyze .
+        if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
+        working-directory: integration_test
         run: dart analyze .
   job_003:
-    name: "analyze_format; Dart dev; PKGS: dartfn, functions_framework, functions_framework_builder, test/hello; `dart format --output=none --set-exit-if-changed .`, `dart analyze --fatal-infos .`"
+    name: "analyze_format; Dart dev; PKGS: dartfn, functions_framework, functions_framework_builder, integration_test; `dart format --output=none --set-exit-if-changed .`, `dart analyze --fatal-infos .`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@v2.1.6
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:dartfn-functions_framework-functions_framework_builder-test/hello;commands:format-analyze_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:dartfn-functions_framework-functions_framework_builder-integration_test;commands:format-analyze_0"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:dartfn-functions_framework-functions_framework_builder-test/hello
+            os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:dartfn-functions_framework-functions_framework_builder-integration_test
             os:ubuntu-latest;pub-cache-hosted;dart:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -148,18 +148,18 @@ jobs:
         if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
         run: dart analyze --fatal-infos .
-      - id: test_hello_pub_upgrade
-        name: test/hello; dart pub upgrade
+      - id: integration_test_pub_upgrade
+        name: integration_test; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: test/hello
+        working-directory: integration_test
         run: dart pub upgrade
-      - name: "test/hello; dart format --output=none --set-exit-if-changed ."
-        if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
-        working-directory: test/hello
+      - name: "integration_test; dart format --output=none --set-exit-if-changed ."
+        if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
+        working-directory: integration_test
         run: "dart format --output=none --set-exit-if-changed ."
-      - name: "test/hello; dart analyze --fatal-infos ."
-        if: "always() && steps.test_hello_pub_upgrade.conclusion == 'success'"
-        working-directory: test/hello
+      - name: "integration_test; dart analyze --fatal-infos ."
+        if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
+        working-directory: integration_test
         run: dart analyze --fatal-infos .
   job_004:
     name: Notify failure

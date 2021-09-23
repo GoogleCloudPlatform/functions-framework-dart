@@ -59,13 +59,13 @@ To run the tests locally:
 #### HTTP
 
 ```shell
-$FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-delay 3 -type=http -cmd="dart test/hello/bin/server.dart --target conformanceHttp"
+$FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-delay 3 -type=http -cmd="dart integration_test/bin/server.dart --target conformanceHttp"
 ```
 
 #### Cloud events
 
 ```shell
-$FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-delay 3 -type=cloudevent -cmd="dart test/hello/bin/server.dart --target conformanceCloudEvent --signature-type cloudevent" --validate-mapping=false
+$FUNCTION_FRAMEWORK_CONFORMANCE_PATH/client/client -buildpacks=false -start-delay 3 -type=cloudevent -cmd="dart integration_test/bin/server.dart --target conformanceCloudEvent --signature-type cloudevent" --validate-mapping=false
 ```
 
 This corresponds to the configuration in `.github/workflows/conformance.yml`.

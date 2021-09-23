@@ -23,6 +23,6 @@ dev_dependencies:
 
 dependency_overrides:
   functions_framework:
-    path: ../../functions_framework
+    path: ../functions_framework
   functions_framework_builder:
-    path: ../../functions_framework_builder
+    path: ../functions_framework_builder
