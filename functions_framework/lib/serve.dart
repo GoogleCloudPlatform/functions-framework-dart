@@ -32,6 +32,7 @@ import 'src/bad_configuration.dart';
 import 'src/cloud_metadata.dart';
 import 'src/function_config.dart';
 import 'src/function_target.dart';
+import 'src/helpers.dart';
 import 'src/logging.dart';
 import 'src/run.dart';
 
@@ -92,36 +93,10 @@ Future<void> _serve(
   final projectId = await CloudMetadata.projectId();
   final loggingMiddleware = createLoggingMiddleware(projectId);
 
-  final completer = Completer<bool>.sync();
-
-  // sigIntSub is copied below to avoid a race condition - ignoring this lint
-  // ignore: cancel_subscriptions
-  StreamSubscription? sigIntSub, sigTermSub;
-
-  Future<void> signalHandler(ProcessSignal signal) async {
-    print('Received signal $signal - closing');
-
-    final subCopy = sigIntSub;
-    if (subCopy != null) {
-      sigIntSub = null;
-      await subCopy.cancel();
-      sigIntSub = null;
-      if (sigTermSub != null) {
-        await sigTermSub!.cancel();
-        sigTermSub = null;
-      }
-      completer.complete(true);
-    }
-  }
-
-  sigIntSub = ProcessSignal.sigint.watch().listen(signalHandler);
-
-  // SIGTERM is not supported on Windows. Attempting to register a SIGTERM
-  // handler raises an exception.
-  if (!Platform.isWindows) {
-    sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
-  }
-
   await run(
-      config.port, functionTarget.handler, completer.future, loggingMiddleware);
+    config.port,
+    functionTarget.handler,
+    terminateRequestFuture().then((value) => true),
+    loggingMiddleware,
+  );
 }
