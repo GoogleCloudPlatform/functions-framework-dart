@@ -17,8 +17,8 @@ import 'dart:io';
 import 'package:args/args.dart';
 
 import 'bad_configuration.dart';
+import 'helpers.dart';
 
-const defaultPort = 8080;
 const defaultFunctionType = FunctionType.http;
 const defaultFunctionTarget = 'function';
 
@@ -40,39 +40,22 @@ class FunctionConfig {
   final String target;
 
   FunctionConfig({
-    this.port = defaultPort,
+    this.port = defaultListenPort,
     this.functionType = defaultFunctionType,
     this.target = defaultFunctionTarget,
   });
 
   // Required per spec:
   // https://github.com/GoogleCloudPlatform/functions-framework#specification-summary
-  factory FunctionConfig.fromEnv() {
-    int port;
-
-    if (Platform.environment.containsKey('PORT')) {
-      try {
-        port = int.parse(Platform.environment['PORT']!);
-      } on FormatException catch (e) {
-        throw BadConfigurationException(
-          'Bad value for environment variable "PORT" – '
-          '"${Platform.environment['PORT']}" – ${e.message}.',
-        );
-      }
-    } else {
-      port = defaultPort;
-    }
-
-    return FunctionConfig(
-      port: port,
-      target: Platform.environment[environmentKeyFunctionTarget] ??
-          defaultFunctionTarget,
-      functionType: _parseFunctionType(
-        Platform.environment['FUNCTION_SIGNATURE_TYPE'] ??
-            _enumValue(FunctionType.http),
-      ),
-    );
-  }
+  factory FunctionConfig.fromEnv() => FunctionConfig(
+        port: listenPort(),
+        target: Platform.environment[environmentKeyFunctionTarget] ??
+            defaultFunctionTarget,
+        functionType: _parseFunctionType(
+          Platform.environment['FUNCTION_SIGNATURE_TYPE'] ??
+              _enumValue(FunctionType.http),
+        ),
+      );
 
   // Optional per spec:
   // https://github.com/GoogleCloudPlatform/functions-framework#specification-summary
@@ -121,7 +104,7 @@ class FunctionConfig {
         );
       }
     } else {
-      port = defaults?.port ?? defaultPort;
+      port = defaults?.port ?? defaultListenPort;
     }
 
     final functionTypeOptionValue = options[_functionTypeOpt] as String?;
