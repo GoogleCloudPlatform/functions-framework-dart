@@ -17,7 +17,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:functions_framework/functions_framework.dart';
-import 'package:pedantic/pedantic.dart';
 import 'package:shelf/shelf.dart';
 
 import 'src/pub_sub_types.dart';
