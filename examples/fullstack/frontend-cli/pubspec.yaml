@@ -2,7 +2,7 @@ name: frontend_cli
 publish_to: none
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.14.0 <3.0.0'
 
 executables:
   greet:
@@ -10,10 +10,10 @@ executables:
 dependencies:
   http: ^0.13.1
   io: ^1.0.0
-  json_annotation: ^4.1.0
+  json_annotation: ^4.3.0
 
 dev_dependencies:
   build_runner: ^2.0.0
-  json_serializable: ^5.0.0
+  json_serializable: ^6.0.0
   lints: ^1.0.0
   test: ^1.14.4

@@ -15,7 +15,7 @@ managed serverless platform on [Google Cloud].
 
 ## Requirements
 
-- Dart: >=2.12.0 <3.0.0
+- Dart: >=2.14.0 <3.0.0
 
 ## Build and deploy the backend
 
