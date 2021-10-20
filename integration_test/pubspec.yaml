@@ -6,7 +6,7 @@ environment:
 
 dependencies:
   functions_framework: any
-  json_annotation: ^4.0.0
+  json_annotation: ^4.3.0
   shelf: ^1.0.0
 
 dev_dependencies:
@@ -16,7 +16,7 @@ dev_dependencies:
   http: ^0.13.1
   http_parser: ^4.0.0
   io: ^1.0.0
-  json_serializable: ^5.0.0
+  json_serializable: ^6.0.0
   test: ^1.15.0
   test_process: ^2.0.0
 

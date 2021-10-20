@@ -2,6 +2,8 @@
 
 ## 0.4.2-dev
 
+- Requires Dart `2.14.0`.
+
 ## 0.4.1
 
 - Improve package documentation.
