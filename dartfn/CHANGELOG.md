@@ -1,10 +1,18 @@
 # Changelog
 
+## 0.4.4
+
+- Add missing `package:lints` dependency.
+  ([#296](https://github.com/GoogleCloudPlatform/functions-framework-dart/issues/296))
+- Add reference to Dart docs on what files to ignore in generated `.gitignore`
+  files.
+  ([#297](https://github.com/GoogleCloudPlatform/functions-framework-dart/issues/297))
+- Add default `analysis_options.yaml` file to `cloudevent` template.
+
 ## 0.4.3
 
-- Fix template Dockerfiles ([#268](
-https://github.com/GoogleCloudPlatform/functions-framework-dart/issues/268
-))
+- Fix template Dockerfiles
+  ([#268](https://github.com/GoogleCloudPlatform/functions-framework-dart/issues/268))
 
 ## 0.4.2
 
