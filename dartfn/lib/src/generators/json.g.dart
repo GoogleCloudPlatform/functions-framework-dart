@@ -10,11 +10,12 @@ const _data = <String>[
   '.gitignore',
   'text',
   '''
-IyBGaWxlcyBhbmQgZGlyZWN0b3JpZXMgY3JlYXRlZCBieSBwdWIKLmRhcnRfdG9vbC8KLnBhY2th
-Z2VzCgojIE9taXQgY29tbWl0aW5nIHB1YnNwZWMubG9jayBmb3IgbGlicmFyeSBwYWNrYWdlczoK
-IyBodHRwczovL2RhcnQuZGV2L2d1aWRlcy9saWJyYXJpZXMvcHJpdmF0ZS1maWxlcyNwdWJzcGVj
-bG9jawpwdWJzcGVjLmxvY2sKCiMgQ29udmVudGlvbmFsIGRpcmVjdG9yeSBmb3IgYnVpbGQgb3V0
-cHV0cwpidWlsZC8KCiMgRGlyZWN0b3J5IGNyZWF0ZWQgYnkgZGFydGRvYwpkb2MvYXBpLwo=''',
+IyBTZWUgaHR0cHM6Ly9kYXJ0LmRldi9ndWlkZXMvbGlicmFyaWVzL3ByaXZhdGUtZmlsZXMKIyBG
+aWxlcyBhbmQgZGlyZWN0b3JpZXMgY3JlYXRlZCBieSBwdWIKLmRhcnRfdG9vbC8KLnBhY2thZ2Vz
+CgojIE9taXQgY29tbWl0aW5nIHB1YnNwZWMubG9jayBmb3IgbGlicmFyeSBwYWNrYWdlczoKIyBo
+dHRwczovL2RhcnQuZGV2L2d1aWRlcy9saWJyYXJpZXMvcHJpdmF0ZS1maWxlcyNwdWJzcGVjbG9j
+awpwdWJzcGVjLmxvY2sKCiMgQ29udmVudGlvbmFsIGRpcmVjdG9yeSBmb3IgYnVpbGQgb3V0cHV0
+cwpidWlsZC8KCiMgRGlyZWN0b3J5IGNyZWF0ZWQgYnkgZGFydGRvYwpkb2MvYXBpLwo=''',
   'Dockerfile',
   'text',
   '''
@@ -247,7 +248,8 @@ bnQ6CiAgc2RrOiAnPj0yLjE0LjAgPDMuMC4wJwoKZGVwZW5kZW5jaWVzOgogIGZ1bmN0aW9uc19m
 cmFtZXdvcms6IF4wLjQuMAogIGpzb25fYW5ub3RhdGlvbjogXjQuMy4wCiAgc2hlbGY6IF4xLjAu
 MAoKZGV2X2RlcGVuZGVuY2llczoKICBidWlsZF9ydW5uZXI6IF4yLjAuMAogIGZ1bmN0aW9uc19m
 cmFtZXdvcmtfYnVpbGRlcjogXjAuNC4wCiAgaHR0cDogXjAuMTMuMAogIGpzb25fc2VyaWFsaXph
-YmxlOiBeNi4wLjAKICB0ZXN0OiBeMS4xNS43CiAgdGVzdF9wcm9jZXNzOiBeMi4wLjAK''',
+YmxlOiBeNi4wLjAKICBsaW50czogXjEuMC4wCiAgdGVzdDogXjEuMTUuNwogIHRlc3RfcHJvY2Vz
+czogXjIuMC4wCg==''',
   'test/function_test.dart',
   'text',
   '''
