@@ -659,8 +659,8 @@ Future<void> _generateTest(
 
 const _ignoredLogMessages = {
   'Generating SDK summary',
-  'Your current `analyzer` version may not fully support your current '
-      'SDK version.',
+  'The latest `analyzer` version may not fully support your current SDK '
+      'version.',
 };
 
 // Ensure every test gets its own unique package name
