@@ -27,7 +27,7 @@ jobs:
         working-directory: ${{ matrix.example_directory }}
     steps:
     - name: Cache Pub hosted dependencies
-      uses: actions/cache@v2
+      uses: actions/cache@v2.1.7
       with:
         path: "~/.pub-cache/hosted"
         key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:${{ matrix.example_directory }}"
@@ -38,7 +38,7 @@ jobs:
     - uses: dart-lang/setup-dart@v1.3
       with:
         sdk: stable
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2.4.0
     - run: dart --version
     - id: pub_get
       run: dart pub get
