@@ -5,11 +5,11 @@ stages:
   - group:
     - format
     - analyze: --fatal-infos .
-    dart: dev
+    sdk: dev
   - group:
     - analyze: .
-    dart: 2.14.0
+    sdk: 2.14.0
 - unit_test:
   - group:
     - test: --run-skipped -t presubmit-only
-    dart: dev
+    sdk: dev
