@@ -1,5 +1,5 @@
 name: functions_framework_builder
-version: 0.4.4
+version: 0.4.5
 description: Builder for package:functions_framework
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
@@ -7,7 +7,7 @@ environment:
   sdk: '>=2.14.0 <3.0.0'
 
 dependencies:
-  analyzer: '>=1.7.0 <3.0.0'
+  analyzer: '>=2.7.0 <4.0.0'
   build: ^2.0.0
   build_config: '>=0.4.3 <2.0.0'
   collection: ^1.15.0
