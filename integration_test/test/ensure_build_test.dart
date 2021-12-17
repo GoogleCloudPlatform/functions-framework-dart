@@ -20,5 +20,6 @@ void main() {
   test(
     'ensure_build',
     () => expectBuildClean(packageRelativeDirectory: 'integration_test'),
+    timeout: const Timeout.factor(2),
   );
 }
