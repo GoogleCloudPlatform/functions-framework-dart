@@ -53,11 +53,11 @@ Updated property [core/project].
 
 ## Build and deploy with a single command
 
-Using the new `gcloud beta run deploy` command, you can now build and deploy
-your function in a single step.
+Use the `gcloud run deploy` command to build and deploy your function in a
+single step.
 
 ```shell
-gcloud beta run deploy NAME \
+gcloud run deploy NAME \
   --source=PATH \          # can use $PWD or . for current dir
   --project=PROJECT \      # the Google Cloud project ID
   --region=REGION  \       # ex: us-central1
@@ -80,7 +80,7 @@ gcloud config set run/region us-central1
 For example:
 
 ```shell
-$ gcloud beta run deploy hello --allow-unauthenticated --source=.
+$ gcloud run deploy hello --allow-unauthenticated --source=.
 Building using Dockerfile and deploying container to Cloud Run service [hello] in project [dart-demo] region [us-central1]
 ✓ Building and deploying new service... Done.
   ✓ Uploading sources...
