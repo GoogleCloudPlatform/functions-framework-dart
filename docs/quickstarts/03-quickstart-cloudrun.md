@@ -99,51 +99,6 @@ Service URL: https://hello-gpua4upw6q-uc.a.run.app
 to Cloud Run. You can now access your function at the Service URL that is
 printed in the last line of output.
 
-If you prefer not to use this beta command for now, read on. The next two
-sections cover building and deploying in two separate steps.
-
-## Build the container image using Cloud Build
-
-[Cloud Build] is a fully serverless continuous integration / continuous delivery
-(CI/CD) platform for [Google Cloud]. Instead of building the image on your own
-machine, you can use `gcloud` to upload the project to Cloud Build. Cloud Build
-knows how to build Docker images and save them to an image repository in the
-container registry associated with your project.
-
-Use the project ID that you selected (see the Prerequisites section for setting
-up your project):
-
-```shell
-export PROJECT_ID=$(gcloud config get-value project)
-export IMAGE_NAME=helloworld
-gcloud builds submit --tag gcr.io/$PROJECT_ID/$IMAGE_NAME
-...
-```
-
-Upon success, you will see a SUCCESS message containing the image name.
-
-## Deploy the function to Cloud Run
-
-```shell
-gcloud run deploy --image gcr.io/$PROJECT_ID/$IMAGE_NAME --platform managed
-```
-
-1. You will be prompted for the service name: press Enter to accept the default
-   name, helloworld.
-1. You will be prompted for region: select the region of your choice, for
-   example `us-central1`.
-1. You will be prompted to allow unauthenticated invocations: respond `y`. Then
-   wait a few moments until the deployment is complete. On success, the command
-   line displays the service URL.
-
-Visit your deployed function by opening the service URL in a web browser.
-
-<br>
-
-![img.png](assets/helloworld-browser.png)
-
-**Congratulations!** You have successfully deployed your function to Cloud Run!
-
 ## Clean up
 
 Cloud Run does not charge when the service is not in use. However, you might
