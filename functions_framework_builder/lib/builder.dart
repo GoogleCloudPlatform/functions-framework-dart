@@ -34,14 +34,20 @@ import 'src/function_type_validator.dart';
 import 'src/supported_function_type.dart';
 
 Builder functionsFrameworkBuilder([BuilderOptions? options]) =>
-    const _FunctionsFrameworkBuilder();
+    _FunctionsFrameworkBuilder(options);
 
 class _FunctionsFrameworkBuilder implements Builder {
-  const _FunctionsFrameworkBuilder();
+  const _FunctionsFrameworkBuilder(this.options);
+  final BuilderOptions? options;
 
   @override
   Map<String, List<String>> get buildExtensions => const {
-        r'lib/functions.dart': ['bin/server.dart'],
+        r'lib/{{}}.dart': [
+          'bin/server_{{}}.dart',
+        ],
+        r'lib/functions.dart': [
+          'bin/server.dart',
+        ],
       };
 
   @override
@@ -49,11 +55,25 @@ class _FunctionsFrameworkBuilder implements Builder {
     final entries = <String, FactoryData>{};
 
     final input = buildStep.inputId;
-
+    final unique = options?.config['unique'] as bool? ?? false;
+    final fileName = input.pathSegments.last.replaceAll('.dart', '');
     final libraryElement = await buildStep.resolver.libraryFor(input);
+    if (fileName == 'functions' && unique) {
+      throw InvalidGenerationSourceError(
+        'File can not be named functions.dart when using the unique option.',
+        element: libraryElement,
+      );
+    }
     final validator = await FunctionTypeValidator.create(buildStep.resolver);
 
     for (var annotatedElement in _fromLibrary(libraryElement)) {
+      if (unique && entries.isNotEmpty) {
+        throw InvalidGenerationSourceError(
+          'Only one function can be annotated with @FunctionsFramework '
+          'per file when using the unique option.',
+          element: annotatedElement.element,
+        );
+      }
       final element = annotatedElement.element;
       if (element is! FunctionElement || element.isPrivate) {
         throw InvalidGenerationSourceError(
@@ -83,16 +103,18 @@ class _FunctionsFrameworkBuilder implements Builder {
       entries[targetName] = invokeExpression;
     }
 
-    final cases = [
-      for (var e in entries.values) '  case ${e.name}:return ${e.expression};',
-    ];
+    if (entries.isNotEmpty) {
+      final cases = [
+        for (var e in entries.values)
+          '  case ${e.name}:return ${e.expression};',
+      ];
 
-    final importDirectives = [
-      "'package:functions_framework/serve.dart'",
-      "'${input.uri}' as $functionsLibraryPrefix"
-    ]..sort();
+      final importDirectives = [
+        "'package:functions_framework/serve.dart'",
+        "'${input.uri}' as $functionsLibraryPrefix"
+      ]..sort();
 
-    var output = '''
+      var output = '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
 //
@@ -123,19 +145,20 @@ ${cases.join('\n')}
 }
 ''';
 
-    try {
-      output = DartFormatter().format(output);
-    } on FormatterException catch (e, stack) {
-      log.warning('Could not format output.', e, stack);
-    }
+      try {
+        output = DartFormatter().format(output);
+      } on FormatterException catch (e, stack) {
+        log.warning('Could not format output.', e, stack);
+      }
 
-    await buildStep.writeAsString(
-      AssetId(
-        buildStep.inputId.package,
-        path.join('bin', 'server.dart'),
-      ),
-      output,
-    );
+      await buildStep.writeAsString(
+        AssetId(
+          buildStep.inputId.package,
+          path.join('bin', unique ? 'server_$fileName.dart' : 'server.dart'),
+        ),
+        output,
+      );
+    }
   }
 }
 

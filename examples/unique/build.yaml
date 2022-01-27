@@ -1,0 +1,6 @@
+targets:
+  $default:
+    builders:
+      functions_framework_builder|function_framework_builder:
+        options:
+          unique: true

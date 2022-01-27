@@ -1,0 +1,14 @@
+# See https://dart.dev/guides/libraries/private-files
+
+# Files and directories created by pub
+.dart_tool/
+.packages
+build/
+# commented out for application, uncomment for lib
+# pubspec.lock
+
+# Standard files for Cloud Functions conformance tests
+# https://github.com/GoogleCloudPlatform/functions-framework-conformance
+function_output.json
+serverlog_stderr.txt
+serverlog_stdout.txt
