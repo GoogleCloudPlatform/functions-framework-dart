@@ -19,7 +19,7 @@ export 'json_data.dart';
 
 @CloudFunction()
 GreetingResponse function(GreetingRequest request) {
-  final name = request.name ?? 'World';
+  final name = request.name ?? 'World2';
   final json = GreetingResponse(salutation: 'Hello', name: name);
   return json;
 }
