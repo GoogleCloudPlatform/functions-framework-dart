@@ -22,8 +22,14 @@ Future<void> run(
   int port,
   Handler handler,
   Future<bool> shutdownSignal,
-  Middleware loggingMiddleware,
-) async {
+  Middleware loggingMiddleware, {
+  bool autoCompress = false,
+  List<Middleware> middlewares = const [],
+}) async {
+  for (var m in middlewares) {
+    loggingMiddleware.addMiddleware(m);
+  }
+
   final server = await shelf_io.serve(
     loggingMiddleware
         .addMiddleware(_forbiddenAssetMiddleware)
@@ -31,6 +37,7 @@ Future<void> run(
     InternetAddress.anyIPv4,
     port,
   );
+  server.autoCompress = autoCompress;
   print('Listening on :${server.port}');
 
   final force = await shutdownSignal;
