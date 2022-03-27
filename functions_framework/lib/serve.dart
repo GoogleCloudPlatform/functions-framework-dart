@@ -46,6 +46,20 @@ export 'src/function_target.dart'
 /// If there are no configuration errors, the returned [Future] will not
 /// complete until the process has received signal [ProcessSignal.sigterm] or
 /// [ProcessSignal.sigint].
+///
+/// The [autoCompress] states whether the [HttpServer] should compress the
+/// content, if possible.
+///
+/// The content can only be compressed when the response is using
+/// chunked Transfer-Encoding and the incoming request has `gzip`
+/// as an accepted encoding in the Accept-Encoding header.
+///
+/// The default value is `false` (compression disabled).
+/// To enable, set `autoCompress` to `true`.
+///
+/// An optional [customMiddleware] can be passed in to provide custom
+/// interceptors for things like authentication, authorization, providing CORS
+/// headers, etc.
 Future<void> serve(
   List<String> args,
   FunctionTarget? Function(String) nameToFunctionTarget, {
@@ -127,15 +141,13 @@ Future<void> _serve(
     sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
   }
 
-  if (customMiddleware != null) {
-    loggingMiddleware.addMiddleware(customMiddleware);
-  }
-
   await run(
     config.port,
     functionTarget.handler,
     completer.future,
-    loggingMiddleware,
+    customMiddleware == null
+        ? loggingMiddleware
+        : loggingMiddleware.addMiddleware(customMiddleware),
     autoCompress: autoCompress,
   );
 }
