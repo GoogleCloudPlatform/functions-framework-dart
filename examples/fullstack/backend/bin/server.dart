@@ -21,7 +21,6 @@ Future<void> main(List<String> args) async {
   await serve(
     args,
     _nameToFunctionTarget,
-    autoCompress: true,
     customMiddleware: corsHeaders(),
   );
 }
