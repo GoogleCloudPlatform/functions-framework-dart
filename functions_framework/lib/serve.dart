@@ -50,10 +50,10 @@ Future<void> serve(
   List<String> args,
   FunctionTarget? Function(String) nameToFunctionTarget, {
   bool autoCompress = false,
-  List<Middleware> middlewares = const [],
+  Middleware? customMiddleware,
 }) async {
   try {
-    await _serve(args, nameToFunctionTarget, autoCompress, middlewares);
+    await _serve(args, nameToFunctionTarget, autoCompress, customMiddleware);
   } on BadConfigurationException catch (e) {
     stderr.writeln(red.wrap(e.message));
     if (e.details != null) {
@@ -67,7 +67,7 @@ Future<void> _serve(
   List<String> args,
   FunctionTarget? Function(String) nameToFunctionTarget,
   bool autoCompress,
-  List<Middleware> middlewares,
+  Middleware? customMiddleware,
 ) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
@@ -127,12 +127,15 @@ Future<void> _serve(
     sigTermSub = ProcessSignal.sigterm.watch().listen(signalHandler);
   }
 
+  if (customMiddleware != null) {
+    loggingMiddleware.addMiddleware(customMiddleware);
+  }
+
   await run(
     config.port,
     functionTarget.handler,
     completer.future,
     loggingMiddleware,
     autoCompress: autoCompress,
-    middlewares: middlewares,
   );
 }
