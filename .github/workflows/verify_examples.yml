@@ -27,7 +27,7 @@ jobs:
         working-directory: ${{ matrix.example_directory }}
     steps:
     - name: Cache Pub hosted dependencies
-      uses: actions/cache@v2.1.7
+      uses: actions/cache@v3.0.1
       with:
         path: "~/.pub-cache/hosted"
         key: "os:ubuntu-latest;pub-cache-hosted;dart:dev;packages:${{ matrix.example_directory }}"
