@@ -38,7 +38,7 @@ jobs:
     - uses: dart-lang/setup-dart@v1.3
       with:
         sdk: stable
-    - uses: actions/checkout@v2.4.0
+    - uses: actions/checkout@v3
     - run: dart --version
     - id: pub_get
       run: dart pub get
