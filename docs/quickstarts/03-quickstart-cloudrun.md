@@ -57,12 +57,13 @@ Use the `gcloud run deploy` command to build and deploy your function in a
 single step.
 
 ```shell
-gcloud run deploy NAME \
-  --source=PATH \          # can use $PWD or . for current dir
-  --project=PROJECT \      # the Google Cloud project ID
-  --region=REGION  \       # ex: us-central1
-  --platform=managed \     # for Cloud Run
-  --allow-unauthenticated  # for public access
+gcloud beta run deploy NAME \
+  --source=PATH \               # can use $PWD or . for current dir
+  --project=PROJECT \           # the Google Cloud project ID
+  --region=REGION  \            # ex: us-central1
+  --platform=managed \          # for Cloud Run
+  --allow-unauthenticated \     # for public access
+  --execution-environment=gen2  # use Docker instead of gVisor
 ```
 
 Since the project ID was saved to the `gcloud` configuration in the
@@ -80,7 +81,7 @@ gcloud config set run/region us-central1
 For example:
 
 ```shell
-$ gcloud run deploy hello --allow-unauthenticated --source=.
+$ gcloud beta run deploy hello --allow-unauthenticated --execution-environment=gen2 --source=.
 Building using Dockerfile and deploying container to Cloud Run service [hello] in project [dart-demo] region [us-central1]
 ✓ Building and deploying new service... Done.
   ✓ Uploading sources...
