@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.6
+
+- Support the latest `package:analyzer`.
+
 ## 0.4.5
 
 - Support the latest `package:analyzer`.
