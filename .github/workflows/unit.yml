@@ -32,7 +32,7 @@ jobs:
         with:
           sdk: "2.14.0"
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -60,7 +60,7 @@ jobs:
         with:
           sdk: "2.14.0"
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: integration_test_pub_upgrade
         name: integration_test; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -88,7 +88,7 @@ jobs:
         with:
           sdk: "2.14.0"
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -116,7 +116,7 @@ jobs:
         with:
           sdk: "2.14.0"
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: functions_framework_builder_pub_upgrade
         name: functions_framework_builder; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -144,7 +144,7 @@ jobs:
         with:
           sdk: "2.14.0"
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: integration_test_pub_upgrade
         name: integration_test; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -172,7 +172,7 @@ jobs:
         with:
           sdk: dev
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -200,7 +200,7 @@ jobs:
         with:
           sdk: dev
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: functions_framework_pub_upgrade
         name: functions_framework; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -228,7 +228,7 @@ jobs:
         with:
           sdk: dev
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: integration_test_pub_upgrade
         name: integration_test; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -256,7 +256,7 @@ jobs:
         with:
           sdk: dev
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -284,7 +284,7 @@ jobs:
         with:
           sdk: dev
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: functions_framework_builder_pub_upgrade
         name: functions_framework_builder; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
@@ -312,7 +312,7 @@ jobs:
         with:
           sdk: dev
       - id: checkout
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.0.2
       - id: integration_test_pub_upgrade
         name: integration_test; dart pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"

@@ -35,7 +35,7 @@ jobs:
         sdk: stable
     - run: dart --version
 
-    - uses: actions/checkout@v3.0.0
+    - uses: actions/checkout@v3.0.2
     - run: dart pub upgrade
       working-directory: integration_test
 
