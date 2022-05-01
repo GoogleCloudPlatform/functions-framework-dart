@@ -15,9 +15,14 @@
 
 import 'package:backend/functions.dart' as function_library;
 import 'package:functions_framework/serve.dart';
+import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 
 Future<void> main(List<String> args) async {
-  await serve(args, _nameToFunctionTarget);
+  await serve(
+    args,
+    _nameToFunctionTarget,
+    customMiddleware: corsHeaders(),
+  );
 }
 
 FunctionTarget? _nameToFunctionTarget(String name) {

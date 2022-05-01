@@ -3,6 +3,7 @@
 ## 0.4.2-dev
 
 - Requires Dart `2.14.0`.
+- Added `autoCompress` and `customMiddleware` as optional parameters to `serve`
 
 ## 0.4.1
 

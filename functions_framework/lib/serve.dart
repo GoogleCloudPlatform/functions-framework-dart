@@ -27,6 +27,7 @@ import 'dart:io';
 
 import 'package:io/ansi.dart';
 import 'package:io/io.dart';
+import 'package:shelf/shelf.dart';
 
 import 'src/bad_configuration.dart';
 import 'src/cloud_metadata.dart';
@@ -45,12 +46,28 @@ export 'src/function_target.dart'
 /// If there are no configuration errors, the returned [Future] will not
 /// complete until the process has received signal [ProcessSignal.sigterm] or
 /// [ProcessSignal.sigint].
+///
+/// The [autoCompress] states whether the [HttpServer] should compress the
+/// content, if possible.
+///
+/// The content can only be compressed when the response is using
+/// chunked Transfer-Encoding and the incoming request has `gzip`
+/// as an accepted encoding in the Accept-Encoding header.
+///
+/// The default value is `false` (compression disabled).
+/// To enable, set `autoCompress` to `true`.
+///
+/// An optional [customMiddleware] can be passed in to provide custom
+/// interceptors for things like authentication, authorization, providing CORS
+/// headers, etc.
 Future<void> serve(
   List<String> args,
-  FunctionTarget? Function(String) nameToFunctionTarget,
-) async {
+  FunctionTarget? Function(String) nameToFunctionTarget, {
+  bool autoCompress = false,
+  Middleware? customMiddleware,
+}) async {
   try {
-    await _serve(args, nameToFunctionTarget);
+    await _serve(args, nameToFunctionTarget, autoCompress, customMiddleware);
   } on BadConfigurationException catch (e) {
     stderr.writeln(red.wrap(e.message));
     if (e.details != null) {
@@ -63,6 +80,8 @@ Future<void> serve(
 Future<void> _serve(
   List<String> args,
   FunctionTarget? Function(String) nameToFunctionTarget,
+  bool autoCompress,
+  Middleware? customMiddleware,
 ) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
@@ -123,5 +142,12 @@ Future<void> _serve(
   }
 
   await run(
-      config.port, functionTarget.handler, completer.future, loggingMiddleware);
+    config.port,
+    functionTarget.handler,
+    completer.future,
+    customMiddleware == null
+        ? loggingMiddleware
+        : loggingMiddleware.addMiddleware(customMiddleware),
+    autoCompress: autoCompress,
+  );
 }
