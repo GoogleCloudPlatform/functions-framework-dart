@@ -4,8 +4,7 @@
 .dart_tool/
 .packages
 build/
-# commented out for application, uncomment for lib
-# pubspec.lock
+pubspec.lock
 
 # Standard files for Cloud Functions conformance tests
 # https://github.com/GoogleCloudPlatform/functions-framework-conformance
