@@ -63,7 +63,7 @@ void main() {
     );
 
     // wait for the server to start!
-    await Future.value();
+    await Future<void>.value();
 
     final listeningLine = lines.single;
     lines.clear();

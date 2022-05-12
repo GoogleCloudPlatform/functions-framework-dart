@@ -48,7 +48,7 @@ class AppDrawer extends StatelessWidget {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => HistoryPage()),
+                  MaterialPageRoute<void>(builder: (_) => HistoryPage()),
                 );
               },
             ),
