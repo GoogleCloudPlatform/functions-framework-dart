@@ -160,7 +160,7 @@ void main() {
       );
     });
 
-    Future<void> _post(
+    Future<void> doPost(
       String path, {
       String? requestBody,
       int expectedStatusCode = 200,
@@ -181,7 +181,7 @@ void main() {
     }
 
     test('no content type causes a 400', () async {
-      await _post(
+      await doPost(
         '',
         expectedStatusCode: 400,
         expectedBody: 'Bad request. Content-Type header is required.',
@@ -201,7 +201,7 @@ void main() {
 
     test('bad format of core header: missing source', () async {
       headers['Content-Type'] = 'application/json';
-      await _post(
+      await doPost(
         '',
         expectedStatusCode: 400,
         requestBody: r'''
@@ -246,7 +246,7 @@ void main() {
       await doSetup(FunctionTarget.http(function));
     });
 
-    Future<void> _get(
+    Future<void> doGet(
       String path, {
       int expectedStatusCode = 200,
       Object? bodyMatcher,
@@ -265,17 +265,17 @@ void main() {
     }
 
     test('root', () async {
-      await _get('', bodyMatcher: 'Hello, World!');
+      await doGet('', bodyMatcher: 'Hello, World!');
       expectLines(isEmpty);
     });
 
     test('info', () async {
-      await _get('info', bodyMatcher: isNotEmpty);
+      await doGet('info', bodyMatcher: isNotEmpty);
       expectLines(isEmpty);
     });
 
     test('print', () async {
-      await _get('print/something', bodyMatcher: 'Printing: print/something');
+      await doGet('print/something', bodyMatcher: 'Printing: print/something');
       expect(lines, hasLength(2));
 
       matchEntry(lines[0], 'print');
@@ -285,7 +285,7 @@ void main() {
     });
 
     test('error', () async {
-      await _get('error', expectedStatusCode: 500);
+      await doGet('error', expectedStatusCode: 500);
 
       expect(lines, hasLength(1));
       final entry = lines.single;
@@ -300,7 +300,7 @@ void main() {
     });
 
     test('async error', () async {
-      await _get('error/async', expectedStatusCode: 500);
+      await doGet('error/async', expectedStatusCode: 500);
 
       expect(lines, hasLength(2));
 
@@ -333,7 +333,7 @@ void main() {
       );
     });
 
-    Future<void> _get(
+    Future<void> doGet(
       String path, {
       int expectedStatusCode = 200,
       Object? bodyMatcher,
@@ -352,7 +352,7 @@ void main() {
     }
 
     test('all levels in and out of zone', () async {
-      await _get('');
+      await doGet('');
       final trace = 'projects/test_project_id/traces/$traceStart';
       expectLines([
         '{"message":"default","severity":"DEFAULT","logging.googleapis.com/trace":"$trace"}',
