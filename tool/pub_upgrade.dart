@@ -19,7 +19,7 @@ import 'dart:io';
 Future<void> main() async {
   final results = <String, int>{};
 
-  Future<void> _work(Directory directory) async {
+  Future<void> doWork(Directory directory) async {
     for (var entry in directory.listSync()) {
       if (entry is File) {
         if (entry.path.endsWith('/pubspec.yaml')) {
@@ -39,13 +39,13 @@ Future<void> main() async {
             .where((element) => element.isNotEmpty)
             .last
             .startsWith('.')) {
-          await _work(entry);
+          await doWork(entry);
         }
       }
     }
   }
 
-  await _work(Directory.current);
+  await doWork(Directory.current);
 
   print('Results:');
   print(results.entries.map((e) => '${e.key} - ${e.value}').join('\n'));

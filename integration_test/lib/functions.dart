@@ -46,7 +46,7 @@ Future<Response> function(Request request) async {
   if (urlPath.contains('slow')) {
     // Adds a one-second pause to matching requests.
     // Good for testing concurrency
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<void>.delayed(const Duration(seconds: 1));
   }
 
   try {
@@ -86,9 +86,9 @@ Future<Response> function(Request request) async {
     if (urlPath.startsWith('error')) {
       if (urlPath.contains('async')) {
         // Add a pause to the result
-        await Future.value();
+        await Future<void>.value();
         unawaited(
-          Future.value().then((value) => throw StateError('async error')),
+          Future<void>.value().then((value) => throw StateError('async error')),
         );
       }
       throw Exception('An error was forced by requesting "$urlPath"');
