@@ -58,9 +58,9 @@ abstract class JsonFunctionTarget<RequestType, ResponseType>
 class _JsonFunctionTarget<RequestType, ResponseType>
     extends JsonFunctionTarget<RequestType, ResponseType> {
   _JsonFunctionTarget(
-    JsonHandler<RequestType, ResponseType> function,
-    RequestType Function(Object?) fromJson,
-  ) : super._(function, fromJson);
+    super.function,
+    super.fromJson,
+  ) : super._();
 
   @override
   FutureOr<Response> handler(Request request) async {
@@ -78,9 +78,9 @@ class _JsonFunctionTarget<RequestType, ResponseType>
 class _VoidJsonFunctionTarget<RequestType, ResponseType>
     extends JsonFunctionTarget<RequestType, ResponseType> {
   _VoidJsonFunctionTarget(
-    JsonHandler<RequestType, ResponseType> function,
-    RequestType Function(Object?) fromJson,
-  ) : super._(function, fromJson);
+    super.function,
+    super.fromJson,
+  ) : super._();
 
   @override
   FutureOr<Response> handler(Request request) async {
@@ -113,9 +113,9 @@ abstract class JsonWithContextFunctionTarget<RequestType, ResponseType>
 class _JsonWithContextFunctionTarget<RequestType, ResponseType>
     extends JsonWithContextFunctionTarget<RequestType, ResponseType> {
   _JsonWithContextFunctionTarget(
-    JsonWithContextHandler<RequestType, ResponseType> function,
-    RequestType Function(Object?) fromJson,
-  ) : super._(function, fromJson);
+    super.function,
+    super.fromJson,
+  ) : super._();
 
   @override
   FutureOr<Response> handler(Request request) async {
@@ -139,9 +139,9 @@ class _JsonWithContextFunctionTarget<RequestType, ResponseType>
 class _VoidJsonWithContextFunctionTarget<RequestType, ResponseType>
     extends JsonWithContextFunctionTarget<RequestType, ResponseType> {
   _VoidJsonWithContextFunctionTarget(
-    JsonWithContextHandler<RequestType, ResponseType> function,
-    RequestType Function(Object?) fromJson,
-  ) : super._(function, fromJson);
+    super.function,
+    super.fromJson,
+  ) : super._();
 
   @override
   FutureOr<Response> handler(Request request) async {
