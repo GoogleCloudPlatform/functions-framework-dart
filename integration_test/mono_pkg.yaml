@@ -1,6 +1,6 @@
 # https://github.com/google/mono_repo.dart
 sdk:
-- 2.14.0
+- 2.17.0
 - dev
 
 stages:
@@ -11,7 +11,7 @@ stages:
     sdk: dev
   - group:
     - analyze: .
-    sdk: 2.14.0
+    sdk: 2.17.0
 - unit_test:
   - test: -x presubmit-only
   - test: --run-skipped -t presubmit-only
