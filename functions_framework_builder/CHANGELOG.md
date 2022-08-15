@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0
+
+- Upgrade to `package:analyzer` 4.4.0 and later, where `element` has been
+  replaced with `element2`. As a result, Dart SDK 2.17 or later is now required.
+
 ## 0.4.6
 
 - Support the latest `package:analyzer`.

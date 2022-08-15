@@ -100,34 +100,6 @@ jobs:
         working-directory: dartfn
         run: dart test
   job_004:
-    name: "unit_test; Dart 2.14.0; PKG: functions_framework_builder; `dart test`"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache Pub hosted dependencies
-        uses: actions/cache@4504faf7e9bcf8f3ed0bc863c4e1d21499ab8ef8
-        with:
-          path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.14.0;packages:functions_framework_builder;commands:test_0"
-          restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.14.0;packages:functions_framework_builder
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.14.0
-            os:ubuntu-latest;pub-cache-hosted
-            os:ubuntu-latest
-      - uses: dart-lang/setup-dart@6a218f2413a3e78e9087f638a238f6b40893203d
-        with:
-          sdk: "2.14.0"
-      - id: checkout
-        uses: actions/checkout@d0651293c4a5a52e711f25b41b05b2212f385d28
-      - id: functions_framework_builder_pub_upgrade
-        name: functions_framework_builder; dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: functions_framework_builder
-        run: dart pub upgrade
-      - name: functions_framework_builder; dart test
-        if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
-        working-directory: functions_framework_builder
-        run: dart test
-  job_005:
     name: "unit_test; Dart 2.14.0; PKG: integration_test; `dart test -x presubmit-only`"
     runs-on: ubuntu-latest
     steps:
@@ -155,6 +127,34 @@ jobs:
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
         run: dart test -x presubmit-only
+  job_005:
+    name: "unit_test; Dart 2.17.0; PKG: functions_framework_builder; `dart test`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@4504faf7e9bcf8f3ed0bc863c4e1d21499ab8ef8
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:functions_framework_builder;commands:test_0"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:functions_framework_builder
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - uses: dart-lang/setup-dart@6a218f2413a3e78e9087f638a238f6b40893203d
+        with:
+          sdk: "2.17.0"
+      - id: checkout
+        uses: actions/checkout@d0651293c4a5a52e711f25b41b05b2212f385d28
+      - id: functions_framework_builder_pub_upgrade
+        name: functions_framework_builder; dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: functions_framework_builder
+        run: dart pub upgrade
+      - name: functions_framework_builder; dart test
+        if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
+        working-directory: functions_framework_builder
+        run: dart test
   job_006:
     name: "unit_test; Dart dev; PKG: dartfn; `dart test --run-skipped -t presubmit-only`"
     runs-on: ubuntu-latest
