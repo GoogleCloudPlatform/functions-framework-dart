@@ -48,7 +48,6 @@ linter:
   - file_names
   - hash_and_equals
   - implementation_imports
-  - invariant_booleans
   - iterable_contains_unrelated_type
   - join_return_with_assignment
   - library_names
@@ -129,5 +128,6 @@ linter:
   - use_is_even_rather_than_modulo
   - use_rethrow_when_possible
   - use_string_buffers
+  - use_super_parameters
   - valid_regexps
   - void_checks

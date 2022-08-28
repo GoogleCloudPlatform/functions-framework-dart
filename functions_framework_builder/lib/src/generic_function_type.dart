@@ -100,12 +100,12 @@ class GenericFunctionType implements SupportedFunctionType {
 
     if (library.typeSystem.isSubtypeOf(element.type, functionType)) {
       if (paramInfo.paramType != null) {
-        if (library.exportNamespace.get(paramInfo.paramType!.element.name) ==
+        if (library.exportNamespace.get(paramInfo.paramType!.element2.name) ==
             null) {
           // TODO: add a test for this!
           throw InvalidGenerationSourceError(
-            'The type `${paramInfo.paramType!.element.name}` is not exposed by '
-            'the function library `${library.source.uri}` so it cannot '
+            'The type `${paramInfo.paramType!.element2.name}` is not exposed '
+            'by the function library `${library.source.uri}` so it cannot '
             'be used.',
           );
         }

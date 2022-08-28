@@ -49,5 +49,5 @@ FutureOr<_MyResponse> customResponseFutureOr(Request request) =>
     throw UnimplementedError();
 
 abstract class _MyResponse extends Response {
-  _MyResponse(int statusCode) : super(statusCode);
+  _MyResponse(super.statusCode);
 }
