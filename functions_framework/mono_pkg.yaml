@@ -8,7 +8,7 @@ stages:
     sdk: dev
   - group:
     - analyze: .
-    sdk: 2.17.0
+    sdk: pubspec
 - unit_test:
   - group:
     - test: --run-skipped -t presubmit-only

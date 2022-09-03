@@ -1,7 +1,7 @@
 # https://github.com/google/mono_repo.dart
 sdk:
 - dev
-- 2.17.0
+- pubspec
 
 stages:
 - analyze_format:
@@ -11,7 +11,7 @@ stages:
     dart: dev
   - group:
     - analyze: .
-    dart: 2.17.0
+    dart: pubspec
 - unit_test:
   - group:
     - test:
