@@ -1,6 +1,6 @@
 # https://github.com/google/mono_repo.dart
 sdk:
-- 2.17.0
+- pubspec
 - dev
 
 stages:
