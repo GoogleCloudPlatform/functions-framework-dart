@@ -2,6 +2,8 @@
 
 ## 0.4.5-dev
 
+- Fix generated code in `couldevent` template.
+
 ## 0.4.4
 
 - Add missing `package:lints` dependency.
