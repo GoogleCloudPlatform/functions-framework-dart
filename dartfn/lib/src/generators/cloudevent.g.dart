@@ -279,7 +279,7 @@ KHJlcXVlc3RPdXRwdXQpLAogICk7CiAgcHJvYy5zaWduYWwoc2lnbmFsKTsKICBhd2FpdCBwcm9j
 LnNob3VsZEV4aXQoMCk7CiAgYXdhaXQgZXhwZWN0TGF0ZXIoCiAgICBwcm9jLnN0ZG91dCwKICAg
 IGVtaXRzVGhyb3VnaCgnUmVjZWl2ZWQgc2lnbmFsICRzaWduYWwgLSBjbG9zaW5nJyksCiAgKTsK
 fQoKUmVnRXhwIGZpbmlzaGVkUGF0dGVybihTdHJpbmcgbWV0aG9kLCBpbnQgc3RhdHVzQ29kZSkg
-PT4KICAgIFJlZ0V4cCgnJG1ldGhvZC4rXFske3N0YXR1c0NvZGUudG9TdHJpbmcoKX1cXScpOwo=''',
+PT4KICAgIFJlZ0V4cCgnJG1ldGhvZC4rWyR7c3RhdHVzQ29kZS50b1N0cmluZygpfV0nKTsK''',
   'tool/binary_mode_request.dart',
   'text',
   '''

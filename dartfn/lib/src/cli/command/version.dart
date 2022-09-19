@@ -24,7 +24,7 @@ class VersionCommand extends Command {
   @override
   final description = 'Print the current version.';
 
-  VersionCommand(CommandContext context) : super(context) {
+  VersionCommand(super.context) {
     argParser.addFlag('short',
         abbr: 's', negatable: false, help: 'Print just the version number.');
   }

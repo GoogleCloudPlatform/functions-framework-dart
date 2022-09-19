@@ -19,13 +19,9 @@ part 'helloworld.g.dart';
 /// A generator for a pub library.
 class HelloWorldGenerator extends common.DefaultGenerator {
   HelloWorldGenerator()
-      : super('helloworld', 'Dart Package',
-            'A sample "Hello, World!" Functions Framework project.',
-            categories: const ['dart']) {
-    for (var file in common.decodeConcatenatedData(_data)) {
-      addTemplateFile(file);
-    }
-
-    setEntrypoint(getFile('bin/server.dart'));
-  }
+      : super(
+          'helloworld',
+          'A sample "Hello, World!" Functions Framework project.',
+          _data,
+        );
 }

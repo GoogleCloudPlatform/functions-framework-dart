@@ -19,13 +19,9 @@ part 'cloudevent.g.dart';
 /// A generator for a pub library.
 class CloudEventFunctionGenerator extends common.DefaultGenerator {
   CloudEventFunctionGenerator()
-      : super('cloudevent', 'Dart Package',
-            'A sample Functions Framework project for handling a cloudevent.',
-            categories: const ['dart']) {
-    for (var file in common.decodeConcatenatedData(_data)) {
-      addTemplateFile(file);
-    }
-
-    setEntrypoint(getFile('bin/server.dart'));
-  }
+      : super(
+          'cloudevent',
+          'A sample Functions Framework project for handling a cloudevent.',
+          _data,
+        );
 }

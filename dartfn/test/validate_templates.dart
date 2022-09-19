@@ -41,16 +41,6 @@ final List<RegExp> _pubspecOrderRegexps =
 final String _expectedGitIgnore = _getMetaTemplateFile('.gitignore');
 final String _expectedAnalysisOptions =
     _getMetaTemplateFile('templates/analysis_options.yaml');
-final String _expectedAngularAnalysisOptions = [
-  _expectedAnalysisOptions.split('\n').take(12),
-  '  exclude: [build/**]',
-  '  errors:',
-  '    uri_has_not_been_generated: ignore',
-  "  # Angular plugin support is in beta. You're welcome to try it and report",
-  '  # issues: https://github.com/dart-lang/angular_analyzer_plugin/issues',
-  '  # plugins:',
-  '    # - angular\n',
-].expand((e) => e is Iterable ? e : [e]).join('\n');
 
 void main() {
   late Directory dir;
@@ -91,14 +81,12 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
   var pubspecFile = File(pubspecPath);
   var pubspecContentString = pubspecFile.readAsStringSync();
   var pubspecContent = yaml.loadYaml(pubspecContentString) as yaml.YamlMap;
-  final usesAngular =
-      pubspecContent['dependencies']?.containsKey('angular') ?? false;
 
   var analysisOptionsPath = path.join(tempDir.path, 'analysis_options.yaml');
   var analysisOptionsFile = File(analysisOptionsPath);
   expect(
     analysisOptionsFile.readAsStringSync(),
-    usesAngular ? _expectedAngularAnalysisOptions : _expectedAnalysisOptions,
+    _expectedAnalysisOptions,
     reason: 'All analysis_options.yaml files should be identical.',
   );
 
