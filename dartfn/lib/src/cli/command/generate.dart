@@ -30,7 +30,7 @@ class GenerateCommand extends Command {
   @override
   final description = 'Run a project generator to get started.';
 
-  GenerateCommand(CommandContext context) : super(context) {
+  GenerateCommand(super.context) {
     argParser.addFlag('list',
         negatable: false, help: 'List available generators.');
 
@@ -113,20 +113,14 @@ class GenerateCommand extends Command {
   }
 
   String _createMachineInfo(List<stagehand.Generator> generators) {
-    var itor = generators.map((stagehand.Generator generator) {
-      var m = {
+    var itor = generators.map(
+      (stagehand.Generator generator) => {
         'name': generator.id,
-        'label': generator.label,
         'description': generator.description,
-        'categories': generator.categories
-      };
-
-      if (generator.entrypoint != null) {
-        m['entrypoint'] = generator.entrypoint!.path;
-      }
-
-      return m;
-    });
+        if (generator.entrypoint != null)
+          'entrypoint': generator.entrypoint!.path,
+      },
+    );
     return json.encode(itor.toList());
   }
 

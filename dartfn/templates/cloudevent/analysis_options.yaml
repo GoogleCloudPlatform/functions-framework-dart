@@ -12,3 +12,9 @@ include: package:lints/recommended.yaml
 analyzer:
 #   exclude:
 #     - path/to/excluded/files/**
+
+# This is here to fix CI analysis. Will be removed at generation.
+# Search source code for details
+linter:
+  rules:
+    lowercase_with_underscores: 'no'

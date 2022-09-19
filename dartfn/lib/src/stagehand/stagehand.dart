@@ -36,19 +36,12 @@ import 'common.dart';
 /// user project based on this template.
 abstract class Generator implements Comparable<Generator> {
   final String id;
-  final String label;
   final String description;
-  final List<String> categories;
 
   final List<TemplateFile> files = [];
   TemplateFile? _entrypoint;
 
-  Generator(
-    this.id,
-    this.label,
-    this.description, {
-    this.categories = const [],
-  });
+  Generator(this.id, this.description);
 
   /// The entrypoint of the application; the main file for the project, which an
   /// IDE might open after creating the project.

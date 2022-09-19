@@ -19,13 +19,9 @@ part 'json.g.dart';
 /// A generator for a pub library.
 class JsonFunctionGenerator extends common.DefaultGenerator {
   JsonFunctionGenerator()
-      : super('json', 'Dart Package',
-            'A sample Functions Framework project for handling JSON.',
-            categories: const ['dart']) {
-    for (var file in common.decodeConcatenatedData(_data)) {
-      addTemplateFile(file);
-    }
-
-    setEntrypoint(getFile('bin/server.dart'));
-  }
+      : super(
+          'json',
+          'A sample Functions Framework project for handling JSON.',
+          _data,
+        );
 }

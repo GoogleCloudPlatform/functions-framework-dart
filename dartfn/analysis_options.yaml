@@ -7,3 +7,4 @@ linter:
   rules:
     - prefer_relative_imports
     - prefer_expression_function_bodies
+    - use_super_parameters

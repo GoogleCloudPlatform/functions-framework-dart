@@ -84,9 +84,13 @@ String substituteVars(String str, Map<String, String> vars) {
 
 /// An abstract implementation of a [Generator].
 abstract class DefaultGenerator extends Generator {
-  DefaultGenerator(String id, String label, String description,
-      {List<String> categories = const []})
-      : super(id, label, description, categories: categories);
+  DefaultGenerator(super.id, super.description, List<String> data) {
+    for (var file in decodeConcatenatedData(data)) {
+      addTemplateFile(file);
+    }
+
+    setEntrypoint(getFile('bin/server.dart'));
+  }
 
   TemplateFile addFile(String path, String contents) =>
       addTemplateFile(TemplateFile(path, contents));

@@ -37,19 +37,21 @@ class DataGenerator extends Generator {
         p.basenameWithoutExtension(buildStep.inputId.path).replaceAll('_', '-');
 
     var filteredAssets =
-        await buildStep.findAssets(Glob('templates/$name/**')).where((asset) {
-      var rootSegment = asset.pathSegments[2];
+        await buildStep.findAssets(Glob('templates/$name/**')).where(
+      (asset) {
+        var rootSegment = asset.pathSegments[2];
 
-      if (rootSegment == 'build' || rootSegment == 'pubspec.lock') {
-        return false;
-      }
+        if (rootSegment == 'build' || rootSegment == 'pubspec.lock') {
+          return false;
+        }
 
-      if (_allowedDotFiles.contains(rootSegment)) {
-        return true;
-      }
+        if (_allowedDotFiles.contains(rootSegment)) {
+          return true;
+        }
 
-      return !rootSegment.startsWith('.');
-    }).toList()
+        return !rootSegment.startsWith('.');
+      },
+    ).toList()
           ..sort();
 
     var items = await _getLines(filteredAssets, buildStep).map((item) {
@@ -67,9 +69,29 @@ Stream<String> _getLines(List<AssetId> ids, AssetReader reader) async* {
   for (var id in ids) {
     yield p.url.joinAll(id.pathSegments.skip(2));
     yield _binaryFileTypes.hasMatch(p.basename(id.path)) ? 'binary' : 'text';
-    yield _base64encode(await reader.readAsBytes(id));
+
+    if (id.pathSegments.last == 'analysis_options.yaml') {
+      var content = await reader.readAsString(id);
+      if (content.contains(_lintFix)) {
+        content = content.replaceAll(_lintFix, '');
+        yield _base64encode(utf8.encode(content));
+      } else {
+        throw StateError('Expected `${id.path}` to contain:\n$_lintFix');
+      }
+    } else {
+      yield _base64encode(await reader.readAsBytes(id));
+    }
   }
 }
+
+const _lintFix = r'''
+
+# This is here to fix CI analysis. Will be removed at generation.
+# Search source code for details
+linter:
+  rules:
+    lowercase_with_underscores: 'no'
+''';
 
 String _base64encode(List<int> bytes) {
   var encoded = base64.encode(bytes);
