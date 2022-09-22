@@ -33,8 +33,10 @@ void main() {
         expect(response.statusCode, 404);
         expect(response.body, 'Not found.');
 
-        await finishServerTest(proc,
-            requestOutput: endsWith('GET     [404] /$item'));
+        await finishServerTest(
+          proc,
+          requestOutput: endsWith('GET     [404] /$item'),
+        );
       });
     }
   });
@@ -52,8 +54,10 @@ void main() {
       expect(jsonBody, contains('headers'));
       expect(jsonBody, contains('environment'));
 
-      await finishServerTest(proc,
-          requestOutput: endsWith('GET     [200] /info'));
+      await finishServerTest(
+        proc,
+        requestOutput: endsWith('GET     [200] /info'),
+      );
     });
 
     test('print', () async {
@@ -88,13 +92,14 @@ void main() {
       expect(response.body, 'Internal Server Error');
 
       await expectLater(
-          proc.stderr,
-          emitsInOrder([
-            startsWith('ERROR -'),
-            'GET /error',
-            'Error thrown by handler.',
-            'Exception: An error was forced by requesting "error"',
-          ]));
+        proc.stderr,
+        emitsInOrder([
+          startsWith('ERROR -'),
+          'GET /error',
+          'Error thrown by handler.',
+          'Exception: An error was forced by requesting "error"',
+        ]),
+      );
 
       await finishServerTest(proc, requestOutput: isEmpty);
     });
@@ -131,21 +136,22 @@ void main() {
       expect(response.body, 'Internal Server Error');
 
       await expectLater(
-          proc.stderr,
-          emitsInOrder([
-            startsWith('ERROR -'),
-            'GET /error/async',
-            'Error thrown by handler.',
-            'Exception: An error was forced by requesting "error/async"',
-            // Need the `mayEmitMultiple` here because Dart 2.10 and Dart 2.12
-            // behave differently
-            mayEmitMultiple(startsWith('package:')),
-            '',
-            startsWith('ERROR -'),
-            'Asynchronous error',
-            'Bad state: async error',
-            startsWith('package:hello_world_function_test/functions.dart'),
-          ]));
+        proc.stderr,
+        emitsInOrder([
+          startsWith('ERROR -'),
+          'GET /error/async',
+          'Error thrown by handler.',
+          'Exception: An error was forced by requesting "error/async"',
+          // Need the `mayEmitMultiple` here because Dart 2.10 and Dart 2.12
+          // behave differently
+          mayEmitMultiple(startsWith('package:')),
+          '',
+          startsWith('ERROR -'),
+          'Asynchronous error',
+          'Bad state: async error',
+          startsWith('package:hello_world_function_test/functions.dart'),
+        ]),
+      );
 
       await finishServerTest(proc, requestOutput: isEmpty);
     });

@@ -86,7 +86,8 @@ JsonReturnKind validJsonReturnType(DartType type) {
   if (type.isDartAsyncFuture || type.isDartAsyncFutureOr) {
     // Unwrap the future value and run again!
     return _validJsonReturnTypeCore(
-        (type as InterfaceType).typeArguments.single);
+      (type as InterfaceType).typeArguments.single,
+    );
   }
 
   return _validJsonReturnTypeCore(type);

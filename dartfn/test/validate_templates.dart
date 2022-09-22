@@ -51,11 +51,15 @@ void main() {
     addTearDown(() => dir.delete(recursive: true));
   });
 
-  test('Meta-template .gitignore exists',
-      () => expect(_expectedGitIgnore, isNotEmpty));
+  test(
+    'Meta-template .gitignore exists',
+    () => expect(_expectedGitIgnore, isNotEmpty),
+  );
 
-  test('Meta-template analysis_options.yaml exists',
-      () => expect(_expectedAnalysisOptions, isNotEmpty));
+  test(
+    'Meta-template analysis_options.yaml exists',
+    () => expect(_expectedAnalysisOptions, isNotEmpty),
+  );
 
   test('Validate pkg/stagehand pubspec', () {
     final pubspecContent =
@@ -73,9 +77,11 @@ void main() {
 }
 
 void _testGenerator(stagehand.Generator generator, Directory tempDir) {
-  Dart.run(path.join(path.current, 'bin/dartfn.dart'),
-      arguments: ['--mock-analytics', generator.id],
-      runOptions: RunOptions(workingDirectory: tempDir.path));
+  Dart.run(
+    path.join(path.current, 'bin/dartfn.dart'),
+    arguments: ['--mock-analytics', generator.id],
+    runOptions: RunOptions(workingDirectory: tempDir.path),
+  );
 
   final pubspecPath = path.join(tempDir.path, 'pubspec.yaml');
   final pubspecFile = File(pubspecPath);
@@ -178,8 +184,11 @@ void _validatePubspec(String pubspecContentString) {
 /// Return the list of children for the given directory. This list is normalized
 /// (by sorting on the file path) in order to prevent large merge diffs in the
 /// generated template data files.
-List<FileSystemEntity> _listSync(Directory dir,
-        {bool recursive = false, bool followLinks = true}) =>
+List<FileSystemEntity> _listSync(
+  Directory dir, {
+  bool recursive = false,
+  bool followLinks = true,
+}) =>
     dir.listSync(recursive: recursive, followLinks: followLinks)
       ..sort((entity1, entity2) => entity1.path.compareTo(entity2.path));
 

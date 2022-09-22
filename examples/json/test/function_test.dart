@@ -23,7 +23,7 @@ import 'package:test_process/test_process.dart';
 const defaultTimeout = Timeout(Duration(seconds: 3));
 
 void main() {
-  test('defaults', () async {
+  test('defaults', timeout: defaultTimeout, () async {
     final proc = await TestProcess.start('dart', ['bin/server.dart']);
 
     await expectLater(
@@ -60,5 +60,5 @@ void main() {
       proc.stdout,
       emitsThrough('Received signal SIGTERM - closing'),
     );
-  }, timeout: defaultTimeout);
+  });
 }

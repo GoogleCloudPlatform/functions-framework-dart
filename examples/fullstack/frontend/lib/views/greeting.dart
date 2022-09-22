@@ -86,9 +86,11 @@ class GreetingState extends State<Greeting> {
           // clear queued snackbars from clicking too fast (only supported
           // in dev channel though)
           // .clearSnackBars()
-          .showSnackBar(SnackBar(
-        content: Text('${model.salutation}, ${model.name}'),
-      ));
+          .showSnackBar(
+        SnackBar(
+          content: Text('${model.salutation}, ${model.name}'),
+        ),
+      );
 
       _focusNameNode?.requestFocus();
     }

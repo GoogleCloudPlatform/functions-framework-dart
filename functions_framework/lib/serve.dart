@@ -123,5 +123,9 @@ Future<void> _serve(
   }
 
   await run(
-      config.port, functionTarget.handler, completer.future, loggingMiddleware);
+    config.port,
+    functionTarget.handler,
+    completer.future,
+    loggingMiddleware,
+  );
 }

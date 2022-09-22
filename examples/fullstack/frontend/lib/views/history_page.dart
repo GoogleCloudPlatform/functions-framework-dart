@@ -16,7 +16,8 @@ class HistoryPage extends StatelessWidget {
         itemBuilder: (context, index) {
           final greeting = model.pastGreetings[index];
           return ListTile(
-              title: Text('${greeting.salutation}, ${greeting.name}'));
+            title: Text('${greeting.salutation}, ${greeting.name}'),
+          );
         },
       ),
     );

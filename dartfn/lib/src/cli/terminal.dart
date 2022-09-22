@@ -17,8 +17,10 @@ import '../printer.dart';
 /// TerminalPrinter is a printer for writing decorated/colorized output to a
 /// terminal for the CLI.
 class TerminalPrinter extends Printer {
-  TerminalPrinter(
-      [PrintFunc super.stdout = print, PrintFunc super.stderr = print]);
+  TerminalPrinter([
+    PrintFunc super.stdout = print,
+    PrintFunc super.stderr = print,
+  ]);
 
   TerminalPrinter.fromPrinter(super.printer) : super.fromPrinter();
 
