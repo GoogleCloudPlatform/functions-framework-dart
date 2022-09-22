@@ -7,11 +7,11 @@ stages:
 - analyze_format:
   - group:
     - format
-    - analyze: --fatal-infos .
+    - analyze: --fatal-infos
     sdk: dev
-  - group:
-    - analyze: .
-    sdk: 2.17.0
+  - analyze:
+    sdk: pubspec
 - unit_test:
   - test: -x presubmit-only
   - test: --run-skipped -t presubmit-only
+    sdk: dev

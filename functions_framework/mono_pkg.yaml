@@ -4,12 +4,10 @@ stages:
 - analyze_format:
   - group:
     - format
-    - analyze: --fatal-infos .
+    - analyze: --fatal-infos
     sdk: dev
-  - group:
-    - analyze: .
+  - analyze:
     sdk: pubspec
 - unit_test:
-  - group:
-    - test: --run-skipped -t presubmit-only
+  - test: --run-skipped -t presubmit-only
     sdk: dev
