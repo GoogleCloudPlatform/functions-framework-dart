@@ -248,8 +248,8 @@ bnQ6CiAgc2RrOiAnPj0yLjE3LjAgPDMuMC4wJwoKZGVwZW5kZW5jaWVzOgogIGZ1bmN0aW9uc19m
 cmFtZXdvcms6IF4wLjQuMAogIGpzb25fYW5ub3RhdGlvbjogXjQuMy4wCiAgc2hlbGY6IF4xLjAu
 MAoKZGV2X2RlcGVuZGVuY2llczoKICBidWlsZF9ydW5uZXI6IF4yLjAuMAogIGZ1bmN0aW9uc19m
 cmFtZXdvcmtfYnVpbGRlcjogXjAuNC4wCiAgaHR0cDogXjAuMTMuMAogIGpzb25fc2VyaWFsaXph
-YmxlOiBeNi4wLjAKICBsaW50czogJz49MS4wLjAgPDMuMC4wJwogIHRlc3Q6IF4xLjE1LjcKICB0
-ZXN0X3Byb2Nlc3M6IF4yLjAuMAo=''',
+YmxlOiBeNi4wLjAKICBsaW50czogXjIuMC4wCiAgdGVzdDogXjEuMTUuNwogIHRlc3RfcHJvY2Vz
+czogXjIuMC4wCg==''',
   'test/function_test.dart',
   'text',
   '''

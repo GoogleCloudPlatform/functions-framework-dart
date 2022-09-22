@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:source_gen/source_gen.dart';
 import 'package:build/build.dart';
+import 'package:source_gen/source_gen.dart';
 
 import 'src/code_generator.dart';
 

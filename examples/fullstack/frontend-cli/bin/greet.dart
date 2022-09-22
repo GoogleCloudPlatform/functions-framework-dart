@@ -17,10 +17,9 @@ import 'dart:convert';
 import 'dart:io' as io;
 import 'dart:io' show Platform;
 
+import 'package:frontend_cli/api_types.dart';
 import 'package:http/http.dart' as http;
 import 'package:io/io.dart' show ExitCode;
-
-import 'package:frontend_cli/api_types.dart';
 
 FutureOr<int> main(List<String> args) async {
   // (1) parse the environment to prepare request

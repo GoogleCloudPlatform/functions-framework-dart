@@ -25,7 +25,7 @@ import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
-final _pubspecOrder = const [
+const _pubspecOrder = [
   'name',
   'description',
   'version',
@@ -58,7 +58,7 @@ void main() {
       () => expect(_expectedAnalysisOptions, isNotEmpty));
 
   test('Validate pkg/stagehand pubspec', () {
-    var pubspecContent =
+    final pubspecContent =
         File(path.join(path.current, 'pubspec.yaml')).readAsStringSync();
     _validatePubspec(pubspecContent);
   });
@@ -77,13 +77,13 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
       arguments: ['--mock-analytics', generator.id],
       runOptions: RunOptions(workingDirectory: tempDir.path));
 
-  var pubspecPath = path.join(tempDir.path, 'pubspec.yaml');
-  var pubspecFile = File(pubspecPath);
-  var pubspecContentString = pubspecFile.readAsStringSync();
-  var pubspecContent = yaml.loadYaml(pubspecContentString) as yaml.YamlMap;
+  final pubspecPath = path.join(tempDir.path, 'pubspec.yaml');
+  final pubspecFile = File(pubspecPath);
+  final pubspecContentString = pubspecFile.readAsStringSync();
+  final pubspecContent = yaml.loadYaml(pubspecContentString) as yaml.YamlMap;
 
-  var analysisOptionsPath = path.join(tempDir.path, 'analysis_options.yaml');
-  var analysisOptionsFile = File(analysisOptionsPath);
+  final analysisOptionsPath = path.join(tempDir.path, 'analysis_options.yaml');
+  final analysisOptionsFile = File(analysisOptionsPath);
   expect(
     analysisOptionsFile.readAsStringSync(),
     _expectedAnalysisOptions,
@@ -100,9 +100,9 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
 
   if (path.extension(filePath) != '.dart' ||
       !FileSystemEntity.isFileSync(filePath)) {
-    var parent = Directory(path.dirname(filePath));
+    final parent = Directory(path.dirname(filePath));
 
-    var file =
+    final file =
         _listSync(parent).firstWhereOrNull((f) => f.path.endsWith('.dart'));
 
     if (file == null) {
@@ -114,7 +114,7 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
 
   // Run the analyzer.
   if (filePath != null) {
-    var cwd = Directory.current;
+    final cwd = Directory.current;
     try {
       // TODO: Extend Analyzer.analyze to support .packages files.
       Directory.current = tempDir.path;
@@ -139,7 +139,7 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
   );
 
   // Run package tests, if `test` is included.
-  var devDeps = pubspecContent['dev_dependencies'] as Map?;
+  final devDeps = pubspecContent['dev_dependencies'] as Map?;
   if (devDeps != null) {
     if (devDeps.containsKey('test')) {
       if (devDeps.containsKey('build_test')) {
@@ -161,26 +161,27 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
 
 void _validatePubspec(String pubspecContentString) {
   // Note: the regex will match lines even if they are commented out
-  var orders = _pubspecOrderRegexps
+  final orders = _pubspecOrderRegexps
       .map((regexp) => pubspecContentString.indexOf(regexp))
       .toList();
 
   // On failure, you'll just see numbers – but the `reason` will help understand
   // which order things should go in.
-  expect(orders, orderedEquals(orders.toList()..sort()),
-      reason:
-          "Top-level keys in the pubspec were not in the expected order: ${_pubspecOrder.join(',')}");
+  expect(
+    orders,
+    orderedEquals(orders.toList()..sort()),
+    reason: 'Top-level keys in the pubspec were not in the expected order: '
+        "${_pubspecOrder.join(',')}",
+  );
 }
 
 /// Return the list of children for the given directory. This list is normalized
 /// (by sorting on the file path) in order to prevent large merge diffs in the
 /// generated template data files.
 List<FileSystemEntity> _listSync(Directory dir,
-    {bool recursive = false, bool followLinks = true}) {
-  var results = dir.listSync(recursive: recursive, followLinks: followLinks);
-  results.sort((entity1, entity2) => entity1.path.compareTo(entity2.path));
-  return results;
-}
+        {bool recursive = false, bool followLinks = true}) =>
+    dir.listSync(recursive: recursive, followLinks: followLinks)
+      ..sort((entity1, entity2) => entity1.path.compareTo(entity2.path));
 
 // Gets the named meta-template file if available, returns '' otherwise.
 String _getMetaTemplateFile(String fileName) {

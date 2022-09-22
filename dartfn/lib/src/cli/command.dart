@@ -19,7 +19,7 @@ import 'package:args/command_runner.dart' as cr;
 import '../stagehand/stagehand.dart';
 import 'console.dart';
 
-abstract class Command extends cr.Command {
+abstract class Command extends cr.Command<void> {
   final CommandContext context;
 
   Command(this.context);

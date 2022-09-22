@@ -1,10 +1,6 @@
-include: package:lints/recommended.yaml
+# https://dart.dev/guides/language/analysis-options
+include: ../analysis_options.yaml
+
 analyzer:
   exclude:
     - 'templates/**'
-
-linter:
-  rules:
-    - prefer_relative_imports
-    - prefer_expression_function_bodies
-    - use_super_parameters

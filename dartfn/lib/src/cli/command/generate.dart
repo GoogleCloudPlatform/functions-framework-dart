@@ -31,16 +31,16 @@ class GenerateCommand extends Command {
   final description = 'Run a project generator to get started.';
 
   GenerateCommand(super.context) {
-    argParser.addFlag('list',
-        negatable: false, help: 'List available generators.');
+    argParser
+      ..addFlag('list', negatable: false, help: 'List available generators.')
 
-    // Hidden option to list available projects as JSON to stdout.
-    // This is useful for tools that don't want to have to parse the output of
-    // `--help`.
-    argParser.addFlag('machine', negatable: false, hide: true);
+      // Hidden option to list available projects as JSON to stdout.
+      // This is useful for tools that don't want to have to parse the output of
+      // `--help`.
+      ..addFlag('machine', negatable: false, hide: true)
 
-    // Hidden option to generate into the current directory.
-    argParser.addFlag('force', abbr: 'f', negatable: false, hide: true);
+      // Hidden option to generate into the current directory.
+      ..addFlag('force', abbr: 'f', negatable: false, hide: true);
   }
 
   @override
@@ -51,11 +51,11 @@ class GenerateCommand extends Command {
     final generators = context.generator.generators;
     final options = argResults!;
 
-    if (options['machine']) {
+    if (options['machine'] as bool) {
       return write(_createMachineInfo(generators));
     }
 
-    if (options['list']!) {
+    if (options['list'] as bool) {
       return _listGenerators(generators);
     }
 
@@ -69,8 +69,8 @@ class GenerateCommand extends Command {
       usageException('Too many arguments (should only be one generator).');
     }
 
-    var generatorName = options.rest.first;
-    if (!options['force'] && !await context.generator.cwd.isEmpty()) {
+    final generatorName = options.rest.first;
+    if (!(options['force'] as bool) && !await context.generator.cwd.isEmpty()) {
       return error(
           'The current directory is not empty. Overwritting an exising project '
           'is NOT recommended.\n'
@@ -82,7 +82,7 @@ class GenerateCommand extends Command {
   }
 
   Future<void> _generate(String generatorName) {
-    var generator = _getGenerator(generatorName);
+    final generator = _getGenerator(generatorName);
     if (generator == null) {
       usageException("'$generatorName' is not a valid generator.\n");
     }
@@ -97,9 +97,9 @@ class GenerateCommand extends Command {
 
     write('Creating $generatorName application `$projectName`:');
 
-    var vars = <String, String>{};
+    final vars = <String, String>{};
 
-    var f = generator.generate(projectName, target, additionalVars: vars);
+    final f = generator.generate(projectName, target, additionalVars: vars);
     return f.then((_) {
       write('${generator.numFiles()} files written.');
 
@@ -113,7 +113,7 @@ class GenerateCommand extends Command {
   }
 
   String _createMachineInfo(List<stagehand.Generator> generators) {
-    var itor = generators.map(
+    final itor = generators.map(
       (stagehand.Generator generator) => {
         'name': generator.id,
         'description': generator.description,

@@ -29,8 +29,8 @@ class DirectoryGeneratorTarget extends GeneratorTarget {
   }
 
   @override
-  Future createFile(String path, List<int> contents) {
-    var file = io.File(p.join(dir.path, path));
+  Future<void> createFile(String path, List<int> contents) {
+    final file = io.File(p.join(dir.path, path));
 
     printer.write('  ${file.path}');
 
