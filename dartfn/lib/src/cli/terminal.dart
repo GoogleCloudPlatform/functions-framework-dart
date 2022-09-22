@@ -41,7 +41,9 @@ class TerminalPrinter extends Printer {
   void error(Object obj) {
     if (obj is Exception) {
       try {
-        obj = (obj as dynamic).message;
+        // ignore: avoid_dynamic_calls
+        obj = (obj as dynamic).message as Object;
+        // ignore: avoid_catching_errors
       } on NoSuchMethodError {
         // ok
       }

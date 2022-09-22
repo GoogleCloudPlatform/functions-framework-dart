@@ -65,7 +65,7 @@ abstract class Generator implements Comparable<Generator> {
     _entrypoint = entrypoint;
   }
 
-  Future generate(
+  Future<void> generate(
     String projectName,
     GeneratorTarget target, {
     Map<String, String>? additionalVars,
@@ -104,7 +104,7 @@ abstract class Generator implements Comparable<Generator> {
 /// and the binary content for the file.
 abstract class GeneratorTarget {
   /// Create a file at the given path with the given contents.
-  Future createFile(String path, List<int> contents);
+  Future<void> createFile(String path, List<int> contents);
 }
 
 /// This class represents a file in a generator template. The contents could

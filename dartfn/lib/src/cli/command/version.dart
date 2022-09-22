@@ -32,7 +32,7 @@ class VersionCommand extends Command {
   @override
   Future<void> run() async {
     await printVersion(context,
-        short: argResults!['short'], checkUpdates: true);
+        short: argResults!['short'] as bool, checkUpdates: true);
   }
 }
 
@@ -61,7 +61,7 @@ Future<void> printVersion(
     // TODO: Don't say a "later" version is available in certain situations.
     // For example: when current version is "0.3.0-dev" and latest published is
     // "0.2.0".
-    var latest = await checkPubForLaterVersion(name, version);
+    final latest = await checkPubForLaterVersion(name, version);
     if (latest != null) {
       context.console.write(
           'Version $latest is available! To update to this version, run: '

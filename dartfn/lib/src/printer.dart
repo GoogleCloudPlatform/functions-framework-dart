@@ -21,10 +21,7 @@ class Printer {
 
   Printer([PrintFunc? stdout, PrintFunc? stderr])
       : stdout = stdout ?? print,
-        stderr = stderr ?? stdout ?? print {
-    assert(stdout != null);
-    assert(stderr != null);
-  }
+        stderr = stderr ?? stdout ?? print;
 
   Printer.fromPrinter(Printer printer)
       : stdout = printer.stdout,

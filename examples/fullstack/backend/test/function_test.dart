@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:backend/functions.dart';
 import 'package:http/http.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
-
-import 'package:backend/functions.dart';
 
 const defaultTimeout = Timeout(Duration(seconds: 3));
 

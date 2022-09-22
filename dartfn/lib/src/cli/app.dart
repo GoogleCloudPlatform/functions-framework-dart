@@ -20,21 +20,22 @@ import 'package:args/command_runner.dart';
 import '../printer.dart';
 import '../stagehand/stagehand.dart';
 import '../version.dart';
+import 'command.dart';
 import 'command/generate.dart';
 import 'command/version.dart';
-import 'command.dart';
 import 'console.dart';
 
 export 'terminal.dart' show TerminalPrinter;
 
 const String _appName = 'dartfn';
 const String _appDescription =
-    '$_appName is a tool for managing Dart Functions-as-a-Service (FaaS) projects.';
+    '$_appName is a tool for managing Dart Functions-as-a-Service (FaaS) '
+    'projects.';
 
 /// App is a CLI tool for running in a user's terminal.
 class App extends Console {
   late final CommandContext _context;
-  late final CommandRunner _runner;
+  late final CommandRunner<void> _runner;
 
   App(List<Generator> generators, [Printer? out, GeneratorTarget? target])
       : super(out) {
@@ -53,7 +54,7 @@ class App extends Console {
 
   CommandContext get context => _context;
 
-  Future run(List<String> args) async {
+  Future<void> run(List<String> args) async {
     try {
       await _runner.run(args);
     } catch (e, st) {

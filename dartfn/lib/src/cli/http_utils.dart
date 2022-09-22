@@ -17,16 +17,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<http.Response> _getPubInfo(String appName) async {
-  var pubInfo = Uri.https('pub.dev', '/packages/$appName.json');
+  final pubInfo = Uri.https('pub.dev', '/packages/$appName.json');
   return await http.get(pubInfo);
 }
 
-List _getPubVersions(http.Response resp) => jsonDecode(resp.body)['versions'];
+List<String> _getPubVersions(http.Response resp) =>
+    ((jsonDecode(resp.body) as Map)['versions'] as List).cast<String>();
 
 /// Check pub.dev for newer versions.
 Future<String?> checkPubForLaterVersion(String appName, String version) async =>
     Future<String?>(() async {
-      var resp = await _getPubInfo(appName);
-      var versions = _getPubVersions(resp);
-      return (version != versions.last) ? versions.last as String : null;
+      final resp = await _getPubInfo(appName);
+      final versions = _getPubVersions(resp);
+      return (version != versions.last) ? versions.last : null;
     }).catchError((e) => null);
