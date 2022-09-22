@@ -16,66 +16,6 @@ permissions: read-all
 
 jobs:
   job_001:
-    name: "unit_test; Dart 2.17.0; PKG: dartfn; `dart test --run-skipped -t presubmit-only`"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache Pub hosted dependencies
-        uses: actions/cache@fd5de65bc895cf536527842281bea11763fefd77
-        with:
-          path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:dartfn;commands:test_1"
-          restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:dartfn
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0
-            os:ubuntu-latest;pub-cache-hosted
-            os:ubuntu-latest
-      - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@6a218f2413a3e78e9087f638a238f6b40893203d
-        with:
-          sdk: "2.17.0"
-      - id: checkout
-        name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
-      - id: dartfn_pub_upgrade
-        name: dartfn; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: dartfn
-      - name: "dartfn; dart test --run-skipped -t presubmit-only"
-        run: dart test --run-skipped -t presubmit-only
-        if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
-        working-directory: dartfn
-  job_002:
-    name: "unit_test; Dart 2.17.0; PKG: integration_test; `dart test --run-skipped -t presubmit-only`"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache Pub hosted dependencies
-        uses: actions/cache@fd5de65bc895cf536527842281bea11763fefd77
-        with:
-          path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:integration_test;commands:test_1"
-          restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:integration_test
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0
-            os:ubuntu-latest;pub-cache-hosted
-            os:ubuntu-latest
-      - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@6a218f2413a3e78e9087f638a238f6b40893203d
-        with:
-          sdk: "2.17.0"
-      - id: checkout
-        name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
-      - id: integration_test_pub_upgrade
-        name: integration_test; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: integration_test
-      - name: "integration_test; dart test --run-skipped -t presubmit-only"
-        run: dart test --run-skipped -t presubmit-only
-        if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
-        working-directory: integration_test
-  job_003:
     name: "unit_test; Dart 2.17.0; PKG: dartfn; `dart test`"
     runs-on: ubuntu-latest
     steps:
@@ -105,7 +45,7 @@ jobs:
         run: dart test
         if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
         working-directory: dartfn
-  job_004:
+  job_002:
     name: "unit_test; Dart 2.17.0; PKG: functions_framework_builder; `dart test`"
     runs-on: ubuntu-latest
     steps:
@@ -135,7 +75,7 @@ jobs:
         run: dart test
         if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
-  job_005:
+  job_003:
     name: "unit_test; Dart 2.17.0; PKG: integration_test; `dart test -x presubmit-only`"
     runs-on: ubuntu-latest
     steps:
@@ -165,7 +105,7 @@ jobs:
         run: dart test -x presubmit-only
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
-  job_006:
+  job_004:
     name: "unit_test; Dart dev; PKG: dartfn; `dart test --run-skipped -t presubmit-only`"
     runs-on: ubuntu-latest
     steps:
@@ -195,7 +135,7 @@ jobs:
         run: dart test --run-skipped -t presubmit-only
         if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
         working-directory: dartfn
-  job_007:
+  job_005:
     name: "unit_test; Dart dev; PKG: functions_framework; `dart test --run-skipped -t presubmit-only`"
     runs-on: ubuntu-latest
     steps:
@@ -225,7 +165,7 @@ jobs:
         run: dart test --run-skipped -t presubmit-only
         if: "always() && steps.functions_framework_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework
-  job_008:
+  job_006:
     name: "unit_test; Dart dev; PKG: integration_test; `dart test --run-skipped -t presubmit-only`"
     runs-on: ubuntu-latest
     steps:
@@ -255,7 +195,7 @@ jobs:
         run: dart test --run-skipped -t presubmit-only
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
-  job_009:
+  job_007:
     name: "unit_test; Dart dev; PKG: dartfn; `dart test`"
     runs-on: ubuntu-latest
     steps:
@@ -285,7 +225,7 @@ jobs:
         run: dart test
         if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
         working-directory: dartfn
-  job_010:
+  job_008:
     name: "unit_test; Dart dev; PKG: functions_framework_builder; `dart test`"
     runs-on: ubuntu-latest
     steps:
@@ -315,7 +255,7 @@ jobs:
         run: dart test
         if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
-  job_011:
+  job_009:
     name: "unit_test; Dart dev; PKG: integration_test; `dart test -x presubmit-only`"
     runs-on: ubuntu-latest
     steps:
@@ -345,7 +285,7 @@ jobs:
         run: dart test -x presubmit-only
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
-  job_012:
+  job_010:
     name: Notify failure
     runs-on: ubuntu-latest
     if: "(github.event_name == 'push' || github.event_name == 'schedule') && failure()"
@@ -366,5 +306,3 @@ jobs:
       - job_007
       - job_008
       - job_009
-      - job_010
-      - job_011
