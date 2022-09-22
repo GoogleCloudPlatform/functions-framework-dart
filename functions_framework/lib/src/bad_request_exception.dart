@@ -59,10 +59,12 @@ class BadRequestException implements Exception {
     }
 
     final chain = Chain.forTrace(innerStack ?? stack)
-        .foldFrames((frame) =>
-            frame.isCore ||
-            frame.package == 'shelf' ||
-            frame.package == 'functions_framework')
+        .foldFrames(
+          (frame) =>
+              frame.isCore ||
+              frame.package == 'shelf' ||
+              frame.package == 'functions_framework',
+        )
         .terse;
 
     buffer.write('$chain'.trim());

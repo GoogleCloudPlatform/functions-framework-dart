@@ -23,8 +23,9 @@ import 'package:source_gen/source_gen.dart';
 
 const List<String> _allowedDotFiles = <String>['.gitignore'];
 final RegExp _binaryFileTypes = RegExp(
-    r'\.(jpe?g|png|gif|ico|svg|ttf|eot|woff|woff2)$',
-    caseSensitive: false);
+  r'\.(jpe?g|png|gif|ico|svg|ttf|eot|woff|woff2)$',
+  caseSensitive: false,
+);
 
 class DataGenerator extends Generator {
   @override

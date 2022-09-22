@@ -25,14 +25,21 @@ class VersionCommand extends Command {
   final description = 'Print the current version.';
 
   VersionCommand(super.context) {
-    argParser.addFlag('short',
-        abbr: 's', negatable: false, help: 'Print just the version number.');
+    argParser.addFlag(
+      'short',
+      abbr: 's',
+      negatable: false,
+      help: 'Print just the version number.',
+    );
   }
 
   @override
   Future<void> run() async {
-    await printVersion(context,
-        short: argResults!['short'] as bool, checkUpdates: true);
+    await printVersion(
+      context,
+      short: argResults!['short'] as bool,
+      checkUpdates: true,
+    );
   }
 }
 

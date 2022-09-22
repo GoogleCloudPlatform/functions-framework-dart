@@ -42,10 +42,14 @@ class App extends Console {
     generators.sort();
 
     _context = CommandContext(
-        app: AppInfo(_appName, packageVersion),
-        console: this,
-        generator: GeneratorConfig(
-            generators: generators, cwd: io.Directory.current, target: target));
+      app: AppInfo(_appName, packageVersion),
+      console: this,
+      generator: GeneratorConfig(
+        generators: generators,
+        cwd: io.Directory.current,
+        target: target,
+      ),
+    );
 
     _runner = CommandRunner(_appName, _appDescription)
       ..addCommand(GenerateCommand(context))

@@ -40,11 +40,13 @@ class Greeting {
 
     if (res.statusCode == HttpStatus.ok) {
       final greetingResponse = GreetingResponse.fromJson(
-          jsonDecode(res.body) as Map<String, dynamic>);
+        jsonDecode(res.body) as Map<String, dynamic>,
+      );
       return greetingResponse;
     }
 
     throw Exception(
-        'Error: unexpected HTTP status code: ${res.statusCode.toString()}');
+      'Error: unexpected HTTP status code: ${res.statusCode.toString()}',
+    );
   }
 }

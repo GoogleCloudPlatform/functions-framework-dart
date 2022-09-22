@@ -44,8 +44,11 @@ FutureOr<int> main(List<String> args) async {
   final sw = Stopwatch()..start();
   http.Response res;
   try {
-    res = await http.post(url,
-        headers: {'content-type': 'application/json'}, body: body);
+    res = await http.post(
+      url,
+      headers: {'content-type': 'application/json'},
+      body: body,
+    );
   } catch (e) {
     print('Error: ${e.toString()}');
     return io.exitCode = ExitCode.osError.code;

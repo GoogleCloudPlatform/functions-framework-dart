@@ -88,11 +88,15 @@ FunctionTarget? _nameToFunctionTarget(String name) {
       'customResponse',
       'customResponseAsync',
       'customResponseFutureOr',
-    ].map((e) => """
+    ]
+        .map(
+          (e) => """
     case '$e':
       return FunctionTarget.http(
         function_library.$e,
-      );""").join('\n');
+      );""",
+        )
+        .join('\n');
     await _generateTest(
       file.readAsStringSync(),
       '''
@@ -117,11 +121,15 @@ $lines
       'futureOrFunction',
       'optionalParam',
       'objectParam',
-    ].map((e) => """
+    ]
+        .map(
+          (e) => """
     case '$e':
       return FunctionTarget.cloudEvent(
         function_library.$e,
-      );""").join('\n');
+      );""",
+        )
+        .join('\n');
     await _generateTest(
       file.readAsStringSync(),
       '''
@@ -144,15 +152,15 @@ $lines
 
     test('void return type', () async {
       await _testItems(
-          inputContent,
-          [
-            'syncFunction',
-            'asyncFunction',
-            'futureOrFunction',
-            'extraParam',
-            'optionalParam',
-          ],
-          (e) => """
+        inputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) => """
     case '$e':
       return JsonFunctionTarget.voidResult(
         function_library.$e,
@@ -175,7 +183,8 @@ $lines
             '`Map<String, dynamic>`.',
           );
         },
-      );""");
+      );""",
+      );
     });
 
     test('void return type with context', () async {
@@ -190,15 +199,15 @@ $lines
           );
 
       await _testItems(
-          newInputContent,
-          [
-            'syncFunction',
-            'asyncFunction',
-            'futureOrFunction',
-            'extraParam',
-            'optionalParam',
-          ],
-          (e) => """
+        newInputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) => """
     case '$e':
       return JsonWithContextFunctionTarget.voidResult(
         function_library.$e,
@@ -221,7 +230,8 @@ $lines
             '`Map<String, dynamic>`.',
           );
         },
-      );""");
+      );""",
+      );
     });
 
     test('simple return type', () async {
@@ -230,15 +240,15 @@ $lines
           .replaceAll('<void>', '<int>');
 
       await _testItems(
-          newInputContent,
-          [
-            'syncFunction',
-            'asyncFunction',
-            'futureOrFunction',
-            'extraParam',
-            'optionalParam',
-          ],
-          (e) => """
+        newInputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) => """
     case '$e':
       return JsonFunctionTarget(
         function_library.$e,
@@ -261,7 +271,8 @@ $lines
             '`Map<String, dynamic>`.',
           );
         },
-      );""");
+      );""",
+      );
     });
 
     test('JSON return type', () async {
@@ -270,15 +281,15 @@ $lines
           .replaceAll('<void>', '<int>');
 
       await _testItems(
-          newInputContent,
-          [
-            'syncFunction',
-            'asyncFunction',
-            'futureOrFunction',
-            'extraParam',
-            'optionalParam',
-          ],
-          (e) => """
+        newInputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) => """
     case '$e':
       return JsonFunctionTarget(
         function_library.$e,
@@ -301,7 +312,8 @@ $lines
             '`Map<String, dynamic>`.',
           );
         },
-      );""");
+      );""",
+      );
     });
 
     test('complex return type', () async {
@@ -310,15 +322,15 @@ $lines
           .replaceAll('<void>', '<Map<String, List<JsonType>>>');
 
       await _testItems(
-          newInputContent,
-          [
-            'syncFunction',
-            'asyncFunction',
-            'futureOrFunction',
-            'extraParam',
-            'optionalParam',
-          ],
-          (e) => """
+        newInputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) => """
     case '$e':
       return JsonFunctionTarget(
         function_library.$e,
@@ -341,7 +353,8 @@ $lines
             '`Map<String, dynamic>`.',
           );
         },
-      );""");
+      );""",
+      );
     });
   });
 
@@ -352,15 +365,15 @@ $lines
 
     test('void return type', () async {
       await _testItems(
-          inputContent,
-          [
-            'syncFunction',
-            'asyncFunction',
-            'futureOrFunction',
-            'extraParam',
-            'optionalParam',
-          ],
-          (e) => """
+        inputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) => """
     case '$e':
       return JsonFunctionTarget.voidResult(
         function_library.$e,
@@ -374,7 +387,8 @@ $lines
             '`num`.',
           );
         },
-      );""");
+      );""",
+      );
     });
 
     test('simple return type', () async {
@@ -382,15 +396,15 @@ $lines
           .replaceAll('void ', 'int ')
           .replaceAll('<void>', '<int>');
       await _testItems(
-          newInputContent,
-          [
-            'syncFunction',
-            'asyncFunction',
-            'futureOrFunction',
-            'extraParam',
-            'optionalParam',
-          ],
-          (e) => """
+        newInputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) => """
     case '$e':
       return JsonFunctionTarget(
         function_library.$e,
@@ -404,7 +418,8 @@ $lines
             '`num`.',
           );
         },
-      );""");
+      );""",
+      );
     });
 
     test('complex return type', () async {
@@ -413,15 +428,15 @@ $lines
           .replaceAll('<void>', '<Map<String, List<bool>>>');
 
       await _testItems(
-          newInputContent,
-          [
-            'syncFunction',
-            'asyncFunction',
-            'futureOrFunction',
-            'extraParam',
-            'optionalParam',
-          ],
-          (e) => """
+        newInputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) => """
     case '$e':
       return JsonFunctionTarget(
         function_library.$e,
@@ -435,7 +450,8 @@ $lines
             '`num`.',
           );
         },
-      );""");
+      );""",
+      );
     });
 
     test('void with context', () async {
@@ -450,15 +466,15 @@ $lines
           );
 
       await _testItems(
-          newInputContent,
-          [
-            'syncFunction',
-            'asyncFunction',
-            'futureOrFunction',
-            'extraParam',
-            'optionalParam',
-          ],
-          (e) => """
+        newInputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) => """
     case '$e':
       return JsonWithContextFunctionTarget.voidResult(
         function_library.$e,
@@ -472,7 +488,8 @@ $lines
             '`num`.',
           );
         },
-      );""");
+      );""",
+      );
     });
   });
 
@@ -600,8 +617,11 @@ Future<void> _generateThrows(String inputLibrary, Object matcher) async {
   );
 }
 
-Future<void> _testItems(String inputContent, List<String> functions,
-    String Function(String entry) entryFactory) async {
+Future<void> _testItems(
+  String inputContent,
+  List<String> functions,
+  String Function(String entry) entryFactory,
+) async {
   final entries = functions.map((e) => entryFactory(e)).join('\n');
 
   await _generateTest(
