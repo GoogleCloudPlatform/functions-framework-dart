@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Cache Pub hosted dependencies
-      uses: actions/cache@4504faf7e9bcf8f3ed0bc863c4e1d21499ab8ef8
+      uses: actions/cache@ac8075791e805656e71b4ba23325ace9e3421120
       with:
         path: "~/.pub-cache/hosted"
         key: "os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;"
