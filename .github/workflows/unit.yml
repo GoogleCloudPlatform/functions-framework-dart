@@ -35,7 +35,7 @@ jobs:
           sdk: "2.17.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@v3.1.0
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -65,7 +65,7 @@ jobs:
           sdk: "2.17.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@v3.1.0
       - id: functions_framework_builder_pub_upgrade
         name: functions_framework_builder; dart pub upgrade
         run: dart pub upgrade
@@ -95,7 +95,7 @@ jobs:
           sdk: "2.17.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@v3.1.0
       - id: integration_test_pub_upgrade
         name: integration_test; dart pub upgrade
         run: dart pub upgrade
@@ -125,7 +125,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@v3.1.0
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -155,7 +155,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@v3.1.0
       - id: functions_framework_pub_upgrade
         name: functions_framework; dart pub upgrade
         run: dart pub upgrade
@@ -185,7 +185,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@v3.1.0
       - id: integration_test_pub_upgrade
         name: integration_test; dart pub upgrade
         run: dart pub upgrade
@@ -215,7 +215,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@v3.1.0
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -245,7 +245,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@v3.1.0
       - id: functions_framework_builder_pub_upgrade
         name: functions_framework_builder; dart pub upgrade
         run: dart pub upgrade
@@ -275,7 +275,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@v3.1.0
       - id: integration_test_pub_upgrade
         name: integration_test; dart pub upgrade
         run: dart pub upgrade
