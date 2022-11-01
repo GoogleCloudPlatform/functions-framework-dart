@@ -39,16 +39,16 @@ jobs:
       - name: mono_repo self validate
         run: dart pub global run mono_repo generate --validate
   job_002:
-    name: "analyze_format; Dart 2.17.0; PKGS: dartfn, functions_framework, functions_framework_builder, integration_test; `dart analyze`"
+    name: "analyze_format; Dart 2.17.0; PKGS: dartfn, functions_framework; `dart analyze`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:dartfn-functions_framework-functions_framework_builder-integration_test;commands:analyze_1"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:dartfn-functions_framework;commands:analyze_1"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:dartfn-functions_framework-functions_framework_builder-integration_test
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:dartfn-functions_framework
             os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -77,6 +77,27 @@ jobs:
         run: dart analyze
         if: "always() && steps.functions_framework_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework
+  job_003:
+    name: "analyze_format; Dart 2.18.0; PKGS: functions_framework_builder, integration_test; `dart analyze`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0;packages:functions_framework_builder-integration_test;commands:analyze_1"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0;packages:functions_framework_builder-integration_test
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@6a218f2413a3e78e9087f638a238f6b40893203d
+        with:
+          sdk: "2.18.0"
+      - id: checkout
+        name: Checkout repository
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
       - id: functions_framework_builder_pub_upgrade
         name: functions_framework_builder; dart pub upgrade
         run: dart pub upgrade
@@ -95,7 +116,7 @@ jobs:
         run: dart analyze
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
-  job_003:
+  job_004:
     name: "analyze_format; Dart dev; PKGS: dartfn, functions_framework, functions_framework_builder, integration_test; `dart format --output=none --set-exit-if-changed .`, `dart analyze --fatal-infos`"
     runs-on: ubuntu-latest
     steps:
@@ -168,7 +189,7 @@ jobs:
         run: dart analyze --fatal-infos
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
-  job_004:
+  job_005:
     name: Notify failure
     runs-on: ubuntu-latest
     if: "(github.event_name == 'push' || github.event_name == 'schedule') && failure()"
@@ -183,3 +204,4 @@ jobs:
       - job_001
       - job_002
       - job_003
+      - job_004

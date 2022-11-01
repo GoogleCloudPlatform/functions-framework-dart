@@ -46,23 +46,23 @@ jobs:
         if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
         working-directory: dartfn
   job_002:
-    name: "unit_test; Dart 2.17.0; PKG: functions_framework_builder; `dart test`"
+    name: "unit_test; Dart 2.18.0; PKG: functions_framework_builder; `dart test`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:functions_framework_builder;commands:test_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0;packages:functions_framework_builder;commands:test_0"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:functions_framework_builder
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0;packages:functions_framework_builder
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@6a218f2413a3e78e9087f638a238f6b40893203d
         with:
-          sdk: "2.17.0"
+          sdk: "2.18.0"
       - id: checkout
         name: Checkout repository
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
@@ -76,23 +76,23 @@ jobs:
         if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
         working-directory: functions_framework_builder
   job_003:
-    name: "unit_test; Dart 2.17.0; PKG: integration_test; `dart test -x presubmit-only`"
+    name: "unit_test; Dart 2.18.0; PKG: integration_test; `dart test -x presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:integration_test;commands:test_2"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0;packages:integration_test;commands:test_2"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0;packages:integration_test
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.17.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0;packages:integration_test
+            os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@6a218f2413a3e78e9087f638a238f6b40893203d
         with:
-          sdk: "2.17.0"
+          sdk: "2.18.0"
       - id: checkout
         name: Checkout repository
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
