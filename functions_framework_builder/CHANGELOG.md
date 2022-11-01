@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.8-dev
+
+- Support the latest `package:analyzer`.
+- Require Dart 2.18
+
 ## 0.4.7
 
 - Support the latest `package:analyzer`.
