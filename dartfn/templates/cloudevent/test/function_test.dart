@@ -46,9 +46,8 @@ void main() {
       final stderrOutput = await proc.stderrStream().join('\n');
       final json = jsonDecode(stderrOutput) as Map<String, dynamic>;
 
-      expect(
-        json,
-        {
+      expect(json, {
+        'message': {
           'id': '1234-1234-1234',
           'specversion': '1.0',
           'type': 'google.cloud.pubsub.topic.publish',
@@ -57,7 +56,8 @@ void main() {
           'source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
           'data': jsonDecode(body),
         },
-      );
+        'severity': 'INFO',
+      });
     });
   });
 
@@ -101,8 +101,11 @@ void main() {
       expect(
         json,
         {
-          ...jsonDecode(body) as Map<String, dynamic>,
-          'datacontenttype': 'application/json; charset=utf-8',
+          'message': {
+            ...jsonDecode(body) as Map<String, dynamic>,
+            'datacontenttype': 'application/json; charset=utf-8',
+          },
+          'severity': 'INFO',
         },
       );
     });
