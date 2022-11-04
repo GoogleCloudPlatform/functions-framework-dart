@@ -4,6 +4,4 @@
 .github/
 .gitignore
 .idea/
-.packages
 Dockerfile
-build/

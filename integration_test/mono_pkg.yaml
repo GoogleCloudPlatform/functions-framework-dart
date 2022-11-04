@@ -1,8 +1,4 @@
 # https://github.com/google/mono_repo.dart
-sdk:
-- pubspec
-- dev
-
 stages:
 - analyze_format:
   - group:
@@ -10,8 +6,9 @@ stages:
     - analyze: --fatal-infos
     sdk: dev
   - analyze:
-    sdk: pubspec
-- unit_test:
-  - test: -x presubmit-only
-  - test: --run-skipped -t presubmit-only
     sdk: dev
+- unit_test:
+  - test:
+    sdk: [dev, pubspec]
+  - test: --run-skipped -t presubmit-only
+    sdk: [dev]
