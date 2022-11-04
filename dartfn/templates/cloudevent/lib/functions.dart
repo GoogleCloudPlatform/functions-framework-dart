@@ -13,7 +13,7 @@ void function(CloudEvent event, RequestContext context) {
     _encoder.convert(
       {
         'message': event,
-        'serverity': LogSeverity.info,
+        'severity': LogSeverity.info,
       },
     ),
   );
