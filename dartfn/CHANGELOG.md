@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.5-dev
+## 0.4.5
 
 - Fix generated code in `couldevent` template.
 
