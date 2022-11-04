@@ -2,7 +2,7 @@
 
 ## 0.4.2-dev
 
-- Requires Dart `2.14.0`.
+- Requires Dart `2.18.0`.
 
 ## 0.4.1
 

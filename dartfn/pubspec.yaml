@@ -2,11 +2,11 @@ name: dartfn
 description: >
   A tools package for managing FaaS (Function as a service) portable Dart functions projects
 # After changing the version, run `pub run build_runner build`.
-version: 0.4.5
+version: 0.4.6-dev
 homepage: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: '>=2.18.0 <3.0.0'
 
 executables:
   dartfn:

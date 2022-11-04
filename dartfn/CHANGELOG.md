@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.6-dev
+
+- Ignore file cleanup.
+- Require Dart 2.18
+
 ## 0.4.5
 
 - Fix generated code in `couldevent` template.

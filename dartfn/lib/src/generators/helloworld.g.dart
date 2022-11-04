@@ -10,12 +10,9 @@ const _data = <String>[
   '.gitignore',
   'text',
   '''
-IyBTZWUgaHR0cHM6Ly9kYXJ0LmRldi9ndWlkZXMvbGlicmFyaWVzL3ByaXZhdGUtZmlsZXMKIyBG
-aWxlcyBhbmQgZGlyZWN0b3JpZXMgY3JlYXRlZCBieSBwdWIKLmRhcnRfdG9vbC8KLnBhY2thZ2Vz
-CgojIE9taXQgY29tbWl0aW5nIHB1YnNwZWMubG9jayBmb3IgbGlicmFyeSBwYWNrYWdlczoKIyBo
-dHRwczovL2RhcnQuZGV2L2d1aWRlcy9saWJyYXJpZXMvcHJpdmF0ZS1maWxlcyNwdWJzcGVjbG9j
-awpwdWJzcGVjLmxvY2sKCiMgQ29udmVudGlvbmFsIGRpcmVjdG9yeSBmb3IgYnVpbGQgb3V0cHV0
-cwpidWlsZC8KCiMgRGlyZWN0b3J5IGNyZWF0ZWQgYnkgZGFydGRvYwpkb2MvYXBpLwo=''',
+IyBTZWUgaHR0cHM6Ly9kYXJ0LmRldi9ndWlkZXMvbGlicmFyaWVzL3ByaXZhdGUtZmlsZXMKCiMg
+RmlsZXMgYW5kIGRpcmVjdG9yaWVzIGNyZWF0ZWQgYnkgcHViCi5kYXJ0X3Rvb2wvCnB1YnNwZWMu
+bG9jawo=''',
   'Dockerfile',
   'text',
   '''

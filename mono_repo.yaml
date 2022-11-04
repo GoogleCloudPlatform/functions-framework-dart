@@ -4,6 +4,7 @@ self_validate: analyze_format
 
 merge_stages:
 - analyze_format
+- unit_test
 
 github:
   on:
