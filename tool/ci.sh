@@ -75,6 +75,10 @@ for PKG in ${PKGS}; do
         echo 'dart analyze'
         dart analyze || EXIT_CODE=$?
         ;;
+      command)
+        echo './tool/docker_test_script.sh'
+        ./tool/docker_test_script.sh || EXIT_CODE=$?
+        ;;
       format)
         echo 'dart format --output=none --set-exit-if-changed .'
         dart format --output=none --set-exit-if-changed . || EXIT_CODE=$?

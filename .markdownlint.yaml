@@ -11,5 +11,5 @@ line_length:              # MD013 max line length
   line_length: 80
 html:                     # MD033 no html
   allowed_elements: [br]
-headings: true            # MD041 require heading at top of file
 images: false             # MD045: image alt text
+first-line-h1: false      # MD041: First line in a file should be a top-level heading

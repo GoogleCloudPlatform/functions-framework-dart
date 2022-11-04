@@ -6,7 +6,7 @@ environment:
 
 dependencies:
   functions_framework: any
-  json_annotation: ^4.3.0
+  json_annotation: ^4.7.0
   shelf: ^1.0.0
 
 dev_dependencies:
@@ -26,3 +26,5 @@ dependency_overrides:
     path: ../functions_framework
   functions_framework_builder:
     path: ../functions_framework_builder
+  gcp:
+    path: ../gcp

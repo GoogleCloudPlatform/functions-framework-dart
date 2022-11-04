@@ -1,4 +1,4 @@
-// Copyright 2021 Google LLC
+// Copyright 2022 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,13 +11,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import 'package:gcp/gcp.dart';
 
-class BadConfigurationException implements Exception {
-  final String message;
-  final String? details;
-
-  BadConfigurationException(this.message, {this.details});
-
-  @override
-  String toString() => 'BadConfiguration: $message';
+Future<void> main() async {
+  print('waiting for termination');
+  await waitForTerminate();
+  print('done!');
 }
