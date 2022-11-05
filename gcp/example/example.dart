@@ -23,24 +23,48 @@ class _Server {
   _Server._({
     required this.projectId,
     required this.client,
+    required this.hosted,
   });
 
   static Future<_Server> create() async {
-    final projectId = await currentProjectId();
+    String? projectId;
+    bool hosted;
+
+    try {
+      projectId = await projectIdFromMetadataServer();
+      hosted = true;
+    } on BadConfigurationException {
+      projectId = projectIdFromEnvironment();
+      hosted = false;
+    }
+
+    if (projectId == null) {
+      throw BadConfigurationException(
+        '''
+Could not contact GCP metadata server or find the project-id in one of these
+environment variables:
+  ${gcpProjectIdEnvironmentVariables.join('\n  ')}''',
+      );
+    }
+
     print('Current GCP project id: $projectId');
 
     final authClient = await clientViaApplicationDefaultCredentials(
       scopes: [FirestoreApi.datastoreScope],
     );
 
-    return _Server._(projectId: projectId, client: authClient);
+    return _Server._(projectId: projectId, client: authClient, hosted: hosted);
   }
 
   final String projectId;
   final AutoRefreshingAuthClient client;
+  final bool hosted;
 
   late final FirestoreApi api = FirestoreApi(client);
-  late final handler = _onlyGetRootMiddleware.addHandler(_incrementHandler);
+  late final handler =
+      createLoggingMiddleware(projectId: hosted ? projectId : null)
+          .addMiddleware(_onlyGetRootMiddleware)
+          .addHandler(_incrementHandler);
 
   Future<Response> _incrementHandler(Request request) async {
     final result = await api.projects.databases.documents.commit(
@@ -50,9 +74,7 @@ class _Server {
 
     return Response.ok(
       JsonUtf8Encoder(' ').convert(result),
-      headers: {
-        'content-type': 'application/json',
-      },
+      headers: {'content-type': 'application/json'},
     );
   }
 
@@ -61,12 +83,13 @@ class _Server {
   }
 }
 
+/// For `GET` `request` objects to [handler], otherwise sends a 404.
 Handler _onlyGetRootMiddleware(Handler handler) => (Request request) async {
       if (request.method == 'GET' && request.url.pathSegments.isEmpty) {
         return await handler(request);
       }
 
-      return Response.badRequest();
+      throw BadRequestException(404, 'Not found');
     };
 
 CommitRequest _incrementRequest(String projectId) => CommitRequest(

@@ -18,29 +18,46 @@ import 'package:http/http.dart' as http;
 
 import 'bad_configuration_exception.dart';
 
+/// A convenience wrapper that first tries [projectIdFromEnvironment]
+/// then (if the value is `null`) tries [projectIdFromMetadataServer].
+Future<String> computeProjectId() async {
+  final localValue = projectIdFromEnvironment();
+  if (localValue != null) {
+    return localValue;
+  }
+  final result = await projectIdFromMetadataServer();
+
+  return result;
+}
+
 /// Returns a [Future] that completes with the
 /// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
 /// for the current Google Cloud Project.
 ///
-/// First, if an environment variable with a name in
-/// [gcpProjectIdEnvironmentVariables] exists, that is returned.
+/// If an environment variable with a name in [gcpProjectIdEnvironmentVariables]
+/// exists, that is returned.
 /// (The list is checked in order.) This is useful for local development.
 ///
-/// If no such environment variable exists (or [metadataServerOnly] is `true`),
-/// then we assume the code is running on Google Cloud and
+/// Otherwise, `null` is returned.
+String? projectIdFromEnvironment() {
+  for (var envKey in gcpProjectIdEnvironmentVariables) {
+    final value = Platform.environment[envKey];
+    if (value != null) return value;
+  }
+
+  return null;
+}
+
+/// Returns a [Future] that completes with the
+/// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
+/// for the current Google Cloud Project.
+///
 /// [Project metadata](https://cloud.google.com/compute/docs/metadata/default-metadata-values#project_metadata)
 /// is queried for the Project ID.
 ///
 /// If the metadata server cannot be contacted, a [BadConfigurationException] is
 /// thrown.
-Future<String> currentProjectId({bool metadataServerOnly = false}) async {
-  if (!metadataServerOnly) {
-    for (var envKey in gcpProjectIdEnvironmentVariables) {
-      final value = Platform.environment[envKey];
-      if (value != null) return value;
-    }
-  }
-
+Future<String> projectIdFromMetadataServer() async {
   const host = 'http://metadata.google.internal/';
   final url = Uri.parse('$host/computeMetadata/v1/project/project-id');
 

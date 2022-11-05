@@ -31,10 +31,10 @@ import 'package:io/io.dart';
 
 import 'src/function_config.dart';
 import 'src/function_target.dart';
-import 'src/logging.dart';
 import 'src/run.dart';
 
-export 'src/bad_request_exception.dart' show BadRequestException;
+export 'package:gcp/gcp.dart' show BadRequestException;
+
 export 'src/function_target.dart'
     show FunctionTarget, JsonFunctionTarget, JsonWithContextFunctionTarget;
 
@@ -90,11 +90,11 @@ Future<void> _serve(
 
   String? projectId;
   try {
-    projectId = await currentProjectId(metadataServerOnly: true);
+    projectId = await projectIdFromMetadataServer();
   } on BadConfigurationException {
     // NOOP! - we aren't on GCP, so use normal logging
   }
-  final loggingMiddleware = createLoggingMiddleware(projectId);
+  final loggingMiddleware = createLoggingMiddleware(projectId: projectId);
 
   await run(
     config.port,

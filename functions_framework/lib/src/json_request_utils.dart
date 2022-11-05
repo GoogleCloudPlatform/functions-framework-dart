@@ -14,10 +14,9 @@
 
 import 'dart:convert';
 
+import 'package:gcp/gcp.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:shelf/shelf.dart';
-
-import 'bad_request_exception.dart';
 
 MediaType mediaTypeFromRequest(Request request) {
   final contentType = request.headers[contentTypeHeader];

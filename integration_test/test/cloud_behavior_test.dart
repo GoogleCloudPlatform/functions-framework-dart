@@ -16,11 +16,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:functions_framework/functions_framework.dart';
 import 'package:functions_framework/serve.dart';
-import 'package:functions_framework/src/constants.dart';
-import 'package:functions_framework/src/logging.dart';
 import 'package:functions_framework/src/run.dart';
+import 'package:gcp/gcp.dart';
 import 'package:hello_world_function_test/functions.dart';
 import 'package:test/test.dart';
 
@@ -233,7 +231,7 @@ void main() {
           'Bad request. Could not decode the request as a '
           'structured-mode message.',
         ),
-        startsWith('package:functions_framework/src/'),
+        startsWith('package:json_annotation/'),
         isNotEmpty,
         severity: 'WARNING',
       );

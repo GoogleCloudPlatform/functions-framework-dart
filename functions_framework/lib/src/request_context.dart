@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:gcp/gcp.dart';
 import 'package:meta/meta.dart';
 import 'package:shelf/shelf.dart';
 
 import 'cloud_event.dart';
-import 'log_severity.dart';
-import 'logging.dart';
 
 /// Provides access to a [RequestLogger], the source [Request] and response
 /// headers for a typed function handler.
