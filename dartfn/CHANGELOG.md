@@ -1,5 +1,3 @@
-# Changelog
-
 ## 0.4.6-dev
 
 - Ignore file cleanup.
