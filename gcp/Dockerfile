@@ -1,3 +1,6 @@
+# Corresponds to the sample app in example/
+# Can be deployed directly to Cloud Run via `gcloud run deploy`
+
 # Official Dart image: https://hub.docker.com/_/dart
 # Specify the Dart SDK base image version using dart:<version> (ex: dart:2.12)
 FROM dart:stable AS build
