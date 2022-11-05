@@ -1,5 +1,3 @@
-# Changelog
-
 ## 0.4.2-dev
 
 - Requires Dart `2.18.0`.
