@@ -25,19 +25,17 @@ import 'bad_request_exception.dart';
 import 'constants.dart';
 import 'log_severity.dart';
 
-/// Returns the [RequestLogger] associated with [request].
+/// Returns the current [RequestLogger].
 ///
-/// If the [request] is from a [Handler] wrapped with [cloudLoggingMiddleware],
-/// the returned [RequestLogger] will create output that conforms with
+/// If called within [cloudLoggingMiddleware], the returned [RequestLogger] will
+/// create output that conforms with
 /// [structured logs](https://cloud.google.com/functions/docs/monitoring/logging#writing_structured_logs).
 ///
 /// Otherwise, the returned [RequestLogger] will simply [print] log entries,
 /// with entries having a [LogSeverity] different than
 /// [LogSeverity.defaultSeverity] being prefixed as such.
-RequestLogger loggerForRequest(Request request) =>
-    _requestExpando[request] ?? const _DefaultLogger();
-
-final _requestExpando = Expando<RequestLogger>('request logger expando');
+RequestLogger get currentLogger =>
+    Zone.current[_loggerKey] as RequestLogger? ?? const _DefaultLogger();
 
 /// Convenience [Middleware] that handles logging depending on [projectId].
 ///
@@ -95,6 +93,9 @@ Response _responseFromBadRequest(BadRequestException e, StackTrace stack) =>
       },
     );
 
+/// Used to represent the [RequestLogger] in [Zone] values.
+final _loggerKey = Object();
+
 /// Return [Middleware] that logs errors using Google Cloud structured logs and
 /// returns the correct response.
 Middleware cloudLoggingMiddleware(String projectId) {
@@ -134,8 +135,8 @@ Middleware cloudLoggingMiddleware(String projectId) {
 
         final currentZone = Zone.current;
 
-        Zone.current
-            .fork(
+        Zone.current.fork(
+          zoneValues: {_loggerKey: _CloudLogger(currentZone, traceValue)},
           specification: ZoneSpecification(
             handleUncaughtError: (self, parent, zone, error, stackTrace) {
               if (error is HijackException) {
@@ -178,10 +179,8 @@ Middleware cloudLoggingMiddleware(String projectId) {
               parent.print(self, logContent);
             },
           ),
-        )
-            .runGuarded(
+        ).runGuarded(
           () async {
-            _requestExpando[request] = _CloudLogger(currentZone, traceValue);
             final response = await innerHandler(request);
             if (!completer.isCompleted) {
               completer.complete(response);

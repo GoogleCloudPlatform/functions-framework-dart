@@ -34,7 +34,7 @@ class RequestContext {
 
   final responseHeaders = <String, /* String | List<String> */ Object>{};
 
-  RequestContext._(this.request) : logger = loggerForRequest(request);
+  RequestContext._(this.request) : logger = currentLogger;
 }
 
 @internal
