@@ -2,8 +2,7 @@ name: gcp
 publish_to: none
 description: >-
   Utilities for running Dart code correctly on the Google Cloud Platform.
-# After changing the version, run `pub run build_runner build`.
-version: 0.1.0-dev
+version: 0.1.0
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart/tree/main/gcp
 
 environment:
