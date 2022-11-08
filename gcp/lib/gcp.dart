@@ -28,6 +28,6 @@ export 'src/logging.dart'
         badRequestMiddleware,
         cloudLoggingMiddleware,
         createLoggingMiddleware,
-        loggerForRequest;
+        currentLogger;
 export 'src/serve.dart' show listenPort, serveHandler;
 export 'src/terminate.dart' show waitForTerminate;
