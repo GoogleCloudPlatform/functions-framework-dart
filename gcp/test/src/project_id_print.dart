@@ -14,5 +14,5 @@
 import 'package:gcp/gcp.dart';
 
 Future<void> main() async {
-  print(await currentProjectId());
+  print(await computeProjectId());
 }

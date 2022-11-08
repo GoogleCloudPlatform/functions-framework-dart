@@ -42,10 +42,7 @@ void main() {
 
     await expectLater(
       testProcess.stderr,
-      emitsInOrder([
-        '[BAD REQUEST] POST	/',
-        '$errorMessage (400)',
-      ]),
+      emitsInOrder(['$errorMessage (400)']),
     );
 
     await finishServerTest(

@@ -10,8 +10,11 @@ environment:
   sdk: ^2.18.0
 
 dependencies:
+  collection: ^1.17.0
   http: ^0.13.5
+  io: ^1.0.3
   shelf: ^1.4.0
+  stack_trace: ^1.11.0
 
 dev_dependencies:
   googleapis: ^9.2.0

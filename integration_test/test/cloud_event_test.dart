@@ -112,12 +112,11 @@ void main() {
       expect(
         stderrOutput,
         startsWith(
-          '[BAD REQUEST] POST\t/\n'
           'Could not decode the request as a binary-mode message. (400)\n'
           'CheckedFromJsonException\n'
           'Could not create `CloudEvent`.\n'
           'There is a problem with "time".\n'
-          'Invalid date format\n',
+          'Invalid date format (CheckedFromJsonException)\n',
         ),
       );
     });
@@ -147,14 +146,14 @@ void main() {
       expect(
         stderrOutput,
         startsWith(
-          '[BAD REQUEST] POST\t/\n'
-          // NOTE! Since binary-mode failed, we fallback to structured mode!
-          'Could not decode the request as a structured-mode message. (400)\n'
-          'CheckedFromJsonException\n'
-          'Could not create `CloudEvent`.\n'
-          'There is a problem with "id".\n'
-          'Required keys are missing: id, source, specversion, type.\n',
-        ),
+            // NOTE! Since binary-mode failed, we fallback to structured mode!
+            '''
+Could not decode the request as a structured-mode message. (400)
+CheckedFromJsonException
+Could not create `CloudEvent`.
+There is a problem with "id".
+Required keys are missing: id, source, specversion, type. (CheckedFromJsonException)
+'''),
       );
     });
   });
@@ -240,12 +239,11 @@ void main() {
       expect(
         stderrOutput,
         startsWith(
-          '[BAD REQUEST] POST\t/\n'
           'Could not decode the request as a structured-mode message. (400)\n'
           'CheckedFromJsonException\n'
           'Could not create `CloudEvent`.\n'
           'There is a problem with "time".\n'
-          'Invalid date format\n',
+          'Invalid date format (CheckedFromJsonException)\n',
         ),
       );
     });
@@ -277,12 +275,11 @@ void main() {
       expect(
         stderrOutput,
         startsWith(
-          '[BAD REQUEST] POST\t/\n'
           'Could not decode the request as a structured-mode message. (400)\n'
           'CheckedFromJsonException\n'
           'Could not create `CloudEvent`.\n'
           'There is a problem with "source".\n'
-          'Required keys are missing: source.\n',
+          'Required keys are missing: source. (CheckedFromJsonException)\n',
         ),
       );
     });

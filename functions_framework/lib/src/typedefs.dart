@@ -14,10 +14,10 @@
 
 import 'dart:async';
 
+import 'package:gcp/gcp.dart';
 import 'package:shelf/shelf.dart';
 
 import 'cloud_event.dart';
-import 'log_severity.dart';
 import 'request_context.dart';
 
 /// The shape of a handler for [CloudEvent] types.

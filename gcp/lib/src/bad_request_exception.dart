@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:stack_trace/stack_trace.dart';
+import 'package:shelf/shelf.dart';
 
-/// When thrown in a request handler, causes a response with a status code
-/// [statusCode] to be returned.
+import 'logging.dart';
+
+/// When thrown in a [Handler], configured with [badRequestMiddleware] or
+/// similar, causes a response with [statusCode] to be returned.
 ///
 /// [statusCode] must be >= `400` and <= `499`.
 ///
@@ -47,30 +49,4 @@ class BadRequestException implements Exception {
 
   @override
   String toString() => '$message ($statusCode)';
-
-  String errorMessage(Uri requestedUri, String method, StackTrace stack) {
-    final buffer = StringBuffer()
-      ..writeln('[BAD REQUEST] $method\t'
-          '${requestedUri.path}${_formatQuery(requestedUri.query)}')
-      ..writeln(this);
-
-    if (innerError != null) {
-      buffer.writeln('$innerError'.trim());
-    }
-
-    final chain = Chain.forTrace(innerStack ?? stack)
-        .foldFrames(
-          (frame) =>
-              frame.isCore ||
-              frame.package == 'shelf' ||
-              frame.package == 'functions_framework',
-        )
-        .terse;
-
-    buffer.write('$chain'.trim());
-
-    return buffer.toString();
-  }
 }
-
-String _formatQuery(String query) => query == '' ? '' : '?$query';

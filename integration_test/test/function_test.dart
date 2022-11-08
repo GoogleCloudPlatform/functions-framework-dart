@@ -114,7 +114,6 @@ void main() {
       await expectLater(
         proc.stderr,
         emitsInOrder([
-          '[BAD REQUEST] GET\t/exception',
           'Testing `throw BadRequestException` (400)',
           startsWith('package:hello_world_function_test/functions.dart'),
         ]),

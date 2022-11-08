@@ -14,9 +14,9 @@
 
 import 'dart:async';
 
+import 'package:gcp/gcp.dart';
 import 'package:shelf/shelf.dart';
 
-import '../bad_request_exception.dart';
 import '../cloud_event.dart';
 import '../function_config.dart';
 import '../function_target.dart';

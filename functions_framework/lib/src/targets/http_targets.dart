@@ -14,10 +14,10 @@
 
 import 'dart:async';
 
+import 'package:gcp/gcp.dart';
 import 'package:shelf/shelf.dart';
 
 import '../function_target.dart';
-import '../logging.dart';
 import '../typedefs.dart';
 
 class HttpFunctionTarget extends FunctionTarget {

@@ -13,8 +13,21 @@
 // limitations under the License.
 
 export 'src/bad_configuration_exception.dart' show BadConfigurationException;
-export 'src/constants.dart' show portEnvironmentKey, defaultListenPort;
+export 'src/bad_request_exception.dart' show BadRequestException;
+export 'src/constants.dart'
+    show portEnvironmentKey, defaultListenPort, cloudTraceContextHeader;
 export 'src/gcp_project.dart'
-    show currentProjectId, gcpProjectIdEnvironmentVariables;
+    show
+        computeProjectId,
+        gcpProjectIdEnvironmentVariables,
+        projectIdFromMetadataServer,
+        projectIdFromEnvironment;
+export 'src/log_severity.dart' show LogSeverity, RequestLogger;
+export 'src/logging.dart'
+    show
+        badRequestMiddleware,
+        cloudLoggingMiddleware,
+        createLoggingMiddleware,
+        loggerForRequest;
 export 'src/serve.dart' show listenPort, serveHandler;
 export 'src/terminate.dart' show waitForTerminate;

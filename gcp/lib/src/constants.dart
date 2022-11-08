@@ -19,3 +19,7 @@ const portEnvironmentKey = 'PORT';
 /// The default port a service should listen on if [portEnvironmentKey] is not
 /// set.
 const defaultListenPort = 8080;
+
+/// Standard header used by
+/// [Cloud Trace](https://cloud.google.com/trace/docs/setup).
+const cloudTraceContextHeader = 'x-cloud-trace-context';

@@ -24,10 +24,11 @@
 /// ```
 library functions_framework;
 
-export 'src/bad_request_exception.dart' show BadRequestException;
+export 'package:gcp/gcp.dart'
+    show BadRequestException, RequestLogger, LogSeverity;
+
 export 'src/cloud_event.dart' show CloudEvent;
 export 'src/cloud_function.dart' show CloudFunction;
-export 'src/log_severity.dart' show RequestLogger, LogSeverity;
 export 'src/request_context.dart' show RequestContext;
 export 'src/typedefs.dart'
     show
