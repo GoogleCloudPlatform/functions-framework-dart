@@ -1,5 +1,4 @@
 name: gcp
-publish_to: none
 description: >-
   Utilities for running Dart code correctly on the Google Cloud Platform.
 version: 0.1.0
