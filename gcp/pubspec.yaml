@@ -5,7 +5,7 @@ version: 0.1.0
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart/tree/main/gcp
 
 environment:
-  sdk: ^2.18.0
+  sdk: '>=2.18.0 <3.0.0'
 
 dependencies:
   collection: ^1.17.0
