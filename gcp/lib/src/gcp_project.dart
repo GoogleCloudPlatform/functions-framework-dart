@@ -19,7 +19,10 @@ import 'package:http/http.dart' as http;
 import 'bad_configuration_exception.dart';
 
 /// A convenience wrapper that first tries [projectIdFromEnvironment]
-/// then (if the value is `null`) tries [projectIdFromMetadataServer].
+/// then (if the value is `null`) tries [projectIdFromMetadataServer]
+///
+/// Like [projectIdFromMetadataServer], if no value is found, a
+/// [BadConfigurationException] is thrown.
 Future<String> computeProjectId() async {
   final localValue = projectIdFromEnvironment();
   if (localValue != null) {
@@ -30,15 +33,14 @@ Future<String> computeProjectId() async {
   return result;
 }
 
-/// Returns a [Future] that completes with the
+/// Returns the
 /// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
-/// for the current Google Cloud Project.
+/// for the current Google Cloud Project by checking the environment variables
+/// in [gcpProjectIdEnvironmentVariables].
 ///
-/// If an environment variable with a name in [gcpProjectIdEnvironmentVariables]
-/// exists, that is returned.
-/// (The list is checked in order.) This is useful for local development.
+/// The list is checked in order. This is useful for local development.
 ///
-/// Otherwise, `null` is returned.
+/// If no matching variable is found, `null` is returned.
 String? projectIdFromEnvironment() {
   for (var envKey in gcpProjectIdEnvironmentVariables) {
     final value = Platform.environment[envKey];
@@ -50,10 +52,8 @@ String? projectIdFromEnvironment() {
 
 /// Returns a [Future] that completes with the
 /// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
-/// for the current Google Cloud Project.
-///
-/// [Project metadata](https://cloud.google.com/compute/docs/metadata/default-metadata-values#project_metadata)
-/// is queried for the Project ID.
+/// for the current Google Cloud Project by checking
+/// [project metadata](https://cloud.google.com/compute/docs/metadata/default-metadata-values#project_metadata).
 ///
 /// If the metadata server cannot be contacted, a [BadConfigurationException] is
 /// thrown.
