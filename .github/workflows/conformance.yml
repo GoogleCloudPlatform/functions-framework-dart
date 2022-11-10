@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Cache Pub hosted dependencies
-      uses: actions/cache@4504faf7e9bcf8f3ed0bc863c4e1d21499ab8ef8
+      uses: actions/cache@9b0c1fce7a93df8e3bb8926b0d6e9d89e92f20a7
       with:
         path: "~/.pub-cache/hosted"
         key: "os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;"
@@ -26,21 +26,21 @@ jobs:
           os:ubuntu-latest
 
     - name: Setup Go
-      uses: actions/setup-go@v3
+      uses: actions/setup-go@c4a742cab115ed795e34d4513e2cf7d472deb55f
       with:
         go-version: '^1.16'
 
-    - uses: dart-lang/setup-dart@v1.3
+    - uses: dart-lang/setup-dart@6a218f2413a3e78e9087f638a238f6b40893203d
       with:
         sdk: stable
     - run: dart --version
 
-    - uses: actions/checkout@v3.0.2
+    - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
     - run: dart pub upgrade
       working-directory: integration_test
 
     - name: Run HTTP conformance tests
-      uses: GoogleCloudPlatform/functions-framework-conformance/action@v1.7.0
+      uses: GoogleCloudPlatform/functions-framework-conformance@1975792fb34ebbfa058d690666186d669d3a5977
       with:
         functionType: 'http'
         useBuildpacks: false
@@ -49,7 +49,7 @@ jobs:
         startDelay: 3
 
     - name: Run CloudEvent conformance tests
-      uses: GoogleCloudPlatform/functions-framework-conformance/action@v1.7.0
+      uses: GoogleCloudPlatform/functions-framework-conformance@1975792fb34ebbfa058d690666186d669d3a5977
       with:
         functionType: 'cloudevent'
         useBuildpacks: false
