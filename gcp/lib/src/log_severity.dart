@@ -40,16 +40,16 @@ abstract class RequestLogger {
 }
 
 /// See https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity
-class LogSeverity implements Comparable<LogSeverity> {
-  static const defaultSeverity = LogSeverity._(0, 'DEFAULT');
-  static const debug = LogSeverity._(100, 'DEBUG');
-  static const info = LogSeverity._(200, 'INFO');
-  static const notice = LogSeverity._(300, 'NOTICE');
-  static const warning = LogSeverity._(400, 'WARNING');
-  static const error = LogSeverity._(500, 'ERROR');
-  static const critical = LogSeverity._(600, 'CRITICAL');
-  static const alert = LogSeverity._(700, 'ALERT');
-  static const emergency = LogSeverity._(800, 'EMERGENCY');
+enum LogSeverity implements Comparable<LogSeverity> {
+  defaultSeverity._(0, 'DEFAULT'),
+  debug._(100, 'DEBUG'),
+  info._(200, 'INFO'),
+  notice._(300, 'NOTICE'),
+  warning._(400, 'WARNING'),
+  error._(500, 'ERROR'),
+  critical._(600, 'CRITICAL'),
+  alert._(700, 'ALERT'),
+  emergency._(800, 'EMERGENCY');
 
   final int value;
   final String name;
@@ -61,13 +61,6 @@ class LogSeverity implements Comparable<LogSeverity> {
 
   @override
   String toString() => 'LogSeverity $name ($value)';
-
-  @override
-  bool operator ==(Object other) =>
-      other is LogSeverity && other.value == value;
-
-  @override
-  int get hashCode => value;
 
   String toJson() => name;
 }
