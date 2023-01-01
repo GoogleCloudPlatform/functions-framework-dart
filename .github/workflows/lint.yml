@@ -33,7 +33,7 @@ jobs:
           sdk: stable
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+        uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - name: mono_repo self validate
         run: dart pub global activate mono_repo 6.4.2
       - name: mono_repo self validate
@@ -58,7 +58,7 @@ jobs:
           sdk: "2.18.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+        uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -115,7 +115,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+        uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -201,7 +201,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
+        uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b
       - id: integration_test_pub_upgrade
         name: integration_test; dart pub upgrade
         run: dart pub upgrade
