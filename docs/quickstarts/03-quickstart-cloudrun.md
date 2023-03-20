@@ -58,11 +58,11 @@ single step.
 
 ```shell
 gcloud run deploy NAME \
-  --source=PATH \               # can use $PWD or . for current dir
-  --project=PROJECT \           # the Google Cloud project ID
-  --region=REGION  \            # ex: us-central1
-  --platform=managed \          # for Cloud Run
-  --allow-unauthenticated       # for public access
+  --source=PATH \          # can use $PWD or . for current dir
+  --project=PROJECT \      # the Google Cloud project ID
+  --region=REGION  \       # ex: us-central1
+  --platform=managed \     # for Cloud Run
+  --allow-unauthenticated  # for public access
 ```
 
 Since the project ID was saved to the `gcloud` configuration in the
