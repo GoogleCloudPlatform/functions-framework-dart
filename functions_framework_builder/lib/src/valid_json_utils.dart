@@ -94,7 +94,7 @@ JsonReturnKind validJsonReturnType(DartType type) {
 }
 
 JsonReturnKind _validJsonReturnTypeCore(DartType type) {
-  if (type.isVoid) {
+  if (type is VoidType) {
     return JsonReturnKind.isVoid;
   }
 
