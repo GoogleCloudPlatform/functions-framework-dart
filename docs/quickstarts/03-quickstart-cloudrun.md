@@ -58,11 +58,11 @@ single step.
 
 ```shell
 gcloud run deploy NAME \
-  --source=PATH \          # can use $PWD or . for current dir
-  --project=PROJECT \      # the Google Cloud project ID
-  --region=REGION  \       # ex: us-central1
-  --platform=managed \     # for Cloud Run
-  --allow-unauthenticated  # for public access
+  --source=PATH \               # can use $PWD or . for current dir
+  --project=PROJECT \           # the Google Cloud project ID
+  --region=REGION  \            # ex: us-central1
+  --platform=managed \          # for Cloud Run
+  --allow-unauthenticated       # for public access
 ```
 
 Since the project ID was saved to the `gcloud` configuration in the
@@ -93,6 +93,23 @@ Service [hello] revision [hello-00001-yen] has been deployed and is serving 100 
 Service URL: https://hello-gpua4upw6q-uc.a.run.app
 ```
 
+## If connecting to Cloud SQL
+
+If your Cloud Run service will connect to Cloud SQL via the [Cloud SQL Auth Proxy], then it is important
+to select the `gen2` Cloud Run execution environment.
+
+**Note:** To do this, you may need to install the `beta` version of the gcloud CLI, but if this is required, you will be prompted. Enter `y` to accept the extra installation.
+
+```shell
+gcloud beta run deploy NAME \
+  --source=PATH \               # can use $PWD or . for current dir
+  --project=PROJECT \           # the Google Cloud project ID
+  --region=REGION  \            # ex: us-central1
+  --platform=managed \          # for Cloud Run
+  --allow-unauthenticated       # for public access
+  --execution-environment=gen2  # helpful if using CloudSQL
+```
+
 <br>
 
 **Congratulations!** You have successfully built and deployed your function
@@ -116,6 +133,7 @@ the [Manage resources] page.
 [Cloud Run]: https://cloud.google.com/run
 [Cloud Shell]: https://cloud.google.com/shell
 [Cloud Shell Editor]: https://shell.cloud.google.com/?show=ide&environment_deployment=ide
+[Cloud SQL Auth Proxy]: https://github.com/GoogleCloudPlatform/cloud-sql-proxy
 [codelab]: https://codelabs.developers.google.com/codelabs/cloud-shell
 [delete the image]: https://cloud.google.com/container-registry/docs/managing#deleting_images
 [gcloud]: https://cloud.google.com/sdk/docs/install
