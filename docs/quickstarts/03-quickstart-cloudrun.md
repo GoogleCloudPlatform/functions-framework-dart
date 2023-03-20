@@ -98,23 +98,6 @@ Service [hello] revision [hello-00001-yen] has been deployed and is serving 100 
 Service URL: https://hello-gpua4upw6q-uc.a.run.app
 ```
 
-## If connecting to Cloud SQL
-
-If your Cloud Run service will connect to Cloud SQL via the [Cloud SQL Auth Proxy], then it is important
-to select the `gen2` Cloud Run execution environment.
-
-**Note:** To do this, you may need to install the `beta` version of the gcloud CLI, but if this is required, you will be prompted. Enter `y` to accept the extra installation.
-
-```shell
-gcloud beta run deploy NAME \
-  --source=PATH \               # can use $PWD or . for current dir
-  --project=PROJECT \           # the Google Cloud project ID
-  --region=REGION  \            # ex: us-central1
-  --platform=managed \          # for Cloud Run
-  --allow-unauthenticated       # for public access
-  --execution-environment=gen2  # helpful if using CloudSQL
-```
-
 <br>
 
 **Congratulations!** You have successfully built and deployed your function
