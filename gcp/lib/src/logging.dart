@@ -230,12 +230,12 @@ class _CloudLogger extends RequestLogger {
 
   @override
   void log(Object message, LogSeverity severity) =>
-      _zone.print(_createLogEntry(_traceId, '$message', severity));
+      _zone.print(_createLogEntry(_traceId, message, severity));
 }
 
 String _createLogEntry(
   String? traceValue,
-  String message,
+  Object message,
   LogSeverity severity, {
   Frame? stackFrame,
 }) {
