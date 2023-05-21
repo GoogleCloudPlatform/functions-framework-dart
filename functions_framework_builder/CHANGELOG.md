@@ -1,7 +1,8 @@
 ## 0.4.8-dev
 
 - Support the latest `package:analyzer`.
-- Require Dart 2.18
+- Require Dart 3.0
+- Support `package:http` v1
 
 ## 0.4.7
 

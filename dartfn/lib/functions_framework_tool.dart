@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library functions_framework_tool;
-
 export 'src/generators.dart';
 export 'src/printer.dart';
 export 'src/version.dart';

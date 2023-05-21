@@ -1,5 +1,5 @@
 # https://dart.dev/guides/language/analysis-options
-include: package:lints/recommended.yaml
+include: package:dart_flutter_team_lints/analysis_options.yaml
 
 analyzer:
   language:
@@ -9,11 +9,8 @@ analyzer:
 
 linter:
   rules:
-  - always_declare_return_types
   - avoid_bool_literals_in_conditional_expressions
-  - avoid_catching_errors
   - avoid_classes_with_only_static_members
-  - avoid_dynamic_calls
   - avoid_private_typedef_functions
   - avoid_redundant_argument_values
   - avoid_returning_null
@@ -23,31 +20,17 @@ linter:
   - cancel_subscriptions
   - cascade_invocations
   - comment_references
-  - directives_ordering
   - join_return_with_assignment
-  - lines_longer_than_80_chars
   - literal_only_boolean_expressions
   - missing_whitespace_between_adjacent_strings
   - no_runtimeType_toString
-  - omit_local_variable_types
-  - only_throw_errors
   - package_api_docs
-  - prefer_asserts_in_initializer_lists
   - prefer_const_constructors
   - prefer_const_declarations
   - prefer_expression_function_bodies
   - prefer_final_locals
   - prefer_relative_imports
-  - prefer_single_quotes
   - require_trailing_commas
-  - sort_pub_dependencies
   - test_types_in_equals
-  - throw_in_finally
-  - type_annotate_public_apis
-  - unawaited_futures
-  - unnecessary_lambdas
-  - unnecessary_parenthesis
-  - unnecessary_statements
-  - use_is_even_rather_than_modulo
   - use_string_buffers
   - use_super_parameters

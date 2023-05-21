@@ -4,13 +4,13 @@ version: 1.0.0
 publish_to: 'none'
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: ^3.0.0
 
 dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  http: ^0.13.0
+  http: '>=0.13.0 <2.0.0'
   json_annotation: ^4.3.0
   provider: ^6.0.0
 

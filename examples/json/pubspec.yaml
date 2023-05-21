@@ -5,7 +5,7 @@ repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
 publish_to: none
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: ^3.0.0
 
 dependencies:
   functions_framework: ^0.4.0
@@ -15,7 +15,7 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.0.0
   functions_framework_builder: ^0.4.0
-  http: ^0.13.0
+  http: '>=0.13.0 <2.0.0'
   json_serializable: ^6.0.0
   test: ^1.15.7
   test_process: ^2.0.0

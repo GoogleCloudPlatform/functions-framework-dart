@@ -1,6 +1,6 @@
 import 'package:functions_framework/functions_framework.dart';
 
-class JsonType {
+mixin class JsonType {
   Map<String, dynamic> toJson() => throw UnimplementedError();
 }
 

@@ -15,6 +15,8 @@
 // This is explicitly not named with _test.dart extension so it is not run as
 // part of the normal test process
 @TestOn('vm')
+library;
+
 import 'dart:io';
 
 import 'package:collection/collection.dart';

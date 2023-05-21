@@ -5,13 +5,13 @@ description: >-
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: ^3.0.0
 
 dependencies:
   args: ^2.0.0
   collection: ^1.15.0
   gcp: ^0.1.0
-  http: ^0.13.0
+  http: '>=0.13.0 <2.0.0'
   http_parser: ^4.0.0
   io: ^1.0.0
   json_annotation: ^4.3.0
@@ -22,8 +22,8 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.0.0
   build_verify: ^3.0.0
+  dart_flutter_team_lints: ^1.0.0
   json_serializable: ^6.0.0
-  lints: ^2.0.0
   test: ^1.15.7
 
 dependency_overrides:

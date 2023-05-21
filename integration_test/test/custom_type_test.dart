@@ -13,6 +13,8 @@
 // limitations under the License.
 
 @Timeout(Duration(seconds: 3))
+library;
+
 import 'dart:convert';
 
 import 'package:hello_world_function_test/functions.dart';

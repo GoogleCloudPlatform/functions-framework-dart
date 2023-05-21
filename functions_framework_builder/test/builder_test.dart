@@ -593,6 +593,8 @@ package:$_pkgName/functions.dart:8:10
       test('"${shape.key}"', () async {
         await _generateThrows(
           '''
+import 'dart:async';
+
 import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
@@ -667,7 +669,7 @@ Future<void> _generateTest(
       }
       addTearDown(() {
         var output = 'Unexpected log message: "${log.message}"';
-        if ((log.message.isEmpty) && log.error != null) {
+        if (log.message.isEmpty && log.error != null) {
           output = '$output (${log.error})';
         }
         fail(output);

@@ -1,6 +1,7 @@
 ## 0.4.2-dev
 
-- Requires Dart `2.18.0`.
+- Requires Dart `3.0.0`.
+- Support `package:http` v1
 
 ## 0.4.1
 

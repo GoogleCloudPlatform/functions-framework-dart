@@ -1,7 +1,8 @@
 ## 0.4.6-dev
 
 - Ignore file cleanup.
-- Require Dart 2.18
+- Require Dart 3.0
+- Support `package:http` v1
 
 ## 0.4.5
 
