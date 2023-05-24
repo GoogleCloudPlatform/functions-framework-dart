@@ -3,6 +3,8 @@
 // license that can be found in the LICENSE file.
 
 /// Some utility methods for stagehand.
+library;
+
 import 'dart:convert' show base64, utf8;
 
 import 'stagehand.dart';

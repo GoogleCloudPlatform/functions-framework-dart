@@ -20,11 +20,11 @@ const fromJsonFactoryName = 'fromJson';
 bool _validJsonType(DartType type, bool allowComplexMembers) {
   bool validCollectionMember(DartType memberType) {
     if (allowComplexMembers) {
-      return memberType.isDynamic ||
+      return memberType is DynamicType ||
           memberType.isDartCoreObject ||
           _validJsonReturnTypeCore(memberType) == JsonReturnKind.other;
     }
-    return memberType.isDynamic || memberType.isDartCoreObject;
+    return memberType is DynamicType || memberType.isDartCoreObject;
   }
 
   if (type.isDartCoreBool ||

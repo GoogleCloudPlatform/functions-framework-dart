@@ -1,4 +1,4 @@
-# Created with package:mono_repo v6.5.4
+# Created with package:mono_repo v6.5.6
 name: Dart Unit CI
 on:
   push:
@@ -16,23 +16,23 @@ permissions: read-all
 
 jobs:
   job_001:
-    name: "unit_test; linux; Dart 2.18.0; PKGS: dartfn, functions_framework_builder, gcp, integration_test; `dart test`"
+    name: "unit_test; linux; Dart 3.0.0; PKGS: dartfn, functions_framework_builder, gcp, integration_test; `dart test`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0;packages:dartfn-functions_framework_builder-gcp-integration_test;commands:test_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:dartfn-functions_framework_builder-gcp-integration_test;commands:test_0"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0;packages:dartfn-functions_framework_builder-gcp-integration_test
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:dartfn-functions_framework_builder-gcp-integration_test
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@d6a63dab3335f427404425de0fbfed4686d93c4f
         with:
-          sdk: "2.18.0"
+          sdk: "3.0.0"
       - id: checkout
         name: Checkout repository
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
@@ -73,23 +73,23 @@ jobs:
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
   job_002:
-    name: "unit_test; linux; Dart 2.18.0; PKG: gcp; `./tool/docker_test_script.sh`"
+    name: "unit_test; linux; Dart 3.0.0; PKG: gcp; `./tool/docker_test_script.sh`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0;packages:gcp;commands:command"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp;commands:command"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0;packages:gcp
-            os:ubuntu-latest;pub-cache-hosted;sdk:2.18.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@d6a63dab3335f427404425de0fbfed4686d93c4f
         with:
-          sdk: "2.18.0"
+          sdk: "3.0.0"
       - id: checkout
         name: Checkout repository
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
@@ -208,23 +208,23 @@ jobs:
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
   job_005:
-    name: "unit_test; macos; Dart 2.18.0; PKG: gcp; `dart test`"
+    name: "unit_test; macos; Dart 3.0.0; PKG: gcp; `dart test`"
     runs-on: macos-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:macos-latest;pub-cache-hosted;sdk:2.18.0;packages:gcp;commands:test_0"
+          key: "os:macos-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp;commands:test_0"
           restore-keys: |
-            os:macos-latest;pub-cache-hosted;sdk:2.18.0;packages:gcp
-            os:macos-latest;pub-cache-hosted;sdk:2.18.0
+            os:macos-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp
+            os:macos-latest;pub-cache-hosted;sdk:3.0.0
             os:macos-latest;pub-cache-hosted
             os:macos-latest
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@d6a63dab3335f427404425de0fbfed4686d93c4f
         with:
-          sdk: "2.18.0"
+          sdk: "3.0.0"
       - id: checkout
         name: Checkout repository
         uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
