@@ -21,30 +21,20 @@ enum Environment {
   prod,
 }
 
-extension EnumToString on Environment {
-  String toName() => toString().split('.').last;
-}
-
-Environment parseEnvironment(String env) => switch (env) {
-      'dev' => Environment.dev,
-      'prod' => Environment.prod,
-      _ => throw Exception("Parsing as Environment enum exception: '$env'")
-    };
-
 class Config {
   final String greetingsUrl;
 
   Config({required this.greetingsUrl});
 
   static Future<Config> load(Environment env) async {
-    final file = 'assets/config/${env.toName()}.json';
+    final file = 'assets/config/${env.name}.json';
     final data = await rootBundle.loadString(file);
     final json = jsonDecode(data) as Map<String, dynamic>;
     return Config(greetingsUrl: json['greetingUrl'] as String);
   }
 
   static Future<Config> parse(String environment) async {
-    final env = parseEnvironment(environment);
+    final env = Environment.values.byName(environment);
     return await load(env);
   }
 }
