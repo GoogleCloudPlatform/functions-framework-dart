@@ -20,66 +20,56 @@ Future<void> main(List<String> args) async {
   await serve(args, _nameToFunctionTarget);
 }
 
-FunctionTarget? _nameToFunctionTarget(String name) {
-  switch (name) {
-    case 'function':
-      return FunctionTarget.http(
-        function_library.function,
-      );
-    case 'loggingHandler':
-      return FunctionTarget.httpWithLogger(
-        function_library.loggingHandler,
-      );
-    case 'basicCloudEventHandler':
-      return FunctionTarget.cloudEventWithContext(
-        function_library.basicCloudEventHandler,
-      );
-    case 'conformanceHttp':
-      return FunctionTarget.http(
-        function_library.conformanceHttp,
-      );
-    case 'conformanceCloudEvent':
-      return FunctionTarget.cloudEvent(
-        function_library.conformanceCloudEvent,
-      );
-    case 'pubSubHandler':
-      return JsonWithContextFunctionTarget.voidResult(
-        function_library.pubSubHandler,
-        (json) {
-          if (json is Map<String, dynamic>) {
-            try {
-              return function_library.PubSub.fromJson(json);
-            } catch (e, stack) {
-              throw BadRequestException(
-                400,
-                'There was an error parsing the provided JSON data.',
-                innerError: e,
-                innerStack: stack,
-              );
+FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
+      'function' => FunctionTarget.http(
+          function_library.function,
+        ),
+      'loggingHandler' => FunctionTarget.httpWithLogger(
+          function_library.loggingHandler,
+        ),
+      'basicCloudEventHandler' => FunctionTarget.cloudEventWithContext(
+          function_library.basicCloudEventHandler,
+        ),
+      'conformanceHttp' => FunctionTarget.http(
+          function_library.conformanceHttp,
+        ),
+      'conformanceCloudEvent' => FunctionTarget.cloudEvent(
+          function_library.conformanceCloudEvent,
+        ),
+      'pubSubHandler' => JsonWithContextFunctionTarget.voidResult(
+          function_library.pubSubHandler,
+          (json) {
+            if (json is Map<String, dynamic>) {
+              try {
+                return function_library.PubSub.fromJson(json);
+              } catch (e, stack) {
+                throw BadRequestException(
+                  400,
+                  'There was an error parsing the provided JSON data.',
+                  innerError: e,
+                  innerStack: stack,
+                );
+              }
             }
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`Map<String, dynamic>`.',
-          );
-        },
-      );
-    case 'jsonHandler':
-      return JsonWithContextFunctionTarget(
-        function_library.jsonHandler,
-        (json) {
-          if (json is Map<String, dynamic>) {
-            return json;
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`Map<String, dynamic>`.',
-          );
-        },
-      );
-    default:
-      return null;
-  }
-}
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`Map<String, dynamic>`.',
+            );
+          },
+        ),
+      'jsonHandler' => JsonWithContextFunctionTarget(
+          function_library.jsonHandler,
+          (json) {
+            if (json is Map<String, dynamic>) {
+              return json;
+            }
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`Map<String, dynamic>`.',
+            );
+          },
+        ),
+      _ => null
+    };

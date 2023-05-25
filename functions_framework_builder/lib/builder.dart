@@ -84,7 +84,7 @@ class _FunctionsFrameworkBuilder implements Builder {
     }
 
     final cases = [
-      for (var e in entries.values) '  case ${e.name}:return ${e.expression};',
+      for (var e in entries.values) '  ${e.name} => ${e.expression},',
     ];
 
     final importDirectives = [
@@ -114,13 +114,11 @@ Future<void> main(List<String> args) async {
   await serve(args, _nameToFunctionTarget);
 }
 
-FunctionTarget? _nameToFunctionTarget(String name) {
+FunctionTarget? _nameToFunctionTarget(String name) =>
   switch (name) {
 ${cases.join('\n')}
-    default:
-      return null;
-  }
-}
+  _ => null
+  };
 ''';
 
     try {
