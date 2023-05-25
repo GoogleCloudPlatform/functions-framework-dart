@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: '>=0.13.0 <2.0.0'
-  json_annotation: ^4.3.0
+  json_annotation: ^4.8.1
   provider: ^6.0.0
 
 dev_dependencies:

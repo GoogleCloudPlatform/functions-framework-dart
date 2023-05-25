@@ -25,16 +25,11 @@ extension EnumToString on Environment {
   String toName() => toString().split('.').last;
 }
 
-Environment parseEnvironment(String env) {
-  switch (env) {
-    case 'dev':
-      return Environment.dev;
-    case 'prod':
-      return Environment.prod;
-    default:
-      throw Exception("Parsing as Environment enum exception: '$env'");
-  }
-}
+Environment parseEnvironment(String env) => switch (env) {
+      'dev' => Environment.dev,
+      'prod' => Environment.prod,
+      _ => throw Exception("Parsing as Environment enum exception: '$env'")
+    };
 
 class Config {
   final String greetingsUrl;

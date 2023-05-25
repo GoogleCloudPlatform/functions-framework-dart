@@ -6,7 +6,7 @@ environment:
 
 dependencies:
   functions_framework: any
-  json_annotation: ^4.7.0
+  json_annotation: ^4.8.1
   shelf: ^1.0.0
 
 dev_dependencies:
