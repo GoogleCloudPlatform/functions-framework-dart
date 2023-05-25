@@ -37,16 +37,12 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-FunctionTarget? _nameToFunctionTarget(String name) {
-  switch (name) {
-    case 'handleGet':
-      return FunctionTarget.http(
-        function_library.handleGet,
-      );
-    default:
-      return null;
-  }
-}
+FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
+      'handleGet' => FunctionTarget.http(
+          function_library.handleGet,
+        ),
+      _ => null
+    };
 ''',
     );
   });
@@ -62,16 +58,12 @@ Response handleGet(Request request) => Response.ok('Hello, World!');
 ''',
       '''
 $_outputHeader
-FunctionTarget? _nameToFunctionTarget(String name) {
-  switch (name) {
-    case 'some function':
-      return FunctionTarget.http(
-        function_library.handleGet,
-      );
-    default:
-      return null;
-  }
-}
+FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
+      'some function' => FunctionTarget.http(
+          function_library.handleGet,
+        ),
+      _ => null
+    };
 ''',
     );
   });
@@ -91,23 +83,19 @@ FunctionTarget? _nameToFunctionTarget(String name) {
     ]
         .map(
           (e) => """
-    case '$e':
-      return FunctionTarget.http(
-        function_library.$e,
-      );""",
+      '$e' => FunctionTarget.http(
+          function_library.$e,
+        ),""",
         )
         .join('\n');
     await _generateTest(
       file.readAsStringSync(),
       '''
 $_outputHeader
-FunctionTarget? _nameToFunctionTarget(String name) {
-  switch (name) {
+FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
 $lines
-    default:
-      return null;
-  }
-}
+      _ => null
+    };
 ''',
     );
   });
@@ -124,23 +112,19 @@ $lines
     ]
         .map(
           (e) => """
-    case '$e':
-      return FunctionTarget.cloudEvent(
-        function_library.$e,
-      );""",
+      '$e' => FunctionTarget.cloudEvent(
+          function_library.$e,
+        ),""",
         )
         .join('\n');
     await _generateTest(
       file.readAsStringSync(),
       '''
 $_outputHeader
-FunctionTarget? _nameToFunctionTarget(String name) {
-  switch (name) {
+FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
 $lines
-    default:
-      return null;
-  }
-}
+      _ => null
+    };
 ''',
     );
   });
@@ -161,29 +145,28 @@ $lines
           'optionalParam',
         ],
         (e) => """
-    case '$e':
-      return JsonFunctionTarget.voidResult(
-        function_library.$e,
-        (json) {
-          if (json is Map<String, dynamic>) {
-            try {
-              return function_library.JsonType.fromJson(json);
-            } catch (e, stack) {
-              throw BadRequestException(
-                400,
-                'There was an error parsing the provided JSON data.',
-                innerError: e,
-                innerStack: stack,
-              );
+      '$e' => JsonFunctionTarget.voidResult(
+          function_library.$e,
+          (json) {
+            if (json is Map<String, dynamic>) {
+              try {
+                return function_library.JsonType.fromJson(json);
+              } catch (e, stack) {
+                throw BadRequestException(
+                  400,
+                  'There was an error parsing the provided JSON data.',
+                  innerError: e,
+                  innerStack: stack,
+                );
+              }
             }
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`Map<String, dynamic>`.',
-          );
-        },
-      );""",
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`Map<String, dynamic>`.',
+            );
+          },
+        ),""",
       );
     });
 
@@ -208,29 +191,28 @@ $lines
           'optionalParam',
         ],
         (e) => """
-    case '$e':
-      return JsonWithContextFunctionTarget.voidResult(
-        function_library.$e,
-        (json) {
-          if (json is Map<String, dynamic>) {
-            try {
-              return function_library.JsonType.fromJson(json);
-            } catch (e, stack) {
-              throw BadRequestException(
-                400,
-                'There was an error parsing the provided JSON data.',
-                innerError: e,
-                innerStack: stack,
-              );
+      '$e' => JsonWithContextFunctionTarget.voidResult(
+          function_library.$e,
+          (json) {
+            if (json is Map<String, dynamic>) {
+              try {
+                return function_library.JsonType.fromJson(json);
+              } catch (e, stack) {
+                throw BadRequestException(
+                  400,
+                  'There was an error parsing the provided JSON data.',
+                  innerError: e,
+                  innerStack: stack,
+                );
+              }
             }
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`Map<String, dynamic>`.',
-          );
-        },
-      );""",
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`Map<String, dynamic>`.',
+            );
+          },
+        ),""",
       );
     });
 
@@ -249,29 +231,28 @@ $lines
           'optionalParam',
         ],
         (e) => """
-    case '$e':
-      return JsonFunctionTarget(
-        function_library.$e,
-        (json) {
-          if (json is Map<String, dynamic>) {
-            try {
-              return function_library.JsonType.fromJson(json);
-            } catch (e, stack) {
-              throw BadRequestException(
-                400,
-                'There was an error parsing the provided JSON data.',
-                innerError: e,
-                innerStack: stack,
-              );
+      '$e' => JsonFunctionTarget(
+          function_library.$e,
+          (json) {
+            if (json is Map<String, dynamic>) {
+              try {
+                return function_library.JsonType.fromJson(json);
+              } catch (e, stack) {
+                throw BadRequestException(
+                  400,
+                  'There was an error parsing the provided JSON data.',
+                  innerError: e,
+                  innerStack: stack,
+                );
+              }
             }
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`Map<String, dynamic>`.',
-          );
-        },
-      );""",
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`Map<String, dynamic>`.',
+            );
+          },
+        ),""",
       );
     });
 
@@ -290,29 +271,28 @@ $lines
           'optionalParam',
         ],
         (e) => """
-    case '$e':
-      return JsonFunctionTarget(
-        function_library.$e,
-        (json) {
-          if (json is Map<String, dynamic>) {
-            try {
-              return function_library.JsonType.fromJson(json);
-            } catch (e, stack) {
-              throw BadRequestException(
-                400,
-                'There was an error parsing the provided JSON data.',
-                innerError: e,
-                innerStack: stack,
-              );
+      '$e' => JsonFunctionTarget(
+          function_library.$e,
+          (json) {
+            if (json is Map<String, dynamic>) {
+              try {
+                return function_library.JsonType.fromJson(json);
+              } catch (e, stack) {
+                throw BadRequestException(
+                  400,
+                  'There was an error parsing the provided JSON data.',
+                  innerError: e,
+                  innerStack: stack,
+                );
+              }
             }
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`Map<String, dynamic>`.',
-          );
-        },
-      );""",
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`Map<String, dynamic>`.',
+            );
+          },
+        ),""",
       );
     });
 
@@ -331,29 +311,28 @@ $lines
           'optionalParam',
         ],
         (e) => """
-    case '$e':
-      return JsonFunctionTarget(
-        function_library.$e,
-        (json) {
-          if (json is Map<String, dynamic>) {
-            try {
-              return function_library.JsonType.fromJson(json);
-            } catch (e, stack) {
-              throw BadRequestException(
-                400,
-                'There was an error parsing the provided JSON data.',
-                innerError: e,
-                innerStack: stack,
-              );
+      '$e' => JsonFunctionTarget(
+          function_library.$e,
+          (json) {
+            if (json is Map<String, dynamic>) {
+              try {
+                return function_library.JsonType.fromJson(json);
+              } catch (e, stack) {
+                throw BadRequestException(
+                  400,
+                  'There was an error parsing the provided JSON data.',
+                  innerError: e,
+                  innerStack: stack,
+                );
+              }
             }
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`Map<String, dynamic>`.',
-          );
-        },
-      );""",
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`Map<String, dynamic>`.',
+            );
+          },
+        ),""",
       );
     });
   });
@@ -374,20 +353,19 @@ $lines
           'optionalParam',
         ],
         (e) => """
-    case '$e':
-      return JsonFunctionTarget.voidResult(
-        function_library.$e,
-        (json) {
-          if (json is num) {
-            return json;
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`num`.',
-          );
-        },
-      );""",
+      '$e' => JsonFunctionTarget.voidResult(
+          function_library.$e,
+          (json) {
+            if (json is num) {
+              return json;
+            }
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`num`.',
+            );
+          },
+        ),""",
       );
     });
 
@@ -405,20 +383,19 @@ $lines
           'optionalParam',
         ],
         (e) => """
-    case '$e':
-      return JsonFunctionTarget(
-        function_library.$e,
-        (json) {
-          if (json is num) {
-            return json;
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`num`.',
-          );
-        },
-      );""",
+      '$e' => JsonFunctionTarget(
+          function_library.$e,
+          (json) {
+            if (json is num) {
+              return json;
+            }
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`num`.',
+            );
+          },
+        ),""",
       );
     });
 
@@ -437,20 +414,19 @@ $lines
           'optionalParam',
         ],
         (e) => """
-    case '$e':
-      return JsonFunctionTarget(
-        function_library.$e,
-        (json) {
-          if (json is num) {
-            return json;
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`num`.',
-          );
-        },
-      );""",
+      '$e' => JsonFunctionTarget(
+          function_library.$e,
+          (json) {
+            if (json is num) {
+              return json;
+            }
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`num`.',
+            );
+          },
+        ),""",
       );
     });
 
@@ -475,20 +451,19 @@ $lines
           'optionalParam',
         ],
         (e) => """
-    case '$e':
-      return JsonWithContextFunctionTarget.voidResult(
-        function_library.$e,
-        (json) {
-          if (json is num) {
-            return json;
-          }
-          throw BadRequestException(
-            400,
-            'The provided JSON is not the expected type '
-            '`num`.',
-          );
-        },
-      );""",
+      '$e' => JsonWithContextFunctionTarget.voidResult(
+          function_library.$e,
+          (json) {
+            if (json is num) {
+              return json;
+            }
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`num`.',
+            );
+          },
+        ),""",
       );
     });
   });
@@ -630,13 +605,10 @@ Future<void> _testItems(
     inputContent,
     '''
 $_outputHeader
-FunctionTarget? _nameToFunctionTarget(String name) {
-  switch (name) {
+FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
 $entries
-    default:
-      return null;
-  }
-}
+      _ => null
+    };
 ''',
   );
 }
