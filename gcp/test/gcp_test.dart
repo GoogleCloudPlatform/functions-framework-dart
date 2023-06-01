@@ -131,6 +131,40 @@ void main() {
       });
     },
   );
+
+  group('currentRegion', () {
+    const regionPrint = 'test/src/region_print.dart';
+
+    test('not environment', () async {
+      final proc = await _run(regionPrint);
+
+      final errorOut = await proc.stderrStream().toList();
+
+      await expectLater(
+        errorOut,
+        containsAll(MetadataValue.region.environmentValues),
+      );
+      await expectLater(proc.stdout, emitsDone);
+
+      await proc.shouldExit(255);
+    });
+
+    test('environment set', () async {
+      final proc = await _run(
+        regionPrint,
+        environment: {
+          MetadataValue.region.environmentValues.first: 'us-central1',
+        },
+      );
+
+      await expectLater(proc.stdout, emits('us-central1'));
+      await expectLater(proc.stderr, emitsDone);
+
+      await proc.shouldExit(0);
+    });
+
+    // TODO: worth emulating the metadata server?
+  });
 }
 
 Future<TestProcess> _run(

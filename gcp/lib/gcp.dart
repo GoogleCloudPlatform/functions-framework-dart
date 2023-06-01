@@ -29,5 +29,6 @@ export 'src/logging.dart'
         cloudLoggingMiddleware,
         createLoggingMiddleware,
         currentLogger;
+export 'src/metadata.dart' show MetadataValue;
 export 'src/serve.dart' show listenPort, serveHandler;
 export 'src/terminate.dart' show waitForTerminate;
