@@ -22,6 +22,12 @@ export 'src/gcp_project.dart'
         gcpProjectIdEnvironmentVariables,
         projectIdFromEnvironment,
         projectIdFromMetadataServer;
+export 'src/gpc_region.dart'
+    show
+        computeRegion,
+        gcpRegionEnvironmentVariables,
+        regionFromEnvironment,
+        regionFromMetadataServer;
 export 'src/log_severity.dart' show LogSeverity, RequestLogger;
 export 'src/logging.dart'
     show
