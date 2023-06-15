@@ -20,13 +20,9 @@ Future<void> main(List<String> args) async {
   await serve(args, _nameToFunctionTarget);
 }
 
-FunctionTarget? _nameToFunctionTarget(String name) {
-  switch (name) {
-    case 'function':
-      return FunctionTarget.cloudEventWithContext(
-        function_library.function,
-      );
-    default:
-      return null;
-  }
-}
+FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
+      'function' => FunctionTarget.cloudEventWithContext(
+          function_library.function,
+        ),
+      _ => null
+    };
