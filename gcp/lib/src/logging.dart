@@ -98,6 +98,8 @@ final _loggerKey = Object();
 
 /// Return [Middleware] that logs errors using Google Cloud structured logs and
 /// returns the correct response.
+/// Log messages of type [Map] are logged as structured logs (`jsonPayload`).
+/// All other logs messages are logged as text logs (`textPayload`).
 Middleware cloudLoggingMiddleware(String projectId) {
   Handler hostedLoggingMiddleware(Handler innerHandler) => (request) async {
         // Add log correlation to nest all log messages beneath request log in
