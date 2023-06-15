@@ -40,7 +40,7 @@ jobs:
       working-directory: integration_test
 
     - name: Run HTTP conformance tests
-      uses: GoogleCloudPlatform/functions-framework-conformance/action@v1.8.0
+      uses: GoogleCloudPlatform/functions-framework-conformance/action@v1.8.1
       with:
         functionType: 'http'
         useBuildpacks: false
@@ -49,7 +49,7 @@ jobs:
         startDelay: 3
 
     - name: Run CloudEvent conformance tests
-      uses: GoogleCloudPlatform/functions-framework-conformance/action@v1.8.0
+      uses: GoogleCloudPlatform/functions-framework-conformance/action@v1.8.1
       with:
         functionType: 'cloudevent'
         useBuildpacks: false
