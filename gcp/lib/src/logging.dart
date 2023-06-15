@@ -98,6 +98,8 @@ final _loggerKey = Object();
 
 /// Return [Middleware] that logs errors using Google Cloud structured logs and
 /// returns the correct response.
+/// Log messages of type [Map] are logged as structured logs (`jsonPayload`).
+/// All other logs messages are logged as text logs (`textPayload`).
 Middleware cloudLoggingMiddleware(String projectId) {
   Handler hostedLoggingMiddleware(Handler innerHandler) => (request) async {
         // Add log correlation to nest all log messages beneath request log in
@@ -229,13 +231,18 @@ class _CloudLogger extends RequestLogger {
   _CloudLogger(this._zone, this._traceId);
 
   @override
-  void log(Object message, LogSeverity severity) =>
-      _zone.print(_createLogEntry(_traceId, '$message', severity));
+  void log(Object message, LogSeverity severity) => _zone.print(
+        _createLogEntry(
+          _traceId,
+          message is Map ? message : '$message',
+          severity,
+        ),
+      );
 }
 
 String _createLogEntry(
   String? traceValue,
-  String message,
+  Object message,
   LogSeverity severity, {
   Frame? stackFrame,
 }) {
