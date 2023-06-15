@@ -1,5 +1,5 @@
 name: functions_framework
-version: 0.4.2-dev
+version: 0.4.2
 description: >-
   FaaS (Function as a service) framework for writing portable Dart functions
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
@@ -25,7 +25,3 @@ dev_dependencies:
   dart_flutter_team_lints: ^1.0.0
   json_serializable: ^6.0.0
   test: ^1.15.7
-
-dependency_overrides:
-  gcp:
-    path: ../gcp
