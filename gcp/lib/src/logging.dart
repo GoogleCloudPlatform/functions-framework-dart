@@ -229,8 +229,13 @@ class _CloudLogger extends RequestLogger {
   _CloudLogger(this._zone, this._traceId);
 
   @override
-  void log(Object message, LogSeverity severity) =>
-      _zone.print(_createLogEntry(_traceId, message, severity));
+  void log(Object message, LogSeverity severity) => _zone.print(
+        _createLogEntry(
+          _traceId,
+          message is Map ? message : '$message',
+          severity,
+        ),
+      );
 }
 
 String _createLogEntry(
