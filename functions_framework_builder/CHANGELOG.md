@@ -1,4 +1,4 @@
-## 0.4.8-dev
+## 0.4.8
 
 - Support the latest `package:analyzer`.
 - Require Dart 3.0
