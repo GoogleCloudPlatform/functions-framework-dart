@@ -68,7 +68,7 @@ void main() {
       );
       await expectInvalid(
         response,
-        'Unsupported encoding "application/text; charset=utf-8". '
+        'Unsupported encoding "application/text". '
         'Only "application/json" is supported.',
       );
     });
