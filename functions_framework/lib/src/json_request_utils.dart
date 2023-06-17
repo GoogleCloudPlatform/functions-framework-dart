@@ -47,9 +47,9 @@ void mustBeJson(MediaType type) {
 }
 
 Future<Object?> decodeJson(Request request) async {
-  final content = await request.readAsString();
   try {
-    final value = jsonDecode(content);
+    final value =
+        await utf8.decoder.bind(request.read()).transform(json.decoder).single;
     return value;
   } on FormatException catch (e, stackTrace) {
     // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
