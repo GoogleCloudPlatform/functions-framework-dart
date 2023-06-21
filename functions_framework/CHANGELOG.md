@@ -1,3 +1,7 @@
+## 0.4.3-wip
+
+- Support `application/protobuf` event encoding.
+
 ## 0.4.2
 
 - Requires Dart `3.0.0`.
