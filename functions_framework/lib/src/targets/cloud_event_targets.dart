@@ -67,10 +67,8 @@ Future<CloudEvent> _eventFromRequest(Request request) =>
         : _decodeStructured(request);
 
 Future<CloudEvent> _decodeStructured(Request request) async {
-  final type = mediaTypeFromRequest(request);
-
-  mustBeJson(type);
-  var jsonObject = await decodeJson(request) as Map<String, dynamic>;
+  final type = mediaTypeFromRequest(request, requiredMimeType: jsonContentType);
+  var jsonObject = await decodeJson(request.read()) as Map<String, dynamic>;
 
   if (!jsonObject.containsKey('datacontenttype')) {
     jsonObject = {
@@ -86,15 +84,14 @@ const _cloudEventPrefix = 'ce-';
 const _clientEventPrefixLength = _cloudEventPrefix.length;
 
 Future<CloudEvent> _decodeBinary(Request request) async {
-  final type = mediaTypeFromRequest(request);
-  mustBeJson(type);
+  final data = await SupportedContentTypes.decode(request);
 
   final map = <String, Object?>{
     for (var e in request.headers.entries
         .where((element) => element.key.startsWith(_cloudEventPrefix)))
       e.key.substring(_clientEventPrefixLength): e.value,
-    'datacontenttype': type.toString(),
-    'data': await decodeJson(request),
+    'datacontenttype': data.mimeType.toString(),
+    'data': data.data,
   };
 
   return _decodeValidCloudEvent(map, 'binary-mode message');

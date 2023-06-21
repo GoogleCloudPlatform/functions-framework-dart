@@ -18,13 +18,14 @@ import 'package:gcp/gcp.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:shelf/shelf.dart';
 
-MediaType mediaTypeFromRequest(Request request) {
+MediaType mediaTypeFromRequest(Request request, {String? requiredMimeType}) {
   final contentType = request.headers[contentTypeHeader];
   if (contentType == null) {
     throw BadRequestException(400, '$contentTypeHeader header is required.');
   }
+  final MediaType value;
   try {
-    return MediaType.parse(contentType);
+    value = MediaType.parse(contentType);
   } catch (e, stack) {
     throw BadRequestException(
       400,
@@ -33,23 +34,23 @@ MediaType mediaTypeFromRequest(Request request) {
       innerStack: stack,
     );
   }
-}
 
-void mustBeJson(MediaType type) {
-  if (type.mimeType != jsonContentType) {
-    // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
-    throw BadRequestException(
-      400,
-      'Unsupported encoding "${type.toString()}". '
-      'Only "$jsonContentType" is supported.',
-    );
+  if (requiredMimeType != null) {
+    if (value.mimeType != requiredMimeType) {
+      // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
+      throw BadRequestException(
+        400,
+        'Unsupported encoding "${value.mimeType.toString()}". '
+        'Only "$requiredMimeType" is supported.',
+      );
+    }
   }
+  return value;
 }
 
-Future<Object?> decodeJson(Request request) async {
-  final content = await request.readAsString();
+Future<Object?> decodeJson(Stream<List<int>> data) async {
   try {
-    final value = jsonDecode(content);
+    final value = await utf8.decoder.bind(data).transform(json.decoder).single;
     return value;
   } on FormatException catch (e, stackTrace) {
     // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
@@ -63,5 +64,45 @@ Future<Object?> decodeJson(Request request) async {
 }
 
 const jsonContentType = 'application/json';
+
+enum SupportedContentTypes {
+  json(jsonContentType),
+  protobuf('application/protobuf');
+
+  const SupportedContentTypes(this.value);
+
+  final String value;
+
+  static Future<({MediaType mimeType, Object? data})> decode(
+    Request request,
+  ) async {
+    final type = mediaTypeFromRequest(request);
+    final supportedType = SupportedContentTypes.values.singleWhere(
+      (element) => element.value == type.mimeType,
+      orElse: () => throw BadRequestException(
+        400,
+        'Unsupported encoding "$type". '
+        'Supported types: '
+        '${SupportedContentTypes.values.map((e) => '"${e.value}"').join(', ')}',
+      ),
+    );
+
+    return (
+      mimeType: type,
+      data: await supportedType._decode(request.read()),
+    );
+  }
+
+  Future<Object?> _decode(
+    Stream<List<int>> data,
+  ) async =>
+      switch (this) {
+        json => await decodeJson(data),
+        protobuf => await data.fold<List<int>>(
+            <int>[],
+            (previous, element) => previous..addAll(element),
+          ),
+      };
+}
 
 const contentTypeHeader = 'Content-Type';
