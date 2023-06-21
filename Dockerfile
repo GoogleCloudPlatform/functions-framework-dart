@@ -6,6 +6,7 @@ FROM dart:stable AS build
 WORKDIR /app
 COPY ./functions_framework/pubspec.yaml /app/functions_framework/
 COPY ./functions_framework_builder/pubspec.yaml /app/functions_framework_builder/
+COPY ./gcp/pubspec.yaml /app/gcp/
 COPY ./integration_test/pubspec.yaml /app/integration_test/
 
 WORKDIR /app/integration_test
@@ -20,7 +21,10 @@ RUN dart pub run build_runner build --delete-conflicting-outputs
 RUN dart compile exe bin/server.dart -o bin/server
 
 ########################
+# Build minimal serving image from AOT-compiled `/server` and required system
+# libraries and configuration files stored in `/runtime/` from the build stage.
 FROM scratch
-COPY --from=0 /app/integration_test/bin/server /app/bin/server
+COPY --from=build /runtime/ /
+COPY --from=build /app/integration_test/bin/server /app/bin/
 EXPOSE 8080
 ENTRYPOINT ["/app/bin/server"]
