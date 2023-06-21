@@ -29,7 +29,7 @@ abstract class _JsonFunctionTargetBase<RequestType> extends FunctionTarget {
 
   Future<RequestType> _toRequestType(Request request) async {
     mediaTypeFromRequest(request, requiredMimeType: jsonContentType);
-    final jsonObject = await decodeJson(request.read());
+    final jsonObject = await request.decodeJson();
     return _fromJson(jsonObject);
   }
 }

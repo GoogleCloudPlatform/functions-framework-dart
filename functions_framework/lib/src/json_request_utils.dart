@@ -48,18 +48,24 @@ MediaType mediaTypeFromRequest(Request request, {String? requiredMimeType}) {
   return value;
 }
 
-Future<Object?> decodeJson(Stream<List<int>> data) async {
-  try {
-    final value = await utf8.decoder.bind(data).transform(json.decoder).single;
-    return value;
-  } on FormatException catch (e, stackTrace) {
-    // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
-    throw BadRequestException(
-      400,
-      'Could not parse the request body as JSON.',
-      innerError: e,
-      innerStack: stackTrace,
-    );
+extension RequestExt on Request {
+  Future<Object?> decodeJson() async {
+    try {
+      final value = await (encoding ?? utf8)
+          .decoder
+          .bind(read())
+          .transform(json.decoder)
+          .single;
+      return value;
+    } on FormatException catch (e, stackTrace) {
+      // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
+      throw BadRequestException(
+        400,
+        'Could not parse the request body as JSON.',
+        innerError: e,
+        innerStack: stackTrace,
+      );
+    }
   }
 }
 
@@ -89,20 +95,15 @@ enum SupportedContentTypes {
 
     return (
       mimeType: type,
-      data: await supportedType._decode(request.read()),
-    );
-  }
-
-  Future<Object?> _decode(
-    Stream<List<int>> data,
-  ) async =>
-      switch (this) {
-        json => await decodeJson(data),
-        protobuf => await data.fold<List<int>>(
+      data: switch (supportedType) {
+        json => await request.decodeJson(),
+        protobuf => await request.read().fold<List<int>>(
             <int>[],
             (previous, element) => previous..addAll(element),
           ),
-      };
+      },
+    );
+  }
 }
 
 const contentTypeHeader = 'Content-Type';

@@ -68,7 +68,7 @@ Future<CloudEvent> _eventFromRequest(Request request) =>
 
 Future<CloudEvent> _decodeStructured(Request request) async {
   final type = mediaTypeFromRequest(request, requiredMimeType: jsonContentType);
-  var jsonObject = await decodeJson(request.read()) as Map<String, dynamic>;
+  var jsonObject = await request.decodeJson() as Map<String, dynamic>;
 
   if (!jsonObject.containsKey('datacontenttype')) {
     jsonObject = {
