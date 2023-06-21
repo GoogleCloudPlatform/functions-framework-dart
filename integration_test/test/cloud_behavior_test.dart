@@ -96,7 +96,7 @@ void main() {
         'message': message,
         'severity': severity.name,
         'logging.googleapis.com/trace':
-            'projects/test_project_id/traces/$traceStart'
+            'projects/test_project_id/traces/$traceStart',
       },
     );
   }
@@ -363,7 +363,7 @@ void main() {
         '{"message":"error","severity":"ERROR","logging.googleapis.com/trace":"$trace"}',
         '{"message":"critical","severity":"CRITICAL","logging.googleapis.com/trace":"$trace"}',
         '{"message":"alert","severity":"ALERT","logging.googleapis.com/trace":"$trace"}',
-        '{"message":"emergency","severity":"EMERGENCY","logging.googleapis.com/trace":"$trace"}'
+        '{"message":"emergency","severity":"EMERGENCY","logging.googleapis.com/trace":"$trace"}',
       ]);
     });
   });

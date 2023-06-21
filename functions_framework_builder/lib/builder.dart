@@ -89,7 +89,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
     final importDirectives = [
       "'package:functions_framework/serve.dart'",
-      "'${input.uri}' as $functionsLibraryPrefix"
+      "'${input.uri}' as $functionsLibraryPrefix",
     ]..sort();
 
     var output = '''
