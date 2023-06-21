@@ -72,7 +72,7 @@ Handler _errorWriter(Handler innerHandler) => (request) async {
           error,
           if (error.innerError != null)
             '${error.innerError} (${error.innerError.runtimeType})',
-          _fromStackTrace(error.innerStack ?? stack)
+          _fromStackTrace(error.innerStack ?? stack),
         ];
 
         final bob =

@@ -40,7 +40,7 @@ void main() {
       final proc = await _run(
         projectIdPrint,
         environment: {
-          gcpProjectIdEnvironmentVariables.first: 'test-project-42'
+          gcpProjectIdEnvironmentVariables.first: 'test-project-42',
         },
       );
 
@@ -59,7 +59,7 @@ void main() {
     test(
       'no environment',
       onPlatform: {
-        'windows': const Skip('TODO: no idea why this is failing on windows')
+        'windows': const Skip('TODO: no idea why this is failing on windows'),
       },
       () async {
         final proc = await _run(listenPortPrint);

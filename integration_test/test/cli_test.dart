@@ -54,7 +54,7 @@ void main() {
         '--target',
         'function',
         '--signature-type',
-        'http'
+        'http',
       ],
       env: {
         // make sure args have precedence over environment
@@ -226,7 +226,7 @@ void main() {
         '--target',
         'basicCloudEventHandler',
         '--signature-type',
-        'http'
+        'http',
       ],
     );
 

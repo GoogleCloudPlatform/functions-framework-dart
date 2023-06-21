@@ -102,7 +102,7 @@ CommitRequest _incrementRequest(String projectId) => CommitRequest(
               FieldTransform(
                 fieldPath: 'count',
                 increment: Value(integerValue: '1'),
-              )
+              ),
             ],
           ),
         ),
