@@ -30,6 +30,9 @@ FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
       'basicCloudEventHandler' => FunctionTarget.cloudEventWithContext(
           function_library.basicCloudEventHandler,
         ),
+      'protoEventHandler' => FunctionTarget.cloudEventWithContext(
+          function_library.protoEventHandler,
+        ),
       'conformanceHttp' => FunctionTarget.http(
           function_library.conformanceHttp,
         ),

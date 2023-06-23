@@ -84,7 +84,7 @@ const _cloudEventPrefix = 'ce-';
 const _clientEventPrefixLength = _cloudEventPrefix.length;
 
 Future<CloudEvent> _decodeBinary(Request request) async {
-  final data = await SupportedContentTypes.decode(request);
+  final data = await request.decode();
 
   final map = <String, Object?>{
     for (var e in request.headers.entries

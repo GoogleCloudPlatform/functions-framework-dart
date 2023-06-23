@@ -98,6 +98,67 @@ void main() {
       );
     });
 
+    test('valid proto input', () async {
+      final proc = await _hostBasicEventHandler('protoEventHandler');
+
+      const subject = 'documents/users/ghXNtePIFmdDOBH3iEMH';
+      final response = await _makeRequest(
+        _protobytes,
+        {
+          'ce-id': '785865c0-2b16-439b-ad68-f9672343863a',
+          'ce-source':
+              '//firestore.googleapis.com/projects/dart-redirector/databases/(default)',
+          'ce-specversion': '1.0',
+          'ce-type': 'google.cloud.firestore.document.v1.updated',
+          'Content-Type': 'application/protobuf',
+          'ce-dataschema':
+              'https://github.com/googleapis/google-cloudevents/blob/main/proto/google/events/cloud/firestore/v1/data.proto',
+          'ce-subject': subject,
+          'ce-time': '2023-06-21T12:21:25.413855Z',
+        },
+      );
+      expect(response.statusCode, 200);
+      expect(response.body, isEmpty);
+      expect(
+        response.headers,
+        allOf(
+          containsTextPlainHeader,
+          containsPair('x-data-runtime-types', 'Uint8List'),
+        ),
+      );
+      await expectLater(
+        proc.stdout,
+        emitsInOrder(
+          [
+            startsWith('INFO: event subject: $subject'),
+            startsWith('DEBUG:'),
+          ],
+        ),
+      );
+
+      await finishServerTest(
+        proc,
+        requestOutput: endsWith('POST    [200] /'),
+      );
+
+      final stderrOutput = await proc.stderrStream().join('\n');
+      final json = jsonDecode(stderrOutput) as Map<String, dynamic>;
+
+      expect(json, {
+        'id': '785865c0-2b16-439b-ad68-f9672343863a',
+        'source':
+            '//firestore.googleapis.com/projects/dart-redirector/databases/(default)',
+        'specversion': '1.0',
+        'type': 'google.cloud.firestore.document.v1.updated',
+        'datacontenttype': 'application/protobuf',
+        'data': _protobytes,
+        'dataschema':
+            'https://github.com/googleapis/google-cloudevents/blob/main/proto/google/events/cloud/firestore/v1/data.proto',
+        'subject': 'documents/users/ghXNtePIFmdDOBH3iEMH',
+        'time': '2023-06-21T12:21:25.413855Z',
+      });
+    });
+
     test('bad format of core header: time', () async {
       final stderrOutput = await _makeBadRequest(
         _pubSubJsonString,
@@ -311,7 +372,7 @@ Future<String> _makeBadRequest(
   return stderrOutput;
 }
 
-Future<Response> _makeRequest(String body, Map<String, String> headers) async {
+Future<Response> _makeRequest(Object? body, Map<String, String> headers) async {
   final requestUrl = 'http://localhost:$autoPort/';
 
   final response = await post(
@@ -322,11 +383,13 @@ Future<Response> _makeRequest(String body, Map<String, String> headers) async {
   return response;
 }
 
-Future<TestProcess> _hostBasicEventHandler() async {
+Future<TestProcess> _hostBasicEventHandler([
+  String name = 'basicCloudEventHandler',
+]) async {
   final proc = await startServerTest(
     arguments: [
       '--target',
-      'basicCloudEventHandler',
+      name,
       '--signature-type',
       'cloudevent',
     ],
@@ -334,3 +397,12 @@ Future<TestProcess> _hostBasicEventHandler() async {
   );
   return proc;
 }
+
+/// This is a Firestore update record in protobuf
+final _protobytes = base64Decode(
+  'CoIBClFwcm9qZWN0cy9kYXJ0LXJlZGlyZWN0b3IvZGF0YWJhc2VzLyhkZWZhdWx0KS9kb2N1bWVu'
+  'dHMvdXNlcnMvZ2hYTnRlUElGbWRET0JIM2lFTUgSEQoEbmFtZRIJigEGbHVjaWE0GgwI6+KupAYQ'
+  'iMa2qgIiDAjF1sukBhCY2qvFARKCAQpRcHJvamVjdHMvZGFydC1yZWRpcmVjdG9yL2RhdGFiYXNl'
+  'cy8oZGVmYXVsdCkvZG9jdW1lbnRzL3VzZXJzL2doWE50ZVBJRm1kRE9CSDNpRU1IEhEKBG5hbWUS'
+  'CYoBBmx1Y2lhMxoMCOvirqQGEIjGtqoCIgwI8o60pAYQmJa6igMaBgoEbmFtZQ==',
+);
