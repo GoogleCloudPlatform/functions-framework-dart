@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:gcp/gcp.dart';
 import 'package:http_parser/http_parser.dart';
@@ -49,6 +50,23 @@ MediaType mediaTypeFromRequest(Request request, {String? requiredMimeType}) {
 }
 
 extension RequestExt on Request {
+  Future<List<int>> readBytes() async {
+    final length = contentLength;
+    if (length == null) {
+      return await read().fold<List<int>>(
+        <int>[],
+        (previous, element) => previous..addAll(element),
+      );
+    }
+    final bytes = Uint8List(length);
+    var offset = 0;
+    await for (var bits in read()) {
+      bytes.setAll(offset, bits);
+      offset += bits.length;
+    }
+    return bytes;
+  }
+
   Future<Object?> decodeJson() async {
     try {
       final value = await (encoding ?? utf8)
@@ -67,22 +85,9 @@ extension RequestExt on Request {
       );
     }
   }
-}
 
-const jsonContentType = 'application/json';
-
-enum SupportedContentTypes {
-  json(jsonContentType),
-  protobuf('application/protobuf');
-
-  const SupportedContentTypes(this.value);
-
-  final String value;
-
-  static Future<({MediaType mimeType, Object? data})> decode(
-    Request request,
-  ) async {
-    final type = mediaTypeFromRequest(request);
+  Future<({MediaType mimeType, Object? data})> decode() async {
+    final type = mediaTypeFromRequest(this);
     final supportedType = SupportedContentTypes.values.singleWhere(
       (element) => element.value == type.mimeType,
       orElse: () => throw BadRequestException(
@@ -96,14 +101,22 @@ enum SupportedContentTypes {
     return (
       mimeType: type,
       data: switch (supportedType) {
-        json => await request.decodeJson(),
-        protobuf => await request.read().fold<List<int>>(
-            <int>[],
-            (previous, element) => previous..addAll(element),
-          ),
+        SupportedContentTypes.json => await decodeJson(),
+        SupportedContentTypes.protobuf => await readBytes(),
       },
     );
   }
+}
+
+const jsonContentType = 'application/json';
+
+enum SupportedContentTypes {
+  json(jsonContentType),
+  protobuf('application/protobuf');
+
+  const SupportedContentTypes(this.value);
+
+  final String value;
 }
 
 const contentTypeHeader = 'Content-Type';

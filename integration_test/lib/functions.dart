@@ -139,6 +139,18 @@ void basicCloudEventHandler(CloudEvent event, RequestContext context) {
   stderr.writeln(encodeJsonPretty(event));
 }
 
+@CloudFunction()
+void protoEventHandler(CloudEvent event, RequestContext context) {
+  context.logger.info('event subject: ${event.subject}');
+
+  context.logger.debug(context.request.headers);
+
+  context.responseHeaders['x-data-runtime-types'] =
+      event.data.runtimeType.toString();
+
+  stderr.writeln(encodeJsonPretty(event));
+}
+
 final _helloWorldBytes = utf8.encode('Hello, World!');
 
 const _contentTypeHeader = 'Content-Type';
