@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 import 'test_shared.dart';
 
 void main() {
-  test('bob', () {
+  test('validate protobuf decode', () {
     final instance = DocumentEventData.fromBuffer(protobytes);
 
     expect(instance.toProto3Json(), jsonOutput);
