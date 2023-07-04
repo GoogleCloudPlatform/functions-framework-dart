@@ -1,4 +1,4 @@
-## 0.4.3-wip
+## 0.4.3
 
 - Support `application/protobuf` event encoding.
 
