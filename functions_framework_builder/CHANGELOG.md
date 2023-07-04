@@ -1,3 +1,7 @@
+## 0.4.10
+
+- Allow the latest `package:functions_framework`.
+
 ## 0.4.9
 
 - Support the latest `package:analyzer`.

@@ -1,5 +1,5 @@
 name: functions_framework_builder
-version: 0.4.9
+version: 0.4.10
 description: Builder for package:functions_framework
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
@@ -14,7 +14,7 @@ dependencies:
   dart_style: ^2.0.0
   # There is a tight version constraint because the builder has a strict
   # dependency on all features exposed.
-  functions_framework: '>=0.4.0 <0.4.3'
+  functions_framework: '>=0.4.0 <0.4.4'
   glob: ^2.0.0
   meta: ^1.2.4
   path: ^1.7.0
