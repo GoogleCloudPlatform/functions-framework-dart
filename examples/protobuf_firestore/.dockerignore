@@ -1,0 +1,7 @@
+.dart_tool/
+.dockerignore
+.git/
+.github/
+.gitignore
+.idea/
+Dockerfile

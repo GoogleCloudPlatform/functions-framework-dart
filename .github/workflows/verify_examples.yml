@@ -18,13 +18,14 @@ jobs:
     strategy:
       matrix:
         example_directory:
-          - examples/hello
-          - examples/json
-          - examples/raw_cloudevent
-          - examples/fullstack/backend
           - dartfn/templates/cloudevent
           - dartfn/templates/helloworld
           - dartfn/templates/json
+          - examples/fullstack/backend
+          - examples/hello
+          - examples/json
+          - examples/protobuf_firestore
+          - examples/raw_cloudevent
     defaults:
       run:
         working-directory: ${{ matrix.example_directory }}
