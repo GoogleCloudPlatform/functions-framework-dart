@@ -10,25 +10,25 @@ final protobytes = base64Decode(
 );
 
 const jsonOutput = {
-  "value": {
-    "name":
-        "projects/dart-redirector/databases/(default)/documents/users/ghXNtePIFmdDOBH3iEMH",
-    "fields": {
-      "name": {"stringValue": "lucia4"},
+  'value': {
+    'name':
+        'projects/dart-redirector/databases/(default)/documents/users/ghXNtePIFmdDOBH3iEMH',
+    'fields': {
+      'name': {'stringValue': 'lucia4'},
     },
-    "createTime": "2023-06-16T00:48:43.625845Z",
-    "updateTime": "2023-06-21T12:21:25.413855Z",
+    'createTime': '2023-06-16T00:48:43.625845Z',
+    'updateTime': '2023-06-21T12:21:25.413855Z',
   },
-  "oldValue": {
-    "name":
-        "projects/dart-redirector/databases/(default)/documents/users/ghXNtePIFmdDOBH3iEMH",
-    "fields": {
-      "name": {"stringValue": "lucia3"},
+  'oldValue': {
+    'name':
+        'projects/dart-redirector/databases/(default)/documents/users/ghXNtePIFmdDOBH3iEMH',
+    'fields': {
+      'name': {'stringValue': 'lucia3'},
     },
-    "createTime": "2023-06-16T00:48:43.625845Z",
-    "updateTime": "2023-06-17T01:08:02.827231Z",
+    'createTime': '2023-06-16T00:48:43.625845Z',
+    'updateTime': '2023-06-17T01:08:02.827231Z',
   },
-  "updateMask": {
-    "fieldPaths": ["name"],
+  'updateMask': {
+    'fieldPaths': ['name'],
   },
 };
