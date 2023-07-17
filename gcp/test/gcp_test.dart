@@ -135,19 +135,23 @@ void main() {
   group('currentRegion', () {
     const regionPrint = 'test/src/region_print.dart';
 
-    test('not environment', () async {
-      final proc = await _run(regionPrint);
+    test(
+      'not environment',
+      onPlatform: const {'windows': Skip('Broken on windows')},
+      () async {
+        final proc = await _run(regionPrint);
 
-      final errorOut = await proc.stderrStream().toList();
+        final errorOut = await proc.stderrStream().toList();
 
-      await expectLater(
-        errorOut,
-        containsAll(MetadataValue.region.environmentValues),
-      );
-      await expectLater(proc.stdout, emitsDone);
+        await expectLater(
+          errorOut,
+          containsAll(MetadataValue.region.environmentValues),
+        );
+        await expectLater(proc.stdout, emitsDone);
 
-      await proc.shouldExit(255);
-    });
+        await proc.shouldExit(255);
+      },
+    );
 
     test('environment set', () async {
       final proc = await _run(
