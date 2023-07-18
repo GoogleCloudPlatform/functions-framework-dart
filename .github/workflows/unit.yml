@@ -103,6 +103,135 @@ jobs:
         if: "always() && steps.gcp_pub_upgrade.conclusion == 'success'"
         working-directory: gcp
   job_003:
+    name: "unit_test; linux; Dart dev; PKGS: dartfn, dartfn/templates/cloudevent, dartfn/templates/helloworld, dartfn/templates/json, examples/fullstack/backend, examples/hello, examples/json, examples/protobuf_firestore, examples/raw_cloudevent, functions_framework_builder, gcp, integration_test; `dart test`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework_builder-gcp-integration_test;commands:test_0"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework_builder-gcp-integration_test
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@d6a63dab3335f427404425de0fbfed4686d93c4f
+        with:
+          sdk: dev
+      - id: checkout
+        name: Checkout repository
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+      - id: dartfn_pub_upgrade
+        name: dartfn; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: dartfn
+      - name: dartfn; dart test
+        run: dart test
+        if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
+        working-directory: dartfn
+      - id: dartfn_templates_cloudevent_pub_upgrade
+        name: dartfn/templates/cloudevent; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: dartfn/templates/cloudevent
+      - name: dartfn/templates/cloudevent; dart test
+        run: dart test
+        if: "always() && steps.dartfn_templates_cloudevent_pub_upgrade.conclusion == 'success'"
+        working-directory: dartfn/templates/cloudevent
+      - id: dartfn_templates_helloworld_pub_upgrade
+        name: dartfn/templates/helloworld; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: dartfn/templates/helloworld
+      - name: dartfn/templates/helloworld; dart test
+        run: dart test
+        if: "always() && steps.dartfn_templates_helloworld_pub_upgrade.conclusion == 'success'"
+        working-directory: dartfn/templates/helloworld
+      - id: dartfn_templates_json_pub_upgrade
+        name: dartfn/templates/json; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: dartfn/templates/json
+      - name: dartfn/templates/json; dart test
+        run: dart test
+        if: "always() && steps.dartfn_templates_json_pub_upgrade.conclusion == 'success'"
+        working-directory: dartfn/templates/json
+      - id: examples_fullstack_backend_pub_upgrade
+        name: examples/fullstack/backend; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: examples/fullstack/backend
+      - name: examples/fullstack/backend; dart test
+        run: dart test
+        if: "always() && steps.examples_fullstack_backend_pub_upgrade.conclusion == 'success'"
+        working-directory: examples/fullstack/backend
+      - id: examples_hello_pub_upgrade
+        name: examples/hello; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: examples/hello
+      - name: examples/hello; dart test
+        run: dart test
+        if: "always() && steps.examples_hello_pub_upgrade.conclusion == 'success'"
+        working-directory: examples/hello
+      - id: examples_json_pub_upgrade
+        name: examples/json; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: examples/json
+      - name: examples/json; dart test
+        run: dart test
+        if: "always() && steps.examples_json_pub_upgrade.conclusion == 'success'"
+        working-directory: examples/json
+      - id: examples_protobuf_firestore_pub_upgrade
+        name: examples/protobuf_firestore; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: examples/protobuf_firestore
+      - name: examples/protobuf_firestore; dart test
+        run: dart test
+        if: "always() && steps.examples_protobuf_firestore_pub_upgrade.conclusion == 'success'"
+        working-directory: examples/protobuf_firestore
+      - id: examples_raw_cloudevent_pub_upgrade
+        name: examples/raw_cloudevent; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: examples/raw_cloudevent
+      - name: examples/raw_cloudevent; dart test
+        run: dart test
+        if: "always() && steps.examples_raw_cloudevent_pub_upgrade.conclusion == 'success'"
+        working-directory: examples/raw_cloudevent
+      - id: functions_framework_builder_pub_upgrade
+        name: functions_framework_builder; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: functions_framework_builder
+      - name: functions_framework_builder; dart test
+        run: dart test
+        if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
+        working-directory: functions_framework_builder
+      - id: gcp_pub_upgrade
+        name: gcp; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: gcp
+      - name: gcp; dart test
+        run: dart test
+        if: "always() && steps.gcp_pub_upgrade.conclusion == 'success'"
+        working-directory: gcp
+      - id: integration_test_pub_upgrade
+        name: integration_test; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: integration_test
+      - name: integration_test; dart test
+        run: dart test
+        if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
+        working-directory: integration_test
+  job_004:
     name: "unit_test; linux; Dart dev; PKGS: dartfn, functions_framework, integration_test; `dart test --run-skipped -t presubmit-only`"
     runs-on: ubuntu-latest
     steps:
@@ -148,63 +277,6 @@ jobs:
         working-directory: integration_test
       - name: "integration_test; dart test --run-skipped -t presubmit-only"
         run: dart test --run-skipped -t presubmit-only
-        if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
-        working-directory: integration_test
-  job_004:
-    name: "unit_test; linux; Dart dev; PKGS: dartfn, functions_framework_builder, gcp, integration_test; `dart test`"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache Pub hosted dependencies
-        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
-        with:
-          path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-functions_framework_builder-gcp-integration_test;commands:test_0"
-          restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-functions_framework_builder-gcp-integration_test
-            os:ubuntu-latest;pub-cache-hosted;sdk:dev
-            os:ubuntu-latest;pub-cache-hosted
-            os:ubuntu-latest
-      - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@d6a63dab3335f427404425de0fbfed4686d93c4f
-        with:
-          sdk: dev
-      - id: checkout
-        name: Checkout repository
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
-      - id: dartfn_pub_upgrade
-        name: dartfn; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: dartfn
-      - name: dartfn; dart test
-        run: dart test
-        if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
-        working-directory: dartfn
-      - id: functions_framework_builder_pub_upgrade
-        name: functions_framework_builder; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: functions_framework_builder
-      - name: functions_framework_builder; dart test
-        run: dart test
-        if: "always() && steps.functions_framework_builder_pub_upgrade.conclusion == 'success'"
-        working-directory: functions_framework_builder
-      - id: gcp_pub_upgrade
-        name: gcp; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: gcp
-      - name: gcp; dart test
-        run: dart test
-        if: "always() && steps.gcp_pub_upgrade.conclusion == 'success'"
-        working-directory: gcp
-      - id: integration_test_pub_upgrade
-        name: integration_test; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: integration_test
-      - name: integration_test; dart test
-        run: dart test
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
   job_005:

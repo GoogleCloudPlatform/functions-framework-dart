@@ -94,9 +94,6 @@ abstract class DefaultGenerator extends Generator {
     setEntrypoint(getFile('bin/server.dart'));
   }
 
-  TemplateFile addFile(String path, String contents) =>
-      addTemplateFile(TemplateFile(path, contents));
-
   @override
   String getInstallInstructions() =>
       "to provision required packages, run 'pub get'";
