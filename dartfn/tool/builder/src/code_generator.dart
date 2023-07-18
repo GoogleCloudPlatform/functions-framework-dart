@@ -21,11 +21,12 @@ import 'package:glob/glob.dart';
 import 'package:path/path.dart' as p;
 import 'package:source_gen/source_gen.dart';
 
-const List<String> _allowedDotFiles = <String>['.gitignore'];
+const _allowedDotFiles = {'.gitignore'};
 final RegExp _binaryFileTypes = RegExp(
   r'\.(jpe?g|png|gif|ico|svg|ttf|eot|woff|woff2)$',
   caseSensitive: false,
 );
+const _excludedRootFiles = {'build', 'pubspec.lock', 'mono_pkg.yaml'};
 
 class DataGenerator extends Generator {
   @override
@@ -42,7 +43,7 @@ class DataGenerator extends Generator {
       (asset) {
         final rootSegment = asset.pathSegments[2];
 
-        if (rootSegment == 'build' || rootSegment == 'pubspec.lock') {
+        if (_excludedRootFiles.contains(rootSegment)) {
           return false;
         }
 
