@@ -12,26 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
-
-import 'package:http/http.dart' as http;
-
 import 'bad_configuration_exception.dart';
+import 'metadata.dart';
 
 /// A convenience wrapper that first tries [projectIdFromEnvironment]
 /// then (if the value is `null`) tries [projectIdFromMetadataServer]
 ///
 /// Like [projectIdFromMetadataServer], if no value is found, a
 /// [BadConfigurationException] is thrown.
-Future<String> computeProjectId() async {
-  final localValue = projectIdFromEnvironment();
-  if (localValue != null) {
-    return localValue;
-  }
-  final result = await projectIdFromMetadataServer();
-
-  return result;
-}
+Future<String> computeProjectId() =>
+    MetadataValue.project.fromEnvironmentOrMetadata();
 
 /// Returns the
 /// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
@@ -41,14 +31,7 @@ Future<String> computeProjectId() async {
 /// The list is checked in order. This is useful for local development.
 ///
 /// If no matching variable is found, `null` is returned.
-String? projectIdFromEnvironment() {
-  for (var envKey in gcpProjectIdEnvironmentVariables) {
-    final value = Platform.environment[envKey];
-    if (value != null) return value;
-  }
-
-  return null;
-}
+String? projectIdFromEnvironment() => MetadataValue.project.fromEnvironment();
 
 /// Returns a [Future] that completes with the
 /// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
@@ -57,36 +40,8 @@ String? projectIdFromEnvironment() {
 ///
 /// If the metadata server cannot be contacted, a [BadConfigurationException] is
 /// thrown.
-Future<String> projectIdFromMetadataServer() async {
-  const host = 'http://metadata.google.internal/';
-  final url = Uri.parse('$host/computeMetadata/v1/project/project-id');
-
-  try {
-    final response = await http.get(
-      url,
-      headers: {'Metadata-Flavor': 'Google'},
-    );
-
-    if (response.statusCode != 200) {
-      throw HttpException(
-        '${response.body} (${response.statusCode})',
-        uri: url,
-      );
-    }
-
-    return response.body;
-  } on SocketException catch (e) {
-    throw BadConfigurationException(
-      '''
-Could not connect to $host.
-If not running on Google Cloud, one of these environment variables must be set
-to the target Google Project ID:
-${gcpProjectIdEnvironmentVariables.join('\n')}
-''',
-      details: e.toString(),
-    );
-  }
-}
+Future<String> projectIdFromMetadataServer() =>
+    MetadataValue.project.fromMetadataServer();
 
 /// A set of typical environment variables that are likely to represent the
 /// current Google Cloud project ID.
@@ -98,9 +53,5 @@ ${gcpProjectIdEnvironmentVariables.join('\n')}
 ///
 /// Note: these are ordered starting from the most current/canonical to least.
 /// (At least as could be determined at the time of writing.)
-const gcpProjectIdEnvironmentVariables = {
-  'GCP_PROJECT',
-  'GCLOUD_PROJECT',
-  'CLOUDSDK_CORE_PROJECT',
-  'GOOGLE_CLOUD_PROJECT',
-};
+Set<String> get gcpProjectIdEnvironmentVariables =>
+    MetadataValue.project.environmentValues;
