@@ -20,7 +20,7 @@ import 'dart:convert';
 
 import 'package:functions_framework/serve.dart';
 import 'package:functions_framework/src/run.dart';
-import 'package:gcp/gcp.dart';
+import 'package:google_cloud/google_cloud.dart';
 import 'package:hello_world_function_test/functions.dart';
 import 'package:test/test.dart';
 

@@ -7,13 +7,3 @@ stages:
     sdk: dev
   - analyze:
     sdk: pubspec
-- unit_test:
-  - test:
-    os: [windows, macos, linux]
-    sdk: dev
-    # All OSes tested on oldest supported SDK
-  - test:
-    os: [linux, macos] # weird crash on windows – try to update when beyond 2.18
-    sdk: pubspec
-  - command: ./tool/docker_test_script.sh
-    sdk: pubspec

@@ -14,7 +14,7 @@
 
 import 'dart:io';
 
-import 'package:gcp/gcp.dart';
+import 'package:google_cloud/google_cloud.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
