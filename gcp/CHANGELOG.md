@@ -1,5 +1,6 @@
-## 0.1.2-wip
+## 0.2.0
 
+- Last release. Replaced by `package:google_cloud`.
 - `cloudLoggingMiddleware` uses structured logs (`jsonPayload`) when message is of type `Map`. All other messages are logged as text (`textPayload`).
 
 ## 0.1.1

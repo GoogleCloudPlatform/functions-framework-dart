@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import 'package:gcp/gcp.dart';
+import 'package:google_cloud/google_cloud.dart';
 
 Future<void> main() async {
   print('waiting for termination');

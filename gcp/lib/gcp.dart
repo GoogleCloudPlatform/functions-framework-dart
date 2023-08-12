@@ -12,22 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/bad_configuration_exception.dart' show BadConfigurationException;
-export 'src/bad_request_exception.dart' show BadRequestException;
-export 'src/constants.dart'
-    show cloudTraceContextHeader, defaultListenPort, portEnvironmentKey;
-export 'src/gcp_project.dart'
-    show
-        computeProjectId,
-        gcpProjectIdEnvironmentVariables,
-        projectIdFromEnvironment,
-        projectIdFromMetadataServer;
-export 'src/log_severity.dart' show LogSeverity, RequestLogger;
-export 'src/logging.dart'
-    show
-        badRequestMiddleware,
-        cloudLoggingMiddleware,
-        createLoggingMiddleware,
-        currentLogger;
-export 'src/serve.dart' show listenPort, serveHandler;
-export 'src/terminate.dart' show waitForTerminate;
+@Deprecated('Use package:google_cloud instead.')
+library;
+
+export 'package:google_cloud/google_cloud.dart';

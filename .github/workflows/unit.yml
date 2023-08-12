@@ -16,16 +16,16 @@ permissions: read-all
 
 jobs:
   job_001:
-    name: "unit_test; linux; Dart 3.0.0; PKGS: dartfn, functions_framework_builder, gcp, integration_test; `dart test`"
+    name: "unit_test; linux; Dart 3.0.0; PKGS: dartfn, functions_framework_builder, gcp, google_cloud, integration_test; `dart test`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:dartfn-functions_framework_builder-gcp-integration_test;commands:test_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:dartfn-functions_framework_builder-gcp-google_cloud-integration_test;commands:test_0"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:dartfn-functions_framework_builder-gcp-integration_test
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:dartfn-functions_framework_builder-gcp-google_cloud-integration_test
             os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -63,6 +63,15 @@ jobs:
         run: dart test
         if: "always() && steps.gcp_pub_upgrade.conclusion == 'success'"
         working-directory: gcp
+      - id: google_cloud_pub_upgrade
+        name: google_cloud; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: google_cloud
+      - name: google_cloud; dart test
+        run: dart test
+        if: "always() && steps.google_cloud_pub_upgrade.conclusion == 'success'"
+        working-directory: google_cloud
       - id: integration_test_pub_upgrade
         name: integration_test; dart pub upgrade
         run: dart pub upgrade
@@ -73,16 +82,16 @@ jobs:
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
   job_002:
-    name: "unit_test; linux; Dart 3.0.0; PKG: gcp; `./tool/docker_test_script.sh`"
+    name: "unit_test; linux; Dart 3.0.0; PKGS: gcp, google_cloud; `./tool/docker_test_script.sh`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp;commands:command"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp-google_cloud;commands:command"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp-google_cloud
             os:ubuntu-latest;pub-cache-hosted;sdk:3.0.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -102,17 +111,26 @@ jobs:
         run: ./tool/docker_test_script.sh
         if: "always() && steps.gcp_pub_upgrade.conclusion == 'success'"
         working-directory: gcp
+      - id: google_cloud_pub_upgrade
+        name: google_cloud; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: google_cloud
+      - name: google_cloud; ./tool/docker_test_script.sh
+        run: ./tool/docker_test_script.sh
+        if: "always() && steps.google_cloud_pub_upgrade.conclusion == 'success'"
+        working-directory: google_cloud
   job_003:
-    name: "unit_test; linux; Dart dev; PKGS: dartfn, dartfn/templates/cloudevent, dartfn/templates/helloworld, dartfn/templates/json, examples/fullstack/backend, examples/hello, examples/json, examples/protobuf_firestore, examples/raw_cloudevent, functions_framework_builder, gcp, integration_test; `dart test`"
+    name: "unit_test; linux; Dart dev; PKGS: dartfn, dartfn/templates/cloudevent, dartfn/templates/helloworld, dartfn/templates/json, examples/fullstack/backend, examples/hello, examples/json, examples/protobuf_firestore, examples/raw_cloudevent, functions_framework_builder, gcp, google_cloud, integration_test; `dart test`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework_builder-gcp-integration_test;commands:test_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework_builder-gcp-google_cloud-integration_test;commands:test_0"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework_builder-gcp-integration_test
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework_builder-gcp-google_cloud-integration_test
             os:ubuntu-latest;pub-cache-hosted;sdk:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -222,6 +240,15 @@ jobs:
         run: dart test
         if: "always() && steps.gcp_pub_upgrade.conclusion == 'success'"
         working-directory: gcp
+      - id: google_cloud_pub_upgrade
+        name: google_cloud; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: google_cloud
+      - name: google_cloud; dart test
+        run: dart test
+        if: "always() && steps.google_cloud_pub_upgrade.conclusion == 'success'"
+        working-directory: google_cloud
       - id: integration_test_pub_upgrade
         name: integration_test; dart pub upgrade
         run: dart pub upgrade
@@ -280,16 +307,16 @@ jobs:
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
   job_005:
-    name: "unit_test; macos; Dart 3.0.0; PKG: gcp; `dart test`"
+    name: "unit_test; macos; Dart 3.0.0; PKGS: gcp, google_cloud; `dart test`"
     runs-on: macos-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:macos-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp;commands:test_0"
+          key: "os:macos-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp-google_cloud;commands:test_0"
           restore-keys: |
-            os:macos-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp
+            os:macos-latest;pub-cache-hosted;sdk:3.0.0;packages:gcp-google_cloud
             os:macos-latest;pub-cache-hosted;sdk:3.0.0
             os:macos-latest;pub-cache-hosted
             os:macos-latest
@@ -309,17 +336,26 @@ jobs:
         run: dart test
         if: "always() && steps.gcp_pub_upgrade.conclusion == 'success'"
         working-directory: gcp
+      - id: google_cloud_pub_upgrade
+        name: google_cloud; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: google_cloud
+      - name: google_cloud; dart test
+        run: dart test
+        if: "always() && steps.google_cloud_pub_upgrade.conclusion == 'success'"
+        working-directory: google_cloud
   job_006:
-    name: "unit_test; macos; Dart dev; PKG: gcp; `dart test`"
+    name: "unit_test; macos; Dart dev; PKGS: gcp, google_cloud; `dart test`"
     runs-on: macos-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:macos-latest;pub-cache-hosted;sdk:dev;packages:gcp;commands:test_0"
+          key: "os:macos-latest;pub-cache-hosted;sdk:dev;packages:gcp-google_cloud;commands:test_0"
           restore-keys: |
-            os:macos-latest;pub-cache-hosted;sdk:dev;packages:gcp
+            os:macos-latest;pub-cache-hosted;sdk:dev;packages:gcp-google_cloud
             os:macos-latest;pub-cache-hosted;sdk:dev
             os:macos-latest;pub-cache-hosted
             os:macos-latest
@@ -339,8 +375,17 @@ jobs:
         run: dart test
         if: "always() && steps.gcp_pub_upgrade.conclusion == 'success'"
         working-directory: gcp
+      - id: google_cloud_pub_upgrade
+        name: google_cloud; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: google_cloud
+      - name: google_cloud; dart test
+        run: dart test
+        if: "always() && steps.google_cloud_pub_upgrade.conclusion == 'success'"
+        working-directory: google_cloud
   job_007:
-    name: "unit_test; windows; Dart dev; PKG: gcp; `dart test`"
+    name: "unit_test; windows; Dart dev; PKGS: gcp, google_cloud; `dart test`"
     runs-on: windows-latest
     steps:
       - name: Setup Dart SDK
@@ -359,6 +404,15 @@ jobs:
         run: dart test
         if: "always() && steps.gcp_pub_upgrade.conclusion == 'success'"
         working-directory: gcp
+      - id: google_cloud_pub_upgrade
+        name: google_cloud; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: google_cloud
+      - name: google_cloud; dart test
+        run: dart test
+        if: "always() && steps.google_cloud_pub_upgrade.conclusion == 'success'"
+        working-directory: google_cloud
   job_008:
     name: Notify failure
     runs-on: ubuntu-latest
