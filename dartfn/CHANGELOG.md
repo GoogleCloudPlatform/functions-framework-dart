@@ -1,4 +1,4 @@
-## 0.4.6-dev
+## 0.4.6
 
 - Ignore file cleanup.
 - Require Dart 3.0
