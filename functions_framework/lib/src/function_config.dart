@@ -15,7 +15,7 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
-import 'package:gcp/gcp.dart';
+import 'package:google_cloud/google_cloud.dart';
 
 const defaultFunctionType = FunctionType.http;
 const defaultFunctionTarget = 'function';

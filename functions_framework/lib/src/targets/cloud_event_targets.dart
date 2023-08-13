@@ -14,7 +14,7 @@
 
 import 'dart:async';
 
-import 'package:gcp/gcp.dart';
+import 'package:google_cloud/google_cloud.dart';
 import 'package:shelf/shelf.dart';
 
 import '../cloud_event.dart';
