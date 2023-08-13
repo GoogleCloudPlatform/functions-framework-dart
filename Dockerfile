@@ -6,7 +6,7 @@ FROM dart:stable AS build
 WORKDIR /app
 COPY ./functions_framework/pubspec.yaml /app/functions_framework/
 COPY ./functions_framework_builder/pubspec.yaml /app/functions_framework_builder/
-COPY ./gcp/pubspec.yaml /app/gcp/
+COPY ./google_cloud/pubspec.yaml /app/google_cloud/
 COPY ./integration_test/pubspec.yaml /app/integration_test/
 
 WORKDIR /app/integration_test

@@ -1,3 +1,7 @@
+## 0.4.3+1
+
+- Migrate from `package:gcp` to `package:google_cloud`.
+
 ## 0.4.3
 
 - Support `application/protobuf` event encoding.

@@ -25,7 +25,7 @@ library serve;
 import 'dart:async';
 import 'dart:io';
 
-import 'package:gcp/gcp.dart';
+import 'package:google_cloud/google_cloud.dart';
 import 'package:io/ansi.dart';
 import 'package:io/io.dart';
 
@@ -33,7 +33,7 @@ import 'src/function_config.dart';
 import 'src/function_target.dart';
 import 'src/run.dart';
 
-export 'package:gcp/gcp.dart' show BadRequestException;
+export 'package:google_cloud/google_cloud.dart' show BadRequestException;
 
 export 'src/function_target.dart'
     show FunctionTarget, JsonFunctionTarget, JsonWithContextFunctionTarget;
@@ -92,7 +92,7 @@ Future<void> _serve(
   try {
     projectId = await projectIdFromMetadataServer();
   } on BadConfigurationException {
-    // NOOP! - we aren't on GCP, so use normal logging
+    // NOOP! - we aren't on Google Cloud, so use normal logging
   }
   final loggingMiddleware = createLoggingMiddleware(projectId: projectId);
 

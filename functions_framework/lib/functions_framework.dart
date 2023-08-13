@@ -24,7 +24,7 @@
 /// ```
 library functions_framework;
 
-export 'package:gcp/gcp.dart'
+export 'package:google_cloud/google_cloud.dart'
     show BadRequestException, LogSeverity, RequestLogger;
 
 export 'src/cloud_event.dart' show CloudEvent;

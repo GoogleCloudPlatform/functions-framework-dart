@@ -27,7 +27,5 @@ dependency_overrides:
     path: ../functions_framework
   functions_framework_builder:
     path: ../functions_framework_builder
-  gcp:
-    path: ../gcp
   google_cloud:
     path: ../google_cloud

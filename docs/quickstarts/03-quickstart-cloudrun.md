@@ -125,7 +125,7 @@ the [Manage resources] page.
 [codelab]: https://codelabs.developers.google.com/codelabs/cloud-shell
 [delete the image]: https://cloud.google.com/container-registry/docs/managing#deleting_images
 [gcloud]: https://cloud.google.com/sdk/docs/install
-[Google Cloud]: https://cloud.google.com/gcp
+[Google Cloud]: https://cloud.google.com/
 [incur charges]: https://cloud.google.com/container-registry/pricing
 [Installing and using dartfn]: 00-install-dartfn.md
 [Manage resources]: https://console.cloud.google.com/iam-admin/projects

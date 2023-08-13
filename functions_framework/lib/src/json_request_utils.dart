@@ -15,7 +15,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:gcp/gcp.dart';
+import 'package:google_cloud/google_cloud.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:shelf/shelf.dart';
 
