@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -18,8 +18,25 @@ import '../../../../protobuf/struct.pbenum.dart' as $2;
 import '../../../../protobuf/timestamp.pb.dart' as $0;
 import '../../../../type/latlng.pb.dart' as $1;
 
+/// The data within all Firestore document events.
 class DocumentEventData extends $pb.GeneratedMessage {
-  factory DocumentEventData() => create();
+  factory DocumentEventData({
+    Document? value,
+    Document? oldValue,
+    DocumentMask? updateMask,
+  }) {
+    final result = create();
+    if (value != null) {
+      result.value = value;
+    }
+    if (oldValue != null) {
+      result.oldValue = oldValue;
+    }
+    if (updateMask != null) {
+      result.updateMask = updateMask;
+    }
+    return result;
+  }
   DocumentEventData._() : super();
   factory DocumentEventData.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -64,6 +81,8 @@ class DocumentEventData extends $pb.GeneratedMessage {
       $pb.GeneratedMessage.$_defaultFor<DocumentEventData>(create);
   static DocumentEventData? _defaultInstance;
 
+  /// A Document object containing a post-operation document snapshot.
+  /// This is not populated for delete events.
   @$pb.TagNumber(1)
   Document get value => $_getN(0);
   @$pb.TagNumber(1)
@@ -78,6 +97,8 @@ class DocumentEventData extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   Document ensureValue() => $_ensure(0);
 
+  /// A Document object containing a pre-operation document snapshot.
+  /// This is only populated for update and delete events.
   @$pb.TagNumber(2)
   Document get oldValue => $_getN(1);
   @$pb.TagNumber(2)
@@ -92,6 +113,8 @@ class DocumentEventData extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   Document ensureOldValue() => $_ensure(1);
 
+  /// A DocumentMask object that lists changed fields.
+  /// This is only populated for update events.
   @$pb.TagNumber(3)
   DocumentMask get updateMask => $_getN(2);
   @$pb.TagNumber(3)
@@ -107,8 +130,17 @@ class DocumentEventData extends $pb.GeneratedMessage {
   DocumentMask ensureUpdateMask() => $_ensure(2);
 }
 
+/// A set of field paths on a document.
 class DocumentMask extends $pb.GeneratedMessage {
-  factory DocumentMask() => create();
+  factory DocumentMask({
+    $core.Iterable<$core.String>? fieldPaths,
+  }) {
+    final result = create();
+    if (fieldPaths != null) {
+      result.fieldPaths.addAll(fieldPaths);
+    }
+    return result;
+  }
   DocumentMask._() : super();
   factory DocumentMask.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -148,12 +180,36 @@ class DocumentMask extends $pb.GeneratedMessage {
       $pb.GeneratedMessage.$_defaultFor<DocumentMask>(create);
   static DocumentMask? _defaultInstance;
 
+  /// The list of field paths in the mask.
+  /// See [Document.fields][google.cloud.firestore.v1.events.Document.fields]
+  /// for a field path syntax reference.
   @$pb.TagNumber(1)
   $core.List<$core.String> get fieldPaths => $_getList(0);
 }
 
+/// A Firestore document.
 class Document extends $pb.GeneratedMessage {
-  factory Document() => create();
+  factory Document({
+    $core.String? name,
+    $core.Map<$core.String, Value>? fields,
+    $0.Timestamp? createTime,
+    $0.Timestamp? updateTime,
+  }) {
+    final result = create();
+    if (name != null) {
+      result.name = name;
+    }
+    if (fields != null) {
+      result.fields.addAll(fields);
+    }
+    if (createTime != null) {
+      result.createTime = createTime;
+    }
+    if (updateTime != null) {
+      result.updateTime = updateTime;
+    }
+    return result;
+  }
   Document._() : super();
   factory Document.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -202,6 +258,8 @@ class Document extends $pb.GeneratedMessage {
       _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Document>(create);
   static Document? _defaultInstance;
 
+  /// The resource name of the document. For example:
+  /// `projects/{project_id}/databases/{database_id}/documents/{document_path}`
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
@@ -214,9 +272,38 @@ class Document extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearName() => clearField(1);
 
+  ///  The document's fields.
+  ///
+  ///  The map keys represent field names.
+  ///
+  ///  A simple field name contains only characters `a` to `z`, `A` to `Z`,
+  ///  `0` to `9`, or `_`, and must not start with `0` to `9`. For example,
+  ///  `foo_bar_17`.
+  ///
+  ///  Field names matching the regular expression `__.*__` are reserved. Reserved
+  ///  field names are forbidden except in certain documented contexts. The map
+  ///  keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be
+  ///  empty.
+  ///
+  ///  Field paths may be used in other contexts to refer to structured fields
+  ///  defined here. For `map_value`, the field path is represented by the simple
+  ///  or quoted field names of the containing fields, delimited by `.`. For
+  ///  example, the structured field
+  ///  `"foo" : { map_value: { "x&y" : { string_value: "hello" }}}` would be
+  ///  represented by the field path `foo.x&y`.
+  ///
+  ///  Within a field path, a quoted field name starts and ends with `` ` `` and
+  ///  may contain any character. Some characters, including `` ` ``, must be
+  ///  escaped using a `\`. For example, `` `x&y` `` represents `x&y` and
+  ///  `` `bak\`tik` `` represents `` bak`tik ``.
   @$pb.TagNumber(2)
   $core.Map<$core.String, Value> get fields => $_getMap(1);
 
+  ///  The time at which the document was created.
+  ///
+  ///  This value increases monotonically when a document is deleted then
+  ///  recreated. It can also be compared to values from other documents and
+  ///  the `read_time` of a query.
   @$pb.TagNumber(3)
   $0.Timestamp get createTime => $_getN(2);
   @$pb.TagNumber(3)
@@ -231,6 +318,11 @@ class Document extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $0.Timestamp ensureCreateTime() => $_ensure(2);
 
+  ///  The time at which the document was last changed.
+  ///
+  ///  This value is initially set to the `create_time` then increases
+  ///  monotonically with each change to the document. It can also be
+  ///  compared to values from other documents and the `read_time` of a query.
   @$pb.TagNumber(4)
   $0.Timestamp get updateTime => $_getN(3);
   @$pb.TagNumber(4)
@@ -261,8 +353,57 @@ enum Value_ValueType {
   notSet
 }
 
+/// A message that can hold any of the supported value types.
 class Value extends $pb.GeneratedMessage {
-  factory Value() => create();
+  factory Value({
+    $core.bool? booleanValue,
+    $fixnum.Int64? integerValue,
+    $core.double? doubleValue,
+    $core.String? referenceValue,
+    MapValue? mapValue,
+    $1.LatLng? geoPointValue,
+    ArrayValue? arrayValue,
+    $0.Timestamp? timestampValue,
+    $2.NullValue? nullValue,
+    $core.String? stringValue,
+    $core.List<$core.int>? bytesValue,
+  }) {
+    final result = create();
+    if (booleanValue != null) {
+      result.booleanValue = booleanValue;
+    }
+    if (integerValue != null) {
+      result.integerValue = integerValue;
+    }
+    if (doubleValue != null) {
+      result.doubleValue = doubleValue;
+    }
+    if (referenceValue != null) {
+      result.referenceValue = referenceValue;
+    }
+    if (mapValue != null) {
+      result.mapValue = mapValue;
+    }
+    if (geoPointValue != null) {
+      result.geoPointValue = geoPointValue;
+    }
+    if (arrayValue != null) {
+      result.arrayValue = arrayValue;
+    }
+    if (timestampValue != null) {
+      result.timestampValue = timestampValue;
+    }
+    if (nullValue != null) {
+      result.nullValue = nullValue;
+    }
+    if (stringValue != null) {
+      result.stringValue = stringValue;
+    }
+    if (bytesValue != null) {
+      result.bytesValue = bytesValue;
+    }
+    return result;
+  }
   Value._() : super();
   factory Value.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -338,6 +479,7 @@ class Value extends $pb.GeneratedMessage {
   Value_ValueType whichValueType() => _Value_ValueTypeByTag[$_whichOneof(0)]!;
   void clearValueType() => clearField($_whichOneof(0));
 
+  /// A boolean value.
   @$pb.TagNumber(1)
   $core.bool get booleanValue => $_getBF(0);
   @$pb.TagNumber(1)
@@ -350,6 +492,7 @@ class Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearBooleanValue() => clearField(1);
 
+  /// An integer value.
   @$pb.TagNumber(2)
   $fixnum.Int64 get integerValue => $_getI64(1);
   @$pb.TagNumber(2)
@@ -362,6 +505,7 @@ class Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   void clearIntegerValue() => clearField(2);
 
+  /// A double value.
   @$pb.TagNumber(3)
   $core.double get doubleValue => $_getN(2);
   @$pb.TagNumber(3)
@@ -374,6 +518,8 @@ class Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   void clearDoubleValue() => clearField(3);
 
+  /// A reference to a document. For example:
+  /// `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
   @$pb.TagNumber(5)
   $core.String get referenceValue => $_getSZ(3);
   @$pb.TagNumber(5)
@@ -386,6 +532,7 @@ class Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   void clearReferenceValue() => clearField(5);
 
+  /// A map value.
   @$pb.TagNumber(6)
   MapValue get mapValue => $_getN(4);
   @$pb.TagNumber(6)
@@ -400,6 +547,7 @@ class Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   MapValue ensureMapValue() => $_ensure(4);
 
+  /// A geo point value representing a point on the surface of Earth.
   @$pb.TagNumber(8)
   $1.LatLng get geoPointValue => $_getN(5);
   @$pb.TagNumber(8)
@@ -414,6 +562,10 @@ class Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $1.LatLng ensureGeoPointValue() => $_ensure(5);
 
+  ///  An array value.
+  ///
+  ///  Cannot directly contain another array value, though can contain an
+  ///  map which contains another array.
   @$pb.TagNumber(9)
   ArrayValue get arrayValue => $_getN(6);
   @$pb.TagNumber(9)
@@ -428,6 +580,10 @@ class Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   ArrayValue ensureArrayValue() => $_ensure(6);
 
+  ///  A timestamp value.
+  ///
+  ///  Precise only to microseconds. When stored, any additional precision is
+  ///  rounded down.
   @$pb.TagNumber(10)
   $0.Timestamp get timestampValue => $_getN(7);
   @$pb.TagNumber(10)
@@ -442,6 +598,7 @@ class Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   $0.Timestamp ensureTimestampValue() => $_ensure(7);
 
+  /// A null value.
   @$pb.TagNumber(11)
   $2.NullValue get nullValue => $_getN(8);
   @$pb.TagNumber(11)
@@ -454,6 +611,11 @@ class Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(11)
   void clearNullValue() => clearField(11);
 
+  ///  A string value.
+  ///
+  ///  The string, represented as UTF-8, must not exceed 1 MiB - 89 bytes.
+  ///  Only the first 1,500 bytes of the UTF-8 representation are considered by
+  ///  queries.
   @$pb.TagNumber(17)
   $core.String get stringValue => $_getSZ(9);
   @$pb.TagNumber(17)
@@ -466,6 +628,10 @@ class Value extends $pb.GeneratedMessage {
   @$pb.TagNumber(17)
   void clearStringValue() => clearField(17);
 
+  ///  A bytes value.
+  ///
+  ///  Must not exceed 1 MiB - 89 bytes.
+  ///  Only the first 1,500 bytes are considered by queries.
   @$pb.TagNumber(18)
   $core.List<$core.int> get bytesValue => $_getN(10);
   @$pb.TagNumber(18)
@@ -479,8 +645,17 @@ class Value extends $pb.GeneratedMessage {
   void clearBytesValue() => clearField(18);
 }
 
+/// An array value.
 class ArrayValue extends $pb.GeneratedMessage {
-  factory ArrayValue() => create();
+  factory ArrayValue({
+    $core.Iterable<Value>? values,
+  }) {
+    final result = create();
+    if (values != null) {
+      result.values.addAll(values);
+    }
+    return result;
+  }
   ArrayValue._() : super();
   factory ArrayValue.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -519,12 +694,22 @@ class ArrayValue extends $pb.GeneratedMessage {
       $pb.GeneratedMessage.$_defaultFor<ArrayValue>(create);
   static ArrayValue? _defaultInstance;
 
+  /// Values in the array.
   @$pb.TagNumber(1)
   $core.List<Value> get values => $_getList(0);
 }
 
+/// A map value.
 class MapValue extends $pb.GeneratedMessage {
-  factory MapValue() => create();
+  factory MapValue({
+    $core.Map<$core.String, Value>? fields,
+  }) {
+    final result = create();
+    if (fields != null) {
+      result.fields.addAll(fields);
+    }
+    return result;
+  }
   MapValue._() : super();
   factory MapValue.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -568,6 +753,12 @@ class MapValue extends $pb.GeneratedMessage {
       _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<MapValue>(create);
   static MapValue? _defaultInstance;
 
+  ///  The map's fields.
+  ///
+  ///  The map keys represent field names. Field names matching the regular
+  ///  expression `__.*__` are reserved. Reserved field names are forbidden except
+  ///  in certain documented contexts. The map keys, represented as UTF-8, must
+  ///  not exceed 1,500 bytes and cannot be empty.
   @$pb.TagNumber(1)
   $core.Map<$core.String, Value> get fields => $_getMap(0);
 }

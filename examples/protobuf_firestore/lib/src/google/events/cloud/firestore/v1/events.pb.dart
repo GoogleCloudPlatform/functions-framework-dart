@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -15,8 +15,17 @@ import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'data.pb.dart' as $3;
 
+/// The CloudEvent raised when a Firestore document is created.
 class DocumentCreatedEvent extends $pb.GeneratedMessage {
-  factory DocumentCreatedEvent() => create();
+  factory DocumentCreatedEvent({
+    $3.DocumentEventData? data,
+  }) {
+    final result = create();
+    if (data != null) {
+      result.data = data;
+    }
+    return result;
+  }
   DocumentCreatedEvent._() : super();
   factory DocumentCreatedEvent.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -58,6 +67,7 @@ class DocumentCreatedEvent extends $pb.GeneratedMessage {
       $pb.GeneratedMessage.$_defaultFor<DocumentCreatedEvent>(create);
   static DocumentCreatedEvent? _defaultInstance;
 
+  /// The data associated with the event.
   @$pb.TagNumber(1)
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
@@ -73,8 +83,17 @@ class DocumentCreatedEvent extends $pb.GeneratedMessage {
   $3.DocumentEventData ensureData() => $_ensure(0);
 }
 
+/// The CloudEvent raised when a Firestore document is updated.
 class DocumentUpdatedEvent extends $pb.GeneratedMessage {
-  factory DocumentUpdatedEvent() => create();
+  factory DocumentUpdatedEvent({
+    $3.DocumentEventData? data,
+  }) {
+    final result = create();
+    if (data != null) {
+      result.data = data;
+    }
+    return result;
+  }
   DocumentUpdatedEvent._() : super();
   factory DocumentUpdatedEvent.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -116,6 +135,7 @@ class DocumentUpdatedEvent extends $pb.GeneratedMessage {
       $pb.GeneratedMessage.$_defaultFor<DocumentUpdatedEvent>(create);
   static DocumentUpdatedEvent? _defaultInstance;
 
+  /// The data associated with the event.
   @$pb.TagNumber(1)
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
@@ -131,8 +151,17 @@ class DocumentUpdatedEvent extends $pb.GeneratedMessage {
   $3.DocumentEventData ensureData() => $_ensure(0);
 }
 
+/// The CloudEvent raised when a Firestore document is deleted.
 class DocumentDeletedEvent extends $pb.GeneratedMessage {
-  factory DocumentDeletedEvent() => create();
+  factory DocumentDeletedEvent({
+    $3.DocumentEventData? data,
+  }) {
+    final result = create();
+    if (data != null) {
+      result.data = data;
+    }
+    return result;
+  }
   DocumentDeletedEvent._() : super();
   factory DocumentDeletedEvent.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -174,6 +203,7 @@ class DocumentDeletedEvent extends $pb.GeneratedMessage {
       $pb.GeneratedMessage.$_defaultFor<DocumentDeletedEvent>(create);
   static DocumentDeletedEvent? _defaultInstance;
 
+  /// The data associated with the event.
   @$pb.TagNumber(1)
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
@@ -189,8 +219,18 @@ class DocumentDeletedEvent extends $pb.GeneratedMessage {
   $3.DocumentEventData ensureData() => $_ensure(0);
 }
 
+/// The CloudEvent raised when a Firestore document is created, updated or
+/// deleted.
 class DocumentWrittenEvent extends $pb.GeneratedMessage {
-  factory DocumentWrittenEvent() => create();
+  factory DocumentWrittenEvent({
+    $3.DocumentEventData? data,
+  }) {
+    final result = create();
+    if (data != null) {
+      result.data = data;
+    }
+    return result;
+  }
   DocumentWrittenEvent._() : super();
   factory DocumentWrittenEvent.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -232,6 +272,7 @@ class DocumentWrittenEvent extends $pb.GeneratedMessage {
       $pb.GeneratedMessage.$_defaultFor<DocumentWrittenEvent>(create);
   static DocumentWrittenEvent? _defaultInstance;
 
+  /// The data associated with the event.
   @$pb.TagNumber(1)
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
