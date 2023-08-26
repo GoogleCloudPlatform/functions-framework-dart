@@ -4,7 +4,7 @@
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -13,8 +13,25 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+/// An object that represents a latitude/longitude pair. This is expressed as a
+/// pair of doubles to represent degrees latitude and degrees longitude. Unless
+/// specified otherwise, this must conform to the
+/// <a href="http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf">WGS84
+/// standard</a>. Values must be within normalized ranges.
 class LatLng extends $pb.GeneratedMessage {
-  factory LatLng() => create();
+  factory LatLng({
+    $core.double? latitude,
+    $core.double? longitude,
+  }) {
+    final result = create();
+    if (latitude != null) {
+      result.latitude = latitude;
+    }
+    if (longitude != null) {
+      result.longitude = longitude;
+    }
+    return result;
+  }
   LatLng._() : super();
   factory LatLng.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -52,6 +69,7 @@ class LatLng extends $pb.GeneratedMessage {
       _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LatLng>(create);
   static LatLng? _defaultInstance;
 
+  /// The latitude in degrees. It must be in the range [-90.0, +90.0].
   @$pb.TagNumber(1)
   $core.double get latitude => $_getN(0);
   @$pb.TagNumber(1)
@@ -64,6 +82,7 @@ class LatLng extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   void clearLatitude() => clearField(1);
 
+  /// The longitude in degrees. It must be in the range [-180.0, +180.0].
   @$pb.TagNumber(2)
   $core.double get longitude => $_getN(1);
   @$pb.TagNumber(2)
