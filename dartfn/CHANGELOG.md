@@ -1,3 +1,7 @@
+## 0.4.7-wip
+
+- Use latest `dart_flutter_team_lints` version.
+
 ## 0.4.6
 
 - Ignore file cleanup.
