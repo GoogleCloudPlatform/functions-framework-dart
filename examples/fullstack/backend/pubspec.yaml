@@ -11,7 +11,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.0.0
-  dart_flutter_team_lints: ^1.0.0
+  dart_flutter_team_lints: ^2.0.0
   functions_framework_builder: ^0.4.0
   http: '>=0.13.0 <2.0.0'
   json_serializable: ^6.0.0
