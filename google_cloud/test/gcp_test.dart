@@ -22,7 +22,9 @@ void main() {
   group('currentProjectId', () {
     const projectIdPrint = 'test/src/project_id_print.dart';
 
-    test('not environment', () async {
+    test('not environment', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
       final proc = await _run(projectIdPrint);
 
       final errorOut = await proc.stderrStream().toList();
