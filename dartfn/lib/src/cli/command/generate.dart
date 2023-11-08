@@ -81,7 +81,7 @@ class GenerateCommand extends Command {
     return await _generate(generatorName);
   }
 
-  Future<void> _generate(String generatorName) {
+  Future<void> _generate(String generatorName) async {
     final generator = _getGenerator(generatorName);
     if (generator == null) {
       usageException("'$generatorName' is not a valid generator.\n");
@@ -99,17 +99,16 @@ class GenerateCommand extends Command {
 
     final vars = <String, String>{};
 
-    final f = generator.generate(projectName, target, additionalVars: vars);
-    return f.then((_) {
-      write('${generator.numFiles()} files written.');
+    await generator.generate(projectName, target, additionalVars: vars);
 
-      var message = generator.getInstallInstructions();
-      if (message.isNotEmpty) {
-        message = message.trim();
-        message = message.split('\n').map((line) => '--> $line').join('\n');
-        write('\n$message');
-      }
-    });
+    write('${generator.numFiles()} files written.');
+
+    var message = generator.getInstallInstructions();
+    if (message.isNotEmpty) {
+      message = message.trim();
+      message = message.split('\n').map((line) => '--> $line').join('\n');
+      write('\n$message');
+    }
   }
 
   String _createMachineInfo(List<stagehand.Generator> generators) {

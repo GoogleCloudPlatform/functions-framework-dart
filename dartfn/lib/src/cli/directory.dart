@@ -29,14 +29,13 @@ class DirectoryGeneratorTarget extends GeneratorTarget {
   }
 
   @override
-  Future<void> createFile(String path, List<int> contents) {
+  Future<void> createFile(String path, List<int> contents) async {
     final file = io.File(p.join(dir.path, path));
 
     printer.write('  ${file.path}');
 
-    return file
-        .create(recursive: true)
-        .then((_) => file.writeAsBytes(contents));
+    await file.create(recursive: true);
+    await file.writeAsBytes(contents);
   }
 }
 

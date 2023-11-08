@@ -69,7 +69,7 @@ abstract class Generator implements Comparable<Generator> {
     String projectName,
     GeneratorTarget target, {
     Map<String, String>? additionalVars,
-  }) {
+  }) async {
     final vars = {
       'projectName': normalizeProjectName(projectName),
       'description': description,
@@ -78,10 +78,10 @@ abstract class Generator implements Comparable<Generator> {
       if (additionalVars != null) ...additionalVars,
     };
 
-    return Future.forEach(files, (TemplateFile file) {
+    await Future.forEach(files, (TemplateFile file) async {
       final resultFile = file.runSubstitution(vars);
       final filePath = resultFile.path;
-      return target.createFile(filePath, resultFile.content);
+      await target.createFile(filePath, resultFile.content);
     });
   }
 
