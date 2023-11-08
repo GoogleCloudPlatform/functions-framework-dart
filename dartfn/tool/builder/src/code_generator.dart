@@ -111,5 +111,5 @@ String _base64encode(List<int> bytes) {
     index += line.length;
   }
 
-  return lines.join('\r\n');
+  return lines.join('\n');
 }
