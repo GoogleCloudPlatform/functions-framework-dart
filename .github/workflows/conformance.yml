@@ -30,7 +30,7 @@ jobs:
       with:
         go-version: '^1.16'
 
-    - uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
+    - uses: dart-lang/setup-dart@fedb1266e91cf51be2fdb382869461a434b920a3
       with:
         sdk: stable
     - run: dart --version
