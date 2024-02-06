@@ -23,14 +23,14 @@ class LatLng extends $pb.GeneratedMessage {
     $core.double? latitude,
     $core.double? longitude,
   }) {
-    final result = create();
+    final $result = create();
     if (latitude != null) {
-      result.latitude = latitude;
+      $result.latitude = latitude;
     }
     if (longitude != null) {
-      result.longitude = longitude;
+      $result.longitude = longitude;
     }
-    return result;
+    return $result;
   }
   LatLng._() : super();
   factory LatLng.fromBuffer($core.List<$core.int> i,

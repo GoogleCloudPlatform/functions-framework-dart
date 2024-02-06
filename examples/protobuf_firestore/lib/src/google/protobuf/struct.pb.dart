@@ -30,11 +30,11 @@ class Struct extends $pb.GeneratedMessage with $mixin.StructMixin {
   factory Struct({
     $core.Map<$core.String, Value>? fields,
   }) {
-    final result = create();
+    final $result = create();
     if (fields != null) {
-      result.fields.addAll(fields);
+      $result.fields.addAll(fields);
     }
-    return result;
+    return $result;
   }
   Struct._() : super();
   factory Struct.fromBuffer($core.List<$core.int> i,
@@ -111,26 +111,26 @@ class Value extends $pb.GeneratedMessage with $mixin.ValueMixin {
     Struct? structValue,
     ListValue? listValue,
   }) {
-    final result = create();
+    final $result = create();
     if (nullValue != null) {
-      result.nullValue = nullValue;
+      $result.nullValue = nullValue;
     }
     if (numberValue != null) {
-      result.numberValue = numberValue;
+      $result.numberValue = numberValue;
     }
     if (stringValue != null) {
-      result.stringValue = stringValue;
+      $result.stringValue = stringValue;
     }
     if (boolValue != null) {
-      result.boolValue = boolValue;
+      $result.boolValue = boolValue;
     }
     if (structValue != null) {
-      result.structValue = structValue;
+      $result.structValue = structValue;
     }
     if (listValue != null) {
-      result.listValue = listValue;
+      $result.listValue = listValue;
     }
-    return result;
+    return $result;
   }
   Value._() : super();
   factory Value.fromBuffer($core.List<$core.int> i,
@@ -285,11 +285,11 @@ class ListValue extends $pb.GeneratedMessage with $mixin.ListValueMixin {
   factory ListValue({
     $core.Iterable<Value>? values,
   }) {
-    final result = create();
+    final $result = create();
     if (values != null) {
-      result.values.addAll(values);
+      $result.values.addAll(values);
     }
-    return result;
+    return $result;
   }
   ListValue._() : super();
   factory ListValue.fromBuffer($core.List<$core.int> i,

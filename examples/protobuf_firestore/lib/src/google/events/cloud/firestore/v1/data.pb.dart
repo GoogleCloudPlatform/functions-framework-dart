@@ -25,17 +25,17 @@ class DocumentEventData extends $pb.GeneratedMessage {
     Document? oldValue,
     DocumentMask? updateMask,
   }) {
-    final result = create();
+    final $result = create();
     if (value != null) {
-      result.value = value;
+      $result.value = value;
     }
     if (oldValue != null) {
-      result.oldValue = oldValue;
+      $result.oldValue = oldValue;
     }
     if (updateMask != null) {
-      result.updateMask = updateMask;
+      $result.updateMask = updateMask;
     }
-    return result;
+    return $result;
   }
   DocumentEventData._() : super();
   factory DocumentEventData.fromBuffer($core.List<$core.int> i,
@@ -135,11 +135,11 @@ class DocumentMask extends $pb.GeneratedMessage {
   factory DocumentMask({
     $core.Iterable<$core.String>? fieldPaths,
   }) {
-    final result = create();
+    final $result = create();
     if (fieldPaths != null) {
-      result.fieldPaths.addAll(fieldPaths);
+      $result.fieldPaths.addAll(fieldPaths);
     }
-    return result;
+    return $result;
   }
   DocumentMask._() : super();
   factory DocumentMask.fromBuffer($core.List<$core.int> i,
@@ -195,20 +195,20 @@ class Document extends $pb.GeneratedMessage {
     $0.Timestamp? createTime,
     $0.Timestamp? updateTime,
   }) {
-    final result = create();
+    final $result = create();
     if (name != null) {
-      result.name = name;
+      $result.name = name;
     }
     if (fields != null) {
-      result.fields.addAll(fields);
+      $result.fields.addAll(fields);
     }
     if (createTime != null) {
-      result.createTime = createTime;
+      $result.createTime = createTime;
     }
     if (updateTime != null) {
-      result.updateTime = updateTime;
+      $result.updateTime = updateTime;
     }
-    return result;
+    return $result;
   }
   Document._() : super();
   factory Document.fromBuffer($core.List<$core.int> i,
@@ -368,41 +368,41 @@ class Value extends $pb.GeneratedMessage {
     $core.String? stringValue,
     $core.List<$core.int>? bytesValue,
   }) {
-    final result = create();
+    final $result = create();
     if (booleanValue != null) {
-      result.booleanValue = booleanValue;
+      $result.booleanValue = booleanValue;
     }
     if (integerValue != null) {
-      result.integerValue = integerValue;
+      $result.integerValue = integerValue;
     }
     if (doubleValue != null) {
-      result.doubleValue = doubleValue;
+      $result.doubleValue = doubleValue;
     }
     if (referenceValue != null) {
-      result.referenceValue = referenceValue;
+      $result.referenceValue = referenceValue;
     }
     if (mapValue != null) {
-      result.mapValue = mapValue;
+      $result.mapValue = mapValue;
     }
     if (geoPointValue != null) {
-      result.geoPointValue = geoPointValue;
+      $result.geoPointValue = geoPointValue;
     }
     if (arrayValue != null) {
-      result.arrayValue = arrayValue;
+      $result.arrayValue = arrayValue;
     }
     if (timestampValue != null) {
-      result.timestampValue = timestampValue;
+      $result.timestampValue = timestampValue;
     }
     if (nullValue != null) {
-      result.nullValue = nullValue;
+      $result.nullValue = nullValue;
     }
     if (stringValue != null) {
-      result.stringValue = stringValue;
+      $result.stringValue = stringValue;
     }
     if (bytesValue != null) {
-      result.bytesValue = bytesValue;
+      $result.bytesValue = bytesValue;
     }
-    return result;
+    return $result;
   }
   Value._() : super();
   factory Value.fromBuffer($core.List<$core.int> i,
@@ -650,11 +650,11 @@ class ArrayValue extends $pb.GeneratedMessage {
   factory ArrayValue({
     $core.Iterable<Value>? values,
   }) {
-    final result = create();
+    final $result = create();
     if (values != null) {
-      result.values.addAll(values);
+      $result.values.addAll(values);
     }
-    return result;
+    return $result;
   }
   ArrayValue._() : super();
   factory ArrayValue.fromBuffer($core.List<$core.int> i,
@@ -704,11 +704,11 @@ class MapValue extends $pb.GeneratedMessage {
   factory MapValue({
     $core.Map<$core.String, Value>? fields,
   }) {
-    final result = create();
+    final $result = create();
     if (fields != null) {
-      result.fields.addAll(fields);
+      $result.fields.addAll(fields);
     }
-    return result;
+    return $result;
   }
   MapValue._() : super();
   factory MapValue.fromBuffer($core.List<$core.int> i,
