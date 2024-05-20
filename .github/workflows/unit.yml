@@ -35,7 +35,7 @@ jobs:
           sdk: "3.0.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -92,7 +92,7 @@ jobs:
           sdk: "3.0.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade
@@ -122,7 +122,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -251,7 +251,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -299,7 +299,7 @@ jobs:
           sdk: "3.0.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade
@@ -329,7 +329,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade
@@ -349,7 +349,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade
