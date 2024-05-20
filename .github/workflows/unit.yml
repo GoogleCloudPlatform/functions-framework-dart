@@ -30,12 +30,12 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@fedb1266e91cf51be2fdb382869461a434b920a3
+        uses: dart-lang/setup-dart@f0ead981b4d9a35b37f30d36160575d60931ec30
         with:
           sdk: "3.0.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -87,12 +87,12 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@fedb1266e91cf51be2fdb382869461a434b920a3
+        uses: dart-lang/setup-dart@f0ead981b4d9a35b37f30d36160575d60931ec30
         with:
           sdk: "3.0.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade
@@ -117,12 +117,12 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@fedb1266e91cf51be2fdb382869461a434b920a3
+        uses: dart-lang/setup-dart@f0ead981b4d9a35b37f30d36160575d60931ec30
         with:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -246,12 +246,12 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@fedb1266e91cf51be2fdb382869461a434b920a3
+        uses: dart-lang/setup-dart@f0ead981b4d9a35b37f30d36160575d60931ec30
         with:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -294,12 +294,12 @@ jobs:
             os:macos-latest;pub-cache-hosted
             os:macos-latest
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@fedb1266e91cf51be2fdb382869461a434b920a3
+        uses: dart-lang/setup-dart@f0ead981b4d9a35b37f30d36160575d60931ec30
         with:
           sdk: "3.0.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade
@@ -324,12 +324,12 @@ jobs:
             os:macos-latest;pub-cache-hosted
             os:macos-latest
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@fedb1266e91cf51be2fdb382869461a434b920a3
+        uses: dart-lang/setup-dart@f0ead981b4d9a35b37f30d36160575d60931ec30
         with:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade
@@ -344,12 +344,12 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Setup Dart SDK
-        uses: dart-lang/setup-dart@fedb1266e91cf51be2fdb382869461a434b920a3
+        uses: dart-lang/setup-dart@f0ead981b4d9a35b37f30d36160575d60931ec30
         with:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade
