@@ -14,7 +14,7 @@ dependencies:
   http: ">=0.13.5 <2.0.0"
   http_parser: ^4.0.0
   io: ^1.0.3
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
   meta: ^1.7.0
   shelf: ^1.4.0
   stack_trace: ^1.11.0

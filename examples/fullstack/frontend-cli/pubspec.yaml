@@ -10,7 +10,7 @@ executables:
 dependencies:
   http: '>=0.13.1 <2.0.0'
   io: ^1.0.0
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   build_runner: ^2.2.1
