@@ -48,12 +48,7 @@ bool _validJsonType(DartType type, bool allowComplexMembers) {
   return false;
 }
 
-class JsonParamInfo {
-  final DartType jsonType;
-  final InterfaceType? paramType;
-
-  JsonParamInfo._(this.jsonType, this.paramType);
-}
+typedef JsonParamInfo = ({DartType jsonType, InterfaceType? paramType});
 
 JsonParamInfo? validJsonParamType(DartType type) {
   // Look for a `fromJson` factory that takes a JSON-able type
@@ -68,14 +63,14 @@ JsonParamInfo? validJsonParamType(DartType type) {
       if (requiredParams.length == 1) {
         final paramType = requiredParams.single.type;
         if (_validJsonType(paramType, false)) {
-          return JsonParamInfo._(paramType, type);
+          return (jsonType: paramType, paramType: type);
         }
       }
     }
   }
 
   if (_validJsonType(type, false)) {
-    return JsonParamInfo._(type, null);
+    return (jsonType: type, paramType: null);
   }
   return null;
 }
