@@ -1,3 +1,7 @@
+## 0.4.4-wip
+
+- Require Dart 3.4
+
 ## 0.4.3+1
 
 - Migrate from `package:gcp` to `package:google_cloud`.

@@ -1,6 +1,7 @@
 ## 0.4.7-wip
 
 - Use latest `dart_flutter_team_lints` version.
+- Require Dart 3.4
 
 ## 0.4.6
 

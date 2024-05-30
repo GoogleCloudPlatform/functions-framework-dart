@@ -1,3 +1,7 @@
+## 0.4.11-wip
+
+- Require Dart 3.4
+
 ## 0.4.10
 
 - Allow the latest `package:functions_framework`.
