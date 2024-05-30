@@ -16,9 +16,9 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
-import 'package:functions_framework_builder/src/analyzer_utils.dart';
 import 'package:source_helper/source_helper.dart';
 
+import 'analyzer_utils.dart';
 import 'constants.dart';
 
 class SupportedFunctionType {

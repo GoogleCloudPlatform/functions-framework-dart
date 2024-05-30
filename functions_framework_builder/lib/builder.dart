@@ -20,7 +20,7 @@
 /// This library is **not** intended to be imported by typical end-users unless
 /// you are creating a custom compilation pipeline. See documentation for
 /// details, and `build.yaml` for how this builder is configured by default.
-library functions_framework_builder.builder;
+library;
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
