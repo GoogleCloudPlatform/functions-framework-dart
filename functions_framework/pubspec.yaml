@@ -9,19 +9,19 @@ environment:
 
 dependencies:
   args: ^2.0.0
-  collection: ^1.15.0
+  collection: ^1.17.0
   google_cloud: ^0.2.0
-  http: '>=0.13.0 <2.0.0'
+  http: ">=0.13.5 <2.0.0"
   http_parser: ^4.0.0
-  io: ^1.0.0
+  io: ^1.0.3
   json_annotation: ^4.8.1
-  meta: ^1.2.3
-  shelf: ^1.2.0
-  stack_trace: ^1.9.6
+  meta: ^1.7.0
+  shelf: ^1.4.0
+  stack_trace: ^1.11.0
 
 dev_dependencies:
-  build_runner: ^2.0.0
+  build_runner: ^2.2.1
   build_verify: ^3.0.0
-  dart_flutter_team_lints: ^2.0.0
-  json_serializable: ^6.0.0
-  test: ^1.15.7
+  dart_flutter_team_lints: ^3.0.0
+  json_serializable: ^6.6.0
+  test: ^1.21.6

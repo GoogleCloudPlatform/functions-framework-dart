@@ -13,10 +13,10 @@ dependencies:
   shelf: ^1.0.0
 
 dev_dependencies:
-  build_runner: ^2.0.0
-  dart_flutter_team_lints: ^2.0.0
-  functions_framework_builder: ^0.4.0
+  build_runner: ^2.2.1
+  dart_flutter_team_lints: ^3.0.0
+  functions_framework_builder: ^0.4.7
   http: '>=0.13.0 <2.0.0'
-  json_serializable: ^6.0.0
-  test: ^1.15.7
+  json_serializable: ^6.6.0
+  test: ^1.21.6
   test_process: ^2.0.0
