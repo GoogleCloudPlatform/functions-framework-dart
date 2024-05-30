@@ -2,7 +2,7 @@ name: frontend_cli
 publish_to: none
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.4.0
 
 executables:
   greet:

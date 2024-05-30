@@ -2,7 +2,7 @@ name: hello_world_function_test
 publish_to: none
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.4.0
 
 dependencies:
   functions_framework: ^0.4.3+1

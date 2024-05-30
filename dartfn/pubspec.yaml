@@ -6,7 +6,7 @@ version: 0.4.7-wip
 homepage: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.4.0
 
 executables:
   dartfn:
