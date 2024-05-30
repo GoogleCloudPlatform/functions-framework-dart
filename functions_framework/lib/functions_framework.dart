@@ -22,7 +22,7 @@
 /// @CloudFunction()
 /// Response function(Request request) => Response.ok('Hello, World!');
 /// ```
-library functions_framework;
+library;
 
 export 'package:google_cloud/google_cloud.dart'
     show BadRequestException, LogSeverity, RequestLogger;

@@ -18,6 +18,7 @@ import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:source_helper/source_helper.dart';
 
+import 'analyzer_utils.dart';
 import 'constants.dart';
 import 'supported_function_type.dart';
 import 'valid_json_utils.dart';
@@ -41,8 +42,8 @@ class GenericFunctionType implements SupportedFunctionType {
   String get typedefName => _typedefName;
 
   @override
-  String get typeDescription => _functionTypeAliasElement.aliasedElement!
-      .getDisplayString(withNullability: false);
+  String get typeDescription =>
+      _functionTypeAliasElement.aliasedElement!.toStringNonNullable();
 
   final TypeAliasElement _functionTypeAliasElement;
   final bool _withContext;
@@ -146,12 +147,11 @@ class _GenericFactoryData implements FactoryData {
     String target,
     String function,
   ) {
-    final jsonTypeDisplay =
-        info.jsonType.getDisplayString(withNullability: false);
+    final jsonTypeDisplay = info.jsonType.toStringNonNullable();
     final typeDisplayName = info.paramType == null
         ? jsonTypeDisplay
         : '$functionsLibraryPrefix.'
-            '${info.paramType!.getDisplayString(withNullability: false)}';
+            '${info.paramType!.toStringNonNullable()}';
 
     final returnBlock = info.paramType == null
         ? 'return $_jsonParamName;'

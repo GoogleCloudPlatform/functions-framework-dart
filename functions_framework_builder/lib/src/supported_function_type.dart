@@ -18,6 +18,7 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:source_helper/source_helper.dart';
 
+import 'analyzer_utils.dart';
 import 'constants.dart';
 
 class SupportedFunctionType {
@@ -34,7 +35,7 @@ class SupportedFunctionType {
     this._type, {
     String? constructor,
   })  : _constructor = constructor,
-        typeDescription = _type.getDisplayString(withNullability: false);
+        typeDescription = _type.toStringNonNullable();
 
   static Future<SupportedFunctionType> create(
     Resolver resolver,
