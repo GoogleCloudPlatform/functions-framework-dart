@@ -16,6 +16,7 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
+import 'package:functions_framework_builder/src/analyzer_utils.dart';
 import 'package:source_helper/source_helper.dart';
 
 import 'constants.dart';
@@ -34,7 +35,7 @@ class SupportedFunctionType {
     this._type, {
     String? constructor,
   })  : _constructor = constructor,
-        typeDescription = _type.getDisplayString(withNullability: false);
+        typeDescription = _type.toStringNonNullable();
 
   static Future<SupportedFunctionType> create(
     Resolver resolver,

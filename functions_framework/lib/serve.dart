@@ -20,7 +20,7 @@
 /// use
 /// [package:functions_framework_builder](https://pub.dev/packages/functions_framework_builder)
 /// to generate server code instead.
-library serve;
+library;
 
 import 'dart:async';
 import 'dart:io';
