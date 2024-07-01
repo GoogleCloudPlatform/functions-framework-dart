@@ -30,12 +30,12 @@ jobs:
       with:
         go-version: '^1.16'
 
-    - uses: dart-lang/setup-dart@f0ead981b4d9a35b37f30d36160575d60931ec30
+    - uses: dart-lang/setup-dart@0a8a0fc875eb934c15d08629302413c671d3f672
       with:
         sdk: stable
     - run: dart --version
 
-    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
     - run: dart pub upgrade
       working-directory: integration_test
 
