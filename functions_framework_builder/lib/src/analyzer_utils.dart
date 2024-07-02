@@ -2,17 +2,16 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 
 extension DartTypeExtension on DartType {
-  String toStringNonNullable() {
-    final val = getDisplayString();
-    if (val.endsWith('?')) return val.substring(0, val.length - 1);
-    return val;
-  }
+  String toStringNonNullable() => getDisplayString().dropQuestion();
 }
 
 extension ElementExtension on Element {
-  String toStringNonNullable() {
-    final val = getDisplayString();
-    if (val.endsWith('?')) return val.substring(0, val.length - 1);
-    return val;
+  String toStringNonNullable() => getDisplayString().dropQuestion();
+}
+
+extension on String {
+  String dropQuestion() {
+    if (this.endsWith('?')) return this.substring(0, this.length - 1);
+    return this;
   }
 }
