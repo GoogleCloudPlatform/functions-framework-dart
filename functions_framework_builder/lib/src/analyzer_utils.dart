@@ -11,7 +11,7 @@ extension ElementExtension on Element {
 
 extension on String {
   String dropQuestion() {
-    if (this.endsWith('?')) return this.substring(0, this.length - 1);
+    if (endsWith('?')) return substring(0, length - 1);
     return this;
   }
 }
