@@ -28,7 +28,7 @@ Future<void> run(
     loggingMiddleware
         .addMiddleware(_forbiddenAssetMiddleware)
         .addHandler(handler),
-    InternetAddress.anyIPv4,
+    InternetAddress.anyIPv6,
     port,
   );
   print('Listening on :${server.port}');
