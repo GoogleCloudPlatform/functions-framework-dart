@@ -2,13 +2,13 @@ name: frontend_cli
 publish_to: none
 
 environment:
-  sdk: ^3.4.0
+  sdk: ^3.5.0
 
 executables:
   greet:
 
 dependencies:
-  http: '>=0.13.1 <2.0.0'
+  http: ^1.0.0
   io: ^1.0.0
   json_annotation: ^4.9.0
 

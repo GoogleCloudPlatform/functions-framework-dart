@@ -5,8 +5,9 @@ description: >
 version: 0.4.7-wip
 homepage: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
+resolution: workspace
 environment:
-  sdk: ^3.4.0
+  sdk: ^3.5.0
 
 executables:
   dartfn:

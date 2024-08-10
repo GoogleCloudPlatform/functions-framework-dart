@@ -1,10 +1,8 @@
 name: fullstack_demo_frontend
-description: Flutter frontend for Dart full-stack demo
-version: 1.0.0
 publish_to: 'none'
 
 environment:
-  sdk: ^3.4.0
+  sdk: ^3.5.0
 
 dependencies:
   cupertino_icons: ^1.0.2
