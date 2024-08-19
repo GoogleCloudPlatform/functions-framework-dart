@@ -2,6 +2,9 @@
 
 set -e
 
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+${__dir}/fix_pubspec.dart
+
 image="$(docker build -q .)"
 echo Image created: "$image"
 container=$(docker run -d -p 8080:8080 --rm "$image")
