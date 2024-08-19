@@ -9,6 +9,7 @@ dev_dependencies:
 workspace:
   - dartfn
   - examples/fullstack/backend
+  - examples/fullstack/frontend-cli
   - examples/hello
   - examples/json
   - examples/protobuf_firestore

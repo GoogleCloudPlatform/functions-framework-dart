@@ -1,6 +1,7 @@
 name: frontend_cli
 publish_to: none
 
+resolution: workspace
 environment:
   sdk: ^3.5.0
 
