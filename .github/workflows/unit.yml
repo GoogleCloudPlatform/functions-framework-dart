@@ -16,23 +16,23 @@ permissions: read-all
 
 jobs:
   job_001:
-    name: "unit_test; linux; Dart 3.4.0; PKGS: dartfn, functions_framework_builder, google_cloud, integration_test; `dart test`"
+    name: "unit_test; linux; Dart 3.5.0; PKGS: dartfn, functions_framework_builder, google_cloud, integration_test; `dart test`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.4.0;packages:dartfn-functions_framework_builder-google_cloud-integration_test;commands:test_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.5.0;packages:dartfn-functions_framework_builder-google_cloud-integration_test;commands:test_0"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:3.4.0;packages:dartfn-functions_framework_builder-google_cloud-integration_test
-            os:ubuntu-latest;pub-cache-hosted;sdk:3.4.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.5.0;packages:dartfn-functions_framework_builder-google_cloud-integration_test
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.5.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@0a8a0fc875eb934c15d08629302413c671d3f672
         with:
-          sdk: "3.4.0"
+          sdk: "3.5.0"
       - id: checkout
         name: Checkout repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
@@ -73,23 +73,23 @@ jobs:
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
   job_002:
-    name: "unit_test; linux; Dart 3.4.0; PKG: google_cloud; `./tool/docker_test_script.sh`"
+    name: "unit_test; linux; Dart 3.5.0; PKG: google_cloud; `./tool/docker_test_script.sh`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.4.0;packages:google_cloud;commands:command"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.5.0;packages:google_cloud;commands:command"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:3.4.0;packages:google_cloud
-            os:ubuntu-latest;pub-cache-hosted;sdk:3.4.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.5.0;packages:google_cloud
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.5.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@0a8a0fc875eb934c15d08629302413c671d3f672
         with:
-          sdk: "3.4.0"
+          sdk: "3.5.0"
       - id: checkout
         name: Checkout repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
@@ -280,23 +280,23 @@ jobs:
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
   job_005:
-    name: "unit_test; macos; Dart 3.4.0; PKG: google_cloud; `dart test`"
+    name: "unit_test; macos; Dart 3.5.0; PKG: google_cloud; `dart test`"
     runs-on: macos-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:macos-latest;pub-cache-hosted;sdk:3.4.0;packages:google_cloud;commands:test_0"
+          key: "os:macos-latest;pub-cache-hosted;sdk:3.5.0;packages:google_cloud;commands:test_0"
           restore-keys: |
-            os:macos-latest;pub-cache-hosted;sdk:3.4.0;packages:google_cloud
-            os:macos-latest;pub-cache-hosted;sdk:3.4.0
+            os:macos-latest;pub-cache-hosted;sdk:3.5.0;packages:google_cloud
+            os:macos-latest;pub-cache-hosted;sdk:3.5.0
             os:macos-latest;pub-cache-hosted
             os:macos-latest
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@0a8a0fc875eb934c15d08629302413c671d3f672
         with:
-          sdk: "3.4.0"
+          sdk: "3.5.0"
       - id: checkout
         name: Checkout repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332

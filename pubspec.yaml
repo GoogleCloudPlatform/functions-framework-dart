@@ -1,0 +1,19 @@
+name: ffd_workspace     # Can be anything
+environment:
+  sdk: ^3.5.0
+
+publish_to: none
+
+dev_dependencies:
+  dart_flutter_team_lints: ^3.2.0
+workspace:
+  - dartfn
+  - examples/fullstack/backend
+  - examples/hello
+  - examples/json
+  - examples/protobuf_firestore
+  - examples/raw_cloudevent
+  - functions_framework
+  - functions_framework_builder
+  - google_cloud
+  - integration_test

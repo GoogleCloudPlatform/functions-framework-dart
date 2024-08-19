@@ -1,8 +1,9 @@
 name: example_raw_cloudevent_function
 publish_to: none
 
+resolution: workspace
 environment:
-  sdk: ^3.4.0
+  sdk: ^3.5.0
 
 dependencies:
   functions_framework: ^0.4.0

@@ -4,8 +4,9 @@ description: >-
 version: 0.2.1-wip
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart/tree/main/google_cloud
 
+resolution: workspace
 environment:
-  sdk: ^3.4.0
+  sdk: ^3.5.0
 
 dependencies:
   collection: ^1.17.0

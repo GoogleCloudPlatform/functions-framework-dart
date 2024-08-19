@@ -1,11 +1,9 @@
 name: example_json_function
-version: 0.4.0
-description: Dart Functions Framework simple JSON function example.
-repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
 publish_to: none
 
+resolution: workspace
 environment:
-  sdk: ^3.4.0
+  sdk: ^3.5.0
 
 dependencies:
   functions_framework: ^0.4.0
