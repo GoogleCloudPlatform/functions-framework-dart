@@ -157,7 +157,7 @@ void main() {
       await expectLater(
         proc.stderr,
         emitsInOrder([
-          'Could not find an option named "bob".',
+          'Could not find an option named "--bob".',
           ...LineSplitter.split(_usage),
         ]),
       );
@@ -193,7 +193,7 @@ void main() {
       await expectLater(
         proc.stderr,
         emitsInOrder([
-          '"foo" is not an allowed value for option "signature-type".',
+          '"foo" is not an allowed value for option "--signature-type".',
           ...LineSplitter.split(_usage),
         ]),
       );

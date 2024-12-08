@@ -39,24 +39,16 @@ CloudEvent _$CloudEventFromJson(Map<String, dynamic> json) => $checkedCreate(
       },
     );
 
-Map<String, dynamic> _$CloudEventToJson(CloudEvent instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'source': instance.source.toString(),
-    'specversion': instance.specVersion,
-    'type': instance.type,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('datacontenttype', instance.dataContentType);
-  writeNotNull('data', instance.data);
-  writeNotNull('dataschema', instance.dataSchema?.toString());
-  writeNotNull('subject', instance.subject);
-  writeNotNull('time', instance.time?.toIso8601String());
-  return val;
-}
+Map<String, dynamic> _$CloudEventToJson(CloudEvent instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'source': instance.source.toString(),
+      'specversion': instance.specVersion,
+      'type': instance.type,
+      if (instance.dataContentType case final value?) 'datacontenttype': value,
+      if (instance.data case final value?) 'data': value,
+      if (instance.dataSchema?.toString() case final value?)
+        'dataschema': value,
+      if (instance.subject case final value?) 'subject': value,
+      if (instance.time?.toIso8601String() case final value?) 'time': value,
+    };

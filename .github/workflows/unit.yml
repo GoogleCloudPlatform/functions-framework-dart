@@ -359,22 +359,3 @@ jobs:
         run: dart test
         if: "always() && steps.google_cloud_pub_upgrade.conclusion == 'success'"
         working-directory: google_cloud
-  job_008:
-    name: Notify failure
-    runs-on: ubuntu-latest
-    if: "(github.event_name == 'push' || github.event_name == 'schedule') && failure()"
-    steps:
-      - run: |
-          curl -H "Content-Type: application/json" -X POST -d \
-            "{'text':'Build failed! ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}'}" \
-            "${CHAT_WEBHOOK_URL}"
-        env:
-          CHAT_WEBHOOK_URL: "${{ secrets.CHAT_WEBHOOK_URL }}"
-    needs:
-      - job_001
-      - job_002
-      - job_003
-      - job_004
-      - job_005
-      - job_006
-      - job_007
