@@ -48,9 +48,7 @@ class _FunctionsFrameworkBuilder implements Builder {
   Future<void> build(BuildStep buildStep) async {
     final entries = <String, FactoryData>{};
 
-    final input = buildStep.inputId;
-
-    final libraryElement = await buildStep.resolver.libraryFor(input);
+    final libraryElement = await buildStep.inputLibrary;
     final validator = await FunctionTypeValidator.create(buildStep.resolver);
 
     for (var annotatedElement in _fromLibrary(libraryElement)) {
@@ -89,7 +87,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
     final importDirectives = [
       "'package:functions_framework/serve.dart'",
-      "'${input.uri}' as $functionsLibraryPrefix",
+      "'${buildStep.inputId.uri}' as $functionsLibraryPrefix",
     ]..sort();
 
     var output = '''
@@ -122,7 +120,9 @@ ${cases.join('\n')}
 ''';
 
     try {
-      output = DartFormatter().format(output);
+      output = DartFormatter(
+        languageVersion: libraryElement.languageVersion.effective,
+      ).format(output);
     } on FormatterException catch (e, stack) {
       log.warning('Could not format output.', e, stack);
     }
