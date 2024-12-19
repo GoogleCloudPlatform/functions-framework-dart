@@ -1,5 +1,6 @@
 ## 0.4.11-wip
 
+- Support the latest versions of `analyzer`, `dart_style` and `source_gen`.
 - Require Dart 3.5
 
 ## 0.4.10

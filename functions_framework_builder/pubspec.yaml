@@ -5,14 +5,14 @@ repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
 resolution: workspace
 environment:
-  sdk: ^3.5.0
+  sdk: ^3.6.0
 
 dependencies:
-  analyzer: '>=5.12.0 <7.0.0'
+  analyzer: '>=6.9.0 <8.0.0'
   build: ^2.3.1
   build_config: ^1.0.0
   collection: ^1.17.0
-  dart_style: ^2.2.4
+  dart_style: '>=2.3.7 <4.0.0'
   # There is a tight version constraint because the builder has a strict
   # dependency on all features exposed.
   functions_framework: '>=0.4.0 <0.4.5'
@@ -20,7 +20,7 @@ dependencies:
   meta: ^1.7.0
   path: ^1.8.0
   shelf: ^1.0.0
-  source_gen: ^1.2.3
+  source_gen: '>=1.4.0 <3.0.0'
   source_helper: ^1.3.3
 
 dev_dependencies:

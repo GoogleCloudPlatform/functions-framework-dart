@@ -48,9 +48,7 @@ class _FunctionsFrameworkBuilder implements Builder {
   Future<void> build(BuildStep buildStep) async {
     final entries = <String, FactoryData>{};
 
-    final input = buildStep.inputId;
-
-    final libraryElement = await buildStep.resolver.libraryFor(input);
+    final libraryElement = await buildStep.inputLibrary;
     final validator = await FunctionTypeValidator.create(buildStep.resolver);
 
     for (var annotatedElement in _fromLibrary(libraryElement)) {
@@ -89,7 +87,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
     final importDirectives = [
       "'package:functions_framework/serve.dart'",
-      "'${input.uri}' as $functionsLibraryPrefix",
+      "'${buildStep.inputId.uri}' as $functionsLibraryPrefix",
     ]..sort();
 
     var output = '''
@@ -100,13 +98,15 @@ class _FunctionsFrameworkBuilder implements Builder {
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//     https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+// @dart=3.6
 
 ${importDirectives.map((e) => 'import $e;').join('\n')}
 
@@ -122,7 +122,9 @@ ${cases.join('\n')}
 ''';
 
     try {
-      output = DartFormatter().format(output);
+      output = DartFormatter(
+        languageVersion: libraryElement.languageVersion.effective,
+      ).format(output);
     } on FormatterException catch (e, stack) {
       log.warning('Could not format output.', e, stack);
     }
