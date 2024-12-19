@@ -1,5 +1,5 @@
 #!/bin/bash
-# Created with package:mono_repo v6.6.2
+# Created with package:mono_repo v6.6.3-wip
 
 # Support built in commands on windows out of the box.
 
@@ -74,10 +74,6 @@ for PKG in ${PKGS}; do
       analyze_2)
         echo 'flutter analyze --fatal-infos'
         flutter analyze --fatal-infos || EXIT_CODE=$?
-        ;;
-      analyze_3)
-        echo 'flutter analyze'
-        flutter analyze || EXIT_CODE=$?
         ;;
       command)
         echo './tool/docker_test_script.sh'

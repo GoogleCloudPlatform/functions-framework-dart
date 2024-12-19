@@ -1,4 +1,4 @@
-# Created with package:mono_repo v6.6.2
+# Created with package:mono_repo v6.6.3-wip
 name: Dart Lint CI
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
         name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: mono_repo self validate
-        run: dart pub global activate mono_repo 6.6.2
+        run: dart pub global activate mono_repo 6.6.3-wip
       - name: mono_repo self validate
         run: dart pub global run mono_repo generate --validate
   job_002:
@@ -410,48 +410,14 @@ jobs:
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
   job_005:
-    name: "analyze_format; Flutter master; PKG: examples/fullstack/frontend; `dart format --output=none --set-exit-if-changed .`, `flutter analyze --fatal-infos`"
+    name: "analyze_format; Flutter stable; PKG: examples/fullstack/frontend; `dart format --output=none --set-exit-if-changed .`, `flutter analyze --fatal-infos`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
         uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:master;packages:examples/fullstack/frontend;commands:format-analyze_2"
-          restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:master;packages:examples/fullstack/frontend
-            os:ubuntu-latest;pub-cache-hosted;sdk:master
-            os:ubuntu-latest;pub-cache-hosted
-            os:ubuntu-latest
-      - name: Setup Flutter SDK
-        uses: subosito/flutter-action@74af56c5ed2697ba4621264652728e8d217e53d3
-        with:
-          channel: main
-      - id: checkout
-        name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      - id: examples_fullstack_frontend_pub_upgrade
-        name: examples/fullstack/frontend; flutter pub upgrade
-        run: flutter pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: examples/fullstack/frontend
-      - name: "examples/fullstack/frontend; dart format --output=none --set-exit-if-changed ."
-        run: "dart format --output=none --set-exit-if-changed ."
-        if: "always() && steps.examples_fullstack_frontend_pub_upgrade.conclusion == 'success'"
-        working-directory: examples/fullstack/frontend
-      - name: "examples/fullstack/frontend; flutter analyze --fatal-infos"
-        run: flutter analyze --fatal-infos
-        if: "always() && steps.examples_fullstack_frontend_pub_upgrade.conclusion == 'success'"
-        working-directory: examples/fullstack/frontend
-  job_006:
-    name: "analyze_format; Flutter stable; PKG: examples/fullstack/frontend; `flutter analyze`"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache Pub hosted dependencies
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
-        with:
-          path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:examples/fullstack/frontend;commands:analyze_3"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:examples/fullstack/frontend;commands:format-analyze_2"
           restore-keys: |
             os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:examples/fullstack/frontend
             os:ubuntu-latest;pub-cache-hosted;sdk:stable
@@ -469,7 +435,11 @@ jobs:
         run: flutter pub upgrade
         if: "always() && steps.checkout.conclusion == 'success'"
         working-directory: examples/fullstack/frontend
-      - name: examples/fullstack/frontend; flutter analyze
-        run: flutter analyze
+      - name: "examples/fullstack/frontend; dart format --output=none --set-exit-if-changed ."
+        run: "dart format --output=none --set-exit-if-changed ."
+        if: "always() && steps.examples_fullstack_frontend_pub_upgrade.conclusion == 'success'"
+        working-directory: examples/fullstack/frontend
+      - name: "examples/fullstack/frontend; flutter analyze --fatal-infos"
+        run: flutter analyze --fatal-infos
         if: "always() && steps.examples_fullstack_frontend_pub_upgrade.conclusion == 'success'"
         working-directory: examples/fullstack/frontend

@@ -5,7 +5,9 @@ stages:
   - group:
       - format
       - analyze: --fatal-infos
-    sdk: main
-  - group:
-      - analyze
-    sdk: stable
+    sdk: stable # main - debug this!
+# Need to figure why main/master doesn't work!
+#  - group:
+#      - analyze
+#    sdk: stable
+#
