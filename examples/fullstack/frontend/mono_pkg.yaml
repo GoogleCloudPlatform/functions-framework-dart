@@ -5,7 +5,7 @@ stages:
   - group:
       - format
       - analyze: --fatal-infos
-    sdk: master
+    sdk: main
   - group:
       - analyze
     sdk: stable
