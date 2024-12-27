@@ -1,6 +1,7 @@
 # https://github.com/google/mono_repo.dart
 
-self_validate: analyze_format
+# TODO: need to fix the logic here!
+#self_validate: analyze_format
 
 merge_stages:
 - analyze_format

@@ -1,6 +1,6 @@
 name: ffd_workspace     # Can be anything
 environment:
-  sdk: ^3.5.0
+  sdk: ^3.6.0
 
 publish_to: none
 
