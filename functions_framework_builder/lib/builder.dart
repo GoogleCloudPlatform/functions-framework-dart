@@ -33,8 +33,7 @@ import 'src/constants.dart';
 import 'src/function_type_validator.dart';
 import 'src/supported_function_type.dart';
 
-Builder functionsFrameworkBuilder([BuilderOptions? options]) =>
-    const _FunctionsFrameworkBuilder();
+Builder functionsFrameworkBuilder([BuilderOptions? options]) => const _FunctionsFrameworkBuilder();
 
 class _FunctionsFrameworkBuilder implements Builder {
   const _FunctionsFrameworkBuilder();
@@ -64,8 +63,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
       final targetReader = annotatedElement.annotation.read('target');
 
-      final targetName =
-          targetReader.isNull ? element.name : targetReader.stringValue;
+      final targetName = targetReader.isNull ? element.name : targetReader.stringValue;
 
       if (entries.containsKey(targetName)) {
         throw InvalidGenerationSourceError(
@@ -122,7 +120,9 @@ ${cases.join('\n')}
 ''';
 
     try {
-      output = DartFormatter().format(output);
+      output = DartFormatter(
+        languageVersion: DartFormatter.latestLanguageVersion,
+      ).format(output);
     } on FormatterException catch (e, stack) {
       log.warning('Could not format output.', e, stack);
     }

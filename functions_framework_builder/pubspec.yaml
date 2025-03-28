@@ -11,7 +11,7 @@ dependencies:
   build: ^2.0.0
   build_config: '>=0.4.3 <2.0.0'
   collection: ^1.15.0
-  dart_style: ^2.0.0
+  dart_style: ^3.0.1
   # There is a tight version constraint because the builder has a strict
   # dependency on all features exposed.
   functions_framework: '>=0.4.0 <0.4.4'
@@ -19,7 +19,7 @@ dependencies:
   meta: ^1.2.4
   path: ^1.7.0
   shelf: ^1.0.0
-  source_gen: ^1.0.0
+  source_gen: ^2.0.0
   source_helper: ^1.0.0
 
 dev_dependencies:
