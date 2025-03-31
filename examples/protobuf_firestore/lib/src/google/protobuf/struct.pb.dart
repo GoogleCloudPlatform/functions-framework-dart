@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: google/protobuf/struct.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
@@ -16,6 +16,8 @@ import 'package:protobuf/src/protobuf/mixins/well_known.dart' as $mixin;
 
 import 'struct.pbenum.dart';
 
+export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
+
 export 'struct.pbenum.dart';
 
 ///  `Struct` represents a structured data value, consisting of fields
@@ -28,7 +30,7 @@ export 'struct.pbenum.dart';
 ///  The JSON representation for `Struct` is JSON object.
 class Struct extends $pb.GeneratedMessage with $mixin.StructMixin {
   factory Struct({
-    $core.Map<$core.String, Value>? fields,
+    $pb.PbMap<$core.String, Value>? fields,
   }) {
     final $result = create();
     if (fields != null) {
@@ -83,7 +85,7 @@ class Struct extends $pb.GeneratedMessage with $mixin.StructMixin {
 
   /// Unordered map of dynamically typed values.
   @$pb.TagNumber(1)
-  $core.Map<$core.String, Value> get fields => $_getMap(0);
+  $pb.PbMap<$core.String, Value> get fields => $_getMap(0);
 }
 
 enum Value_Kind {
@@ -193,20 +195,20 @@ class Value extends $pb.GeneratedMessage with $mixin.ValueMixin {
   static Value? _defaultInstance;
 
   Value_Kind whichKind() => _Value_KindByTag[$_whichOneof(0)]!;
-  void clearKind() => clearField($_whichOneof(0));
+  void clearKind() => $_clearField($_whichOneof(0));
 
   /// Represents a null value.
   @$pb.TagNumber(1)
   NullValue get nullValue => $_getN(0);
   @$pb.TagNumber(1)
   set nullValue(NullValue v) {
-    setField(1, v);
+    $_setField(1, v);
   }
 
   @$pb.TagNumber(1)
   $core.bool hasNullValue() => $_has(0);
   @$pb.TagNumber(1)
-  void clearNullValue() => clearField(1);
+  void clearNullValue() => $_clearField(1);
 
   /// Represents a double value.
   @$pb.TagNumber(2)
@@ -219,7 +221,7 @@ class Value extends $pb.GeneratedMessage with $mixin.ValueMixin {
   @$pb.TagNumber(2)
   $core.bool hasNumberValue() => $_has(1);
   @$pb.TagNumber(2)
-  void clearNumberValue() => clearField(2);
+  void clearNumberValue() => $_clearField(2);
 
   /// Represents a string value.
   @$pb.TagNumber(3)
@@ -232,7 +234,7 @@ class Value extends $pb.GeneratedMessage with $mixin.ValueMixin {
   @$pb.TagNumber(3)
   $core.bool hasStringValue() => $_has(2);
   @$pb.TagNumber(3)
-  void clearStringValue() => clearField(3);
+  void clearStringValue() => $_clearField(3);
 
   /// Represents a boolean value.
   @$pb.TagNumber(4)
@@ -245,20 +247,20 @@ class Value extends $pb.GeneratedMessage with $mixin.ValueMixin {
   @$pb.TagNumber(4)
   $core.bool hasBoolValue() => $_has(3);
   @$pb.TagNumber(4)
-  void clearBoolValue() => clearField(4);
+  void clearBoolValue() => $_clearField(4);
 
   /// Represents a structured value.
   @$pb.TagNumber(5)
   Struct get structValue => $_getN(4);
   @$pb.TagNumber(5)
   set structValue(Struct v) {
-    setField(5, v);
+    $_setField(5, v);
   }
 
   @$pb.TagNumber(5)
   $core.bool hasStructValue() => $_has(4);
   @$pb.TagNumber(5)
-  void clearStructValue() => clearField(5);
+  void clearStructValue() => $_clearField(5);
   @$pb.TagNumber(5)
   Struct ensureStructValue() => $_ensure(4);
 
@@ -267,13 +269,13 @@ class Value extends $pb.GeneratedMessage with $mixin.ValueMixin {
   ListValue get listValue => $_getN(5);
   @$pb.TagNumber(6)
   set listValue(ListValue v) {
-    setField(6, v);
+    $_setField(6, v);
   }
 
   @$pb.TagNumber(6)
   $core.bool hasListValue() => $_has(5);
   @$pb.TagNumber(6)
-  void clearListValue() => clearField(6);
+  void clearListValue() => $_clearField(6);
   @$pb.TagNumber(6)
   ListValue ensureListValue() => $_ensure(5);
 }
@@ -333,7 +335,7 @@ class ListValue extends $pb.GeneratedMessage with $mixin.ListValueMixin {
 
   /// Repeated field of dynamically typed values.
   @$pb.TagNumber(1)
-  $core.List<Value> get values => $_getList(0);
+  $pb.PbList<Value> get values => $_getList(0);
 }
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
