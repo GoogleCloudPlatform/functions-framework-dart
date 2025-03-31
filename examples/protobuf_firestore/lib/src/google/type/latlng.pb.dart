@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: google/type/latlng.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
@@ -12,6 +12,8 @@
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
+
+export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
 /// An object that represents a latitude/longitude pair. This is expressed as a
 /// pair of doubles to represent degrees latitude and degrees longitude. Unless
@@ -80,7 +82,7 @@ class LatLng extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasLatitude() => $_has(0);
   @$pb.TagNumber(1)
-  void clearLatitude() => clearField(1);
+  void clearLatitude() => $_clearField(1);
 
   /// The longitude in degrees. It must be in the range [-180.0, +180.0].
   @$pb.TagNumber(2)
@@ -93,7 +95,7 @@ class LatLng extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasLongitude() => $_has(1);
   @$pb.TagNumber(2)
-  void clearLongitude() => clearField(2);
+  void clearLongitude() => $_clearField(2);
 }
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');

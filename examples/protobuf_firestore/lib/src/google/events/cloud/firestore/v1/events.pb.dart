@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: google/events/cloud/firestore/v1/events.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
@@ -14,6 +14,8 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'data.pb.dart' as $3;
+
+export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
 /// The CloudEvent raised when a Firestore document is created.
 class DocumentCreatedEvent extends $pb.GeneratedMessage {
@@ -72,13 +74,13 @@ class DocumentCreatedEvent extends $pb.GeneratedMessage {
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
   set data($3.DocumentEventData v) {
-    setField(1, v);
+    $_setField(1, v);
   }
 
   @$pb.TagNumber(1)
   $core.bool hasData() => $_has(0);
   @$pb.TagNumber(1)
-  void clearData() => clearField(1);
+  void clearData() => $_clearField(1);
   @$pb.TagNumber(1)
   $3.DocumentEventData ensureData() => $_ensure(0);
 }
@@ -140,13 +142,13 @@ class DocumentUpdatedEvent extends $pb.GeneratedMessage {
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
   set data($3.DocumentEventData v) {
-    setField(1, v);
+    $_setField(1, v);
   }
 
   @$pb.TagNumber(1)
   $core.bool hasData() => $_has(0);
   @$pb.TagNumber(1)
-  void clearData() => clearField(1);
+  void clearData() => $_clearField(1);
   @$pb.TagNumber(1)
   $3.DocumentEventData ensureData() => $_ensure(0);
 }
@@ -208,13 +210,13 @@ class DocumentDeletedEvent extends $pb.GeneratedMessage {
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
   set data($3.DocumentEventData v) {
-    setField(1, v);
+    $_setField(1, v);
   }
 
   @$pb.TagNumber(1)
   $core.bool hasData() => $_has(0);
   @$pb.TagNumber(1)
-  void clearData() => clearField(1);
+  void clearData() => $_clearField(1);
   @$pb.TagNumber(1)
   $3.DocumentEventData ensureData() => $_ensure(0);
 }
@@ -277,13 +279,13 @@ class DocumentWrittenEvent extends $pb.GeneratedMessage {
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
   set data($3.DocumentEventData v) {
-    setField(1, v);
+    $_setField(1, v);
   }
 
   @$pb.TagNumber(1)
   $core.bool hasData() => $_has(0);
   @$pb.TagNumber(1)
-  void clearData() => clearField(1);
+  void clearData() => $_clearField(1);
   @$pb.TagNumber(1)
   $3.DocumentEventData ensureData() => $_ensure(0);
 }
@@ -350,13 +352,13 @@ class DocumentCreatedEventWithAuthContext extends $pb.GeneratedMessage {
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
   set data($3.DocumentEventData v) {
-    setField(1, v);
+    $_setField(1, v);
   }
 
   @$pb.TagNumber(1)
   $core.bool hasData() => $_has(0);
   @$pb.TagNumber(1)
-  void clearData() => clearField(1);
+  void clearData() => $_clearField(1);
   @$pb.TagNumber(1)
   $3.DocumentEventData ensureData() => $_ensure(0);
 }
@@ -423,13 +425,13 @@ class DocumentUpdatedEventWithAuthContext extends $pb.GeneratedMessage {
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
   set data($3.DocumentEventData v) {
-    setField(1, v);
+    $_setField(1, v);
   }
 
   @$pb.TagNumber(1)
   $core.bool hasData() => $_has(0);
   @$pb.TagNumber(1)
-  void clearData() => clearField(1);
+  void clearData() => $_clearField(1);
   @$pb.TagNumber(1)
   $3.DocumentEventData ensureData() => $_ensure(0);
 }
@@ -496,13 +498,13 @@ class DocumentDeletedEventWithAuthContext extends $pb.GeneratedMessage {
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
   set data($3.DocumentEventData v) {
-    setField(1, v);
+    $_setField(1, v);
   }
 
   @$pb.TagNumber(1)
   $core.bool hasData() => $_has(0);
   @$pb.TagNumber(1)
-  void clearData() => clearField(1);
+  void clearData() => $_clearField(1);
   @$pb.TagNumber(1)
   $3.DocumentEventData ensureData() => $_ensure(0);
 }
@@ -570,13 +572,13 @@ class DocumentWrittenEventWithAuthContext extends $pb.GeneratedMessage {
   $3.DocumentEventData get data => $_getN(0);
   @$pb.TagNumber(1)
   set data($3.DocumentEventData v) {
-    setField(1, v);
+    $_setField(1, v);
   }
 
   @$pb.TagNumber(1)
   $core.bool hasData() => $_has(0);
   @$pb.TagNumber(1)
-  void clearData() => clearField(1);
+  void clearData() => $_clearField(1);
   @$pb.TagNumber(1)
   $3.DocumentEventData ensureData() => $_ensure(0);
 }

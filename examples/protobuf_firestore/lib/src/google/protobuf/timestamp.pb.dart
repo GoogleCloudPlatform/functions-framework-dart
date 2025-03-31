@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: google/protobuf/timestamp.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
@@ -14,6 +14,8 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 import 'package:protobuf/src/protobuf/mixins/well_known.dart' as $mixin;
+
+export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
 ///  A Timestamp represents a point in time independent of any time zone or local
 ///  calendar, encoded as a count of seconds and fractions of seconds at
@@ -171,7 +173,7 @@ class Timestamp extends $pb.GeneratedMessage with $mixin.TimestampMixin {
   @$pb.TagNumber(1)
   $core.bool hasSeconds() => $_has(0);
   @$pb.TagNumber(1)
-  void clearSeconds() => clearField(1);
+  void clearSeconds() => $_clearField(1);
 
   /// Non-negative fractions of a second at nanosecond resolution. Negative
   /// second values with fractions must still have non-negative nanos values
@@ -187,7 +189,7 @@ class Timestamp extends $pb.GeneratedMessage with $mixin.TimestampMixin {
   @$pb.TagNumber(2)
   $core.bool hasNanos() => $_has(1);
   @$pb.TagNumber(2)
-  void clearNanos() => clearField(2);
+  void clearNanos() => $_clearField(2);
 
   /// Creates a new instance from [dateTime].
   ///
