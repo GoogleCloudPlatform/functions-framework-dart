@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Cache Pub hosted dependencies
-      uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf
+      uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
       with:
         path: "~/.pub-cache/hosted"
         key: "os:ubuntu-latest;pub-cache-hosted;dart:2.10.0;"
@@ -26,7 +26,7 @@ jobs:
           os:ubuntu-latest
 
     - name: Setup Go
-      uses: actions/setup-go@f111f3307d8850f501ac008e886eec1fd1932a34
+      uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b
       with:
         go-version: '^1.16'
 
