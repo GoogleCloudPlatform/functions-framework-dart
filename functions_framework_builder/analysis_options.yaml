@@ -1,0 +1,7 @@
+# https://dart.dev/guides/language/analysis-options
+include: ../analysis_options.yaml
+
+analyzer:
+  errors:
+    # analyzer deprecations
+    deprecated_member_use: ignore
