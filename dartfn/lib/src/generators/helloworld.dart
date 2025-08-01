@@ -19,9 +19,9 @@ part 'helloworld.g.dart';
 /// A generator for a pub library.
 class HelloWorldGenerator extends common.DefaultGenerator {
   HelloWorldGenerator()
-      : super(
-          'helloworld',
-          'A sample "Hello, World!" Functions Framework project.',
-          _data,
-        );
+    : super(
+        'helloworld',
+        'A sample "Hello, World!" Functions Framework project.',
+        _data,
+      );
 }

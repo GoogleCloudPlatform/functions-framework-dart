@@ -73,10 +73,7 @@ Future<Response> function(Request request) async {
         'environment': Platform.environment,
       };
 
-      return Response.ok(
-        encodeJsonPretty(output),
-        headers: _jsonHeaders,
-      );
+      return Response.ok(encodeJsonPretty(output), headers: _jsonHeaders);
     }
 
     if (urlPath.startsWith('exception')) {
@@ -133,8 +130,11 @@ void basicCloudEventHandler(CloudEvent event, RequestContext context) {
 
   final pubSub = PubSub.fromJson(event.data as Map<String, dynamic>);
 
-  context.responseHeaders['x-attribute_count'] =
-      pubSub.message.attributes.length.toString();
+  context.responseHeaders['x-attribute_count'] = pubSub
+      .message
+      .attributes
+      .length
+      .toString();
 
   stderr.writeln(encodeJsonPretty(event));
 }
@@ -145,8 +145,8 @@ void protoEventHandler(CloudEvent event, RequestContext context) {
 
   context.logger.debug(context.request.headers);
 
-  context.responseHeaders['x-data-runtime-types'] =
-      event.data.runtimeType.toString();
+  context.responseHeaders['x-data-runtime-types'] = event.data.runtimeType
+      .toString();
 
   stderr.writeln(encodeJsonPretty(event));
 }

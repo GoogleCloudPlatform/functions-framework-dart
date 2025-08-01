@@ -27,10 +27,7 @@ const _portOpt = 'port';
 const _targetOpt = 'target';
 const _functionTypeOpt = 'signature-type';
 
-enum FunctionType {
-  http,
-  cloudevent,
-}
+enum FunctionType { http, cloudevent }
 
 class FunctionConfig {
   final int port;
@@ -46,14 +43,15 @@ class FunctionConfig {
   // Required per spec:
   // https://github.com/GoogleCloudPlatform/functions-framework#specification-summary
   factory FunctionConfig.fromEnv() => FunctionConfig(
-        port: listenPort(),
-        target: Platform.environment[environmentKeyFunctionTarget] ??
-            defaultFunctionTarget,
-        functionType: _parseFunctionType(
-          Platform.environment['FUNCTION_SIGNATURE_TYPE'] ??
-              _enumValue(FunctionType.http),
-        ),
-      );
+    port: listenPort(),
+    target:
+        Platform.environment[environmentKeyFunctionTarget] ??
+        defaultFunctionTarget,
+    functionType: _parseFunctionType(
+      Platform.environment['FUNCTION_SIGNATURE_TYPE'] ??
+          _enumValue(FunctionType.http),
+    ),
+  );
 
   // Optional per spec:
   // https://github.com/GoogleCloudPlatform/functions-framework#specification-summary
@@ -70,14 +68,16 @@ class FunctionConfig {
       )
       ..addOption(
         _targetOpt,
-        help: 'The name of the exported function to be invoked in response to '
+        help:
+            'The name of the exported function to be invoked in response to '
             'requests.\n'
             'Overrides the $environmentKeyFunctionTarget environment variable.',
       )
       ..addOption(
         _functionTypeOpt,
         allowed: FunctionType.values.map(_enumValue),
-        help: 'The signature used when writing your function. '
+        help:
+            'The signature used when writing your function. '
             'Controls unmarshalling rules and determines which arguments are '
             'used to invoke your function.\n'
             'Overrides the FUNCTION_SIGNATURE_TYPE environment variable.',
@@ -109,7 +109,8 @@ class FunctionConfig {
 
     return FunctionConfig(
       port: port,
-      target: options[_targetOpt] as String? ??
+      target:
+          options[_targetOpt] as String? ??
           defaults?.target ??
           defaultFunctionTarget,
       functionType: functionTypeOptionValue == null
@@ -120,12 +121,12 @@ class FunctionConfig {
 }
 
 FunctionType _parseFunctionType(String type) => FunctionType.values.singleWhere(
-      (element) => type == _enumValue(element),
-      orElse: () => throw BadConfigurationException(
-        'FUNCTION_SIGNATURE_TYPE environment variable "$type" is not a valid '
-        'option (must be "http" or "cloudevent")',
-      ),
-    );
+  (element) => type == _enumValue(element),
+  orElse: () => throw BadConfigurationException(
+    'FUNCTION_SIGNATURE_TYPE environment variable "$type" is not a valid '
+    'option (must be "http" or "cloudevent")',
+  ),
+);
 
 String _enumValue(FunctionType enumEntry) {
   final v = enumEntry.toString();

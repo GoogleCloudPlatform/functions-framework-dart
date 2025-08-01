@@ -69,8 +69,7 @@ extension RequestExt on Request {
 
   Future<Object?> decodeJson() async {
     try {
-      final value = await (encoding ?? utf8)
-          .decoder
+      final value = await (encoding ?? utf8).decoder
           .bind(read())
           .transform(json.decoder)
           .single;

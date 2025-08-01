@@ -18,12 +18,9 @@ import 'package:test_process/test_process.dart';
 import 'src/test_utils.dart';
 
 Future<TestProcess> _startServerTest() => startServerTest(
-      arguments: [
-        '--target',
-        'loggingHandler',
-      ],
-      expectedListeningPort: 0,
-    );
+  arguments: ['--target', 'loggingHandler'],
+  expectedListeningPort: 0,
+);
 
 void main() {
   test('test all log severities', () async {
@@ -36,20 +33,18 @@ void main() {
 
     await finishServerTest(
       proc,
-      requestOutput: emitsInOrder(
-        [
-          'default',
-          'DEBUG: debug',
-          'INFO: info',
-          'NOTICE: notice',
-          'WARNING: warning',
-          'ERROR: error',
-          'CRITICAL: critical',
-          'ALERT: alert',
-          'EMERGENCY: emergency',
-          endsWith('GET     [200] /'),
-        ],
-      ),
+      requestOutput: emitsInOrder([
+        'default',
+        'DEBUG: debug',
+        'INFO: info',
+        'NOTICE: notice',
+        'WARNING: warning',
+        'ERROR: error',
+        'CRITICAL: critical',
+        'ALERT: alert',
+        'EMERGENCY: emergency',
+        endsWith('GET     [200] /'),
+      ]),
     );
   });
 }

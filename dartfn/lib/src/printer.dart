@@ -20,12 +20,12 @@ class Printer {
   final PrintFunc stderr;
 
   Printer([PrintFunc? stdout, PrintFunc? stderr])
-      : stdout = stdout ?? print,
-        stderr = stderr ?? stdout ?? print;
+    : stdout = stdout ?? print,
+      stderr = stderr ?? stdout ?? print;
 
   Printer.fromPrinter(Printer printer)
-      : stdout = printer.stdout,
-        stderr = printer.stderr;
+    : stdout = printer.stdout,
+      stderr = printer.stderr;
 
   void write([Object? obj]) {
     stdout(obj ?? '');

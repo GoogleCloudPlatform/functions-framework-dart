@@ -52,45 +52,43 @@ Middleware createLoggingMiddleware({String? projectId}) => projectId == null
 Middleware get badRequestMiddleware => _handleBadRequest;
 
 Handler _handleBadRequest(Handler innerHandler) => (request) async {
-      try {
-        final response = await innerHandler(request);
-        return response;
-      } on BadRequestException catch (error, stack) {
-        return _responseFromBadRequest(error, stack);
-      }
-    };
+  try {
+    final response = await innerHandler(request);
+    return response;
+  } on BadRequestException catch (error, stack) {
+    return _responseFromBadRequest(error, stack);
+  }
+};
 
 Handler _errorWriter(Handler innerHandler) => (request) async {
-      final response = await innerHandler(request);
+  final response = await innerHandler(request);
 
-      final error =
-          response.context['bad_request_exception'] as BadRequestException?;
+  final error =
+      response.context['bad_request_exception'] as BadRequestException?;
 
-      if (error != null) {
-        final stack = response.context['bad_stack_trace'] as StackTrace?;
-        final output = [
-          error,
-          if (error.innerError != null)
-            '${error.innerError} (${error.innerError.runtimeType})',
-          _fromStackTrace(error.innerStack ?? stack),
-        ];
+  if (error != null) {
+    final stack = response.context['bad_stack_trace'] as StackTrace?;
+    final output = [
+      error,
+      if (error.innerError != null)
+        '${error.innerError} (${error.innerError.runtimeType})',
+      _fromStackTrace(error.innerStack ?? stack),
+    ];
 
-        final bob =
-            output.expand((e) => LineSplitter.split('$e'.trim())).join('\n');
+    final bob = output
+        .expand((e) => LineSplitter.split('$e'.trim()))
+        .join('\n');
 
-        stderr.writeln(lightRed.wrap(bob));
-      }
-      return response;
-    };
+    stderr.writeln(lightRed.wrap(bob));
+  }
+  return response;
+};
 
 Response _responseFromBadRequest(BadRequestException e, StackTrace stack) =>
     Response(
       e.statusCode,
       body: 'Bad request. ${e.message}',
-      context: {
-        'bad_request_exception': e,
-        'bad_stack_trace': stack,
-      },
+      context: {'bad_request_exception': e, 'bad_stack_trace': stack},
     );
 
 /// Used to represent the [RequestLogger] in [Zone] values.
@@ -102,42 +100,42 @@ final _loggerKey = Object();
 /// All other logs messages are logged as text logs (`textPayload`).
 Middleware cloudLoggingMiddleware(String projectId) {
   Handler hostedLoggingMiddleware(Handler innerHandler) => (request) async {
-        // Add log correlation to nest all log messages beneath request log in
-        // Log Viewer.
+    // Add log correlation to nest all log messages beneath request log in
+    // Log Viewer.
 
-        String? traceValue;
+    String? traceValue;
 
-        final traceHeader = request.headers[cloudTraceContextHeader];
-        if (traceHeader != null) {
-          traceValue =
-              'projects/$projectId/traces/${traceHeader.split('/')[0]}';
-        }
+    final traceHeader = request.headers[cloudTraceContextHeader];
+    if (traceHeader != null) {
+      traceValue = 'projects/$projectId/traces/${traceHeader.split('/')[0]}';
+    }
 
-        String createErrorLogEntry(
-          Object error,
-          StackTrace? stackTrace,
-          LogSeverity logSeverity,
-        ) {
-          // Collect and format error information as described here
-          // https://cloud.google.com/functions/docs/monitoring/logging#writing_structured_logs
+    String createErrorLogEntry(
+      Object error,
+      StackTrace? stackTrace,
+      LogSeverity logSeverity,
+    ) {
+      // Collect and format error information as described here
+      // https://cloud.google.com/functions/docs/monitoring/logging#writing_structured_logs
 
-          final chain = _fromStackTrace(stackTrace);
+      final chain = _fromStackTrace(stackTrace);
 
-          final stackFrame = chain.traces.firstOrNull?.frames.firstOrNull;
+      final stackFrame = chain.traces.firstOrNull?.frames.firstOrNull;
 
-          return _createLogEntry(
-            traceValue,
-            '$error\n$chain'.trim(),
-            logSeverity,
-            stackFrame: stackFrame,
-          );
-        }
+      return _createLogEntry(
+        traceValue,
+        '$error\n$chain'.trim(),
+        logSeverity,
+        stackFrame: stackFrame,
+      );
+    }
 
-        final completer = Completer<Response>.sync();
+    final completer = Completer<Response>.sync();
 
-        final currentZone = Zone.current;
+    final currentZone = Zone.current;
 
-        Zone.current.fork(
+    Zone.current
+        .fork(
           zoneValues: {_loggerKey: _CloudLogger(currentZone, traceValue)},
           specification: ZoneSpecification(
             handleUncaughtError: (self, parent, zone, error, stackTrace) {
@@ -151,11 +149,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
                       error.innerStack ?? stackTrace,
                       LogSeverity.warning,
                     )
-                  : createErrorLogEntry(
-                      error,
-                      stackTrace,
-                      LogSeverity.error,
-                    );
+                  : createErrorLogEntry(error, stackTrace, LogSeverity.error);
 
               // Serialize to a JSON string and output.
               parent.print(self, logContentString);
@@ -181,29 +175,28 @@ Middleware cloudLoggingMiddleware(String projectId) {
               parent.print(self, logContent);
             },
           ),
-        ).runGuarded(
-          () async {
-            final response = await innerHandler(request);
-            if (!completer.isCompleted) {
-              completer.complete(response);
-            }
-          },
-        );
+        )
+        .runGuarded(() async {
+          final response = await innerHandler(request);
+          if (!completer.isCompleted) {
+            completer.complete(response);
+          }
+        });
 
-        return completer.future;
-      };
+    return completer.future;
+  };
 
   return hostedLoggingMiddleware;
 }
 
 // https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#LogEntrySourceLocation
 Map<String, dynamic> _sourceLocation(Frame frame) => {
-      // TODO: Will need to fix `package:` URIs to file paths when possible
-      // GoogleCloudPlatform/functions-framework-dart#40
-      'file': frame.library,
-      if (frame.line != null) 'line': frame.line.toString(),
-      'function': frame.member,
-    };
+  // TODO: Will need to fix `package:` URIs to file paths when possible
+  // GoogleCloudPlatform/functions-framework-dart#40
+  'file': frame.library,
+  if (frame.line != null) 'line': frame.line.toString(),
+  'function': frame.member,
+};
 
 /// A [RequestLogger] that prints messages normally.
 ///
@@ -232,12 +225,8 @@ class _CloudLogger extends RequestLogger {
 
   @override
   void log(Object message, LogSeverity severity) => _zone.print(
-        _createLogEntry(
-          _traceId,
-          message is Map ? message : '$message',
-          severity,
-        ),
-      );
+    _createLogEntry(_traceId, message is Map ? message : '$message', severity),
+  );
 }
 
 String _createLogEntry(
@@ -258,11 +247,9 @@ String _createLogEntry(
   return jsonEncode(logContent);
 }
 
-Chain _fromStackTrace(
-  StackTrace? stackTrace,
-) =>
+Chain _fromStackTrace(StackTrace? stackTrace) =>
     (stackTrace == null ? Chain.current() : Chain.forTrace(stackTrace))
         .foldFrames(
-      (f) => f.isCore || f.package == 'gcp' || f.package == 'shelf',
-      terse: true,
-    );
+          (f) => f.isCore || f.package == 'gcp' || f.package == 'shelf',
+          terse: true,
+        );

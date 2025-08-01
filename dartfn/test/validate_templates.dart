@@ -37,12 +37,14 @@ const _pubspecOrder = [
   'dev_dependencies',
 ];
 
-final List<RegExp> _pubspecOrderRegexps =
-    _pubspecOrder.map((s) => RegExp('^(# *)?$s:', multiLine: true)).toList();
+final List<RegExp> _pubspecOrderRegexps = _pubspecOrder
+    .map((s) => RegExp('^(# *)?$s:', multiLine: true))
+    .toList();
 
 final String _expectedGitIgnore = _getMetaTemplateFile('.gitignore');
-final String _expectedAnalysisOptions =
-    _getMetaTemplateFile('templates/analysis_options.yaml');
+final String _expectedAnalysisOptions = _getMetaTemplateFile(
+  'templates/analysis_options.yaml',
+);
 
 void main() {
   late Directory dir;
@@ -64,8 +66,9 @@ void main() {
   );
 
   test('Validate pkg/stagehand pubspec', () {
-    final pubspecContent =
-        File(path.join(path.current, 'pubspec.yaml')).readAsStringSync();
+    final pubspecContent = File(
+      path.join(path.current, 'pubspec.yaml'),
+    ).readAsStringSync();
     _validatePubspec(pubspecContent);
   });
 
@@ -110,8 +113,9 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
       !FileSystemEntity.isFileSync(filePath)) {
     final parent = Directory(path.dirname(filePath));
 
-    final file =
-        _listSync(parent).firstWhereOrNull((f) => f.path.endsWith('.dart'));
+    final file = _listSync(
+      parent,
+    ).firstWhereOrNull((f) => f.path.endsWith('.dart'));
 
     if (file == null) {
       filePath = null;
@@ -158,10 +162,7 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
           runOptions: RunOptions(workingDirectory: tempDir.path),
         );
       } else {
-        Pub.run(
-          'test',
-          runOptions: RunOptions(workingDirectory: tempDir.path),
-        );
+        Pub.run('test', runOptions: RunOptions(workingDirectory: tempDir.path));
       }
     }
   }
@@ -178,7 +179,8 @@ void _validatePubspec(String pubspecContentString) {
   expect(
     orders,
     orderedEquals(orders.toList()..sort()),
-    reason: 'Top-level keys in the pubspec were not in the expected order: '
+    reason:
+        'Top-level keys in the pubspec were not in the expected order: '
         "${_pubspecOrder.join(',')}",
   );
 }

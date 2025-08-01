@@ -35,33 +35,34 @@ class DataGenerator extends Generator {
       return null;
     }
 
-    final name =
-        p.basenameWithoutExtension(buildStep.inputId.path).replaceAll('_', '-');
+    final name = p
+        .basenameWithoutExtension(buildStep.inputId.path)
+        .replaceAll('_', '-');
 
     final filteredAssets =
-        await buildStep.findAssets(Glob('templates/$name/**')).where(
-      (asset) {
-        final rootSegment = asset.pathSegments[2];
+        await buildStep.findAssets(Glob('templates/$name/**')).where((asset) {
+            final rootSegment = asset.pathSegments[2];
 
-        if (_excludedRootFiles.contains(rootSegment)) {
-          return false;
-        }
+            if (_excludedRootFiles.contains(rootSegment)) {
+              return false;
+            }
 
-        if (_allowedDotFiles.contains(rootSegment)) {
-          return true;
-        }
+            if (_allowedDotFiles.contains(rootSegment)) {
+              return true;
+            }
 
-        return !rootSegment.startsWith('.');
-      },
-    ).toList()
+            return !rootSegment.startsWith('.');
+          }).toList()
           ..sort();
 
-    final items = await _getLines(filteredAssets, buildStep).map((item) {
-      if (item.contains('\n')) {
-        return "'''\n$item'''";
-      }
-      return "'$item'";
-    }).join(',');
+    final items = await _getLines(filteredAssets, buildStep)
+        .map((item) {
+          if (item.contains('\n')) {
+            return "'''\n$item'''";
+          }
+          return "'$item'";
+        })
+        .join(',');
 
     return 'const _data = <String>[$items];';
   }
@@ -98,10 +99,10 @@ linter:
 String _base64encode(List<int> bytes) {
   final encoded = base64.encode(bytes);
 
-//
-// Logic to cut lines into 76-character chunks
-// – makes for prettier source code
-//
+  //
+  // Logic to cut lines into 76-character chunks
+  // – makes for prettier source code
+  //
   final lines = <String>[];
   var index = 0;
 

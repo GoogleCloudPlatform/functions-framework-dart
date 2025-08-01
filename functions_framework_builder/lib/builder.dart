@@ -41,8 +41,8 @@ class _FunctionsFrameworkBuilder implements Builder {
 
   @override
   Map<String, List<String>> get buildExtensions => const {
-        r'lib/functions.dart': ['bin/server.dart'],
-      };
+    r'lib/functions.dart': ['bin/server.dart'],
+  };
 
   @override
   Future<void> build(BuildStep buildStep) async {
@@ -62,8 +62,9 @@ class _FunctionsFrameworkBuilder implements Builder {
 
       final targetReader = annotatedElement.annotation.read('target');
 
-      final targetName =
-          targetReader.isNull ? element.name : targetReader.stringValue;
+      final targetName = targetReader.isNull
+          ? element.name
+          : targetReader.stringValue;
 
       if (entries.containsKey(targetName)) {
         throw InvalidGenerationSourceError(
@@ -90,7 +91,8 @@ class _FunctionsFrameworkBuilder implements Builder {
       "'${buildStep.inputId.uri}' as $functionsLibraryPrefix",
     ]..sort();
 
-    var output = '''
+    var output =
+        '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
 //
@@ -130,10 +132,7 @@ ${cases.join('\n')}
     }
 
     await buildStep.writeAsString(
-      AssetId(
-        buildStep.inputId.package,
-        path.join('bin', 'server.dart'),
-      ),
+      AssetId(buildStep.inputId.package, path.join('bin', 'server.dart')),
       output,
     );
   }
