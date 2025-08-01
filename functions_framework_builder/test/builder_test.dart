@@ -504,7 +504,7 @@ package:$_pkgName/functions.dart:8:10
     await testBuilder(
       functionsFrameworkBuilder(),
       srcs,
-      reader: await PackageAssetReader.currentIsolate(),
+      packageConfig: (await PackageAssetReader.currentIsolate()).packageConfig,
     );
   });
 
@@ -647,7 +647,7 @@ Future<void> _generateTest(
         fail(output);
       });
     },
-    reader: await PackageAssetReader.currentIsolate(),
+    packageConfig: (await PackageAssetReader.currentIsolate()).packageConfig,
   );
 }
 
