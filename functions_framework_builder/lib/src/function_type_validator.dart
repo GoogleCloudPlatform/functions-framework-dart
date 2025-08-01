@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 
@@ -25,9 +25,9 @@ class FunctionTypeValidator {
   FunctionTypeValidator._(this._types);
 
   FactoryData validate(
-    LibraryElement library,
+    LibraryElement2 library,
     String targetName,
-    FunctionElement element,
+    TopLevelFunctionElement element,
   ) {
     for (var type in _types) {
       final reference = type.createReference(library, targetName, element);

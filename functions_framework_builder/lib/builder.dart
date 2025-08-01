@@ -22,7 +22,7 @@
 /// details, and `build.yaml` for how this builder is configured by default.
 library;
 
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:build/build.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:functions_framework/functions_framework.dart';
@@ -53,7 +53,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
     for (var annotatedElement in _fromLibrary(libraryElement)) {
       final element = annotatedElement.element;
-      if (element is! FunctionElement || element.isPrivate) {
+      if (element is! TopLevelFunctionElement || element.isPrivate) {
         throw InvalidGenerationSourceError(
           'Only top-level, public functions are supported.',
           element: element,
@@ -63,7 +63,7 @@ class _FunctionsFrameworkBuilder implements Builder {
       final targetReader = annotatedElement.annotation.read('target');
 
       final targetName = targetReader.isNull
-          ? element.name
+          ? element.name3!
           : targetReader.stringValue;
 
       if (entries.containsKey(targetName)) {
@@ -138,13 +138,14 @@ ${cases.join('\n')}
   }
 }
 
-Iterable<AnnotatedElement> _fromLibrary(LibraryElement library) sync* {
+Iterable<AnnotatedElement> _fromLibrary(LibraryElement2 library) sync* {
   // Merging the `topLevelElements` picks up private elements and fields.
   // While neither is supported, it allows us to provide helpful errors if devs
   // are using the annotations incorrectly.
-  final mergedElements = {
-    ...library.topLevelElements,
-    ...library.exportNamespace.definedNames.values,
+  final mergedElements = <Element2>{
+    ...library.topLevelFunctions,
+    ...library.topLevelVariables,
+    ...library.exportNamespace.definedNames2.values,
   };
 
   for (var element in mergedElements) {
