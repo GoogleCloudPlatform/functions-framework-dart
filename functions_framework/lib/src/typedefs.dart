@@ -28,7 +28,7 @@ typedef CloudEventHandler = Future<void> Function(
 );
 
 /// The shape of a handler that supports a custom [RequestType] and
-/// [ResponseType].
+/// [ResponseType] and while also providing a [RequestContext].
 ///
 /// The [RequestType] must be either a type compatible with a JSON literal or
 /// have a `fromJson` constructor with a single, positional parameter that is
@@ -38,16 +38,7 @@ typedef CloudEventHandler = Future<void> Function(
 /// have a `toJson()` function with a returns type compatible with a JSON
 /// literal.
 typedef JsonHandler<RequestType, ResponseType> = Future<ResponseType> Function(
-  RequestType request,
-);
-
-/// The shape of a handler that supports a custom [RequestType] and
-/// [ResponseType] and while also providing a [RequestContext].
-///
-/// See [JsonHandler] for the type requirements for [RequestType] and
-/// [ResponseType].
-typedef JsonWithContextHandler<RequestType, ResponseType> = Future<ResponseType>
-    Function(RequestType request, RequestContext context);
+    RequestType request, RequestContext context);
 
 /// The shape of a basic handler that follows the
 /// [package:shelf](https://pub.dev/packages/shelf) [Handler] pattern while also

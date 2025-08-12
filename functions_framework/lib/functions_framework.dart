@@ -29,4 +29,4 @@ export 'package:google_cloud/google_cloud.dart'
 export 'src/cloud_event.dart' show CloudEvent;
 export 'src/request_context.dart' show RequestContext;
 export 'src/typedefs.dart'
-    show CloudEventHandler, HandlerWithLogger, JsonWithContextHandler;
+    show CloudEventHandler, HandlerWithLogger, JsonHandler;

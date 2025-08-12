@@ -36,7 +36,7 @@ abstract class _JsonFunctionTargetBase<RequestType> extends FunctionTarget {
 
 abstract class JsonFunctionTarget<RequestType, ResponseType>
     extends _JsonFunctionTargetBase<RequestType> {
-  final JsonWithContextHandler<RequestType, ResponseType> _function;
+  final JsonHandler<RequestType, ResponseType> _function;
 
   JsonFunctionTarget._(
     this._function,
@@ -44,12 +44,12 @@ abstract class JsonFunctionTarget<RequestType, ResponseType>
   ) : super(fromJson);
 
   factory JsonFunctionTarget(
-    JsonWithContextHandler<RequestType, ResponseType> function,
+    JsonHandler<RequestType, ResponseType> function,
     RequestType Function(Object?) fromJson,
   ) = _JsonWithContextFunctionTarget<RequestType, ResponseType>;
 
   factory JsonFunctionTarget.voidResult(
-    JsonWithContextHandler<RequestType, ResponseType> function,
+    JsonHandler<RequestType, ResponseType> function,
     RequestType Function(Object?) fromJson,
   ) = _VoidJsonWithContextFunctionTarget<RequestType, ResponseType>;
 }
