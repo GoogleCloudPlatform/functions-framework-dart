@@ -36,73 +36,26 @@ abstract class _JsonFunctionTargetBase<RequestType> extends FunctionTarget {
 
 abstract class JsonFunctionTarget<RequestType, ResponseType>
     extends _JsonFunctionTargetBase<RequestType> {
-  final JsonHandler<RequestType, ResponseType> _function;
-
-  JsonFunctionTarget._(this._function, RequestType Function(Object?) fromJson)
-    : super(fromJson);
-
-  factory JsonFunctionTarget(
-    JsonHandler<RequestType, ResponseType> function,
-    RequestType Function(Object?) fromJson,
-  ) = _JsonFunctionTarget<RequestType, ResponseType>;
-
-  factory JsonFunctionTarget.voidResult(
-    JsonHandler<RequestType, ResponseType> function,
-    RequestType Function(Object?) fromJson,
-  ) = _VoidJsonFunctionTarget<RequestType, ResponseType>;
-}
-
-class _JsonFunctionTarget<RequestType, ResponseType>
-    extends JsonFunctionTarget<RequestType, ResponseType> {
-  _JsonFunctionTarget(super.function, super.fromJson) : super._();
-
-  @override
-  Future<Response> handler(Request request) async {
-    final argument = await _toRequestType(request);
-    final response = await _function(argument);
-    final responseJson = jsonEncode(response);
-
-    return Response.ok(
-      responseJson,
-      headers: const {contentTypeHeader: jsonContentType},
-    );
-  }
-}
-
-class _VoidJsonFunctionTarget<RequestType, ResponseType>
-    extends JsonFunctionTarget<RequestType, ResponseType> {
-  _VoidJsonFunctionTarget(super.function, super.fromJson) : super._();
-
-  @override
-  Future<Response> handler(Request request) async {
-    final argument = await _toRequestType(request);
-    await _function(argument);
-    return Response.ok('');
-  }
-}
-
-abstract class JsonWithContextFunctionTarget<RequestType, ResponseType>
-    extends _JsonFunctionTargetBase<RequestType> {
   final JsonWithContextHandler<RequestType, ResponseType> _function;
 
-  JsonWithContextFunctionTarget._(
+  JsonFunctionTarget._(
     this._function,
     RequestType Function(Object?) fromJson,
   ) : super(fromJson);
 
-  factory JsonWithContextFunctionTarget(
+  factory JsonFunctionTarget(
     JsonWithContextHandler<RequestType, ResponseType> function,
     RequestType Function(Object?) fromJson,
   ) = _JsonWithContextFunctionTarget<RequestType, ResponseType>;
 
-  factory JsonWithContextFunctionTarget.voidResult(
+  factory JsonFunctionTarget.voidResult(
     JsonWithContextHandler<RequestType, ResponseType> function,
     RequestType Function(Object?) fromJson,
   ) = _VoidJsonWithContextFunctionTarget<RequestType, ResponseType>;
 }
 
 class _JsonWithContextFunctionTarget<RequestType, ResponseType>
-    extends JsonWithContextFunctionTarget<RequestType, ResponseType> {
+    extends JsonFunctionTarget<RequestType, ResponseType> {
   _JsonWithContextFunctionTarget(super.function, super.fromJson) : super._();
 
   @override
@@ -122,9 +75,9 @@ class _JsonWithContextFunctionTarget<RequestType, ResponseType>
 }
 
 class _VoidJsonWithContextFunctionTarget<RequestType, ResponseType>
-    extends JsonWithContextFunctionTarget<RequestType, ResponseType> {
+    extends JsonFunctionTarget<RequestType, ResponseType> {
   _VoidJsonWithContextFunctionTarget(super.function, super.fromJson)
-    : super._();
+      : super._();
 
   @override
   Future<Response> handler(Request request) async {

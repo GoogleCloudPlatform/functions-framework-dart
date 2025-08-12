@@ -25,7 +25,7 @@ import '../request_context.dart';
 import '../typedefs.dart';
 
 class CloudEventWithContextFunctionTarget extends FunctionTarget {
-  final CloudEventWithContextHandler function;
+  final CloudEventHandler function;
 
   @override
   FunctionType get type => FunctionType.cloudevent;
