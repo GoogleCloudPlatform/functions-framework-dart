@@ -1,4 +1,3 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,8 +20,6 @@ Future<void> main(List<String> args) async {
 }
 
 FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
-      'function' => FunctionTarget.cloudEventWithContext(
-          function_library.function,
-        ),
-      _ => null
-    };
+  'function' => FunctionTarget.cloudEventWithContext(function_library.function),
+  _ => null,
+};

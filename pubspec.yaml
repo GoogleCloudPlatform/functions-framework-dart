@@ -15,6 +15,5 @@ workspace:
   - examples/protobuf_firestore
   - examples/raw_cloudevent
   - functions_framework
-  - functions_framework_builder
   - google_cloud
   - integration_test
