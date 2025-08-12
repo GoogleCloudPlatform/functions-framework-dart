@@ -21,7 +21,7 @@ import 'api_types.dart';
 // Export api_types so builder can use them when generating `bin/server.dart`.
 export 'api_types.dart';
 
-Future<GreetingResponse> function(
+Future<GreetingResponse> greeting(
   GreetingRequest request,
   RequestContext context,
 ) async {
