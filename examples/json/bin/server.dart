@@ -18,7 +18,7 @@ import 'package:functions_framework/serve.dart';
 Future<void> main(List<String> args) async {
   await serve(args, {
     'function': FunctionTarget.jsonable(
-      function_library.function,
+      function_library.greeter,
       function_library.GreetingRequest.fromJson,
     ),
   });

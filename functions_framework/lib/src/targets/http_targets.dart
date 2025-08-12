@@ -24,7 +24,7 @@ class HttpFunctionTarget extends FunctionTarget {
   final Handler _function;
 
   @override
-  Future<Response> handler(Request request) => _function(request);
+  Future<Response> handler(Request request) async => await _function(request);
 
   HttpFunctionTarget(this._function);
 }

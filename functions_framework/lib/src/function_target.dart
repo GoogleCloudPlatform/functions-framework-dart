@@ -32,7 +32,7 @@ abstract class FunctionTarget {
   Future<Response> handler(Request request);
 
   factory FunctionTarget.cloudEvent(CloudEventHandler function) =
-      CloudEventWithContextFunctionTarget;
+      CloudEventFunctionTarget;
 
   factory FunctionTarget.http(Handler function) = HttpFunctionTarget;
 
@@ -44,7 +44,7 @@ abstract class FunctionTarget {
         handler,
     RequestType Function(Map<String, dynamic> json) fromJson,
   ) =>
-      JsonFunctionTarget.voidResult(handler, (json) {
+      JsonFunctionTarget(handler, (json) {
         if (json is Map<String, dynamic>) {
           try {
             return fromJson(json);

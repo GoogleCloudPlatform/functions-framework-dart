@@ -130,11 +130,8 @@ Future<void> basicCloudEventHandler(
 
   final pubSub = PubSub.fromJson(event.data as Map<String, dynamic>);
 
-  context.responseHeaders['x-attribute_count'] = pubSub
-      .message
-      .attributes
-      .length
-      .toString();
+  context.responseHeaders['x-attribute_count'] =
+      pubSub.message.attributes.length.toString();
 
   stderr.writeln(encodeJsonPretty(event));
 }
@@ -144,8 +141,8 @@ Future<void> protoEventHandler(CloudEvent event, RequestContext context) async {
 
   context.logger.debug(context.request.headers);
 
-  context.responseHeaders['x-data-runtime-types'] = event.data.runtimeType
-      .toString();
+  context.responseHeaders['x-data-runtime-types'] =
+      event.data.runtimeType.toString();
 
   stderr.writeln(encodeJsonPretty(event));
 }

@@ -58,7 +58,7 @@ class GreetingResponse {
   int get hashCode => salutation.hashCode ^ name.hashCode;
 }
 
-Future<GreetingResponse> function(
+Future<GreetingResponse> greeter(
   GreetingRequest request,
   RequestContext _,
 ) async {

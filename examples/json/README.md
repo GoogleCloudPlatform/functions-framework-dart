@@ -100,11 +100,8 @@ Future<GreetingResponse> function(GreetingRequest request) async {
 
 ## Generate project files
 
-The Dart `build_runner` tool generates the following files
-
-- `lib/functions.g.dart` - the part file for `GreetingResponse` serialization
-- `bin/server.dart` - the main entry point for the function server app, which
-  invokes the function
+The Dart `build_runner` tool generates  `lib/functions.g.dart` - the part file
+for `GreetingResponse` serialization
 
 Run the `build_runner` tool, as shown here:
 

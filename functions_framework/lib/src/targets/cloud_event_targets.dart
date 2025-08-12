@@ -24,7 +24,7 @@ import '../json_request_utils.dart';
 import '../request_context.dart';
 import '../typedefs.dart';
 
-class CloudEventWithContextFunctionTarget extends FunctionTarget {
+class CloudEventFunctionTarget extends FunctionTarget {
   final CloudEventHandler function;
 
   @override
@@ -40,7 +40,7 @@ class CloudEventWithContextFunctionTarget extends FunctionTarget {
     return Response.ok('', headers: context.responseHeaders);
   }
 
-  CloudEventWithContextFunctionTarget(this.function);
+  CloudEventFunctionTarget(this.function);
 }
 
 Future<CloudEvent> _eventFromRequest(Request request) =>

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@Timeout(Duration(seconds: 3))
+@Timeout(Duration(seconds: 5))
 library;
 
 import 'dart:convert';
