@@ -35,8 +35,7 @@ import 'src/run.dart';
 
 export 'package:google_cloud/google_cloud.dart' show BadRequestException;
 
-export 'src/function_target.dart'
-    show FunctionTarget, JsonFunctionTarget, JsonWithContextFunctionTarget;
+export 'src/function_target.dart' show FunctionTarget;
 
 /// If there is an invalid configuration, [exitCode] will be set to a non-zero
 /// value and the returned [Future] will completes quickly.
@@ -44,12 +43,12 @@ export 'src/function_target.dart'
 /// If there are no configuration errors, the returned [Future] will not
 /// complete until the process has received signal [ProcessSignal.sigterm] or
 /// [ProcessSignal.sigint].
-Future<void> serve(
+Future<void> _serve(
   List<String> args,
   FunctionTarget? Function(String) nameToFunctionTarget,
 ) async {
   try {
-    await _serve(args, nameToFunctionTarget);
+    await _serve2(args, nameToFunctionTarget);
   } on BadConfigurationException catch (e) {
     stderr.writeln(red.wrap(e.message));
     if (e.details != null) {
@@ -59,16 +58,20 @@ Future<void> serve(
   }
 }
 
-Future<void> _serve(
+Future<void> serve(
+  List<String> args,
+  Map<String, FunctionTarget> functions,
+) async {
+  await _serve(args, (name) => functions[name]);
+}
+
+Future<void> _serve2(
   List<String> args,
   FunctionTarget? Function(String) nameToFunctionTarget,
 ) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
-  final config = FunctionConfig.fromArgs(
-    args,
-    defaults: configFromEnvironment,
-  );
+  final config = FunctionConfig.fromArgs(args, defaults: configFromEnvironment);
 
   final functionTarget = nameToFunctionTarget(config.target);
   if (functionTarget == null) {

@@ -24,7 +24,7 @@ class HttpFunctionTarget extends FunctionTarget {
   final Handler _function;
 
   @override
-  FutureOr<Response> handler(Request request) => _function(request);
+  Future<Response> handler(Request request) => _function(request);
 
   HttpFunctionTarget(this._function);
 }
@@ -33,7 +33,7 @@ class HttpWithLoggerFunctionTarget extends FunctionTarget {
   final HandlerWithLogger _function;
 
   @override
-  FutureOr<Response> handler(Request request) =>
+  Future<Response> handler(Request request) =>
       _function(request, currentLogger);
 
   HttpWithLoggerFunctionTarget(this._function);

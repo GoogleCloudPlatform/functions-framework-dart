@@ -18,13 +18,10 @@ import 'package:shelf/shelf.dart';
 
 import 'utils.dart';
 
-@CloudFunction()
 Future<Response> conformanceHttp(Request request) async {
   final content = await request.readAsString();
 
-  File('function_output.json').writeAsStringSync(
-    content,
-  );
+  File('function_output.json').writeAsStringSync(content);
 
   final buffer = StringBuffer()
     ..writeln('Hello, conformance test!')
@@ -38,12 +35,9 @@ Future<Response> conformanceHttp(Request request) async {
   return Response.ok(output);
 }
 
-@CloudFunction()
-void conformanceCloudEvent(CloudEvent event) {
+Future<void> conformanceCloudEvent(CloudEvent event) async {
   final eventEncoded = encodeJsonPretty(event);
-  File('function_output.json').writeAsStringSync(
-    eventEncoded,
-  );
+  File('function_output.json').writeAsStringSync(eventEncoded);
 
   final buffer = StringBuffer()
     ..writeln('Hello, conformance test!')

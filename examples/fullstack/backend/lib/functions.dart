@@ -21,11 +21,15 @@ import 'api_types.dart';
 // Export api_types so builder can use them when generating `bin/server.dart`.
 export 'api_types.dart';
 
-@CloudFunction()
-GreetingResponse function(GreetingRequest request, RequestContext context) {
+Future<GreetingResponse> function(
+  GreetingRequest request,
+  RequestContext context,
+) async {
   final name = request.name ?? 'World';
-  final response =
-      GreetingResponse(salutation: _randomSalutation(), name: name);
+  final response = GreetingResponse(
+    salutation: _randomSalutation(),
+    name: name,
+  );
   context.logger.info('greetingResponse: ${response.toJson()}');
   return response;
 }

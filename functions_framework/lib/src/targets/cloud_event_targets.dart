@@ -31,7 +31,7 @@ class CloudEventFunctionTarget extends FunctionTarget {
   FunctionType get type => FunctionType.cloudevent;
 
   @override
-  FutureOr<Response> handler(Request request) async {
+  Future<Response> handler(Request request) async {
     final event = await _eventFromRequest(request);
 
     await function(event);
@@ -63,18 +63,15 @@ class CloudEventWithContextFunctionTarget extends FunctionTarget {
 
 Future<CloudEvent> _eventFromRequest(Request request) =>
     _requiredBinaryHeader.every(request.headers.containsKey)
-        ? _decodeBinary(request)
-        : _decodeStructured(request);
+    ? _decodeBinary(request)
+    : _decodeStructured(request);
 
 Future<CloudEvent> _decodeStructured(Request request) async {
   final type = mediaTypeFromRequest(request, requiredMimeType: jsonContentType);
   var jsonObject = await request.decodeJson() as Map<String, dynamic>;
 
   if (!jsonObject.containsKey('datacontenttype')) {
-    jsonObject = {
-      ...jsonObject,
-      'datacontenttype': type.toString(),
-    };
+    jsonObject = {...jsonObject, 'datacontenttype': type.toString()};
   }
 
   return _decodeValidCloudEvent(jsonObject, 'structured-mode message');
@@ -87,8 +84,9 @@ Future<CloudEvent> _decodeBinary(Request request) async {
   final data = await request.decode();
 
   final map = <String, Object?>{
-    for (var e in request.headers.entries
-        .where((element) => element.key.startsWith(_cloudEventPrefix)))
+    for (var e in request.headers.entries.where(
+      (element) => element.key.startsWith(_cloudEventPrefix),
+    ))
       e.key.substring(_clientEventPrefixLength): e.value,
     'datacontenttype': data.mimeType.toString(),
     'data': data.data,

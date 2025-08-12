@@ -35,11 +35,9 @@ Here is a simple example of how to write a function that responds to HTTP
 request events with a "Hello, World!" greeting:
 
 ```dart
-import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
-@CloudFunction()
-Response function(Request request) => Response.ok('Hello, World!');
+Future<Response> function(Request request) async => Response.ok('Hello, World!');
 ```
 
 If you deploy this simple example to [Cloud Run], you can easily choose to make

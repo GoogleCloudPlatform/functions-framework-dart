@@ -8,8 +8,7 @@ producer. They generally perform some work and print output for logging.
 The basic shape of the function handler looks like this:
 
 ```dart
-@CloudFunction()
-void function(CloudEvent event, RequestContext context) {
+Future<void> function(CloudEvent event, RequestContext context) async {
 }
 ```
 
@@ -17,8 +16,7 @@ Or like this if it needs to perform work that will complete sometime in the
 future:
 
 ```dart
-@CloudFunction()
-FutureOr<void> function(CloudEvent event, RequestContext context) async {
+Future<void> function(CloudEvent event, RequestContext context) async {
 }
 ```
 
@@ -34,8 +32,7 @@ import 'package:functions_framework/functions_framework.dart';
 
 const _encoder = JsonEncoder.withIndent(' ');
 
-@CloudFunction()
-void function(CloudEvent event, RequestContext context) {
+Future<void> function(CloudEvent event, RequestContext context) async {
   context.logger.info('event subject: ${event.subject}');
   stderr.writeln(_encoder.convert(event));
 }

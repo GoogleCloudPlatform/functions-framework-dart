@@ -126,8 +126,7 @@ the `FUNCTION_TARGET` environment variable is set to the new function name.
 For example:
 
 ```dart
-@CloudFunction()
-Response handleGet(Request request) => Response.ok('Hello, World!');
+Future<Response> handleGet(Request request) async => Response.ok('Hello, World!');
 ```
 
 Run `build_runner` to regenerate `bin/server.dart` from `lib/functions.dart`

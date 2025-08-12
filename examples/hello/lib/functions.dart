@@ -12,14 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
-@CloudFunction()
-Response function(Request request) => Response.ok('Hello, World!');
-
-// Overriding the default 'function' also works, but you will need
-// to ensure to set the FUNCTION_TARGET environment variable for the
-// process to 'handleGet' as well.
-//@CloudFunction()
-//Response handleGet(Request request) => Response.ok('Hello, World!');
+Future<Response> function(Request request) async =>
+    Response.ok('Hello, World!');

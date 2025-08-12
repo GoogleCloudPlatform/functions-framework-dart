@@ -32,7 +32,6 @@ int _requestCount = 0;
 
 final _watch = Stopwatch();
 
-@CloudFunction()
 Future<Response> function(Request request) async {
   _watch.start();
   _requestCount++;
@@ -73,10 +72,7 @@ Future<Response> function(Request request) async {
         'environment': Platform.environment,
       };
 
-      return Response.ok(
-        encodeJsonPretty(output),
-        headers: _jsonHeaders,
-      );
+      return Response.ok(encodeJsonPretty(output), headers: _jsonHeaders);
     }
 
     if (urlPath.startsWith('exception')) {
@@ -111,8 +107,7 @@ Future<Response> function(Request request) async {
   }
 }
 
-@CloudFunction()
-Response loggingHandler(Request request, RequestLogger logger) {
+Future<Response> loggingHandler(Request request, RequestLogger logger) async {
   logger
     ..log('default', LogSeverity.defaultSeverity)
     ..debug('debug')
@@ -127,26 +122,30 @@ Response loggingHandler(Request request, RequestLogger logger) {
   return Response.ok('');
 }
 
-@CloudFunction()
-void basicCloudEventHandler(CloudEvent event, RequestContext context) {
+Future<void> basicCloudEventHandler(
+  CloudEvent event,
+  RequestContext context,
+) async {
   context.logger.info('event subject: ${event.subject}');
 
   final pubSub = PubSub.fromJson(event.data as Map<String, dynamic>);
 
-  context.responseHeaders['x-attribute_count'] =
-      pubSub.message.attributes.length.toString();
+  context.responseHeaders['x-attribute_count'] = pubSub
+      .message
+      .attributes
+      .length
+      .toString();
 
   stderr.writeln(encodeJsonPretty(event));
 }
 
-@CloudFunction()
-void protoEventHandler(CloudEvent event, RequestContext context) {
+Future<void> protoEventHandler(CloudEvent event, RequestContext context) async {
   context.logger.info('event subject: ${event.subject}');
 
   context.logger.debug(context.request.headers);
 
-  context.responseHeaders['x-data-runtime-types'] =
-      event.data.runtimeType.toString();
+  context.responseHeaders['x-data-runtime-types'] = event.data.runtimeType
+      .toString();
 
   stderr.writeln(encodeJsonPretty(event));
 }

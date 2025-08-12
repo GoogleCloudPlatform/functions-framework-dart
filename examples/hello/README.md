@@ -4,10 +4,8 @@ This example handles HTTP GET requests by responding with 'Hello, World!'.
 
 ```dart
 // lib/functions.dart
-import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
-@CloudFunction()
 Response function(Request request) => Response.ok('Hello, World!');
 ```
 
@@ -48,7 +46,6 @@ variable is set to the new function name.
 For example:
 
 ```dart
-@CloudFunction()
 Response handleGet(Request request) => Response.ok('Hello, World!');
 ```
 

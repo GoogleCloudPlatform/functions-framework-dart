@@ -16,11 +16,10 @@
 ///
 /// ```dart
 /// // lib/functions.dart
-/// import 'package:functions_framework/functions_framework.dart';
 /// import 'package:shelf/shelf.dart';
 ///
-/// @CloudFunction()
-/// Response function(Request request) => Response.ok('Hello, World!');
+/// Future<Response> function(Request request) async
+///   => Response.ok('Hello, World!');
 /// ```
 library;
 
@@ -28,7 +27,6 @@ export 'package:google_cloud/google_cloud.dart'
     show BadRequestException, LogSeverity, RequestLogger;
 
 export 'src/cloud_event.dart' show CloudEvent;
-export 'src/cloud_function.dart' show CloudFunction;
 export 'src/request_context.dart' show RequestContext;
 export 'src/typedefs.dart'
     show

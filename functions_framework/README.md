@@ -31,11 +31,9 @@ The framework allows you to go from:
 [examples/hello/lib/functions.dart]
 
 ```dart
-import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
-@CloudFunction()
-Response function(Request request) => Response.ok('Hello, World!');
+Future<Response> function(Request request) async => Response.ok('Hello, World!');
 ```
 
 To:

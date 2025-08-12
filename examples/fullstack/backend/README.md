@@ -8,8 +8,7 @@ The backend demonstrates writing a function that accepts and returns JSON.
 The function handler looks like this:
 
 ```dart
-@CloudFunction()
-GreetingResponse function(GreetingRequest request) {
+Future<GreetingResponse> function(GreetingRequest request) async {
   final name = request.name ?? 'World';
   final json = GreetingResponse(salutation: getSalutation(), name: name);
   return json;

@@ -58,8 +58,10 @@ class GreetingResponse {
   int get hashCode => salutation.hashCode ^ name.hashCode;
 }
 
-@CloudFunction()
-GreetingResponse function(GreetingRequest request) {
+Future<GreetingResponse> function(
+  GreetingRequest request,
+  RequestContext _,
+) async {
   final name = request.name ?? 'World';
   final json = GreetingResponse(salutation: 'Hello', name: name);
   return json;

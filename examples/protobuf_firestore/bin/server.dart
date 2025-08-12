@@ -17,12 +17,7 @@ import 'package:example_protobuf_firestore/functions.dart' as function_library;
 import 'package:functions_framework/serve.dart';
 
 Future<void> main(List<String> args) async {
-  await serve(args, _nameToFunctionTarget);
+  await serve(args, {
+    'function': FunctionTarget.cloudEventWithContext(function_library.function),
+  });
 }
-
-FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
-      'function' => FunctionTarget.cloudEventWithContext(
-          function_library.function,
-        ),
-      _ => null
-    };

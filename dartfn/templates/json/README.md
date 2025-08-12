@@ -5,8 +5,7 @@ This example demonstrates writing a function that accepts and returns JSON.
 The basic shape of the function handler looks like this:
 
 ```dart
-@CloudFunction()
-GreetingResponse function(GreetingRequest request) {
+Future<GreetingResponse> function(GreetingRequest request) async {
 }
 ```
 
@@ -34,21 +33,19 @@ The Functions Framework parses the request data to fit the shape of a
 the request, the function implementation provides a default name: `World`.
 
 ```dart
-@CloudFunction()
-GreetingResponse function(GreetingRequest request) {
+Future<GreetingResponse> function(GreetingRequest request) async {
   final name = request.name ?? 'World';
 }
 ```
 
 Finally, the function creates an object returns it. The Functions Framework will
 take this and attempt "do the right" thing. In this case, the function is typed
-to return a `FutureOr<GreetingResponse>`, which has a `toJson()` method, so the
+to return a `Future<GreetingResponse>`, which has a `toJson()` method, so the
 framework will invoke this, then set the response body to the stringified result
 and set the response header (`content-type`) to `application/json`).
 
 ```dart
-@CloudFunction()
-GreetingResponse function(Map<String, dynamic> request) {
+Future<GreetingResponse> function(Map<String, dynamic> request) async {
   final name = request['name'] as String ?? 'World';
   final json = GreetingResponse(salutation: 'Hello', name: name);
   return json;
@@ -94,8 +91,7 @@ class GreetingResponse {
 // operator, and therefore also `hashCode`.
 }
 
-@CloudFunction()
-GreetingResponse function(GreetingRequest request) {
+Future<GreetingResponse> function(GreetingRequest request) async {
   final name = request.name ?? 'World';
   final json = GreetingResponse(salutation: 'Hello', name: name);
   return json;

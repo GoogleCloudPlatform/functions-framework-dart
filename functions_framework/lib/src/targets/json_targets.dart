@@ -38,10 +38,8 @@ abstract class JsonFunctionTarget<RequestType, ResponseType>
     extends _JsonFunctionTargetBase<RequestType> {
   final JsonHandler<RequestType, ResponseType> _function;
 
-  JsonFunctionTarget._(
-    this._function,
-    RequestType Function(Object?) fromJson,
-  ) : super(fromJson);
+  JsonFunctionTarget._(this._function, RequestType Function(Object?) fromJson)
+    : super(fromJson);
 
   factory JsonFunctionTarget(
     JsonHandler<RequestType, ResponseType> function,
@@ -56,13 +54,10 @@ abstract class JsonFunctionTarget<RequestType, ResponseType>
 
 class _JsonFunctionTarget<RequestType, ResponseType>
     extends JsonFunctionTarget<RequestType, ResponseType> {
-  _JsonFunctionTarget(
-    super.function,
-    super.fromJson,
-  ) : super._();
+  _JsonFunctionTarget(super.function, super.fromJson) : super._();
 
   @override
-  FutureOr<Response> handler(Request request) async {
+  Future<Response> handler(Request request) async {
     final argument = await _toRequestType(request);
     final response = await _function(argument);
     final responseJson = jsonEncode(response);
@@ -76,13 +71,10 @@ class _JsonFunctionTarget<RequestType, ResponseType>
 
 class _VoidJsonFunctionTarget<RequestType, ResponseType>
     extends JsonFunctionTarget<RequestType, ResponseType> {
-  _VoidJsonFunctionTarget(
-    super.function,
-    super.fromJson,
-  ) : super._();
+  _VoidJsonFunctionTarget(super.function, super.fromJson) : super._();
 
   @override
-  FutureOr<Response> handler(Request request) async {
+  Future<Response> handler(Request request) async {
     final argument = await _toRequestType(request);
     await _function(argument);
     return Response.ok('');
@@ -111,13 +103,10 @@ abstract class JsonWithContextFunctionTarget<RequestType, ResponseType>
 
 class _JsonWithContextFunctionTarget<RequestType, ResponseType>
     extends JsonWithContextFunctionTarget<RequestType, ResponseType> {
-  _JsonWithContextFunctionTarget(
-    super.function,
-    super.fromJson,
-  ) : super._();
+  _JsonWithContextFunctionTarget(super.function, super.fromJson) : super._();
 
   @override
-  FutureOr<Response> handler(Request request) async {
+  Future<Response> handler(Request request) async {
     final argument = await _toRequestType(request);
     final context = contextForRequest(request);
     final response = await _function(argument, context);
@@ -127,23 +116,18 @@ class _JsonWithContextFunctionTarget<RequestType, ResponseType>
       responseJson,
       headers: context.responseHeaders.isEmpty
           ? const {contentTypeHeader: jsonContentType}
-          : {
-              contentTypeHeader: jsonContentType,
-              ...context.responseHeaders,
-            },
+          : {contentTypeHeader: jsonContentType, ...context.responseHeaders},
     );
   }
 }
 
 class _VoidJsonWithContextFunctionTarget<RequestType, ResponseType>
     extends JsonWithContextFunctionTarget<RequestType, ResponseType> {
-  _VoidJsonWithContextFunctionTarget(
-    super.function,
-    super.fromJson,
-  ) : super._();
+  _VoidJsonWithContextFunctionTarget(super.function, super.fromJson)
+    : super._();
 
   @override
-  FutureOr<Response> handler(Request request) async {
+  Future<Response> handler(Request request) async {
     final argument = await _toRequestType(request);
     final context = contextForRequest(request);
     await _function(argument, context);

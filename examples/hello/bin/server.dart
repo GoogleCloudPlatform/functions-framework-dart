@@ -17,12 +17,7 @@ import 'package:functions_framework/serve.dart';
 import 'package:hello_world_function/functions.dart' as function_library;
 
 Future<void> main(List<String> args) async {
-  await serve(args, _nameToFunctionTarget);
+  await serve(args, {
+    'function': FunctionTarget.http(function_library.function),
+  });
 }
-
-FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
-      'function' => FunctionTarget.http(
-          function_library.function,
-        ),
-      _ => null
-    };

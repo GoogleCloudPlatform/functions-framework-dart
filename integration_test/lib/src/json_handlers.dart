@@ -16,19 +16,17 @@ import 'package:functions_framework/functions_framework.dart';
 
 import 'pub_sub_types.dart';
 
-@CloudFunction()
-void pubSubHandler(PubSub pubSub, RequestContext context) {
+Future<void> pubSubHandler(PubSub pubSub, RequestContext context) async {
   print('subscription: ${pubSub.subscription}');
   context.logger.info('subscription: ${pubSub.subscription}');
   context.responseHeaders['subscription'] = pubSub.subscription;
   context.responseHeaders['multi'] = ['item1', 'item2'];
 }
 
-@CloudFunction()
-FutureOr<bool> jsonHandler(
+Future<bool> jsonHandler(
   Map<String, dynamic> request,
   RequestContext context,
-) {
+) async {
   print('Keys: ${request.keys.join(', ')}');
   context.responseHeaders['key_count'] = request.keys.length.toString();
   context.responseHeaders['multi'] = ['item1', 'item2'];

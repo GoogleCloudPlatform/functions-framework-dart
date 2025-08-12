@@ -4,11 +4,9 @@ This example handles HTTP GET requests by responding with 'Hello, World!'.
 
 ```dart
 // lib/functions.dart
-import 'package:functions_framework/functions_framework.dart';
 import 'package:shelf/shelf.dart';
 
-@CloudFunction()
-Response function(Request request) => Response.ok('Hello, World!');
+Future<Response> function(Request request) async => Response.ok('Hello, World!');
 ```
 
 ## Simulate a hosted environment on your own machine
@@ -48,8 +46,7 @@ variable is set to the new function name.
 For example:
 
 ```dart
-@CloudFunction()
-Response handleGet(Request request) => Response.ok('Hello, World!');
+Future<Response> handleGet(Request request) async => Response.ok('Hello, World!');
 ```
 
 Run the `build_runner` to regenerate `bin/server.dart` from `lib/functions.dart`

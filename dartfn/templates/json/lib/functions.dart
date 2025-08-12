@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:functions_framework/functions_framework.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'functions.g.dart';
@@ -58,8 +57,7 @@ class GreetingResponse {
   int get hashCode => salutation.hashCode ^ name.hashCode;
 }
 
-@CloudFunction()
-GreetingResponse function(GreetingRequest request) {
+Future<GreetingResponse> function(GreetingRequest request) async {
   final name = request.name ?? 'World';
   final json = GreetingResponse(salutation: 'Hello', name: name);
   return json;
