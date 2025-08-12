@@ -24,10 +24,10 @@ Future<void> main(List<String> args) async => serve(args, {
       'loggingHandler': FunctionTarget.httpWithLogger(
         function_library.loggingHandler,
       ),
-      'basicCloudEventHandler': FunctionTarget.cloudEventWithContext(
+      'basicCloudEventHandler': FunctionTarget.cloudEvent(
         function_library.basicCloudEventHandler,
       ),
-      'protoEventHandler': FunctionTarget.cloudEventWithContext(
+      'protoEventHandler': FunctionTarget.cloudEvent(
         function_library.protoEventHandler,
       ),
       'conformanceHttp': FunctionTarget.http(

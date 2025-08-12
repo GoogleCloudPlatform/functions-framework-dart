@@ -154,7 +154,7 @@ void main() {
   group('cloud event', () {
     setUp(() async {
       await doSetup(
-        FunctionTarget.cloudEventWithContext(
+        FunctionTarget.cloudEvent(
           basicCloudEventHandler,
         ),
       );

@@ -35,7 +35,7 @@ Future<Response> conformanceHttp(Request request) async {
   return Response.ok(output);
 }
 
-Future<void> conformanceCloudEvent(CloudEvent event) async {
+Future<void> conformanceCloudEvent(CloudEvent event, RequestContext _) async {
   final eventEncoded = encodeJsonPretty(event);
   File('function_output.json').writeAsStringSync(eventEncoded);
 

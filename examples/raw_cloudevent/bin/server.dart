@@ -18,6 +18,6 @@ import 'package:functions_framework/serve.dart';
 
 Future<void> main(List<String> args) async {
   await serve(args, {
-    'function': FunctionTarget.cloudEventWithContext(function_library.function),
+    'function': FunctionTarget.cloudEvent(function_library.function),
   });
 }

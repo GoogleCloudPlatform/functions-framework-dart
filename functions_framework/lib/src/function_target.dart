@@ -31,12 +31,8 @@ abstract class FunctionTarget {
 
   Future<Response> handler(Request request);
 
-  factory FunctionTarget.cloudEvent(CloudEventHandler function) =
-      CloudEventFunctionTarget;
-
-  factory FunctionTarget.cloudEventWithContext(
-    CloudEventWithContextHandler function,
-  ) = CloudEventWithContextFunctionTarget;
+  factory FunctionTarget.cloudEvent(CloudEventWithContextHandler function) =
+      CloudEventWithContextFunctionTarget;
 
   factory FunctionTarget.http(Handler function) = HttpFunctionTarget;
 
@@ -45,39 +41,41 @@ abstract class FunctionTarget {
 
   static FunctionTarget jsonable<RequestType, ResponseType>(
     Future<ResponseType> Function(RequestType object, RequestContext context)
-    handler,
+        handler,
     RequestType Function(Map<String, dynamic> json) fromJson,
-  ) => JsonWithContextFunctionTarget.voidResult(handler, (json) {
-    if (json is Map<String, dynamic>) {
-      try {
-        return fromJson(json);
-      } catch (e, stack) {
+  ) =>
+      JsonWithContextFunctionTarget.voidResult(handler, (json) {
+        if (json is Map<String, dynamic>) {
+          try {
+            return fromJson(json);
+          } catch (e, stack) {
+            throw BadRequestException(
+              400,
+              'There was an error parsing the provided JSON data.',
+              innerError: e,
+              innerStack: stack,
+            );
+          }
+        }
         throw BadRequestException(
           400,
-          'There was an error parsing the provided JSON data.',
-          innerError: e,
-          innerStack: stack,
+          'The provided JSON is not the expected type '
+          '`Map<String, dynamic>`.',
         );
-      }
-    }
-    throw BadRequestException(
-      400,
-      'The provided JSON is not the expected type '
-      '`Map<String, dynamic>`.',
-    );
-  });
+      });
 
   static FunctionTarget json(
     Future<void> Function(Map<String, dynamic> json, RequestContext context)
-    handler,
-  ) => JsonWithContextFunctionTarget(handler, (json) {
-    if (json is Map<String, dynamic>) {
-      return json;
-    }
-    throw BadRequestException(
-      400,
-      'The provided JSON is not the expected type '
-      '`Map<String, dynamic>`.',
-    );
-  });
+        handler,
+  ) =>
+      JsonWithContextFunctionTarget(handler, (json) {
+        if (json is Map<String, dynamic>) {
+          return json;
+        }
+        throw BadRequestException(
+          400,
+          'The provided JSON is not the expected type '
+          '`Map<String, dynamic>`.',
+        );
+      });
 }

@@ -24,24 +24,6 @@ import '../json_request_utils.dart';
 import '../request_context.dart';
 import '../typedefs.dart';
 
-class CloudEventFunctionTarget extends FunctionTarget {
-  final CloudEventHandler function;
-
-  @override
-  FunctionType get type => FunctionType.cloudevent;
-
-  @override
-  Future<Response> handler(Request request) async {
-    final event = await _eventFromRequest(request);
-
-    await function(event);
-
-    return Response.ok('');
-  }
-
-  CloudEventFunctionTarget(this.function);
-}
-
 class CloudEventWithContextFunctionTarget extends FunctionTarget {
   final CloudEventWithContextHandler function;
 
@@ -63,8 +45,8 @@ class CloudEventWithContextFunctionTarget extends FunctionTarget {
 
 Future<CloudEvent> _eventFromRequest(Request request) =>
     _requiredBinaryHeader.every(request.headers.containsKey)
-    ? _decodeBinary(request)
-    : _decodeStructured(request);
+        ? _decodeBinary(request)
+        : _decodeStructured(request);
 
 Future<CloudEvent> _decodeStructured(Request request) async {
   final type = mediaTypeFromRequest(request, requiredMimeType: jsonContentType);
