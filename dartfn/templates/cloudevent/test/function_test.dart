@@ -1,4 +1,6 @@
 @Timeout(Duration(seconds: 3))
+library;
+
 import 'dart:convert';
 
 import 'package:http/http.dart';
