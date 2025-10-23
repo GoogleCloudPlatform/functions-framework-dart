@@ -93,7 +93,7 @@ const _lintFix = r'''
 # Search source code for details
 linter:
   rules:
-    file_names: 'no'
+    file_names: false
 ''';
 
 String _base64encode(List<int> bytes) {

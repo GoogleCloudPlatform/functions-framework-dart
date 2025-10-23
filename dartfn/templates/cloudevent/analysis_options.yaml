@@ -17,4 +17,4 @@ analyzer:
 # Search source code for details
 linter:
   rules:
-    file_names: 'no'
+    file_names: false
