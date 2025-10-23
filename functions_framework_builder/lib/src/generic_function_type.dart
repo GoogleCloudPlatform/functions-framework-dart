@@ -55,7 +55,7 @@ class GenericFunctionType implements SupportedFunctionType {
     final lib = await resolver.libraryFor(AssetId.resolve(_libraryUri));
 
     final handlerTypeAlias =
-        lib.exportNamespace.get(_typedefName) as TypeAliasElement;
+        lib.exportNamespace.get2(_typedefName) as TypeAliasElement;
 
     return GenericFunctionType._(handlerTypeAlias, false);
   }
@@ -66,7 +66,7 @@ class GenericFunctionType implements SupportedFunctionType {
     final lib = await resolver.libraryFor(AssetId.resolve(_libraryUri));
 
     final handlerTypeAlias =
-        lib.exportNamespace.get(_typedefWithContextName) as TypeAliasElement;
+        lib.exportNamespace.get2(_typedefWithContextName) as TypeAliasElement;
 
     return GenericFunctionType._(handlerTypeAlias, true);
   }
@@ -102,7 +102,7 @@ class GenericFunctionType implements SupportedFunctionType {
 
     if (library.typeSystem.isSubtypeOf(element.type, functionType)) {
       if (paramInfo.paramType != null) {
-        if (library.exportNamespace.get(paramInfo.paramType!.element.name) ==
+        if (library.exportNamespace.get2(paramInfo.paramType!.element.name!) ==
             null) {
           // TODO: add a test for this!
           throw InvalidGenerationSourceError(

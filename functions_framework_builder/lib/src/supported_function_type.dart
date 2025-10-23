@@ -49,7 +49,7 @@ class SupportedFunctionType {
     );
 
     final handlerTypeAlias =
-        lib.exportNamespace.get(typeDefName) as TypeAliasElement;
+        lib.exportNamespace.get2(typeDefName) as TypeAliasElement;
 
     final functionType = handlerTypeAlias.instantiate(
       typeArguments: [],

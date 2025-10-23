@@ -164,4 +164,7 @@ Iterable<AnnotatedElement> _fromLibrary(LibraryElement2 library) sync* {
   }
 }
 
-const _checker = TypeChecker.fromRuntime(CloudFunction);
+const _checker = TypeChecker.typeNamed(
+  CloudFunction,
+  inPackage: 'functions_framework',
+);

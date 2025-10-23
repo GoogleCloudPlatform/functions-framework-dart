@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: google/type/latlng.proto
-//
+// Generated from google/type/latlng.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:core' as $core;
 
@@ -25,45 +26,41 @@ class LatLng extends $pb.GeneratedMessage {
     $core.double? latitude,
     $core.double? longitude,
   }) {
-    final $result = create();
-    if (latitude != null) {
-      $result.latitude = latitude;
-    }
-    if (longitude != null) {
-      $result.longitude = longitude;
-    }
-    return $result;
+    final result = create();
+    if (latitude != null) result.latitude = latitude;
+    if (longitude != null) result.longitude = longitude;
+    return result;
   }
-  LatLng._() : super();
-  factory LatLng.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory LatLng.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  LatLng._();
+
+  factory LatLng.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory LatLng.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'LatLng',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'google.type'),
       createEmptyInstance: create)
-    ..a<$core.double>(1, _omitFieldNames ? '' : 'latitude', $pb.PbFieldType.OD)
-    ..a<$core.double>(2, _omitFieldNames ? '' : 'longitude', $pb.PbFieldType.OD)
+    ..aD(1, _omitFieldNames ? '' : 'latitude')
+    ..aD(2, _omitFieldNames ? '' : 'longitude')
     ..hasRequiredFields = false;
 
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
-  LatLng clone() => LatLng()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  LatLng clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   LatLng copyWith(void Function(LatLng) updates) =>
       super.copyWith((message) => updates(message as LatLng)) as LatLng;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static LatLng create() => LatLng._();
+  @$core.override
   LatLng createEmptyInstance() => create();
   static $pb.PbList<LatLng> createRepeated() => $pb.PbList<LatLng>();
   @$core.pragma('dart2js:noInline')
@@ -75,10 +72,7 @@ class LatLng extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.double get latitude => $_getN(0);
   @$pb.TagNumber(1)
-  set latitude($core.double v) {
-    $_setDouble(0, v);
-  }
-
+  set latitude($core.double value) => $_setDouble(0, value);
   @$pb.TagNumber(1)
   $core.bool hasLatitude() => $_has(0);
   @$pb.TagNumber(1)
@@ -88,16 +82,14 @@ class LatLng extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.double get longitude => $_getN(1);
   @$pb.TagNumber(2)
-  set longitude($core.double v) {
-    $_setDouble(1, v);
-  }
-
+  set longitude($core.double value) => $_setDouble(1, value);
   @$pb.TagNumber(2)
   $core.bool hasLongitude() => $_has(1);
   @$pb.TagNumber(2)
   void clearLongitude() => $_clearField(2);
 }
 
-const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
-const _omitMessageNames =
+const $core.bool _omitFieldNames =
+    $core.bool.fromEnvironment('protobuf.omit_field_names');
+const $core.bool _omitMessageNames =
     $core.bool.fromEnvironment('protobuf.omit_message_names');

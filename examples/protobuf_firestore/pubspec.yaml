@@ -7,7 +7,7 @@ environment:
 
 dependencies:
   functions_framework: ^0.4.3
-  protobuf: ^4.0.0
+  protobuf: ^5.0.0
   shelf: ^1.4.0
 
 dev_dependencies:
