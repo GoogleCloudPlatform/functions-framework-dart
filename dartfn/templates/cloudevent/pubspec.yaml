@@ -5,7 +5,7 @@ description: A sample Functions Framework project for handling a cloudevent.
 publish_to: none
 
 environment:
-  sdk: ^3.8.0
+  sdk: ^3.9.0
 
 dependencies:
   functions_framework: ^0.4.0

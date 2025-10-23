@@ -5,7 +5,7 @@ repository: https://github.com/GoogleCloudPlatform/functions-framework-dart
 
 resolution: workspace
 environment:
-  sdk: ^3.8.0
+  sdk: ^3.9.0
 
 dependencies:
   analyzer: ^8.4.0

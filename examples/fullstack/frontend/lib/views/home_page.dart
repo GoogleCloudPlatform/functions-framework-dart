@@ -20,43 +20,35 @@ import 'history_page.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text('Greetings!'),
-        ),
-        body: Greeting(),
-        drawer: AppDrawer(),
-      );
+    appBar: AppBar(title: const Text('Greetings!')),
+    body: Greeting(),
+    drawer: AppDrawer(),
+  );
 }
 
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            ListTile(
-              trailing: const Icon(
-                Icons.chevron_left,
-                size: 34,
-              ),
-              onTap: () => Navigator.pop(context),
-            ),
-            ListTile(
-              leading: const Icon(Icons.history),
-              title: const Text('History'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(builder: (_) => HistoryPage()),
-                );
-              },
-            ),
-            const ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-            ),
-          ],
+    child: ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        ListTile(
+          trailing: const Icon(Icons.chevron_left, size: 34),
+          onTap: () => Navigator.pop(context),
         ),
-      );
+        ListTile(
+          leading: const Icon(Icons.history),
+          title: const Text('History'),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(builder: (_) => HistoryPage()),
+            );
+          },
+        ),
+        const ListTile(leading: Icon(Icons.settings), title: Text('Settings')),
+      ],
+    ),
+  );
 }

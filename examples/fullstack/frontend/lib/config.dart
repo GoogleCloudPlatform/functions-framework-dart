@@ -16,10 +16,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-enum Environment {
-  dev,
-  prod,
-}
+enum Environment { dev, prod }
 
 class Config {
   final String greetingsUrl;
