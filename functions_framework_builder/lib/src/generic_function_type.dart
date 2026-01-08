@@ -43,7 +43,7 @@ class GenericFunctionType implements SupportedFunctionType {
 
   @override
   String get typeDescription =>
-      _functionTypeAliasElement.aliasedElement!.toStringNonNullable();
+      _functionTypeAliasElement.aliasedType.toStringNonNullable();
 
   final TypeAliasElement _functionTypeAliasElement;
   final bool _withContext;
@@ -54,7 +54,7 @@ class GenericFunctionType implements SupportedFunctionType {
     final lib = await resolver.libraryFor(AssetId.resolve(_libraryUri));
 
     final handlerTypeAlias =
-        lib.exportNamespace.get(_typedefName) as TypeAliasElement;
+        lib.exportNamespace.get2(_typedefName) as TypeAliasElement;
 
     return GenericFunctionType._(handlerTypeAlias, false);
   }
@@ -65,7 +65,7 @@ class GenericFunctionType implements SupportedFunctionType {
     final lib = await resolver.libraryFor(AssetId.resolve(_libraryUri));
 
     final handlerTypeAlias =
-        lib.exportNamespace.get(_typedefWithContextName) as TypeAliasElement;
+        lib.exportNamespace.get2(_typedefWithContextName) as TypeAliasElement;
 
     return GenericFunctionType._(handlerTypeAlias, true);
   }
@@ -74,13 +74,13 @@ class GenericFunctionType implements SupportedFunctionType {
   FactoryData? createReference(
     LibraryElement library,
     String targetName,
-    FunctionElement element,
+    FunctionTypedElement element,
   ) {
-    if (element.parameters.isEmpty) {
+    if (element.formalParameters.isEmpty) {
       return null;
     }
 
-    final firstParamType = element.parameters.first.type;
+    final firstParamType = element.formalParameters.first.type;
 
     final paramInfo = validJsonParamType(firstParamType);
 
@@ -101,13 +101,13 @@ class GenericFunctionType implements SupportedFunctionType {
 
     if (library.typeSystem.isSubtypeOf(element.type, functionType)) {
       if (paramInfo.paramType != null) {
-        if (library.exportNamespace.get(paramInfo.paramType!.element.name) ==
+        if (library.exportNamespace.get2(paramInfo.paramType!.element.name!) ==
             null) {
           // TODO: add a test for this!
           throw InvalidGenerationSourceError(
             'The type `${paramInfo.paramType!.element.name}` is not exposed '
-            'by the function library `${library.source.uri}` so it cannot '
-            'be used.',
+            'by the function library `${library.firstFragment.source.uri}` so '
+            'it cannot be used.',
           );
         }
       }
@@ -151,7 +151,7 @@ class _GenericFactoryData implements FactoryData {
     final typeDisplayName = info.paramType == null
         ? jsonTypeDisplay
         : '$functionsLibraryPrefix.'
-            '${info.paramType!.toStringNonNullable()}';
+              '${info.paramType!.toStringNonNullable()}';
 
     final returnBlock = info.paramType == null
         ? 'return $_jsonParamName;'
@@ -168,7 +168,8 @@ class _GenericFactoryData implements FactoryData {
     }
     ''';
 
-    final body = '''
+    final body =
+        '''
   if ($_jsonParamName is $jsonTypeDisplay) {
     $returnBlock
   }
@@ -182,11 +183,11 @@ class _GenericFactoryData implements FactoryData {
     return _GenericFactoryData._(
       isVoid
           ? withContext
-              ? _voidWithContextConstructorName
-              : _voidConstructorName
+                ? _voidWithContextConstructorName
+                : _voidConstructorName
           : withContext
-              ? _withContextConstructorName
-              : _constructorName,
+          ? _withContextConstructorName
+          : _constructorName,
       target,
       function,
       typeDisplayName,
@@ -195,7 +196,8 @@ class _GenericFactoryData implements FactoryData {
   }
 
   @override
-  String get expression => '''
+  String get expression =>
+      '''
 $_endpointConstructorName($function, ($_jsonParamName) {
   $factoryBody
 },)

@@ -71,68 +71,66 @@ FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
   test('Valid shelf function shapes are supported', () async {
     final file = File('test/test_examples/valid_shelf_handlers.dart');
 
-    final lines = [
-      'syncFunction',
-      'asyncFunction',
-      'futureOrFunction',
-      'extraParam',
-      'optionalParam',
-      'customResponse',
-      'customResponseAsync',
-      'customResponseFutureOr',
-    ]
-        .map(
-          (e) => """
+    final lines =
+        [
+              'syncFunction',
+              'asyncFunction',
+              'futureOrFunction',
+              'extraParam',
+              'optionalParam',
+              'customResponse',
+              'customResponseAsync',
+              'customResponseFutureOr',
+            ]
+            .map(
+              (e) =>
+                  """
       '$e' => FunctionTarget.http(
           function_library.$e,
         ),""",
-        )
-        .join('\n');
-    await _generateTest(
-      file.readAsStringSync(),
-      '''
+            )
+            .join('\n');
+    await _generateTest(file.readAsStringSync(), '''
 $_outputHeader
 FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
 $lines
       _ => null
     };
-''',
-    );
+''');
   });
 
   test('Valid CloudEvent function shapes are supported', () async {
     final file = File('test/test_examples/valid_cloud_event_handlers.dart');
 
-    final lines = [
-      'syncFunction',
-      'asyncFunction',
-      'futureOrFunction',
-      'optionalParam',
-      'objectParam',
-    ]
-        .map(
-          (e) => """
+    final lines =
+        [
+              'syncFunction',
+              'asyncFunction',
+              'futureOrFunction',
+              'optionalParam',
+              'objectParam',
+            ]
+            .map(
+              (e) =>
+                  """
       '$e' => FunctionTarget.cloudEvent(
           function_library.$e,
         ),""",
-        )
-        .join('\n');
-    await _generateTest(
-      file.readAsStringSync(),
-      '''
+            )
+            .join('\n');
+    await _generateTest(file.readAsStringSync(), '''
 $_outputHeader
 FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
 $lines
       _ => null
     };
-''',
-    );
+''');
   });
 
   group('Valid custom type function shapes are supported', () {
-    final inputContent =
-        File('test/test_examples/valid_custom_type_handlers.dart')
-            .readAsStringSync();
+    final inputContent = File(
+      'test/test_examples/valid_custom_type_handlers.dart',
+    ).readAsStringSync();
 
     test('void return type', () async {
       await _testItems(
@@ -144,7 +142,8 @@ $lines
           'extraParam',
           'optionalParam',
         ],
-        (e) => """
+        (e) =>
+            """
       '$e' => JsonFunctionTarget.voidResult(
           function_library.$e,
           (json) {
@@ -176,10 +175,7 @@ $lines
             '(JsonType request) ',
             '(JsonType request, RequestContext context)',
           )
-          .replaceAll(
-            'int? other',
-            'RequestContext context, int? other',
-          );
+          .replaceAll('int? other', 'RequestContext context, int? other');
 
       await _testItems(
         newInputContent,
@@ -190,7 +186,8 @@ $lines
           'extraParam',
           'optionalParam',
         ],
-        (e) => """
+        (e) =>
+            """
       '$e' => JsonWithContextFunctionTarget.voidResult(
           function_library.$e,
           (json) {
@@ -230,7 +227,8 @@ $lines
           'extraParam',
           'optionalParam',
         ],
-        (e) => """
+        (e) =>
+            """
       '$e' => JsonFunctionTarget(
           function_library.$e,
           (json) {
@@ -270,7 +268,8 @@ $lines
           'extraParam',
           'optionalParam',
         ],
-        (e) => """
+        (e) =>
+            """
       '$e' => JsonFunctionTarget(
           function_library.$e,
           (json) {
@@ -310,7 +309,8 @@ $lines
           'extraParam',
           'optionalParam',
         ],
-        (e) => """
+        (e) =>
+            """
       '$e' => JsonFunctionTarget(
           function_library.$e,
           (json) {
@@ -338,9 +338,9 @@ $lines
   });
 
   group('Valid JSON type function shapes are supported', () {
-    final inputContent =
-        File('test/test_examples/valid_json_type_handlers.dart')
-            .readAsStringSync();
+    final inputContent = File(
+      'test/test_examples/valid_json_type_handlers.dart',
+    ).readAsStringSync();
 
     test('void return type', () async {
       await _testItems(
@@ -352,7 +352,8 @@ $lines
           'extraParam',
           'optionalParam',
         ],
-        (e) => """
+        (e) =>
+            """
       '$e' => JsonFunctionTarget.voidResult(
           function_library.$e,
           (json) {
@@ -382,7 +383,8 @@ $lines
           'extraParam',
           'optionalParam',
         ],
-        (e) => """
+        (e) =>
+            """
       '$e' => JsonFunctionTarget(
           function_library.$e,
           (json) {
@@ -413,7 +415,8 @@ $lines
           'extraParam',
           'optionalParam',
         ],
-        (e) => """
+        (e) =>
+            """
       '$e' => JsonFunctionTarget(
           function_library.$e,
           (json) {
@@ -432,14 +435,8 @@ $lines
 
     test('void with context', () async {
       final newInputContent = inputContent
-          .replaceAll(
-            '(num request)',
-            '(num request, RequestContext context)',
-          )
-          .replaceAll(
-            'int? other',
-            'RequestContext context, int? other',
-          );
+          .replaceAll('(num request)', '(num request, RequestContext context)')
+          .replaceAll('int? other', 'RequestContext context, int? other');
 
       await _testItems(
         newInputContent,
@@ -450,7 +447,8 @@ $lines
           'extraParam',
           'optionalParam',
         ],
-        (e) => """
+        (e) =>
+            """
       '$e' => JsonWithContextFunctionTarget.voidResult(
           function_library.$e,
           (json) {
@@ -495,22 +493,23 @@ package:$_pkgName/functions.dart:8:10
   });
 
   test('freezed style mixed in json types are allowed', () async {
-    final inputContent =
-        File('test/test_examples/freezed_style_json_mixin_handler.dart')
-            .readAsStringSync();
+    final inputContent = File(
+      'test/test_examples/freezed_style_json_mixin_handler.dart',
+    ).readAsStringSync();
 
     final srcs = {'$_pkgName|lib/functions.dart': inputContent};
 
     await testBuilder(
       functionsFrameworkBuilder(),
       srcs,
-      reader: await PackageAssetReader.currentIsolate(),
+      //reader: await PackageAssetReader.currentIsolate(),
     );
   });
 
   group('invalid function shapes are not allowed', () {
-    final onlyFunctionMatcher =
-        startsWith('Only top-level, public functions are supported.');
+    final onlyFunctionMatcher = startsWith(
+      'Only top-level, public functions are supported.',
+    );
     final notCompatibleMatcher = startsWith(
       'Not compatible with a supported function shape:',
     );
@@ -527,8 +526,8 @@ package:$_pkgName/functions.dart:8:10
       //
       '@CloudFunction() Response function(Request request) => null;':
           startsWith(
-        'Cannot be annotated with `CloudFunction` more than once.',
-      ),
+            'Cannot be annotated with `CloudFunction` more than once.',
+          ),
 
       //
       // pkg:shelf handlers
@@ -601,16 +600,13 @@ Future<void> _testItems(
 ) async {
   final entries = functions.map((e) => entryFactory(e)).join('\n');
 
-  await _generateTest(
-    inputContent,
-    '''
+  await _generateTest(inputContent, '''
 $_outputHeader
 FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
 $entries
       _ => null
     };
-''',
-  );
+''');
 }
 
 Future<void> _generateTest(
@@ -623,15 +619,10 @@ Future<void> _generateTest(
   await testBuilder(
     functionsFrameworkBuilder(),
     srcs,
-    generateFor: {
-      ...srcs.keys,
-      '$_pkgName|\$package\$',
-    },
+    generateFor: {...srcs.keys, '$_pkgName|\$package\$'},
     outputs: expectedContent == null
         ? null
-        : {
-            '$_pkgName|bin/server.dart': decodedMatches(expectedContent),
-          },
+        : {'$_pkgName|bin/server.dart': decodedMatches(expectedContent)},
     onLog: (log) {
       if (!validateLog) {
         return;
@@ -647,7 +638,7 @@ Future<void> _generateTest(
         fail(output);
       });
     },
-    reader: await PackageAssetReader.currentIsolate(),
+    //reader: await PackageAssetReader.currentIsolate(),
   );
 }
 
@@ -661,7 +652,8 @@ const _ignoredLogMessages = {
 String get _pkgName => 'pkg$_pkgCacheCount';
 int _pkgCacheCount = 1;
 
-String get _outputHeader => '''
+String get _outputHeader =>
+    '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
 //

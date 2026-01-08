@@ -27,7 +27,7 @@ class FunctionTypeValidator {
   FactoryData validate(
     LibraryElement library,
     String targetName,
-    FunctionElement element,
+    FunctionTypedElement element,
   ) {
     for (var type in _types) {
       final reference = type.createReference(library, targetName, element);
@@ -35,44 +35,39 @@ class FunctionTypeValidator {
         return reference;
       }
     }
-    throw InvalidGenerationSourceError(
-      '''
+    throw InvalidGenerationSourceError('''
 Not compatible with a supported function shape:
 ${_types.map((e) => '  ${e.typedefName} [${e.typeDescription}] from ${e.libraryUri}').join('\n')}
-''',
-      element: element,
-    );
+''', element: element);
   }
 
   static Future<FunctionTypeValidator> create(Resolver resolver) async =>
-      FunctionTypeValidator._(
-        [
-          await SupportedFunctionType.create(
-            resolver,
-            'package:functions_framework/functions_framework.dart',
-            'HandlerWithLogger',
-            'FunctionTarget.httpWithLogger',
-          ),
-          await SupportedFunctionType.create(
-            resolver,
-            'package:shelf/shelf.dart',
-            'Handler',
-            'FunctionTarget.http',
-          ),
-          await SupportedFunctionType.create(
-            resolver,
-            'package:functions_framework/functions_framework.dart',
-            'CloudEventWithContextHandler',
-            'FunctionTarget.cloudEventWithContext',
-          ),
-          await SupportedFunctionType.create(
-            resolver,
-            'package:functions_framework/functions_framework.dart',
-            'CloudEventHandler',
-            'FunctionTarget.cloudEvent',
-          ),
-          await GenericFunctionType.createWithContext(resolver),
-          await GenericFunctionType.create(resolver),
-        ],
-      );
+      FunctionTypeValidator._([
+        await SupportedFunctionType.create(
+          resolver,
+          'package:functions_framework/functions_framework.dart',
+          'HandlerWithLogger',
+          'FunctionTarget.httpWithLogger',
+        ),
+        await SupportedFunctionType.create(
+          resolver,
+          'package:shelf/shelf.dart',
+          'Handler',
+          'FunctionTarget.http',
+        ),
+        await SupportedFunctionType.create(
+          resolver,
+          'package:functions_framework/functions_framework.dart',
+          'CloudEventWithContextHandler',
+          'FunctionTarget.cloudEventWithContext',
+        ),
+        await SupportedFunctionType.create(
+          resolver,
+          'package:functions_framework/functions_framework.dart',
+          'CloudEventHandler',
+          'FunctionTarget.cloudEvent',
+        ),
+        await GenericFunctionType.createWithContext(resolver),
+        await GenericFunctionType.create(resolver),
+      ]);
 }

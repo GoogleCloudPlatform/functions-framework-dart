@@ -6,7 +6,7 @@ extension DartTypeExtension on DartType {
 }
 
 extension ElementExtension on Element {
-  String toStringNonNullable() => getDisplayString().dropQuestion();
+  String toStringNonNullable() => displayName;
 }
 
 extension on String {

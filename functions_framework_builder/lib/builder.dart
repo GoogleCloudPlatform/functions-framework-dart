@@ -25,7 +25,6 @@ library;
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:dart_style/dart_style.dart';
-import 'package:functions_framework/functions_framework.dart';
 import 'package:path/path.dart' as path;
 import 'package:source_gen/source_gen.dart';
 
@@ -41,8 +40,8 @@ class _FunctionsFrameworkBuilder implements Builder {
 
   @override
   Map<String, List<String>> get buildExtensions => const {
-        r'lib/functions.dart': ['bin/server.dart'],
-      };
+    r'lib/functions.dart': ['bin/server.dart'],
+  };
 
   @override
   Future<void> build(BuildStep buildStep) async {
@@ -53,7 +52,7 @@ class _FunctionsFrameworkBuilder implements Builder {
 
     for (var annotatedElement in _fromLibrary(libraryElement)) {
       final element = annotatedElement.element;
-      if (element is! FunctionElement || element.isPrivate) {
+      if (element is! FunctionTypedElement || element.isPrivate) {
         throw InvalidGenerationSourceError(
           'Only top-level, public functions are supported.',
           element: element,
@@ -62,8 +61,9 @@ class _FunctionsFrameworkBuilder implements Builder {
 
       final targetReader = annotatedElement.annotation.read('target');
 
-      final targetName =
-          targetReader.isNull ? element.name : targetReader.stringValue;
+      final targetName = targetReader.isNull
+          ? element.name!
+          : targetReader.stringValue;
 
       if (entries.containsKey(targetName)) {
         throw InvalidGenerationSourceError(
@@ -90,7 +90,8 @@ class _FunctionsFrameworkBuilder implements Builder {
       "'${buildStep.inputId.uri}' as $functionsLibraryPrefix",
     ]..sort();
 
-    var output = '''
+    var output =
+        '''
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // Copyright 2021 Google LLC
 //
@@ -130,10 +131,7 @@ ${cases.join('\n')}
     }
 
     await buildStep.writeAsString(
-      AssetId(
-        buildStep.inputId.package,
-        path.join('bin', 'server.dart'),
-      ),
+      AssetId(buildStep.inputId.package, path.join('bin', 'server.dart')),
       output,
     );
   }
@@ -144,8 +142,9 @@ Iterable<AnnotatedElement> _fromLibrary(LibraryElement library) sync* {
   // While neither is supported, it allows us to provide helpful errors if devs
   // are using the annotations incorrectly.
   final mergedElements = {
-    ...library.topLevelElements,
-    ...library.exportNamespace.definedNames.values,
+    ...library.topLevelFunctions,
+    ...library.topLevelVariables,
+    ...library.exportNamespace.definedNames2.values,
   };
 
   for (var element in mergedElements) {
@@ -164,4 +163,7 @@ Iterable<AnnotatedElement> _fromLibrary(LibraryElement library) sync* {
   }
 }
 
-const _checker = TypeChecker.fromRuntime(CloudFunction);
+const _checker = TypeChecker.typeNamedLiterally(
+  'CloudFunction',
+  inPackage: 'functions_framework',
+);

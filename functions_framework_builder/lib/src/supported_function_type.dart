@@ -48,7 +48,7 @@ class SupportedFunctionType {
     );
 
     final handlerTypeAlias =
-        lib.exportNamespace.get(typeDefName) as TypeAliasElement;
+        lib.exportNamespace.get2(typeDefName) as TypeAliasElement;
 
     final functionType = handlerTypeAlias.instantiate(
       typeArguments: [],
@@ -66,7 +66,7 @@ class SupportedFunctionType {
   FactoryData? createReference(
     LibraryElement library,
     String targetName,
-    FunctionElement element,
+    FunctionTypedElement element,
   ) {
     if (element.library.typeSystem.isSubtypeOf(element.type, _type)) {
       return _TrivialFactoryData(
