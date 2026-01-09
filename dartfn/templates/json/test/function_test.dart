@@ -13,10 +13,7 @@ void main() {
   test('defaults', () async {
     final proc = await TestProcess.start('dart', ['bin/server.dart']);
 
-    await expectLater(
-      proc.stdout,
-      emitsThrough('Listening on :8080'),
-    );
+    await expectLater(proc.stdout, emitsThrough('Listening on :8080'));
 
     const body = '''
     {
@@ -35,8 +32,10 @@ void main() {
     final data = json.decode(response.body) as Map<String, dynamic>;
     final actualResponse = GreetingResponse.fromJson(data);
 
-    final expectedResponse =
-        GreetingResponse(salutation: 'Hello', name: 'World');
+    final expectedResponse = GreetingResponse(
+      salutation: 'Hello',
+      name: 'World',
+    );
 
     expect(actualResponse, expectedResponse);
 

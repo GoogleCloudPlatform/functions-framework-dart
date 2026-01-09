@@ -41,7 +41,10 @@ FutureOr<void> main() async {
  }
 }''';
 
-  final response =
-      await post(Uri.parse(requestUrl), headers: headers, body: body);
+  final response = await post(
+    Uri.parse(requestUrl),
+    headers: headers,
+    body: body,
+  );
   print('response.statusCode: ${response.statusCode}');
 }

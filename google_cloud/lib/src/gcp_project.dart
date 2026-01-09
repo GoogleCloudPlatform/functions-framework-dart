@@ -76,15 +76,12 @@ Future<String> projectIdFromMetadataServer() async {
 
     return response.body;
   } on SocketException catch (e) {
-    throw BadConfigurationException(
-      '''
+    throw BadConfigurationException('''
 Could not connect to $host.
 If not running on Google Cloud, one of these environment variables must be set
 to the target Google Project ID:
 ${gcpProjectIdEnvironmentVariables.join('\n')}
-''',
-      details: e.toString(),
-    );
+''', details: e.toString());
   }
 }
 

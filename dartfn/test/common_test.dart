@@ -32,11 +32,10 @@ void main() {
       });
 
       test('matching input', () {
-        _expect(
-          'foo __bar__ baz',
-          {'bar': '__baz__', 'baz': 'foo'},
-          'foo __baz__ baz',
-        );
+        _expect('foo __bar__ baz', {
+          'bar': '__baz__',
+          'baz': 'foo',
+        }, 'foo __baz__ baz');
       });
 
       test('vars must be alpha + numeric', () {

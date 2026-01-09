@@ -29,21 +29,18 @@ void main() {
     final proc = await _hostCloudEventHandler();
 
     const subject = 'documents/users/ghXNtePIFmdDOBH3iEMH';
-    final response = await _makeRequest(
-      protobytes,
-      {
-        'ce-id': '785865c0-2b16-439b-ad68-f9672343863a',
-        'ce-source':
-            '//firestore.googleapis.com/projects/dart-redirector/databases/(default)',
-        'ce-specversion': '1.0',
-        'ce-type': 'google.cloud.firestore.document.v1.updated',
-        'Content-Type': 'application/protobuf',
-        'ce-dataschema':
-            'https://github.com/googleapis/google-cloudevents/blob/main/proto/google/events/cloud/firestore/v1/data.proto',
-        'ce-subject': subject,
-        'ce-time': '2023-06-21T12:21:25.413855Z',
-      },
-    );
+    final response = await _makeRequest(protobytes, {
+      'ce-id': '785865c0-2b16-439b-ad68-f9672343863a',
+      'ce-source':
+          '//firestore.googleapis.com/projects/dart-redirector/databases/(default)',
+      'ce-specversion': '1.0',
+      'ce-type': 'google.cloud.firestore.document.v1.updated',
+      'Content-Type': 'application/protobuf',
+      'ce-dataschema':
+          'https://github.com/googleapis/google-cloudevents/blob/main/proto/google/events/cloud/firestore/v1/data.proto',
+      'ce-subject': subject,
+      'ce-time': '2023-06-21T12:21:25.413855Z',
+    });
     expect(response.statusCode, 200);
     expect(response.body, isEmpty);
     expect(
@@ -55,18 +52,13 @@ void main() {
     );
     await expectLater(
       proc.stdout,
-      emitsInOrder(
-        [
-          startsWith('INFO: event subject: $subject'),
-          startsWith('DEBUG:'),
-        ],
-      ),
+      emitsInOrder([
+        startsWith('INFO: event subject: $subject'),
+        startsWith('DEBUG:'),
+      ]),
     );
 
-    await finishServerTest(
-      proc,
-      requestOutput: endsWith('POST    [200] /'),
-    );
+    await finishServerTest(proc, requestOutput: endsWith('POST    [200] /'));
 
     final stderrOutput = await proc.stderrStream().join('\n');
     final json = jsonDecode(stderrOutput) as Map<String, dynamic>;
@@ -78,24 +70,19 @@ void main() {
 Future<Response> _makeRequest(Object? body, Map<String, String> headers) async {
   final requestUrl = Uri.parse('http://localhost:$autoPort/');
 
-  final response = await post(
-    requestUrl,
-    body: body,
-    headers: headers,
-  );
+  final response = await post(requestUrl, body: body, headers: headers);
   return response;
 }
 
 Future<TestProcess> _hostCloudEventHandler() async {
   final proc = await startServerTest(
-    arguments: [
-      '--signature-type',
-      'cloudevent',
-    ],
+    arguments: ['--signature-type', 'cloudevent'],
     expectedListeningPort: 0,
   );
   return proc;
 }
 
-final containsTextPlainHeader =
-    containsPair('content-type', 'text/plain; charset=utf-8');
+final containsTextPlainHeader = containsPair(
+  'content-type',
+  'text/plain; charset=utf-8',
+);

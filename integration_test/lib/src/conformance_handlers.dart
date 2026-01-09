@@ -22,9 +22,7 @@ import 'utils.dart';
 Future<Response> conformanceHttp(Request request) async {
   final content = await request.readAsString();
 
-  File('function_output.json').writeAsStringSync(
-    content,
-  );
+  File('function_output.json').writeAsStringSync(content);
 
   final buffer = StringBuffer()
     ..writeln('Hello, conformance test!')
@@ -41,9 +39,7 @@ Future<Response> conformanceHttp(Request request) async {
 @CloudFunction()
 void conformanceCloudEvent(CloudEvent event) {
   final eventEncoded = encodeJsonPretty(event);
-  File('function_output.json').writeAsStringSync(
-    eventEncoded,
-  );
+  File('function_output.json').writeAsStringSync(eventEncoded);
 
   final buffer = StringBuffer()
     ..writeln('Hello, conformance test!')

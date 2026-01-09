@@ -36,7 +36,8 @@ const _pubSubJsonString = r'''
  }
 }''';
 
-final _realHeaders = (jsonDecode(r'''
+final _realHeaders =
+    (jsonDecode(r'''
 {
  "accept": "application/json",
  "accept-encoding": "gzip,deflate,br",
@@ -53,7 +54,9 @@ final _realHeaders = (jsonDecode(r'''
  "x-cloud-trace-context": "99f400597336e627f680986c0835f115/10739301396915309367;o=1",
  "x-forwarded-for": "66.102.6.169",
  "x-forwarded-proto": "https"
-}''') as Map<String, dynamic>).cast<String, String>();
+}''')
+            as Map<String, dynamic>)
+        .cast<String, String>();
 
 void main() {
   // TODO: non-JSON body
@@ -69,54 +72,42 @@ void main() {
       expect(response.body, isEmpty);
       expect(
         response.headers,
-        allOf(
-          containsTextPlainHeader,
-          containsPair('x-attribute_count', '1'),
-        ),
+        allOf(containsTextPlainHeader, containsPair('x-attribute_count', '1')),
       );
 
-      await finishServerTest(
-        proc,
-        requestOutput: endsWith('POST    [200] /'),
-      );
+      await finishServerTest(proc, requestOutput: endsWith('POST    [200] /'));
 
       final stderrOutput = await proc.stderrStream().join('\n');
       final json = jsonDecode(stderrOutput) as Map<String, dynamic>;
 
-      expect(
-        json,
-        {
-          'id': '1999507485604232',
-          'specversion': '1.0',
-          'type': 'google.cloud.pubsub.topic.v1.messagePublished',
-          'datacontenttype': 'application/json',
-          'time': '2021-02-10T18:13:19.698Z',
-          'source':
-              '//pubsub.googleapis.com/projects/redacted/topics/eventarc-us-central1-events-pubsub-trigger-072',
-          'data': jsonDecode(_pubSubJsonString),
-        },
-      );
+      expect(json, {
+        'id': '1999507485604232',
+        'specversion': '1.0',
+        'type': 'google.cloud.pubsub.topic.v1.messagePublished',
+        'datacontenttype': 'application/json',
+        'time': '2021-02-10T18:13:19.698Z',
+        'source':
+            '//pubsub.googleapis.com/projects/redacted/topics/eventarc-us-central1-events-pubsub-trigger-072',
+        'data': jsonDecode(_pubSubJsonString),
+      });
     });
 
     test('valid proto input', () async {
       final proc = await _hostBasicEventHandler('protoEventHandler');
 
       const subject = 'documents/users/ghXNtePIFmdDOBH3iEMH';
-      final response = await _makeRequest(
-        _protobytes,
-        {
-          'ce-id': '785865c0-2b16-439b-ad68-f9672343863a',
-          'ce-source':
-              '//firestore.googleapis.com/projects/dart-redirector/databases/(default)',
-          'ce-specversion': '1.0',
-          'ce-type': 'google.cloud.firestore.document.v1.updated',
-          'Content-Type': 'application/protobuf',
-          'ce-dataschema':
-              'https://github.com/googleapis/google-cloudevents/blob/main/proto/google/events/cloud/firestore/v1/data.proto',
-          'ce-subject': subject,
-          'ce-time': '2023-06-21T12:21:25.413855Z',
-        },
-      );
+      final response = await _makeRequest(_protobytes, {
+        'ce-id': '785865c0-2b16-439b-ad68-f9672343863a',
+        'ce-source':
+            '//firestore.googleapis.com/projects/dart-redirector/databases/(default)',
+        'ce-specversion': '1.0',
+        'ce-type': 'google.cloud.firestore.document.v1.updated',
+        'Content-Type': 'application/protobuf',
+        'ce-dataschema':
+            'https://github.com/googleapis/google-cloudevents/blob/main/proto/google/events/cloud/firestore/v1/data.proto',
+        'ce-subject': subject,
+        'ce-time': '2023-06-21T12:21:25.413855Z',
+      });
       expect(response.statusCode, 200);
       expect(response.body, isEmpty);
       expect(
@@ -128,18 +119,13 @@ void main() {
       );
       await expectLater(
         proc.stdout,
-        emitsInOrder(
-          [
-            startsWith('INFO: event subject: $subject'),
-            startsWith('DEBUG:'),
-          ],
-        ),
+        emitsInOrder([
+          startsWith('INFO: event subject: $subject'),
+          startsWith('DEBUG:'),
+        ]),
       );
 
-      await finishServerTest(
-        proc,
-        requestOutput: endsWith('POST    [200] /'),
-      );
+      await finishServerTest(proc, requestOutput: endsWith('POST    [200] /'));
 
       final stderrOutput = await proc.stderrStream().join('\n');
       final json = jsonDecode(stderrOutput) as Map<String, dynamic>;
@@ -160,18 +146,14 @@ void main() {
     });
 
     test('bad format of core header: time', () async {
-      final stderrOutput = await _makeBadRequest(
-        _pubSubJsonString,
-        {
-          ...jsonContentType,
-          'ce-specversion': '1.0',
-          'ce-type': 'google.cloud.pubsub.topic.publish',
-          'ce-time': 'bad time!',
-          'ce-id': '1234-1234-1234',
-          'ce-source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
-        },
-        'binary-mode message',
-      );
+      final stderrOutput = await _makeBadRequest(_pubSubJsonString, {
+        ...jsonContentType,
+        'ce-specversion': '1.0',
+        'ce-type': 'google.cloud.pubsub.topic.publish',
+        'ce-time': 'bad time!',
+        'ce-id': '1234-1234-1234',
+        'ce-source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
+      }, 'binary-mode message');
       expect(
         stderrOutput,
         startsWith(
@@ -209,14 +191,15 @@ void main() {
       expect(
         stderrOutput,
         startsWith(
-            // NOTE! Since binary-mode failed, we fallback to structured mode!
-            '''
+          // NOTE! Since binary-mode failed, we fallback to structured mode!
+          '''
 Could not decode the request as a structured-mode message. (400)
 CheckedFromJsonException
 Could not create `CloudEvent`.
 There is a problem with "id".
 Required keys are missing: id, source, specversion, type. (CheckedFromJsonException)
-'''),
+''',
+        ),
       );
     });
   });
@@ -250,28 +233,19 @@ Required keys are missing: id, source, specversion, type. (CheckedFromJsonExcept
       expect(response.body, isEmpty);
       expect(
         response.headers,
-        allOf(
-          containsTextPlainHeader,
-          containsPair('x-attribute_count', '1'),
-        ),
+        allOf(containsTextPlainHeader, containsPair('x-attribute_count', '1')),
       );
 
-      await finishServerTest(
-        proc,
-        requestOutput: endsWith('POST    [200] /'),
-      );
+      await finishServerTest(proc, requestOutput: endsWith('POST    [200] /'));
 
       final stderrOutput = await proc.stderrStream().join('\n');
 
       final json = jsonDecode(stderrOutput) as Map<String, dynamic>;
 
-      expect(
-        json,
-        {
-          ...jsonDecode(body) as Map<String, dynamic>,
-          'datacontenttype': 'application/json; charset=utf-8',
-        },
-      );
+      expect(json, {
+        ...jsonDecode(body) as Map<String, dynamic>,
+        'datacontenttype': 'application/json; charset=utf-8',
+      });
     });
 
     test('bad format of core header: time', () async {
@@ -294,9 +268,7 @@ Required keys are missing: id, source, specversion, type. (CheckedFromJsonExcept
     }
   }
 }''',
-        {
-          'Content-Type': 'application/json; charset=utf-8',
-        },
+        {'Content-Type': 'application/json; charset=utf-8'},
         'structured-mode message',
       );
       expect(
@@ -330,9 +302,7 @@ Required keys are missing: id, source, specversion, type. (CheckedFromJsonExcept
     }
   }
 }''',
-        {
-          'Content-Type': 'application/json; charset=utf-8',
-        },
+        {'Content-Type': 'application/json; charset=utf-8'},
         'structured-mode message',
       );
       expect(
@@ -363,10 +333,7 @@ Future<String> _makeBadRequest(
     reason: 'response.body',
   );
 
-  await finishServerTest(
-    proc,
-    requestOutput: endsWith('POST    [400] /'),
-  );
+  await finishServerTest(proc, requestOutput: endsWith('POST    [400] /'));
 
   final stderrOutput = await proc.stderrStream().join('\n');
   return stderrOutput;
@@ -375,11 +342,7 @@ Future<String> _makeBadRequest(
 Future<Response> _makeRequest(Object? body, Map<String, String> headers) async {
   final requestUrl = 'http://localhost:$autoPort/';
 
-  final response = await post(
-    requestUrl,
-    body: body,
-    headers: headers,
-  );
+  final response = await post(requestUrl, body: body, headers: headers);
   return response;
 }
 
@@ -387,12 +350,7 @@ Future<TestProcess> _hostBasicEventHandler([
   String name = 'basicCloudEventHandler',
 ]) async {
   final proc = await startServerTest(
-    arguments: [
-      '--target',
-      name,
-      '--signature-type',
-      'cloudevent',
-    ],
+    arguments: ['--target', name, '--signature-type', 'cloudevent'],
     expectedListeningPort: 0,
   );
   return proc;

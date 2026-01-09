@@ -22,21 +22,23 @@ void main() {
   group('currentProjectId', () {
     const projectIdPrint = 'test/src/project_id_print.dart';
 
-    test('not environment', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final proc = await _run(projectIdPrint);
+    test(
+      'not environment',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final proc = await _run(projectIdPrint);
 
-      final errorOut = await proc.stderrStream().toList();
+        final errorOut = await proc.stderrStream().toList();
 
-      await expectLater(
-        errorOut,
-        containsAll(gcpProjectIdEnvironmentVariables),
-      );
-      await expectLater(proc.stdout, emitsDone);
+        await expectLater(
+          errorOut,
+          containsAll(gcpProjectIdEnvironmentVariables),
+        );
+        await expectLater(proc.stdout, emitsDone);
 
-      await proc.shouldExit(255);
-    });
+        await proc.shouldExit(255);
+      },
+    );
 
     test('environment set', () async {
       final proc = await _run(
@@ -74,10 +76,7 @@ void main() {
     );
 
     test('environment set', () async {
-      final proc = await _run(
-        listenPortPrint,
-        environment: {'PORT': '8123'},
-      );
+      final proc = await _run(listenPortPrint, environment: {'PORT': '8123'});
 
       await expectLater(proc.stderr, emitsDone);
       await expectLater(proc.stdout, emits('8123'));
@@ -138,10 +137,9 @@ void main() {
 Future<TestProcess> _run(
   String dartScript, {
   Map<String, String>? environment,
-}) =>
-    TestProcess.start(
-      Platform.resolvedExecutable,
-      [dartScript],
-      environment: environment,
-      includeParentEnvironment: false,
-    );
+}) => TestProcess.start(
+  Platform.resolvedExecutable,
+  [dartScript],
+  environment: environment,
+  includeParentEnvironment: false,
+);

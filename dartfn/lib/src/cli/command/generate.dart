@@ -33,12 +33,10 @@ class GenerateCommand extends Command {
   GenerateCommand(super.context) {
     argParser
       ..addFlag('list', negatable: false, help: 'List available generators.')
-
       // Hidden option to list available projects as JSON to stdout.
       // This is useful for tools that don't want to have to parse the output of
       // `--help`.
       ..addFlag('machine', negatable: false, hide: true)
-
       // Hidden option to generate into the current directory.
       ..addFlag('force', abbr: 'f', negatable: false, hide: true);
   }
@@ -72,10 +70,11 @@ class GenerateCommand extends Command {
     final generatorName = options.rest.first;
     if (!(options['force'] as bool) && !await context.generator.cwd.isEmpty()) {
       return error(
-          'The current directory is not empty. Overwritting an exising project '
-          'is NOT recommended.\n'
-          'Create a new (empty) project directory, or use --force to override '
-          "this safeguard if you know what you're doing.");
+        'The current directory is not empty. Overwritting an exising project '
+        'is NOT recommended.\n'
+        'Create a new (empty) project directory, or use --force to override '
+        "this safeguard if you know what you're doing.",
+      );
     }
 
     return await _generate(generatorName);
@@ -92,7 +91,8 @@ class GenerateCommand extends Command {
 
     write('project: $projectName');
 
-    final target = context.generator.target ??
+    final target =
+        context.generator.target ??
         DirectoryGeneratorTarget(context.console.out, context.generator.cwd);
 
     write('Creating $generatorName application `$projectName`:');

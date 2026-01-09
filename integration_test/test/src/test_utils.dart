@@ -18,9 +18,7 @@ import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
-const jsonContentType = {
-  'Content-Type': 'application/json; charset=utf-8',
-};
+const jsonContentType = {'Content-Type': 'application/json; charset=utf-8'};
 
 Future<http.Response> get(Object url, {Map<String, String>? headers}) =>
     http.get(url is String ? Uri.parse(url) : url as Uri, headers: headers);
@@ -29,12 +27,11 @@ Future<http.Response> post(
   Object url, {
   Map<String, String>? headers,
   Object? body,
-}) =>
-    http.post(
-      url is String ? Uri.parse(url) : url as Uri,
-      headers: headers,
-      body: body,
-    );
+}) => http.post(
+  url is String ? Uri.parse(url) : url as Uri,
+  headers: headers,
+  body: body,
+);
 
 const defaultPort = 8080;
 
@@ -103,5 +100,7 @@ Future<void> finishServerTest(
   );
 }
 
-final containsTextPlainHeader =
-    containsPair('content-type', 'text/plain; charset=utf-8');
+final containsTextPlainHeader = containsPair(
+  'content-type',
+  'text/plain; charset=utf-8',
+);
