@@ -8,9 +8,7 @@ class HistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.watch<AppModel>();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('History'),
-      ),
+      appBar: AppBar(title: const Text('History')),
       body: ListView.builder(
         itemCount: model.pastGreetings.length,
         itemBuilder: (context, index) {

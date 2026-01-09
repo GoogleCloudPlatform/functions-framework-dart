@@ -42,16 +42,15 @@ CloudEvent _$CloudEventFromJson(Map<String, dynamic> json) => $checkedCreate(
   },
 );
 
-Map<String, dynamic> _$CloudEventToJson(
-  CloudEvent instance,
-) => <String, dynamic>{
-  'id': instance.id,
-  'source': instance.source.toString(),
-  'specversion': instance.specVersion,
-  'type': instance.type,
-  if (instance.dataContentType case final value?) 'datacontenttype': value,
-  if (instance.data case final value?) 'data': value,
-  if (instance.dataSchema?.toString() case final value?) 'dataschema': value,
-  if (instance.subject case final value?) 'subject': value,
-  if (instance.time?.toIso8601String() case final value?) 'time': value,
-};
+Map<String, dynamic> _$CloudEventToJson(CloudEvent instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'source': instance.source.toString(),
+      'specversion': instance.specVersion,
+      'type': instance.type,
+      'datacontenttype': ?instance.dataContentType,
+      'data': ?instance.data,
+      'dataschema': ?instance.dataSchema?.toString(),
+      'subject': ?instance.subject,
+      'time': ?instance.time?.toIso8601String(),
+    };
