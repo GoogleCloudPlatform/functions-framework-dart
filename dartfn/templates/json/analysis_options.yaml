@@ -17,4 +17,4 @@ analyzer:
 # Search source code for details
 linter:
   rules:
-    lowercase_with_underscores: 'no'
+    package_names: false

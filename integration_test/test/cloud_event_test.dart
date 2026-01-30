@@ -89,7 +89,7 @@ void main() {
           'id': '1999507485604232',
           'specversion': '1.0',
           'type': 'google.cloud.pubsub.topic.v1.messagePublished',
-          'datacontenttype': 'application/json; charset=utf-8',
+          'datacontenttype': 'application/json',
           'time': '2021-02-10T18:13:19.698Z',
           'source':
               '//pubsub.googleapis.com/projects/redacted/topics/eventarc-us-central1-events-pubsub-trigger-072',
