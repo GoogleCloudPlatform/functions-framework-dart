@@ -13,3 +13,6 @@ jobs:
   publish:
     if: ${{ github.repository_owner == 'GoogleCloudPlatform' }}
     uses: dart-lang/ecosystem/.github/workflows/publish.yaml@main
+    permissions:
+      pull-requests: write
+      id-token: write
