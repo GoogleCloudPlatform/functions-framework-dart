@@ -176,6 +176,37 @@ void main() {
       await proc.shouldExit(255);
     });
 
+    test('credentials file with malformed JSON', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        final credFile = File(
+          '${tempDir.path}${Platform.pathSeparator}credentials.json',
+        );
+        await credFile.writeAsString('not valid json at all');
+
+        final proc = await _run(
+          projectIdPrint,
+          environment: {
+            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+          },
+        );
+
+        final errorOut = await proc.stderrStream().toList();
+
+        await expectLater(
+          errorOut,
+          containsAll(gcpProjectIdEnvironmentVariables),
+        );
+        await expectLater(proc.stdout, emitsDone);
+
+        await proc.shouldExit(255);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
     // TODO: worth emulating the metadata server?
   });
 
