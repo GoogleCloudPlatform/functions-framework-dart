@@ -207,6 +207,258 @@ void main() {
       }
     });
 
+    test('gcloud config with project_id', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        // Create a mock gcloud script using Dart
+        final mockGcloud = File(
+          '${tempDir.path}${Platform.pathSeparator}gcloud',
+        );
+        await mockGcloud.writeAsString('''
+#!${Platform.resolvedExecutable}
+void main() {
+  print('{"configuration": {"properties": {"core": {"project": "test-project-from-gcloud"}}}}');
+}
+''');
+        await Process.run('chmod', ['+x', mockGcloud.path]);
+
+        final proc = await _run(
+          projectIdPrint,
+          environment: {
+            'PATH': tempDir.path,
+          },
+        );
+
+        await expectLater(proc.stdout, emits('test-project-from-gcloud'));
+        await expectLater(proc.stderr, emitsDone);
+
+        await proc.shouldExit(0);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
+    test('credentials file takes precedence over gcloud config', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        final credFile = File(
+          '${tempDir.path}${Platform.pathSeparator}credentials.json',
+        );
+        await credFile.writeAsString('''
+{
+  "type": "service_account",
+  "project_id": "test-project-from-file"
+}
+''');
+
+        // Create a mock gcloud script using Dart
+        final mockGcloud = File(
+          '${tempDir.path}${Platform.pathSeparator}gcloud',
+        );
+        await mockGcloud.writeAsString('''
+#!${Platform.resolvedExecutable}
+void main() {
+  print('{"configuration": {"properties": {"core": {"project": "test-project-from-gcloud"}}}}');
+}
+''');
+        await Process.run('chmod', ['+x', mockGcloud.path]);
+
+        final proc = await _run(
+          projectIdPrint,
+          environment: {
+            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+            'PATH': tempDir.path,
+          },
+        );
+
+        await expectLater(proc.stdout, emits('test-project-from-file'));
+        await expectLater(proc.stderr, emitsDone);
+
+        await proc.shouldExit(0);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
+    test('gcloud not found', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
+      final proc = await _run(
+        projectIdPrint,
+        environment: {
+          'PATH': '/nonexistent/path',
+        },
+      );
+
+      final errorOut = await proc.stderrStream().toList();
+
+      await expectLater(
+        errorOut,
+        containsAll(gcpProjectIdEnvironmentVariables),
+      );
+      await expectLater(proc.stdout, emitsDone);
+
+      await proc.shouldExit(255);
+    });
+
+    test('gcloud returns non-zero exit code', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        // Create a mock gcloud script that fails
+        final mockGcloud = File(
+          '${tempDir.path}${Platform.pathSeparator}gcloud',
+        );
+        await mockGcloud.writeAsString('''
+#!${Platform.resolvedExecutable}
+import 'dart:io';
+void main() {
+  stderr.writeln('ERROR: gcloud config error');
+  exit(1);
+}
+''');
+        await Process.run('chmod', ['+x', mockGcloud.path]);
+
+        final proc = await _run(
+          projectIdPrint,
+          environment: {
+            'PATH': tempDir.path,
+          },
+        );
+
+        final errorOut = await proc.stderrStream().toList();
+
+        await expectLater(
+          errorOut,
+          containsAll(gcpProjectIdEnvironmentVariables),
+        );
+        await expectLater(proc.stdout, emitsDone);
+
+        await proc.shouldExit(255);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
+    test('gcloud returns malformed JSON', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        // Create a mock gcloud script that returns invalid JSON
+        final mockGcloud = File(
+          '${tempDir.path}${Platform.pathSeparator}gcloud',
+        );
+        await mockGcloud.writeAsString('''
+#!${Platform.resolvedExecutable}
+void main() {
+  print('not valid json');
+}
+''');
+        await Process.run('chmod', ['+x', mockGcloud.path]);
+
+        final proc = await _run(
+          projectIdPrint,
+          environment: {
+            'PATH': tempDir.path,
+          },
+        );
+
+        final errorOut = await proc.stderrStream().toList();
+
+        await expectLater(
+          errorOut,
+          containsAll(gcpProjectIdEnvironmentVariables),
+        );
+        await expectLater(proc.stdout, emitsDone);
+
+        await proc.shouldExit(255);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
+    test('gcloud returns JSON with missing configuration field', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        // Create a mock gcloud script that returns JSON without configuration
+        final mockGcloud = File(
+          '${tempDir.path}${Platform.pathSeparator}gcloud',
+        );
+        await mockGcloud.writeAsString('''
+#!${Platform.resolvedExecutable}
+void main() {
+  print('{"some": "data"}');
+}
+''');
+        await Process.run('chmod', ['+x', mockGcloud.path]);
+
+        final proc = await _run(
+          projectIdPrint,
+          environment: {
+            'PATH': tempDir.path,
+          },
+        );
+
+        final errorOut = await proc.stderrStream().toList();
+
+        await expectLater(
+          errorOut,
+          containsAll(gcpProjectIdEnvironmentVariables),
+        );
+        await expectLater(proc.stdout, emitsDone);
+
+        await proc.shouldExit(255);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
+    test('gcloud returns JSON with missing project field', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        // Create a mock gcloud that returns JSON without project
+        final mockGcloud = File(
+          '${tempDir.path}${Platform.pathSeparator}gcloud',
+        );
+        await mockGcloud.writeAsString('''
+#!${Platform.resolvedExecutable}
+void main() {
+  print('{"configuration": {"properties": {"core": {}}}}');
+}
+''');
+        await Process.run('chmod', ['+x', mockGcloud.path]);
+
+        final proc = await _run(
+          projectIdPrint,
+          environment: {
+            'PATH': tempDir.path,
+          },
+        );
+
+        final errorOut = await proc.stderrStream().toList();
+
+        await expectLater(
+          errorOut,
+          containsAll(gcpProjectIdEnvironmentVariables),
+        );
+        await expectLater(proc.stdout, emitsDone);
+
+        await proc.shouldExit(255);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
     // TODO: worth emulating the metadata server?
   });
 
