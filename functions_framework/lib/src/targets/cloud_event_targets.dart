@@ -63,8 +63,8 @@ class CloudEventWithContextFunctionTarget extends FunctionTarget {
 
 Future<CloudEvent> _eventFromRequest(Request request) =>
     _requiredBinaryHeader.every(request.headers.containsKey)
-        ? _decodeBinary(request)
-        : _decodeStructured(request);
+    ? _decodeBinary(request)
+    : _decodeStructured(request);
 
 Future<CloudEvent> _decodeStructured(Request request) async {
   final type = mediaTypeFromRequest(request, requiredMimeType: jsonContentType);

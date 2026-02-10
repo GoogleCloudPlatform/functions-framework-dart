@@ -37,8 +37,9 @@ const _pubspecOrder = [
   'dev_dependencies',
 ];
 
-final List<RegExp> _pubspecOrderRegexps =
-    _pubspecOrder.map((s) => RegExp('^(# *)?$s:', multiLine: true)).toList();
+final List<RegExp> _pubspecOrderRegexps = _pubspecOrder
+    .map((s) => RegExp('^(# *)?$s:', multiLine: true))
+    .toList();
 
 final String _expectedGitIgnore = _getMetaTemplateFile('.gitignore');
 final String _expectedAnalysisOptions = _getMetaTemplateFile(
@@ -65,8 +66,9 @@ void main() {
   );
 
   test('Validate pkg/stagehand pubspec', () {
-    final pubspecContent =
-        File(path.join(path.current, 'pubspec.yaml')).readAsStringSync();
+    final pubspecContent = File(
+      path.join(path.current, 'pubspec.yaml'),
+    ).readAsStringSync();
     _validatePubspec(pubspecContent);
   });
 
@@ -168,10 +170,9 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
 
 void _validatePubspec(String pubspecContentString) {
   // Note: the regex will match lines even if they are commented out
-  final orders =
-      _pubspecOrderRegexps
-          .map((regexp) => pubspecContentString.indexOf(regexp))
-          .toList();
+  final orders = _pubspecOrderRegexps
+      .map((regexp) => pubspecContentString.indexOf(regexp))
+      .toList();
 
   // On failure, you'll just see numbers – but the `reason` will help understand
   // which order things should go in.

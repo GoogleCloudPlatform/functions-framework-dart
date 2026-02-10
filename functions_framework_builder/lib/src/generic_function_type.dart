@@ -148,16 +148,14 @@ class _GenericFactoryData implements FactoryData {
     String function,
   ) {
     final jsonTypeDisplay = info.jsonType.toStringNonNullable();
-    final typeDisplayName =
-        info.paramType == null
-            ? jsonTypeDisplay
-            : '$functionsLibraryPrefix.'
-                '${info.paramType!.toStringNonNullable()}';
+    final typeDisplayName = info.paramType == null
+        ? jsonTypeDisplay
+        : '$functionsLibraryPrefix.'
+              '${info.paramType!.toStringNonNullable()}';
 
-    final returnBlock =
-        info.paramType == null
-            ? 'return $_jsonParamName;'
-            : '''
+    final returnBlock = info.paramType == null
+        ? 'return $_jsonParamName;'
+        : '''
     try {
       return $typeDisplayName.$fromJsonFactoryName($_jsonParamName);
     } catch (e, stack) {
@@ -170,7 +168,8 @@ class _GenericFactoryData implements FactoryData {
     }
     ''';
 
-    final body = '''
+    final body =
+        '''
   if ($_jsonParamName is $jsonTypeDisplay) {
     $returnBlock
   }
@@ -184,8 +183,8 @@ class _GenericFactoryData implements FactoryData {
     return _GenericFactoryData._(
       isVoid
           ? withContext
-              ? _voidWithContextConstructorName
-              : _voidConstructorName
+                ? _voidWithContextConstructorName
+                : _voidConstructorName
           : withContext
           ? _withContextConstructorName
           : _constructorName,
@@ -197,7 +196,8 @@ class _GenericFactoryData implements FactoryData {
   }
 
   @override
-  String get expression => '''
+  String get expression =>
+      '''
 $_endpointConstructorName($function, ($_jsonParamName) {
   $factoryBody
 },)

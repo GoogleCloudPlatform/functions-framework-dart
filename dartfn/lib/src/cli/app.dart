@@ -51,10 +51,9 @@ class App extends Console {
       ),
     );
 
-    _runner =
-        CommandRunner(_appName, _appDescription)
-          ..addCommand(GenerateCommand(context))
-          ..addCommand(VersionCommand(context));
+    _runner = CommandRunner(_appName, _appDescription)
+      ..addCommand(GenerateCommand(context))
+      ..addCommand(VersionCommand(context));
   }
 
   CommandContext get context => _context;

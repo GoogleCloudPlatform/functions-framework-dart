@@ -43,12 +43,9 @@ RequestLogger get currentLogger =>
 /// [badRequestMiddleware].
 ///
 /// If [projectId] is provided, returns the value from [cloudLoggingMiddleware].
-Middleware createLoggingMiddleware({String? projectId}) =>
-    projectId == null
-        ? _errorWriter
-            .addMiddleware(logRequests())
-            .addMiddleware(_handleBadRequest)
-        : cloudLoggingMiddleware(projectId);
+Middleware createLoggingMiddleware({String? projectId}) => projectId == null
+    ? _errorWriter.addMiddleware(logRequests()).addMiddleware(_handleBadRequest)
+    : cloudLoggingMiddleware(projectId);
 
 /// Adds logic which catches [BadRequestException], logs details to [stderr] and
 /// returns a corresponding [Response].
@@ -146,18 +143,13 @@ Middleware cloudLoggingMiddleware(String projectId) {
                 completer.completeError(error, stackTrace);
               }
 
-              final logContentString =
-                  error is BadRequestException
-                      ? createErrorLogEntry(
-                        'Bad request. ${error.message}',
-                        error.innerStack ?? stackTrace,
-                        LogSeverity.warning,
-                      )
-                      : createErrorLogEntry(
-                        error,
-                        stackTrace,
-                        LogSeverity.error,
-                      );
+              final logContentString = error is BadRequestException
+                  ? createErrorLogEntry(
+                      'Bad request. ${error.message}',
+                      error.innerStack ?? stackTrace,
+                      LogSeverity.warning,
+                    )
+                  : createErrorLogEntry(error, stackTrace, LogSeverity.error);
 
               // Serialize to a JSON string and output.
               parent.print(self, logContentString);
@@ -166,10 +158,9 @@ Middleware cloudLoggingMiddleware(String projectId) {
                 return;
               }
 
-              final response =
-                  error is BadRequestException
-                      ? _responseFromBadRequest(error, stackTrace)
-                      : Response.internalServerError();
+              final response = error is BadRequestException
+                  ? _responseFromBadRequest(error, stackTrace)
+                  : Response.internalServerError();
 
               completer.complete(response);
             },
@@ -249,7 +240,7 @@ String _createLogEntry(
     'message': message,
     'severity': severity,
     // 'logging.googleapis.com/labels': { }
-    if (traceValue != null) 'logging.googleapis.com/trace': traceValue,
+    'logging.googleapis.com/trace': ?traceValue,
     if (stackFrame != null)
       'logging.googleapis.com/sourceLocation': _sourceLocation(stackFrame),
   };

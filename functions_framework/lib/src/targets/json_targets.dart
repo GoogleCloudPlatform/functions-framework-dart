@@ -114,13 +114,9 @@ class _JsonWithContextFunctionTarget<RequestType, ResponseType>
 
     return Response.ok(
       responseJson,
-      headers:
-          context.responseHeaders.isEmpty
-              ? const {contentTypeHeader: jsonContentType}
-              : {
-                contentTypeHeader: jsonContentType,
-                ...context.responseHeaders,
-              },
+      headers: context.responseHeaders.isEmpty
+          ? const {contentTypeHeader: jsonContentType}
+          : {contentTypeHeader: jsonContentType, ...context.responseHeaders},
     );
   }
 }

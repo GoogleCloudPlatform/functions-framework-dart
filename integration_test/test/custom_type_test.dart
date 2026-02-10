@@ -44,7 +44,7 @@ void main() {
     await finishServerTest(
       testProcess,
       requestOutput: emitsInOrder([
-        if (extraPrintMatcher != null) extraPrintMatcher,
+        ?extraPrintMatcher,
         endsWith('POST    [400] /'),
       ]),
     );

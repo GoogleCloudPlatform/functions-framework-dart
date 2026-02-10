@@ -69,11 +69,10 @@ extension RequestExt on Request {
 
   Future<Object?> decodeJson() async {
     try {
-      final value =
-          await (encoding ?? utf8).decoder
-              .bind(read())
-              .transform(json.decoder)
-              .single;
+      final value = await (encoding ?? utf8).decoder
+          .bind(read())
+          .transform(json.decoder)
+          .single;
       return value;
     } on FormatException catch (e, stackTrace) {
       // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes

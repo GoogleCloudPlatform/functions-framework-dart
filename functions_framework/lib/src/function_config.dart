@@ -59,27 +59,26 @@ class FunctionConfig {
     List<String> args, {
     FunctionConfig? defaults,
   }) {
-    final parser =
-        ArgParser(usageLineLength: 80)
-          ..addOption(
-            _portOpt,
-            help: '''
+    final parser = ArgParser(usageLineLength: 80)
+      ..addOption(
+        _portOpt,
+        help: '''
 The port on which the Functions Framework listens for requests.
 Overrides the PORT environment variable.''',
-          )
-          ..addOption(
-            _targetOpt,
-            help: '''
+      )
+      ..addOption(
+        _targetOpt,
+        help: '''
 The name of the exported function to be invoked in response to requests.
 Overrides the $environmentKeyFunctionTarget environment variable.''',
-          )
-          ..addOption(
-            _functionTypeOpt,
-            allowed: FunctionType.values.map(_enumValue),
-            help: '''
+      )
+      ..addOption(
+        _functionTypeOpt,
+        allowed: FunctionType.values.map(_enumValue),
+        help: '''
 The signature used when writing your function. Controls unmarshalling rules and determines which arguments are used to invoke your function.
 Overrides the FUNCTION_SIGNATURE_TYPE environment variable.''',
-          );
+      );
 
     ArgResults options;
     try {
@@ -111,22 +110,19 @@ Overrides the FUNCTION_SIGNATURE_TYPE environment variable.''',
           options[_targetOpt] as String? ??
           defaults?.target ??
           defaultFunctionTarget,
-      functionType:
-          functionTypeOptionValue == null
-              ? defaults?.functionType ?? defaultFunctionType
-              : _parseFunctionType(functionTypeOptionValue),
+      functionType: functionTypeOptionValue == null
+          ? defaults?.functionType ?? defaultFunctionType
+          : _parseFunctionType(functionTypeOptionValue),
     );
   }
 }
 
 FunctionType _parseFunctionType(String type) => FunctionType.values.singleWhere(
   (element) => type == _enumValue(element),
-  orElse:
-      () =>
-          throw BadConfigurationException(
-            '''
+  orElse: () => throw BadConfigurationException(
+    '''
 FUNCTION_SIGNATURE_TYPE environment variable "$type" is not a valid option (must be "http" or "cloudevent")''',
-          ),
+  ),
 );
 
 String _enumValue(FunctionType enumEntry) {

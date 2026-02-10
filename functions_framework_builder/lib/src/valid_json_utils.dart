@@ -57,10 +57,9 @@ JsonParamInfo? validJsonParamType(DartType type) {
       (element) => element.name == fromJsonFactoryName,
     );
     if (fromJsonCtor != null) {
-      final requiredParams =
-          fromJsonCtor.parameters
-              .where((element) => element.isRequiredPositional)
-              .toList();
+      final requiredParams = fromJsonCtor.parameters
+          .where((element) => element.isRequiredPositional)
+          .toList();
       if (requiredParams.length == 1) {
         final paramType = requiredParams.single.type;
         if (_validJsonType(paramType, false)) {
