@@ -6,7 +6,7 @@ repository: https://github.com/GoogleCloudPlatform/functions-framework-dart/tree
 
 resolution: workspace
 environment:
-  sdk: ^3.6.0
+  sdk: ^3.7.0
 
 dependencies:
   collection: ^1.17.0

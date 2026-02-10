@@ -1,4 +1,4 @@
-# Created with package:mono_repo v6.6.2
+# Created with package:mono_repo v6.6.3
 name: Dart Lint CI
 on:
   push:
@@ -16,26 +16,26 @@ permissions: read-all
 
 jobs:
   job_001:
-    name: "analyze_format; Dart 3.6.0; PKGS: dartfn, dartfn/templates/cloudevent, dartfn/templates/helloworld, dartfn/templates/json, examples/fullstack/backend, examples/fullstack/frontend-cli, examples/hello, examples/json, examples/protobuf_firestore, examples/raw_cloudevent, functions_framework, functions_framework_builder, google_cloud; `dart analyze`"
+    name: "analyze_format; Dart 3.7.0; PKGS: dartfn, dartfn/templates/cloudevent, dartfn/templates/helloworld, dartfn/templates/json, examples/fullstack/backend, examples/fullstack/frontend-cli, examples/hello, examples/json, examples/protobuf_firestore, examples/raw_cloudevent, functions_framework, functions_framework_builder, google_cloud; `dart analyze`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.6.0;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/fullstack/frontend-cli-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework-functions_framework_builder-google_cloud;commands:analyze_1"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.7.0;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/fullstack/frontend-cli-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework-functions_framework_builder-google_cloud;commands:analyze_1"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:3.6.0;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/fullstack/frontend-cli-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework-functions_framework_builder-google_cloud
-            os:ubuntu-latest;pub-cache-hosted;sdk:3.6.0
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.7.0;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/fullstack/frontend-cli-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework-functions_framework_builder-google_cloud
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.7.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Dart SDK
         uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
         with:
-          sdk: "3.6.0"
+          sdk: "3.7.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -158,7 +158,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/fullstack/frontend-cli-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework-functions_framework_builder-google_cloud-integration_test;commands:format-analyze_0"
@@ -173,7 +173,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - id: dartfn_pub_upgrade
         name: dartfn; dart pub upgrade
         run: dart pub upgrade
@@ -361,7 +361,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:integration_test;commands:analyze_1"
@@ -376,7 +376,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - id: integration_test_pub_upgrade
         name: integration_test; dart pub upgrade
         run: dart pub upgrade
@@ -391,7 +391,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;sdk:stable;packages:examples/fullstack/frontend;commands:format-analyze_2"
@@ -401,12 +401,12 @@ jobs:
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
       - name: Setup Flutter SDK
-        uses: subosito/flutter-action@fd55f4c5af5b953cc57a2be44cb082c8f6635e8e
+        uses: subosito/flutter-action@f2c4f6686ca8e8d6e6d0f28410eeef506ed66aff
         with:
           channel: stable
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - id: examples_fullstack_frontend_pub_upgrade
         name: examples/fullstack/frontend; flutter pub upgrade
         run: flutter pub upgrade

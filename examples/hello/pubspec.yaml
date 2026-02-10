@@ -6,7 +6,7 @@ publish_to: none
 
 resolution: workspace
 environment:
-  sdk: ^3.6.0
+  sdk: ^3.7.0
 
 dependencies:
   functions_framework: ^0.4.0
