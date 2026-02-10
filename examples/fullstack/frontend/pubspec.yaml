@@ -17,7 +17,7 @@ dev_dependencies:
   dart_flutter_team_lints: ^3.0.0
   flutter_test:
     sdk: flutter
-  json_serializable: ^6.6.0
+  json_serializable: ^6.10.0
 
 flutter:
   assets:
