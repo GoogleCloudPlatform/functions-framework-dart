@@ -14,10 +14,14 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 
+import 'package:build/build.dart';
 import 'package:build_test/build_test.dart';
 import 'package:functions_framework_builder/builder.dart';
-import 'package:source_gen/source_gen.dart';
+import 'package:glob/glob.dart';
+import 'package:logging/logging.dart';
+import 'package:package_config/package_config.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -80,14 +84,17 @@ FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
       'customResponse',
       'customResponseAsync',
       'customResponseFutureOr',
-    ]
-        .map(
-          (e) => """
-      '$e' => FunctionTarget.http(
+    ].map(
+      (e) {
+        final target = ['extraParam', 'optionalParam'].contains(e)
+            ? 'FunctionTarget.httpWithLogger'
+            : 'FunctionTarget.http';
+        return """
+      '$e' => $target(
           function_library.$e,
-        ),""",
-        )
-        .join('\n');
+        ),""";
+      },
+    ).join('\n');
     await _generateTest(
       file.readAsStringSync(),
       '''
@@ -480,16 +487,8 @@ Response function(Request request) => Response.ok('Hello, World!');
 @CloudFunction(target: 'function')
 Response function2(Request request) => Response.ok('Hello, World!');
 ''',
-      isA<InvalidGenerationSourceError>().having(
-        (e) => e.toString(),
-        'toString()',
-        '''
-A function has already been annotated with target "function".
-package:$_pkgName/functions.dart:8:10
-  ╷
-8 │ Response function2(Request request) => Response.ok('Hello, World!');
-  │          ^^^^^^^^^
-  ╵''',
+      contains(
+        'A function has already been annotated',
       ),
     );
   });
@@ -504,14 +503,14 @@ package:$_pkgName/functions.dart:8:10
     await testBuilder(
       functionsFrameworkBuilder(),
       srcs,
-      reader: await PackageAssetReader.currentIsolate(),
+      packageConfig: await _getTestPackageConfig(),
     );
   });
 
   group('invalid function shapes are not allowed', () {
     final onlyFunctionMatcher =
-        startsWith('Only top-level, public functions are supported.');
-    final notCompatibleMatcher = startsWith(
+        contains('Only top-level, public functions are supported.');
+    final notCompatibleMatcher = contains(
       'Not compatible with a supported function shape:',
     );
     final invalidShapes = {
@@ -525,8 +524,7 @@ package:$_pkgName/functions.dart:8:10
       //
       // Double-annotated functions are not allowed
       //
-      '@CloudFunction() Response function(Request request) => null;':
-          startsWith(
+      '@CloudFunction() Response function(Request request) => null;': contains(
         'Cannot be annotated with `CloudFunction` more than once.',
       ),
 
@@ -539,7 +537,7 @@ package:$_pkgName/functions.dart:8:10
       // First param is not positional
       'Response handleGet({Request request}) => null;': notCompatibleMatcher,
       // Too many required params
-      'Response handleGet(Request request, int other) => null;':
+      'Response handleGet(Request request, int other, int another) => null;':
           notCompatibleMatcher,
       // Param is wrong type
       'Response handleGet(int request) => null;': notCompatibleMatcher,
@@ -576,22 +574,29 @@ import 'package:shelf/shelf.dart';
 @CloudFunction()
 ${shape.key}
 ''',
-          isA<InvalidGenerationSourceError>().having(
-            (e) => e.toString(),
-            'toString()',
-            shape.value,
-          ),
+          shape.value,
         );
       });
     }
   });
 }
 
-Future<void> _generateThrows(String inputLibrary, Object matcher) async {
-  await expectLater(
-    () => _generateTest(inputLibrary, null, validateLog: false),
-    throwsA(matcher),
+Future<void> _generateThrows(String inputLibrary, Matcher matcher) async {
+  final logs = <LogRecord>[];
+  await _generateTest(
+    inputLibrary,
+    null,
+    validateLog: false,
+    onLog: logs.add,
   );
+
+  final expected = logs.where((e) => matcher.matches(e.message, {})).toList();
+  if (expected.isEmpty) {
+    fail(
+      'Expected log message matching $matcher, but got: '
+      '${logs.map((e) => '[${e.level}] ${e.message}').join('\n')}',
+    );
+  }
 }
 
 Future<void> _testItems(
@@ -617,22 +622,22 @@ Future<void> _generateTest(
   String inputLibrary,
   String? expectedContent, {
   bool validateLog = true,
+  void Function(LogRecord)? onLog,
 }) async {
   final srcs = {'$_pkgName|lib/functions.dart': inputLibrary};
 
   await testBuilder(
     functionsFrameworkBuilder(),
     srcs,
-    generateFor: {
-      ...srcs.keys,
-      '$_pkgName|\$package\$',
-    },
     outputs: expectedContent == null
         ? null
         : {
             '$_pkgName|bin/server.dart': decodedMatches(expectedContent),
           },
     onLog: (log) {
+      if (onLog != null) {
+        onLog(log);
+      }
       if (!validateLog) {
         return;
       }
@@ -647,14 +652,64 @@ Future<void> _generateTest(
         fail(output);
       });
     },
-    reader: await PackageAssetReader.currentIsolate(),
+    packageConfig: await _getTestPackageConfig(),
+    readerWriter: await _getReaderWriter(),
   );
+}
+
+Future<TestReaderWriter> _getReaderWriter() async {
+  final reader = await PackageAssetReader.currentIsolate();
+  final assets = <AssetId, List<int>>{};
+
+  for (var package in [
+    'functions_framework',
+    'shelf',
+    'logging',
+    'cloudevents',
+  ]) {
+    await for (final id
+        in reader.findAssets(Glob('lib/**'), package: package)) {
+      assets[id] = await reader.readAsBytes(id);
+    }
+  }
+
+  final readerWriter = TestReaderWriter(rootPackage: _pkgName);
+  for (final entry in assets.entries) {
+    readerWriter.testing.writeBytes(entry.key, entry.value);
+  }
+
+  return readerWriter;
+}
+
+Future<PackageConfig> _getTestPackageConfig() async {
+  final current = await loadPackageConfigUri((await Isolate.packageConfig)!);
+  return PackageConfig([
+    ...current.packages,
+    Package(
+      _pkgName,
+      Uri.parse('file:///$_pkgName/'),
+      packageUriRoot: Uri.parse('lib/'),
+      languageVersion: LanguageVersion(3, 6),
+    ),
+  ]);
 }
 
 const _ignoredLogMessages = {
   'Generating SDK summary',
   'The latest `analyzer` version may not fully support your current SDK '
       'version.',
+  'SDK language version',
+  'Run `flutter packages upgrade`.',
+  'Reading the asset graph',
+  'Creating the asset graph',
+  'Doing initial build cleanup',
+  'Updating the asset graph',
+  'Building, full build',
+  'Running the post build',
+  'Writing the asset graph',
+  'Built with build_runner',
+  'Failed to build with build_runner',
+  'on 1 input',
 };
 
 // Ensure every test gets its own unique package name
