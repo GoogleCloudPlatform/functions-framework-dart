@@ -19,31 +19,55 @@ import 'package:http/http.dart' as http;
 
 import 'bad_configuration_exception.dart';
 
+/// Cached project ID to avoid redundant discovery operations.
+String? _cachedProjectId;
+
 /// A convenience wrapper that first tries [projectIdFromEnvironment],
 /// then [projectIdFromCredentialsFile], then [projectIdFromGcloudConfig],
 /// and finally [projectIdFromMetadataServer]
 ///
+/// The result is cached for the lifetime of the Dart process. Subsequent calls
+/// return the cached value without performing discovery again.
+///
 /// Like [projectIdFromMetadataServer], if no value is found, a
 /// [BadConfigurationException] is thrown.
 Future<String> computeProjectId() async {
+  // Return cached value if available
+  if (_cachedProjectId != null) {
+    return _cachedProjectId!;
+  }
+
   final localValue = projectIdFromEnvironment();
   if (localValue != null) {
+    _cachedProjectId = localValue;
     return localValue;
   }
 
   final credentialsValue = projectIdFromCredentialsFile();
   if (credentialsValue != null) {
+    _cachedProjectId = credentialsValue;
     return credentialsValue;
   }
 
   final gcloudValue = await projectIdFromGcloudConfig();
   if (gcloudValue != null) {
+    _cachedProjectId = gcloudValue;
     return gcloudValue;
   }
 
   final result = await projectIdFromMetadataServer();
+  _cachedProjectId = result;
 
   return result;
+}
+
+/// Clears the cached project ID.
+///
+/// This is primarily useful for testing scenarios where the project ID
+/// might change between tests, or when you need to force re-discovery
+/// of the project ID.
+void clearProjectIdCache() {
+  _cachedProjectId = null;
 }
 
 /// Returns the

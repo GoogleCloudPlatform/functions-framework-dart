@@ -22,9 +22,13 @@ void main() {
   group('currentProjectId', () {
     const projectIdPrint = 'test/src/project_id_print.dart';
 
+    tearDown(clearProjectIdCache);
+
     test(
       'not environment',
-      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      onPlatform: {
+        'windows': const Skip('Cannot validate tests on windows.'),
+      },
       () async {
         final proc = await _run(projectIdPrint);
 
@@ -464,6 +468,41 @@ void main() {
         }
       },
     );
+
+    test('computeProjectId caches and returns same value', () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        final credFile = File(
+          '${tempDir.path}${Platform.pathSeparator}credentials.json',
+        );
+        await credFile.writeAsString('''
+{
+  "project_id": "original-cached-project"
+}
+''');
+
+        // First call - should discover and cache
+        final proc1 = await _run(
+          'test/src/project_id_cache_print.dart',
+          environment: {
+            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+          },
+        );
+
+        await expectLater(
+          proc1.stdout,
+          emitsInOrder([
+            'First call: original-cached-project',
+            'Second call: original-cached-project',
+            'CACHE_WORKS',
+          ]),
+        );
+        await expectLater(proc1.stderr, emitsDone);
+        await proc1.shouldExit(0);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
 
     // TODO: worth emulating the metadata server?
   });
