@@ -1,5 +1,5 @@
-// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 part of 'json.dart';
 
@@ -241,9 +241,9 @@ cGFnZTogaHR0cHM6Ly93d3cuZXhhbXBsZS5jb20KcHVibGlzaF90bzogbm9uZQoKZW52aXJvbm1l
 bnQ6CiAgc2RrOiBeMy45LjAKCmRlcGVuZGVuY2llczoKICBmdW5jdGlvbnNfZnJhbWV3b3JrOiBe
 MC40LjAKICBqc29uX2Fubm90YXRpb246IF40LjkuMAogIHNoZWxmOiBeMS4wLjAKCmRldl9kZXBl
 bmRlbmNpZXM6CiAgYnVpbGRfcnVubmVyOiBeMi4yLjEKICBmdW5jdGlvbnNfZnJhbWV3b3JrX2J1
-aWxkZXI6IF4wLjQuNwogIGh0dHA6IF4xLjAuMAogIGpzb25fc2VyaWFsaXphYmxlOiBeNi42LjAK
-ICBkYXJ0X2ZsdXR0ZXJfdGVhbV9saW50czogXjMuMC4wCiAgdGVzdDogXjEuMjEuNgogIHRlc3Rf
-cHJvY2VzczogXjIuMC4wCg==''',
+aWxkZXI6IF4wLjQuNwogIGh0dHA6IF4xLjAuMAogIGpzb25fc2VyaWFsaXphYmxlOiBeNi4xMC4w
+CiAgZGFydF9mbHV0dGVyX3RlYW1fbGludHM6IF4zLjAuMAogIHRlc3Q6IF4xLjIxLjYKICB0ZXN0
+X3Byb2Nlc3M6IF4yLjAuMAo=''',
   'test/function_test.dart',
   'text',
   '''
