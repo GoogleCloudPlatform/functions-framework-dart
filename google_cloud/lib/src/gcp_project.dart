@@ -12,14 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
 import 'bad_configuration_exception.dart';
 
-/// A convenience wrapper that first tries [projectIdFromEnvironment]
-/// then (if the value is `null`) tries [projectIdFromMetadataServer]
+/// A convenience wrapper that first tries [projectIdFromEnvironment],
+/// then [projectIdFromCredentialsFile], and finally
+/// [projectIdFromMetadataServer]
 ///
 /// Like [projectIdFromMetadataServer], if no value is found, a
 /// [BadConfigurationException] is thrown.
@@ -28,6 +30,12 @@ Future<String> computeProjectId() async {
   if (localValue != null) {
     return localValue;
   }
+
+  final credentialsValue = projectIdFromCredentialsFile();
+  if (credentialsValue != null) {
+    return credentialsValue;
+  }
+
   final result = await projectIdFromMetadataServer();
 
   return result;
@@ -48,6 +56,32 @@ String? projectIdFromEnvironment() {
   }
 
   return null;
+}
+
+/// Returns the
+/// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
+/// for the current Google Cloud Project by reading the `project_id` field
+/// from the credentials JSON file specified by the
+/// `GOOGLE_APPLICATION_CREDENTIALS` environment variable.
+///
+/// This is useful for local development when using a service account JSON file
+/// for authentication, as it allows the project ID to be automatically
+/// discovered from the credentials file without requiring an additional
+/// environment variable.
+///
+/// If the environment variable is not set, the file doesn't exist, or the file
+/// is invalid JSON, `null` is returned.
+String? projectIdFromCredentialsFile() {
+  final path = Platform.environment['GOOGLE_APPLICATION_CREDENTIALS'];
+  if (path == null) return null;
+
+  try {
+    final json = jsonDecode(File(path).readAsStringSync()) as Map;
+    return json['project_id'] as String?;
+  } catch (e) {
+    // If file doesn't exist or is invalid, return null
+    return null;
+  }
 }
 
 /// Returns a [Future] that completes with the
@@ -82,6 +116,9 @@ Could not connect to $host.
 If not running on Google Cloud, one of these environment variables must be set
 to the target Google Project ID:
 ${gcpProjectIdEnvironmentVariables.join('\n')}
+
+Alternatively, set GOOGLE_APPLICATION_CREDENTIALS to point to a service account
+JSON file that contains a "project_id" field.
 ''',
       details: e.toString(),
     );

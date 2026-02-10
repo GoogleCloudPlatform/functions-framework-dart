@@ -52,6 +52,161 @@ void main() {
       await proc.shouldExit(0);
     });
 
+    test('credentials file with project_id', () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        final credFile = File(
+          '${tempDir.path}${Platform.pathSeparator}credentials.json',
+        );
+        await credFile.writeAsString('''
+{
+  "type": "service_account",
+  "project_id": "test-project-from-file",
+  "private_key_id": "key123",
+  "private_key": "-----BEGIN PRIVATE KEY-----\\ntest\\n-----END PRIVATE KEY-----\\n",
+  "client_email": "test@test-project.iam.gserviceaccount.com",
+  "client_id": "123456789",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token"
+}
+''');
+
+        final proc = await _run(
+          projectIdPrint,
+          environment: {
+            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+          },
+        );
+
+        await expectLater(proc.stdout, emits('test-project-from-file'));
+        await expectLater(proc.stderr, emitsDone);
+
+        await proc.shouldExit(0);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
+    test('environment variable takes precedence over credentials file',
+        () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        final credFile = File(
+          '${tempDir.path}${Platform.pathSeparator}credentials.json',
+        );
+        await credFile.writeAsString('''
+{
+  "type": "service_account",
+  "project_id": "test-project-from-file",
+  "private_key_id": "key123"
+}
+''');
+
+        final proc = await _run(
+          projectIdPrint,
+          environment: {
+            gcpProjectIdEnvironmentVariables.first: 'test-project-from-env',
+            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+          },
+        );
+
+        await expectLater(proc.stdout, emits('test-project-from-env'));
+        await expectLater(proc.stderr, emitsDone);
+
+        await proc.shouldExit(0);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
+    test('credentials file without project_id', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        final credFile = File(
+          '${tempDir.path}${Platform.pathSeparator}credentials.json',
+        );
+        await credFile.writeAsString('''
+{
+  "type": "service_account",
+  "private_key_id": "key123"
+}
+''');
+
+        final proc = await _run(
+          projectIdPrint,
+          environment: {
+            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+          },
+        );
+
+        final errorOut = await proc.stderrStream().toList();
+
+        await expectLater(
+          errorOut,
+          containsAll(gcpProjectIdEnvironmentVariables),
+        );
+        await expectLater(proc.stdout, emitsDone);
+
+        await proc.shouldExit(255);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
+    test('invalid credentials file path', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
+      final proc = await _run(
+        projectIdPrint,
+        environment: {
+          'GOOGLE_APPLICATION_CREDENTIALS': '/nonexistent/path/to/file.json',
+        },
+      );
+
+      final errorOut = await proc.stderrStream().toList();
+
+      await expectLater(
+        errorOut,
+        containsAll(gcpProjectIdEnvironmentVariables),
+      );
+      await expectLater(proc.stdout, emitsDone);
+
+      await proc.shouldExit(255);
+    });
+
+    test('credentials file with malformed JSON', onPlatform: {
+      'windows': const Skip('Cannot validate tests on windows.'),
+    }, () async {
+      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+      try {
+        final credFile = File(
+          '${tempDir.path}${Platform.pathSeparator}credentials.json',
+        );
+        await credFile.writeAsString('not valid json at all');
+
+        final proc = await _run(
+          projectIdPrint,
+          environment: {
+            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+          },
+        );
+
+        final errorOut = await proc.stderrStream().toList();
+
+        await expectLater(
+          errorOut,
+          containsAll(gcpProjectIdEnvironmentVariables),
+        );
+        await expectLater(proc.stdout, emitsDone);
+
+        await proc.shouldExit(255);
+      } finally {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
     // TODO: worth emulating the metadata server?
   });
 
