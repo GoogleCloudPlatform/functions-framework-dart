@@ -90,14 +90,16 @@ extension RequestExt on Request {
     final type = mediaTypeFromRequest(this);
     final supportedType = SupportedContentTypes.values.singleWhere(
       (element) => element.value == type.mimeType,
-      orElse:
-          () =>
-              throw BadRequestException(
-                400,
-                'Unsupported encoding "$type". '
-                'Supported types: '
-                '${SupportedContentTypes.values.map((e) => '"${e.value}"').join(', ')}',
-              ),
+      orElse: () {
+        final supportedTypes = SupportedContentTypes.values
+            .map((e) => '"${e.value}"')
+            .join(', ');
+        throw BadRequestException(
+          400,
+          'Unsupported encoding "$type". '
+          'Supported types: $supportedTypes',
+        );
+      },
     );
 
     return (

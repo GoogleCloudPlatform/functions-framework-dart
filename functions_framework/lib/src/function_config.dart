@@ -63,25 +63,22 @@ class FunctionConfig {
         ArgParser(usageLineLength: 80)
           ..addOption(
             _portOpt,
-            help:
-                'The port on which the Functions Framework listens for requests.\n'
-                'Overrides the PORT environment variable.',
+            help: '''
+The port on which the Functions Framework listens for requests.
+Overrides the PORT environment variable.''',
           )
           ..addOption(
             _targetOpt,
-            help:
-                'The name of the exported function to be invoked in response to '
-                'requests.\n'
-                'Overrides the $environmentKeyFunctionTarget environment variable.',
+            help: '''
+The name of the exported function to be invoked in response to requests.
+Overrides the $environmentKeyFunctionTarget environment variable.''',
           )
           ..addOption(
             _functionTypeOpt,
             allowed: FunctionType.values.map(_enumValue),
-            help:
-                'The signature used when writing your function. '
-                'Controls unmarshalling rules and determines which arguments are '
-                'used to invoke your function.\n'
-                'Overrides the FUNCTION_SIGNATURE_TYPE environment variable.',
+            help: '''
+The signature used when writing your function. Controls unmarshalling rules and determines which arguments are used to invoke your function.
+Overrides the FUNCTION_SIGNATURE_TYPE environment variable.''',
           );
 
     ArgResults options;
@@ -127,8 +124,8 @@ FunctionType _parseFunctionType(String type) => FunctionType.values.singleWhere(
   orElse:
       () =>
           throw BadConfigurationException(
-            'FUNCTION_SIGNATURE_TYPE environment variable "$type" is not a valid '
-            'option (must be "http" or "cloudevent")',
+            '''
+FUNCTION_SIGNATURE_TYPE environment variable "$type" is not a valid option (must be "http" or "cloudevent")''',
           ),
 );
 
