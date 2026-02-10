@@ -20,8 +20,8 @@ import 'package:http/http.dart' as http;
 import 'bad_configuration_exception.dart';
 
 /// A convenience wrapper that first tries [projectIdFromEnvironment],
-/// then [projectIdFromCredentialsFile], and finally
-/// [projectIdFromMetadataServer]
+/// then [projectIdFromCredentialsFile], then [projectIdFromGcloudConfig],
+/// and finally [projectIdFromMetadataServer]
 ///
 /// Like [projectIdFromMetadataServer], if no value is found, a
 /// [BadConfigurationException] is thrown.
@@ -34,6 +34,11 @@ Future<String> computeProjectId() async {
   final credentialsValue = projectIdFromCredentialsFile();
   if (credentialsValue != null) {
     return credentialsValue;
+  }
+
+  final gcloudValue = await projectIdFromGcloudConfig();
+  if (gcloudValue != null) {
+    return gcloudValue;
   }
 
   final result = await projectIdFromMetadataServer();
@@ -76,10 +81,55 @@ String? projectIdFromCredentialsFile() {
   if (path == null) return null;
 
   try {
-    final json = jsonDecode(File(path).readAsStringSync()) as Map;
+    final json =
+        jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
     return json['project_id'] as String?;
   } catch (e) {
     // If file doesn't exist or is invalid, return null
+    return null;
+  }
+}
+
+/// Returns a [Future] that completes with the
+/// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
+/// for the current Google Cloud Project by querying the gcloud CLI
+/// configuration.
+///
+/// This is useful for local development when developers have authenticated
+/// using `gcloud auth application-default login` and set their project using
+/// `gcloud config set project PROJECT_ID`. The project ID is automatically
+/// discovered from the gcloud CLI without requiring additional environment
+/// variables.
+///
+/// If gcloud is not installed, not in PATH, or fails to execute, `null` is
+/// returned.
+Future<String?> projectIdFromGcloudConfig() async {
+  try {
+    final result = await Process.run('gcloud', [
+      'config',
+      'config-helper',
+      '--format',
+      'json',
+    ]);
+
+    if (result.exitCode != 0) return null;
+
+    final stdout = result.stdout;
+    if (stdout is! String || stdout.isEmpty) return null;
+
+    final json = jsonDecode(stdout) as Map<String, dynamic>;
+    final configuration = json['configuration'] as Map<String, dynamic>?;
+    if (configuration == null) return null;
+
+    final properties = configuration['properties'] as Map<String, dynamic>?;
+    if (properties == null) return null;
+
+    final core = properties['core'] as Map<String, dynamic>?;
+    if (core == null) return null;
+
+    return core['project'] as String?;
+  } catch (e) {
+    // If gcloud is not installed or fails, return null
     return null;
   }
 }
@@ -117,8 +167,10 @@ If not running on Google Cloud, one of these environment variables must be set
 to the target Google Project ID:
 ${gcpProjectIdEnvironmentVariables.join('\n')}
 
-Alternatively, set GOOGLE_APPLICATION_CREDENTIALS to point to a service account
-JSON file that contains a "project_id" field.
+Alternatively:
+- Set GOOGLE_APPLICATION_CREDENTIALS to point to a service account JSON file
+  that contains a "project_id" field
+- Configure gcloud CLI with: gcloud config set project PROJECT_ID
 ''',
       details: e.toString(),
     );
