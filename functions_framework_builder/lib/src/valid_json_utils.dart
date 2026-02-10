@@ -57,9 +57,10 @@ JsonParamInfo? validJsonParamType(DartType type) {
       (element) => element.name == fromJsonFactoryName,
     );
     if (fromJsonCtor != null) {
-      final requiredParams = fromJsonCtor.parameters
-          .where((element) => element.isRequiredPositional)
-          .toList();
+      final requiredParams =
+          fromJsonCtor.parameters
+              .where((element) => element.isRequiredPositional)
+              .toList();
       if (requiredParams.length == 1) {
         final paramType = requiredParams.single.type;
         if (_validJsonType(paramType, false)) {
@@ -95,8 +96,10 @@ JsonReturnKind _validJsonReturnTypeCore(DartType type) {
 
   // Look for a `toJson` function that returns a JSON-able type
   if (type is InterfaceType) {
-    final toJsonMethod = type.element.augmented
-        .lookUpMethod(name: 'toJson', library: type.element.library);
+    final toJsonMethod = type.element.augmented.lookUpMethod(
+      name: 'toJson',
+      library: type.element.library,
+    );
     if (toJsonMethod != null &&
         toJsonMethod.parameters.every((element) => element.isOptional)) {
       type = toJsonMethod.returnType;

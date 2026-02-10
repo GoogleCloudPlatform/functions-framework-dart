@@ -34,8 +34,8 @@ class SupportedFunctionType {
     this.typedefName,
     this._type, {
     String? constructor,
-  })  : _constructor = constructor,
-        typeDescription = _type.toStringNonNullable();
+  }) : _constructor = constructor,
+       typeDescription = _type.toStringNonNullable();
 
   static Future<SupportedFunctionType> create(
     Resolver resolver,

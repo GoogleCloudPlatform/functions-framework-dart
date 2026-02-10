@@ -65,10 +65,7 @@ Future<void> _serve(
 ) async {
   final configFromEnvironment = FunctionConfig.fromEnv();
 
-  final config = FunctionConfig.fromArgs(
-    args,
-    defaults: configFromEnvironment,
-  );
+  final config = FunctionConfig.fromArgs(args, defaults: configFromEnvironment);
 
   final functionTarget = nameToFunctionTarget(config.target);
   if (functionTarget == null) {

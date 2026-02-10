@@ -22,16 +22,15 @@ import 'utils.dart';
 Future<Response> conformanceHttp(Request request) async {
   final content = await request.readAsString();
 
-  File('function_output.json').writeAsStringSync(
-    content,
-  );
+  File('function_output.json').writeAsStringSync(content);
 
-  final buffer = StringBuffer()
-    ..writeln('Hello, conformance test!')
-    ..writeln('HEADERS')
-    ..writeln(encodeJsonPretty(request.headers))
-    ..writeln('BODY')
-    ..writeln(encodeJsonPretty(jsonDecode(content)));
+  final buffer =
+      StringBuffer()
+        ..writeln('Hello, conformance test!')
+        ..writeln('HEADERS')
+        ..writeln(encodeJsonPretty(request.headers))
+        ..writeln('BODY')
+        ..writeln(encodeJsonPretty(jsonDecode(content)));
 
   final output = buffer.toString();
   print(output);
@@ -41,14 +40,13 @@ Future<Response> conformanceHttp(Request request) async {
 @CloudFunction()
 void conformanceCloudEvent(CloudEvent event) {
   final eventEncoded = encodeJsonPretty(event);
-  File('function_output.json').writeAsStringSync(
-    eventEncoded,
-  );
+  File('function_output.json').writeAsStringSync(eventEncoded);
 
-  final buffer = StringBuffer()
-    ..writeln('Hello, conformance test!')
-    ..writeln('EVENT')
-    ..writeln(eventEncoded);
+  final buffer =
+      StringBuffer()
+        ..writeln('Hello, conformance test!')
+        ..writeln('EVENT')
+        ..writeln(eventEncoded);
 
   print(buffer.toString());
 }

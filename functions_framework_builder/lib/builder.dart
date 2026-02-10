@@ -41,8 +41,8 @@ class _FunctionsFrameworkBuilder implements Builder {
 
   @override
   Map<String, List<String>> get buildExtensions => const {
-        r'lib/functions.dart': ['bin/server.dart'],
-      };
+    r'lib/functions.dart': ['bin/server.dart'],
+  };
 
   @override
   Future<void> build(BuildStep buildStep) async {
@@ -130,10 +130,7 @@ ${cases.join('\n')}
     }
 
     await buildStep.writeAsString(
-      AssetId(
-        buildStep.inputId.package,
-        path.join('bin', 'server.dart'),
-      ),
+      AssetId(buildStep.inputId.package, path.join('bin', 'server.dart')),
       output,
     );
   }

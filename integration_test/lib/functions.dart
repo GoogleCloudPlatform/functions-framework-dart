@@ -73,10 +73,7 @@ Future<Response> function(Request request) async {
         'environment': Platform.environment,
       };
 
-      return Response.ok(
-        encodeJsonPretty(output),
-        headers: _jsonHeaders,
-      );
+      return Response.ok(encodeJsonPretty(output), headers: _jsonHeaders);
     }
 
     if (urlPath.startsWith('exception')) {

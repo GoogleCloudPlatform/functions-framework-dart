@@ -22,21 +22,23 @@ void main() {
   group('currentProjectId', () {
     const projectIdPrint = 'test/src/project_id_print.dart';
 
-    test('not environment', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final proc = await _run(projectIdPrint);
+    test(
+      'not environment',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final proc = await _run(projectIdPrint);
 
-      final errorOut = await proc.stderrStream().toList();
+        final errorOut = await proc.stderrStream().toList();
 
-      await expectLater(
-        errorOut,
-        containsAll(gcpProjectIdEnvironmentVariables),
-      );
-      await expectLater(proc.stdout, emitsDone);
+        await expectLater(
+          errorOut,
+          containsAll(gcpProjectIdEnvironmentVariables),
+        );
+        await expectLater(proc.stdout, emitsDone);
 
-      await proc.shouldExit(255);
-    });
+        await proc.shouldExit(255);
+      },
+    );
 
     test('environment set', () async {
       final proc = await _run(
@@ -73,9 +75,7 @@ void main() {
 
         final proc = await _run(
           projectIdPrint,
-          environment: {
-            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
-          },
+          environment: {'GOOGLE_APPLICATION_CREDENTIALS': credFile.path},
         );
 
         await expectLater(proc.stdout, emits('test-project-from-file'));
@@ -87,14 +87,15 @@ void main() {
       }
     });
 
-    test('environment variable takes precedence over credentials file',
-        () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        final credFile = File(
-          '${tempDir.path}${Platform.pathSeparator}credentials.json',
-        );
-        await credFile.writeAsString('''
+    test(
+      'environment variable takes precedence over credentials file',
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          final credFile = File(
+            '${tempDir.path}${Platform.pathSeparator}credentials.json',
+          );
+          await credFile.writeAsString('''
 {
   "type": "service_account",
   "project_id": "test-project-from-file",
@@ -102,42 +103,68 @@ void main() {
 }
 ''');
 
-        final proc = await _run(
-          projectIdPrint,
-          environment: {
-            gcpProjectIdEnvironmentVariables.first: 'test-project-from-env',
-            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
-          },
-        );
+          final proc = await _run(
+            projectIdPrint,
+            environment: {
+              gcpProjectIdEnvironmentVariables.first: 'test-project-from-env',
+              'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+            },
+          );
 
-        await expectLater(proc.stdout, emits('test-project-from-env'));
-        await expectLater(proc.stderr, emitsDone);
+          await expectLater(proc.stdout, emits('test-project-from-env'));
+          await expectLater(proc.stderr, emitsDone);
 
-        await proc.shouldExit(0);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
+          await proc.shouldExit(0);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
 
-    test('credentials file without project_id', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        final credFile = File(
-          '${tempDir.path}${Platform.pathSeparator}credentials.json',
-        );
-        await credFile.writeAsString('''
+    test(
+      'credentials file without project_id',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          final credFile = File(
+            '${tempDir.path}${Platform.pathSeparator}credentials.json',
+          );
+          await credFile.writeAsString('''
 {
   "type": "service_account",
   "private_key_id": "key123"
 }
 ''');
 
+          final proc = await _run(
+            projectIdPrint,
+            environment: {'GOOGLE_APPLICATION_CREDENTIALS': credFile.path},
+          );
+
+          final errorOut = await proc.stderrStream().toList();
+
+          await expectLater(
+            errorOut,
+            containsAll(gcpProjectIdEnvironmentVariables),
+          );
+          await expectLater(proc.stdout, emitsDone);
+
+          await proc.shouldExit(255);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
+
+    test(
+      'invalid credentials file path',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
         final proc = await _run(
           projectIdPrint,
           environment: {
-            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+            'GOOGLE_APPLICATION_CREDENTIALS': '/nonexistent/path/to/file.json',
           },
         );
 
@@ -150,62 +177,39 @@ void main() {
         await expectLater(proc.stdout, emitsDone);
 
         await proc.shouldExit(255);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
+      },
+    );
 
-    test('invalid credentials file path', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final proc = await _run(
-        projectIdPrint,
-        environment: {
-          'GOOGLE_APPLICATION_CREDENTIALS': '/nonexistent/path/to/file.json',
-        },
-      );
+    test(
+      'credentials file with malformed JSON',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          final credFile = File(
+            '${tempDir.path}${Platform.pathSeparator}credentials.json',
+          );
+          await credFile.writeAsString('not valid json at all');
 
-      final errorOut = await proc.stderrStream().toList();
+          final proc = await _run(
+            projectIdPrint,
+            environment: {'GOOGLE_APPLICATION_CREDENTIALS': credFile.path},
+          );
 
-      await expectLater(
-        errorOut,
-        containsAll(gcpProjectIdEnvironmentVariables),
-      );
-      await expectLater(proc.stdout, emitsDone);
+          final errorOut = await proc.stderrStream().toList();
 
-      await proc.shouldExit(255);
-    });
+          await expectLater(
+            errorOut,
+            containsAll(gcpProjectIdEnvironmentVariables),
+          );
+          await expectLater(proc.stdout, emitsDone);
 
-    test('credentials file with malformed JSON', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        final credFile = File(
-          '${tempDir.path}${Platform.pathSeparator}credentials.json',
-        );
-        await credFile.writeAsString('not valid json at all');
-
-        final proc = await _run(
-          projectIdPrint,
-          environment: {
-            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
-          },
-        );
-
-        final errorOut = await proc.stderrStream().toList();
-
-        await expectLater(
-          errorOut,
-          containsAll(gcpProjectIdEnvironmentVariables),
-        );
-        await expectLater(proc.stdout, emitsDone);
-
-        await proc.shouldExit(255);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
+          await proc.shouldExit(255);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
 
     // TODO: worth emulating the metadata server?
   });
@@ -229,10 +233,7 @@ void main() {
     );
 
     test('environment set', () async {
-      final proc = await _run(
-        listenPortPrint,
-        environment: {'PORT': '8123'},
-      );
+      final proc = await _run(listenPortPrint, environment: {'PORT': '8123'});
 
       await expectLater(proc.stderr, emitsDone);
       await expectLater(proc.stdout, emits('8123'));
@@ -293,10 +294,9 @@ void main() {
 Future<TestProcess> _run(
   String dartScript, {
   Map<String, String>? environment,
-}) =>
-    TestProcess.start(
-      Platform.resolvedExecutable,
-      [dartScript],
-      environment: environment,
-      includeParentEnvironment: false,
-    );
+}) => TestProcess.start(
+  Platform.resolvedExecutable,
+  [dartScript],
+  environment: environment,
+  includeParentEnvironment: false,
+);

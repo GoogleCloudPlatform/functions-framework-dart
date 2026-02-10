@@ -71,10 +71,7 @@ Future<CloudEvent> _decodeStructured(Request request) async {
   var jsonObject = await request.decodeJson() as Map<String, dynamic>;
 
   if (!jsonObject.containsKey('datacontenttype')) {
-    jsonObject = {
-      ...jsonObject,
-      'datacontenttype': type.toString(),
-    };
+    jsonObject = {...jsonObject, 'datacontenttype': type.toString()};
   }
 
   return _decodeValidCloudEvent(jsonObject, 'structured-mode message');
@@ -87,8 +84,9 @@ Future<CloudEvent> _decodeBinary(Request request) async {
   final data = await request.decode();
 
   final map = <String, Object?>{
-    for (var e in request.headers.entries
-        .where((element) => element.key.startsWith(_cloudEventPrefix)))
+    for (var e in request.headers.entries.where(
+      (element) => element.key.startsWith(_cloudEventPrefix),
+    ))
       e.key.substring(_clientEventPrefixLength): e.value,
     'datacontenttype': data.mimeType.toString(),
     'data': data.data,

@@ -41,8 +41,9 @@ final List<RegExp> _pubspecOrderRegexps =
     _pubspecOrder.map((s) => RegExp('^(# *)?$s:', multiLine: true)).toList();
 
 final String _expectedGitIgnore = _getMetaTemplateFile('.gitignore');
-final String _expectedAnalysisOptions =
-    _getMetaTemplateFile('templates/analysis_options.yaml');
+final String _expectedAnalysisOptions = _getMetaTemplateFile(
+  'templates/analysis_options.yaml',
+);
 
 void main() {
   late Directory dir;
@@ -110,8 +111,9 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
       !FileSystemEntity.isFileSync(filePath)) {
     final parent = Directory(path.dirname(filePath));
 
-    final file =
-        _listSync(parent).firstWhereOrNull((f) => f.path.endsWith('.dart'));
+    final file = _listSync(
+      parent,
+    ).firstWhereOrNull((f) => f.path.endsWith('.dart'));
 
     if (file == null) {
       filePath = null;
@@ -158,10 +160,7 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
           runOptions: RunOptions(workingDirectory: tempDir.path),
         );
       } else {
-        Pub.run(
-          'test',
-          runOptions: RunOptions(workingDirectory: tempDir.path),
-        );
+        Pub.run('test', runOptions: RunOptions(workingDirectory: tempDir.path));
       }
     }
   }
@@ -169,16 +168,18 @@ void _testGenerator(stagehand.Generator generator, Directory tempDir) {
 
 void _validatePubspec(String pubspecContentString) {
   // Note: the regex will match lines even if they are commented out
-  final orders = _pubspecOrderRegexps
-      .map((regexp) => pubspecContentString.indexOf(regexp))
-      .toList();
+  final orders =
+      _pubspecOrderRegexps
+          .map((regexp) => pubspecContentString.indexOf(regexp))
+          .toList();
 
   // On failure, you'll just see numbers – but the `reason` will help understand
   // which order things should go in.
   expect(
     orders,
     orderedEquals(orders.toList()..sort()),
-    reason: 'Top-level keys in the pubspec were not in the expected order: '
+    reason:
+        'Top-level keys in the pubspec were not in the expected order: '
         "${_pubspecOrder.join(',')}",
   );
 }

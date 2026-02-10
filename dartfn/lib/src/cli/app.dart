@@ -38,7 +38,7 @@ class App extends Console {
   late final CommandRunner<void> _runner;
 
   App(List<Generator> generators, [Printer? out, GeneratorTarget? target])
-      : super(out) {
+    : super(out) {
     generators.sort();
 
     _context = CommandContext(
@@ -51,9 +51,10 @@ class App extends Console {
       ),
     );
 
-    _runner = CommandRunner(_appName, _appDescription)
-      ..addCommand(GenerateCommand(context))
-      ..addCommand(VersionCommand(context));
+    _runner =
+        CommandRunner(_appName, _appDescription)
+          ..addCommand(GenerateCommand(context))
+          ..addCommand(VersionCommand(context));
   }
 
   CommandContext get context => _context;

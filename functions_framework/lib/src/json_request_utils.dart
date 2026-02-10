@@ -69,11 +69,11 @@ extension RequestExt on Request {
 
   Future<Object?> decodeJson() async {
     try {
-      final value = await (encoding ?? utf8)
-          .decoder
-          .bind(read())
-          .transform(json.decoder)
-          .single;
+      final value =
+          await (encoding ?? utf8).decoder
+              .bind(read())
+              .transform(json.decoder)
+              .single;
       return value;
     } on FormatException catch (e, stackTrace) {
       // https://github.com/GoogleCloudPlatform/functions-framework#http-status-codes
@@ -90,12 +90,14 @@ extension RequestExt on Request {
     final type = mediaTypeFromRequest(this);
     final supportedType = SupportedContentTypes.values.singleWhere(
       (element) => element.value == type.mimeType,
-      orElse: () => throw BadRequestException(
-        400,
-        'Unsupported encoding "$type". '
-        'Supported types: '
-        '${SupportedContentTypes.values.map((e) => '"${e.value}"').join(', ')}',
-      ),
+      orElse:
+          () =>
+              throw BadRequestException(
+                400,
+                'Unsupported encoding "$type". '
+                'Supported types: '
+                '${SupportedContentTypes.values.map((e) => '"${e.value}"').join(', ')}',
+              ),
     );
 
     return (

@@ -90,15 +90,12 @@ void main() {
   }) {
     final map = jsonDecode(entry) as Map<String, dynamic>;
 
-    expect(
-      map,
-      {
-        'message': message,
-        'severity': severity.name,
-        'logging.googleapis.com/trace':
-            'projects/test_project_id/traces/$traceStart',
-      },
-    );
+    expect(map, {
+      'message': message,
+      'severity': severity.name,
+      'logging.googleapis.com/trace':
+          'projects/test_project_id/traces/$traceStart',
+    });
   }
 
   void validateCloudErrorOutput(
@@ -111,13 +108,7 @@ void main() {
   }) {
     expect(map, hasLength(4));
     expect(map, containsPair('severity', severity));
-    expect(
-      map,
-      containsPair(
-        'message',
-        messageMatcher,
-      ),
-    );
+    expect(map, containsPair('message', messageMatcher));
     expect(
       map,
       containsPair(
@@ -129,13 +120,7 @@ void main() {
     final sourceLocation =
         map['logging.googleapis.com/sourceLocation'] as Map<String, dynamic>;
 
-    expect(
-      sourceLocation,
-      containsPair(
-        'file',
-        fileMatcher,
-      ),
-    );
+    expect(sourceLocation, containsPair('file', fileMatcher));
 
     if (containsLine) {
       expect(
@@ -154,9 +139,7 @@ void main() {
   group('cloud event', () {
     setUp(() async {
       await doSetup(
-        FunctionTarget.cloudEventWithContext(
-          basicCloudEventHandler,
-        ),
+        FunctionTarget.cloudEventWithContext(basicCloudEventHandler),
       );
     });
 
@@ -221,7 +204,8 @@ void main() {
     }
   }
 }''',
-        expectedBody: 'Bad request. Could not decode the request as a '
+        expectedBody:
+            'Bad request. Could not decode the request as a '
             'structured-mode message.',
       );
 
@@ -315,9 +299,7 @@ void main() {
 
       validateCloudErrorOutput(
         jsonDecode(lines[1]) as Map<String, dynamic>,
-        startsWith(
-          'Bad state: async error',
-        ),
+        startsWith('Bad state: async error'),
         'package:hello_world_function_test/functions.dart',
         'function.<fn>',
       );
@@ -328,9 +310,7 @@ void main() {
 
   group('logging', () {
     setUp(() async {
-      await doSetup(
-        FunctionTarget.httpWithLogger(loggingHandler),
-      );
+      await doSetup(FunctionTarget.httpWithLogger(loggingHandler));
     });
 
     Future<void> doGet(

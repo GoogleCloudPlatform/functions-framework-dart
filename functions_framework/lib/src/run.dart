@@ -40,8 +40,8 @@ Future<void> run(
 const _forbiddenAssets = {'robots.txt', 'favicon.ico'};
 
 Handler _forbiddenAssetMiddleware(Handler innerHandler) => (Request request) {
-      if (_forbiddenAssets.contains(request.url.path)) {
-        return Response.notFound('Not found.');
-      }
-      return innerHandler(request);
-    };
+  if (_forbiddenAssets.contains(request.url.path)) {
+    return Response.notFound('Not found.');
+  }
+  return innerHandler(request);
+};

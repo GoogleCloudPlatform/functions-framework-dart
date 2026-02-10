@@ -7,14 +7,14 @@ part of 'pub_sub_types.dart';
 // **************************************************************************
 
 PubSub _$PubSubFromJson(Map<String, dynamic> json) => PubSub(
-      PubSubMessage.fromJson(json['message'] as Map<String, dynamic>),
-      json['subscription'] as String,
-    );
+  PubSubMessage.fromJson(json['message'] as Map<String, dynamic>),
+  json['subscription'] as String,
+);
 
 Map<String, dynamic> _$PubSubToJson(PubSub instance) => <String, dynamic>{
-      'message': instance.message,
-      'subscription': instance.subscription,
-    };
+  'message': instance.message,
+  'subscription': instance.subscription,
+};
 
 PubSubMessage _$PubSubMessageFromJson(Map<String, dynamic> json) =>
     PubSubMessage(

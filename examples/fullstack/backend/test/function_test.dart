@@ -12,10 +12,7 @@ void main() {
   test('defaults', timeout: defaultTimeout, () async {
     final proc = await TestProcess.start('dart', ['bin/server.dart']);
 
-    await expectLater(
-      proc.stdout,
-      emitsThrough('Listening on :8080'),
-    );
+    await expectLater(proc.stdout, emitsThrough('Listening on :8080'));
 
     const body = '''
     {
@@ -35,8 +32,10 @@ void main() {
     final actualResponse = GreetingResponse.fromJson(data);
 
     // Use any salutation from the list of salutations
-    final expectedResponse =
-        GreetingResponse(salutation: salutations[0], name: 'World');
+    final expectedResponse = GreetingResponse(
+      salutation: salutations[0],
+      name: 'World',
+    );
 
     expect(salutations, contains(actualResponse.salutation));
     expect(actualResponse.name, expectedResponse.name);

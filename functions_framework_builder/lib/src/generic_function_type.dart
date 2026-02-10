@@ -148,14 +148,16 @@ class _GenericFactoryData implements FactoryData {
     String function,
   ) {
     final jsonTypeDisplay = info.jsonType.toStringNonNullable();
-    final typeDisplayName = info.paramType == null
-        ? jsonTypeDisplay
-        : '$functionsLibraryPrefix.'
-            '${info.paramType!.toStringNonNullable()}';
+    final typeDisplayName =
+        info.paramType == null
+            ? jsonTypeDisplay
+            : '$functionsLibraryPrefix.'
+                '${info.paramType!.toStringNonNullable()}';
 
-    final returnBlock = info.paramType == null
-        ? 'return $_jsonParamName;'
-        : '''
+    final returnBlock =
+        info.paramType == null
+            ? 'return $_jsonParamName;'
+            : '''
     try {
       return $typeDisplayName.$fromJsonFactoryName($_jsonParamName);
     } catch (e, stack) {
@@ -185,8 +187,8 @@ class _GenericFactoryData implements FactoryData {
               ? _voidWithContextConstructorName
               : _voidConstructorName
           : withContext
-              ? _withContextConstructorName
-              : _constructorName,
+          ? _withContextConstructorName
+          : _constructorName,
       target,
       function,
       typeDisplayName,

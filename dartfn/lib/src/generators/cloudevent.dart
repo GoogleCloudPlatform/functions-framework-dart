@@ -19,9 +19,9 @@ part 'cloudevent.g.dart';
 /// A generator for a pub library.
 class CloudEventFunctionGenerator extends common.DefaultGenerator {
   CloudEventFunctionGenerator()
-      : super(
-          'cloudevent',
-          'A sample Functions Framework project for handling a cloudevent.',
-          _data,
-        );
+    : super(
+        'cloudevent',
+        'A sample Functions Framework project for handling a cloudevent.',
+        _data,
+      );
 }

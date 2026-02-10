@@ -17,9 +17,5 @@ import 'package:source_gen/source_gen.dart';
 
 import 'src/code_generator.dart';
 
-Builder builder([BuilderOptions? _]) => PartBuilder(
-      [
-        DataGenerator(),
-      ],
-      '.g.dart',
-    );
+Builder builder([BuilderOptions? _]) =>
+    PartBuilder([DataGenerator()], '.g.dart');
