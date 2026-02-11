@@ -89,6 +89,7 @@ Stream<String> _getLines(
         id.pathSegments.last == 'pubspec.yaml') {
       var content = await reader.readAsString(id);
       content = content.replaceAll('__${name}__', '__projectName__');
+      content = content.replaceAll('resolution: workspace\n', '');
       yield _base64encode(utf8.encode(content));
     } else {
       yield _base64encode(await reader.readAsBytes(id));
