@@ -29,4 +29,6 @@ void validate(Generator generator) {
   expect(generator.description, endsWith('.'));
   expect(generator.entrypoint, isNotNull);
   expect(generator.getInstallInstructions(), isNotNull);
+  final pubspec = generator.getFile('pubspec.yaml');
+  expect(pubspec.content, contains('__projectName__'));
 }

@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:__projectName__/functions.dart' as function_library;
+import 'package:__json__/functions.dart' as function_library;
 import 'package:functions_framework/serve.dart';
 
 Future<void> main(List<String> args) async {
@@ -21,24 +21,27 @@ Future<void> main(List<String> args) async {
 }
 
 FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
-  'function' => JsonFunctionTarget(function_library.function, (json) {
-    if (json is Map<String, dynamic>) {
-      try {
-        return function_library.GreetingRequest.fromJson(json);
-      } catch (e, stack) {
-        throw BadRequestException(
-          400,
-          'There was an error parsing the provided JSON data.',
-          innerError: e,
-          innerStack: stack,
-        );
-      }
-    }
-    throw BadRequestException(
-      400,
-      'The provided JSON is not the expected type '
-      '`Map<String, dynamic>`.',
-    );
-  }),
-  _ => null,
-};
+      'function' => JsonFunctionTarget(
+          function_library.function,
+          (json) {
+            if (json is Map<String, dynamic>) {
+              try {
+                return function_library.GreetingRequest.fromJson(json);
+              } catch (e, stack) {
+                throw BadRequestException(
+                  400,
+                  'There was an error parsing the provided JSON data.',
+                  innerError: e,
+                  innerStack: stack,
+                );
+              }
+            }
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`Map<String, dynamic>`.',
+            );
+          },
+        ),
+      _ => null
+    };

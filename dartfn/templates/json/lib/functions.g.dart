@@ -7,10 +7,14 @@ part of 'functions.dart';
 // **************************************************************************
 
 GreetingRequest _$GreetingRequestFromJson(Map<String, dynamic> json) =>
-    GreetingRequest(name: json['name'] as String?);
+    GreetingRequest(
+      name: json['name'] as String?,
+    );
 
 Map<String, dynamic> _$GreetingRequestToJson(GreetingRequest instance) =>
-    <String, dynamic>{'name': instance.name};
+    <String, dynamic>{
+      'name': instance.name,
+    };
 
 GreetingResponse _$GreetingResponseFromJson(Map<String, dynamic> json) =>
     GreetingResponse(
@@ -19,4 +23,7 @@ GreetingResponse _$GreetingResponseFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$GreetingResponseToJson(GreetingResponse instance) =>
-    <String, dynamic>{'salutation': instance.salutation, 'name': instance.name};
+    <String, dynamic>{
+      'salutation': instance.salutation,
+      'name': instance.name,
+    };

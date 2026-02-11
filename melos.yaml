@@ -2,6 +2,9 @@ name: ffd_workspace
 
 packages:
   - dartfn
+  - dartfn/templates/cloudevent
+  - dartfn/templates/helloworld
+  - dartfn/templates/json
   - examples/fullstack/backend
   - examples/fullstack/frontend-cli
   - examples/hello

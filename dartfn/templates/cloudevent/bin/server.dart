@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:__projectName__/functions.dart' as function_library;
+import 'package:__cloudevent__/functions.dart' as function_library;
 import 'package:functions_framework/serve.dart';
 
 Future<void> main(List<String> args) async {

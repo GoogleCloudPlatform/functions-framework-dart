@@ -55,7 +55,7 @@ class DataGenerator extends Generator {
           }).toList()
           ..sort();
 
-    final items = await _getLines(filteredAssets, buildStep)
+    final items = await _getLines(filteredAssets, buildStep, name)
         .map((item) {
           if (item.contains('\n')) {
             return "'''\n$item'''";
@@ -68,7 +68,11 @@ class DataGenerator extends Generator {
   }
 }
 
-Stream<String> _getLines(List<AssetId> ids, AssetReader reader) async* {
+Stream<String> _getLines(
+  List<AssetId> ids,
+  AssetReader reader,
+  String name,
+) async* {
   for (var id in ids) {
     yield p.url.joinAll(id.pathSegments.skip(2));
     yield _binaryFileTypes.hasMatch(p.basename(id.path)) ? 'binary' : 'text';
@@ -81,6 +85,10 @@ Stream<String> _getLines(List<AssetId> ids, AssetReader reader) async* {
       } else {
         throw StateError('Expected `${id.path}` to contain:\n$_lintFix');
       }
+    } else if (id.pathSegments.last == 'pubspec.yaml') {
+      var content = await reader.readAsString(id);
+      content = content.replaceAll('__${name}__', '__projectName__');
+      yield _base64encode(utf8.encode(content));
     } else {
       yield _base64encode(await reader.readAsBytes(id));
     }
