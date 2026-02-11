@@ -7,9 +7,12 @@ on:
     branches: [ main ]
     types: [opened, synchronize, reopened, labeled, unlabeled]
   push:
-    tags: [ '[A-z]+-v[0-9]+.[0-9]+.[0-9]+' ]
+    tags: [ '[A-z]+-v[0-9]+.[0-9]+.[0-9]+*' ]
 
 jobs:
   publish:
     if: ${{ github.repository_owner == 'GoogleCloudPlatform' }}
     uses: dart-lang/ecosystem/.github/workflows/publish.yaml@main
+    permissions:
+      id-token: write # Required for authentication using OIDC
+      pull-requests: write # Required for writing the pull request note
