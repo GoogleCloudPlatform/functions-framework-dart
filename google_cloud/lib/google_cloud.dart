@@ -22,6 +22,7 @@ export 'src/gcp_project.dart'
         gcpProjectIdEnvironmentVariables,
         projectIdFromCredentialsFile,
         projectIdFromEnvironment,
+        projectIdFromGcloudConfig,
         projectIdFromMetadataServer;
 export 'src/log_severity.dart' show LogSeverity, RequestLogger;
 export 'src/logging.dart'

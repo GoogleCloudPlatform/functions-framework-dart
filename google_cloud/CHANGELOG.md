@@ -1,7 +1,7 @@
 ## 0.2.1-wip
 
-- Add `projectIdFromCredentialsFile()` to automatically discover project ID from the 
-credentials JSON file.
+- Add `projectIdFromCredentialsFile()` to automatically discover project ID from the credentials JSON file.
+- Add `projectIdFromGcloudConfig()` to automatically discover project ID from gcloud CLI configuration.
 - Require `package:http` `^1.0.0`.
 - Require Dart 3.9
 
