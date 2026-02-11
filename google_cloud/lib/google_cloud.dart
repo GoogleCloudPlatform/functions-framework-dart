@@ -18,6 +18,7 @@ export 'src/constants.dart'
     show cloudTraceContextHeader, defaultListenPort, portEnvironmentKey;
 export 'src/gcp_project.dart'
     show
+        clearProjectIdCache,
         computeProjectId,
         gcpProjectIdEnvironmentVariables,
         projectIdFromCredentialsFile,
