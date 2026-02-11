@@ -39,12 +39,10 @@ class _Server {
     }
 
     if (projectId == null) {
-      throw BadConfigurationException(
-        '''
+      throw BadConfigurationException('''
 Could not contact GCP metadata server or find the project-id in one of these
 environment variables:
-  ${gcpProjectIdEnvironmentVariables.join('\n  ')}''',
-      );
+  ${gcpProjectIdEnvironmentVariables.join('\n  ')}''');
     }
 
     print('Current GCP project id: $projectId');
@@ -61,10 +59,9 @@ environment variables:
   final bool hosted;
 
   late final FirestoreApi api = FirestoreApi(client);
-  late final handler =
-      createLoggingMiddleware(projectId: hosted ? projectId : null)
-          .addMiddleware(_onlyGetRootMiddleware)
-          .addHandler(_incrementHandler);
+  late final handler = createLoggingMiddleware(
+    projectId: hosted ? projectId : null,
+  ).addMiddleware(_onlyGetRootMiddleware).addHandler(_incrementHandler);
 
   Future<Response> _incrementHandler(Request request) async {
     final result = await api.projects.databases.documents.commit(
@@ -85,26 +82,26 @@ environment variables:
 
 /// For `GET` `request` objects to [handler], otherwise sends a 404.
 Handler _onlyGetRootMiddleware(Handler handler) => (Request request) async {
-      if (request.method == 'GET' && request.url.pathSegments.isEmpty) {
-        return await handler(request);
-      }
+  if (request.method == 'GET' && request.url.pathSegments.isEmpty) {
+    return await handler(request);
+  }
 
-      throw BadRequestException(404, 'Not found');
-    };
+  throw BadRequestException(404, 'Not found');
+};
 
 CommitRequest _incrementRequest(String projectId) => CommitRequest(
-      writes: [
-        Write(
-          transform: DocumentTransform(
-            document:
-                'projects/$projectId/databases/(default)/documents/settings/count',
-            fieldTransforms: [
-              FieldTransform(
-                fieldPath: 'count',
-                increment: Value(integerValue: '1'),
-              ),
-            ],
+  writes: [
+    Write(
+      transform: DocumentTransform(
+        document:
+            'projects/$projectId/databases/(default)/documents/settings/count',
+        fieldTransforms: [
+          FieldTransform(
+            fieldPath: 'count',
+            increment: Value(integerValue: '1'),
           ),
-        ),
-      ],
-    );
+        ],
+      ),
+    ),
+  ],
+);

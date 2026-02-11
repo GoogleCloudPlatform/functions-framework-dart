@@ -22,21 +22,23 @@ void main() {
   group('currentProjectId', () {
     const projectIdPrint = 'test/src/project_id_print.dart';
 
-    test('not environment', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final proc = await _run(projectIdPrint);
+    test(
+      'not environment',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final proc = await _run(projectIdPrint);
 
-      final errorOut = await proc.stderrStream().toList();
+        final errorOut = await proc.stderrStream().toList();
 
-      await expectLater(
-        errorOut,
-        containsAll(gcpProjectIdEnvironmentVariables),
-      );
-      await expectLater(proc.stdout, emitsDone);
+        await expectLater(
+          errorOut,
+          containsAll(gcpProjectIdEnvironmentVariables),
+        );
+        await expectLater(proc.stdout, emitsDone);
 
-      await proc.shouldExit(255);
-    });
+        await proc.shouldExit(255);
+      },
+    );
 
     test('environment set', () async {
       final proc = await _run(
@@ -73,9 +75,7 @@ void main() {
 
         final proc = await _run(
           projectIdPrint,
-          environment: {
-            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
-          },
+          environment: {'GOOGLE_APPLICATION_CREDENTIALS': credFile.path},
         );
 
         await expectLater(proc.stdout, emits('test-project-from-file'));
@@ -87,14 +87,15 @@ void main() {
       }
     });
 
-    test('environment variable takes precedence over credentials file',
-        () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        final credFile = File(
-          '${tempDir.path}${Platform.pathSeparator}credentials.json',
-        );
-        await credFile.writeAsString('''
+    test(
+      'environment variable takes precedence over credentials file',
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          final credFile = File(
+            '${tempDir.path}${Platform.pathSeparator}credentials.json',
+          );
+          await credFile.writeAsString('''
 {
   "type": "service_account",
   "project_id": "test-project-from-file",
@@ -102,42 +103,68 @@ void main() {
 }
 ''');
 
-        final proc = await _run(
-          projectIdPrint,
-          environment: {
-            gcpProjectIdEnvironmentVariables.first: 'test-project-from-env',
-            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
-          },
-        );
+          final proc = await _run(
+            projectIdPrint,
+            environment: {
+              gcpProjectIdEnvironmentVariables.first: 'test-project-from-env',
+              'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+            },
+          );
 
-        await expectLater(proc.stdout, emits('test-project-from-env'));
-        await expectLater(proc.stderr, emitsDone);
+          await expectLater(proc.stdout, emits('test-project-from-env'));
+          await expectLater(proc.stderr, emitsDone);
 
-        await proc.shouldExit(0);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
+          await proc.shouldExit(0);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
 
-    test('credentials file without project_id', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        final credFile = File(
-          '${tempDir.path}${Platform.pathSeparator}credentials.json',
-        );
-        await credFile.writeAsString('''
+    test(
+      'credentials file without project_id',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          final credFile = File(
+            '${tempDir.path}${Platform.pathSeparator}credentials.json',
+          );
+          await credFile.writeAsString('''
 {
   "type": "service_account",
   "private_key_id": "key123"
 }
 ''');
 
+          final proc = await _run(
+            projectIdPrint,
+            environment: {'GOOGLE_APPLICATION_CREDENTIALS': credFile.path},
+          );
+
+          final errorOut = await proc.stderrStream().toList();
+
+          await expectLater(
+            errorOut,
+            containsAll(gcpProjectIdEnvironmentVariables),
+          );
+          await expectLater(proc.stdout, emitsDone);
+
+          await proc.shouldExit(255);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
+
+    test(
+      'invalid credentials file path',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
         final proc = await _run(
           projectIdPrint,
           environment: {
-            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+            'GOOGLE_APPLICATION_CREDENTIALS': '/nonexistent/path/to/file.json',
           },
         );
 
@@ -150,171 +177,151 @@ void main() {
         await expectLater(proc.stdout, emitsDone);
 
         await proc.shouldExit(255);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
+      },
+    );
 
-    test('invalid credentials file path', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final proc = await _run(
-        projectIdPrint,
-        environment: {
-          'GOOGLE_APPLICATION_CREDENTIALS': '/nonexistent/path/to/file.json',
-        },
-      );
+    test(
+      'credentials file with malformed JSON',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          final credFile = File(
+            '${tempDir.path}${Platform.pathSeparator}credentials.json',
+          );
+          await credFile.writeAsString('not valid json at all');
 
-      final errorOut = await proc.stderrStream().toList();
+          final proc = await _run(
+            projectIdPrint,
+            environment: {'GOOGLE_APPLICATION_CREDENTIALS': credFile.path},
+          );
 
-      await expectLater(
-        errorOut,
-        containsAll(gcpProjectIdEnvironmentVariables),
-      );
-      await expectLater(proc.stdout, emitsDone);
+          final errorOut = await proc.stderrStream().toList();
 
-      await proc.shouldExit(255);
-    });
+          await expectLater(
+            errorOut,
+            containsAll(gcpProjectIdEnvironmentVariables),
+          );
+          await expectLater(proc.stdout, emitsDone);
 
-    test('credentials file with malformed JSON', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        final credFile = File(
-          '${tempDir.path}${Platform.pathSeparator}credentials.json',
-        );
-        await credFile.writeAsString('not valid json at all');
+          await proc.shouldExit(255);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
 
-        final proc = await _run(
-          projectIdPrint,
-          environment: {
-            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
-          },
-        );
-
-        final errorOut = await proc.stderrStream().toList();
-
-        await expectLater(
-          errorOut,
-          containsAll(gcpProjectIdEnvironmentVariables),
-        );
-        await expectLater(proc.stdout, emitsDone);
-
-        await proc.shouldExit(255);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
-
-    test('gcloud config with project_id', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        // Create a mock gcloud script using Dart
-        final mockGcloud = File(
-          '${tempDir.path}${Platform.pathSeparator}gcloud',
-        );
-        await mockGcloud.writeAsString('''
+    test(
+      'gcloud config with project_id',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          // Create a mock gcloud script using Dart
+          final mockGcloud = File(
+            '${tempDir.path}${Platform.pathSeparator}gcloud',
+          );
+          await mockGcloud.writeAsString('''
 #!${Platform.resolvedExecutable}
 void main() {
   print('{"configuration": {"properties": {"core": {"project": "test-project-from-gcloud"}}}}');
 }
 ''');
-        await Process.run('chmod', ['+x', mockGcloud.path]);
+          await Process.run('chmod', ['+x', mockGcloud.path]);
 
-        final proc = await _run(
-          projectIdPrint,
-          environment: {
-            'PATH': tempDir.path,
-          },
-        );
+          final proc = await _run(
+            projectIdPrint,
+            environment: {'PATH': tempDir.path},
+          );
 
-        await expectLater(proc.stdout, emits('test-project-from-gcloud'));
-        await expectLater(proc.stderr, emitsDone);
+          await expectLater(proc.stdout, emits('test-project-from-gcloud'));
+          await expectLater(proc.stderr, emitsDone);
 
-        await proc.shouldExit(0);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
+          await proc.shouldExit(0);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
 
-    test('credentials file takes precedence over gcloud config', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        final credFile = File(
-          '${tempDir.path}${Platform.pathSeparator}credentials.json',
-        );
-        await credFile.writeAsString('''
+    test(
+      'credentials file takes precedence over gcloud config',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          final credFile = File(
+            '${tempDir.path}${Platform.pathSeparator}credentials.json',
+          );
+          await credFile.writeAsString('''
 {
   "type": "service_account",
   "project_id": "test-project-from-file"
 }
 ''');
 
-        // Create a mock gcloud script using Dart
-        final mockGcloud = File(
-          '${tempDir.path}${Platform.pathSeparator}gcloud',
-        );
-        await mockGcloud.writeAsString('''
+          // Create a mock gcloud script using Dart
+          final mockGcloud = File(
+            '${tempDir.path}${Platform.pathSeparator}gcloud',
+          );
+          await mockGcloud.writeAsString('''
 #!${Platform.resolvedExecutable}
 void main() {
   print('{"configuration": {"properties": {"core": {"project": "test-project-from-gcloud"}}}}');
 }
 ''');
-        await Process.run('chmod', ['+x', mockGcloud.path]);
+          await Process.run('chmod', ['+x', mockGcloud.path]);
 
+          final proc = await _run(
+            projectIdPrint,
+            environment: {
+              'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+              'PATH': tempDir.path,
+            },
+          );
+
+          await expectLater(proc.stdout, emits('test-project-from-file'));
+          await expectLater(proc.stderr, emitsDone);
+
+          await proc.shouldExit(0);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
+
+    test(
+      'gcloud not found',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
         final proc = await _run(
           projectIdPrint,
-          environment: {
-            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
-            'PATH': tempDir.path,
-          },
+          environment: {'PATH': '/nonexistent/path'},
         );
 
-        await expectLater(proc.stdout, emits('test-project-from-file'));
-        await expectLater(proc.stderr, emitsDone);
+        final errorOut = await proc.stderrStream().toList();
 
-        await proc.shouldExit(0);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
-
-    test('gcloud not found', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final proc = await _run(
-        projectIdPrint,
-        environment: {
-          'PATH': '/nonexistent/path',
-        },
-      );
-
-      final errorOut = await proc.stderrStream().toList();
-
-      await expectLater(
-        errorOut,
-        containsAll(gcpProjectIdEnvironmentVariables),
-      );
-      await expectLater(proc.stdout, emitsDone);
-
-      await proc.shouldExit(255);
-    });
-
-    test('gcloud returns non-zero exit code', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        // Create a mock gcloud script that fails
-        final mockGcloud = File(
-          '${tempDir.path}${Platform.pathSeparator}gcloud',
+        await expectLater(
+          errorOut,
+          containsAll(gcpProjectIdEnvironmentVariables),
         );
-        await mockGcloud.writeAsString('''
+        await expectLater(proc.stdout, emitsDone);
+
+        await proc.shouldExit(255);
+      },
+    );
+
+    test(
+      'gcloud returns non-zero exit code',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          // Create a mock gcloud script that fails
+          final mockGcloud = File(
+            '${tempDir.path}${Platform.pathSeparator}gcloud',
+          );
+          await mockGcloud.writeAsString('''
 #!${Platform.resolvedExecutable}
 import 'dart:io';
 void main() {
@@ -322,142 +329,141 @@ void main() {
   exit(1);
 }
 ''');
-        await Process.run('chmod', ['+x', mockGcloud.path]);
+          await Process.run('chmod', ['+x', mockGcloud.path]);
 
-        final proc = await _run(
-          projectIdPrint,
-          environment: {
-            'PATH': tempDir.path,
-          },
-        );
+          final proc = await _run(
+            projectIdPrint,
+            environment: {'PATH': tempDir.path},
+          );
 
-        final errorOut = await proc.stderrStream().toList();
+          final errorOut = await proc.stderrStream().toList();
 
-        await expectLater(
-          errorOut,
-          containsAll(gcpProjectIdEnvironmentVariables),
-        );
-        await expectLater(proc.stdout, emitsDone);
+          await expectLater(
+            errorOut,
+            containsAll(gcpProjectIdEnvironmentVariables),
+          );
+          await expectLater(proc.stdout, emitsDone);
 
-        await proc.shouldExit(255);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
+          await proc.shouldExit(255);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
 
-    test('gcloud returns malformed JSON', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        // Create a mock gcloud script that returns invalid JSON
-        final mockGcloud = File(
-          '${tempDir.path}${Platform.pathSeparator}gcloud',
-        );
-        await mockGcloud.writeAsString('''
+    test(
+      'gcloud returns malformed JSON',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          // Create a mock gcloud script that returns invalid JSON
+          final mockGcloud = File(
+            '${tempDir.path}${Platform.pathSeparator}gcloud',
+          );
+          await mockGcloud.writeAsString('''
 #!${Platform.resolvedExecutable}
 void main() {
   print('not valid json');
 }
 ''');
-        await Process.run('chmod', ['+x', mockGcloud.path]);
+          await Process.run('chmod', ['+x', mockGcloud.path]);
 
-        final proc = await _run(
-          projectIdPrint,
-          environment: {
-            'PATH': tempDir.path,
-          },
-        );
+          final proc = await _run(
+            projectIdPrint,
+            environment: {'PATH': tempDir.path},
+          );
 
-        final errorOut = await proc.stderrStream().toList();
+          final errorOut = await proc.stderrStream().toList();
 
-        await expectLater(
-          errorOut,
-          containsAll(gcpProjectIdEnvironmentVariables),
-        );
-        await expectLater(proc.stdout, emitsDone);
+          await expectLater(
+            errorOut,
+            containsAll(gcpProjectIdEnvironmentVariables),
+          );
+          await expectLater(proc.stdout, emitsDone);
 
-        await proc.shouldExit(255);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
+          await proc.shouldExit(255);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
 
-    test('gcloud returns JSON with missing configuration field', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        // Create a mock gcloud script that returns JSON without configuration
-        final mockGcloud = File(
-          '${tempDir.path}${Platform.pathSeparator}gcloud',
-        );
-        await mockGcloud.writeAsString('''
+    test(
+      'gcloud returns JSON with missing configuration field',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          // Create a mock gcloud script that returns JSON without configuration
+          final mockGcloud = File(
+            '${tempDir.path}${Platform.pathSeparator}gcloud',
+          );
+          await mockGcloud.writeAsString('''
 #!${Platform.resolvedExecutable}
 void main() {
   print('{"some": "data"}');
 }
 ''');
-        await Process.run('chmod', ['+x', mockGcloud.path]);
+          await Process.run('chmod', ['+x', mockGcloud.path]);
 
-        final proc = await _run(
-          projectIdPrint,
-          environment: {
-            'PATH': tempDir.path,
-          },
-        );
+          final proc = await _run(
+            projectIdPrint,
+            environment: {'PATH': tempDir.path},
+          );
 
-        final errorOut = await proc.stderrStream().toList();
+          final errorOut = await proc.stderrStream().toList();
 
-        await expectLater(
-          errorOut,
-          containsAll(gcpProjectIdEnvironmentVariables),
-        );
-        await expectLater(proc.stdout, emitsDone);
+          await expectLater(
+            errorOut,
+            containsAll(gcpProjectIdEnvironmentVariables),
+          );
+          await expectLater(proc.stdout, emitsDone);
 
-        await proc.shouldExit(255);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
+          await proc.shouldExit(255);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
 
-    test('gcloud returns JSON with missing project field', onPlatform: {
-      'windows': const Skip('Cannot validate tests on windows.'),
-    }, () async {
-      final tempDir = await Directory.systemTemp.createTemp('gcp_test');
-      try {
-        // Create a mock gcloud that returns JSON without project
-        final mockGcloud = File(
-          '${tempDir.path}${Platform.pathSeparator}gcloud',
-        );
-        await mockGcloud.writeAsString('''
+    test(
+      'gcloud returns JSON with missing project field',
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+      () async {
+        final tempDir = await Directory.systemTemp.createTemp('gcp_test');
+        try {
+          // Create a mock gcloud that returns JSON without project
+          final mockGcloud = File(
+            '${tempDir.path}${Platform.pathSeparator}gcloud',
+          );
+          await mockGcloud.writeAsString('''
 #!${Platform.resolvedExecutable}
 void main() {
   print('{"configuration": {"properties": {"core": {}}}}');
 }
 ''');
-        await Process.run('chmod', ['+x', mockGcloud.path]);
+          await Process.run('chmod', ['+x', mockGcloud.path]);
 
-        final proc = await _run(
-          projectIdPrint,
-          environment: {
-            'PATH': tempDir.path,
-          },
-        );
+          final proc = await _run(
+            projectIdPrint,
+            environment: {'PATH': tempDir.path},
+          );
 
-        final errorOut = await proc.stderrStream().toList();
+          final errorOut = await proc.stderrStream().toList();
 
-        await expectLater(
-          errorOut,
-          containsAll(gcpProjectIdEnvironmentVariables),
-        );
-        await expectLater(proc.stdout, emitsDone);
+          await expectLater(
+            errorOut,
+            containsAll(gcpProjectIdEnvironmentVariables),
+          );
+          await expectLater(proc.stdout, emitsDone);
 
-        await proc.shouldExit(255);
-      } finally {
-        await tempDir.delete(recursive: true);
-      }
-    });
+          await proc.shouldExit(255);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      },
+    );
 
     // TODO: worth emulating the metadata server?
   });
@@ -481,10 +487,7 @@ void main() {
     );
 
     test('environment set', () async {
-      final proc = await _run(
-        listenPortPrint,
-        environment: {'PORT': '8123'},
-      );
+      final proc = await _run(listenPortPrint, environment: {'PORT': '8123'});
 
       await expectLater(proc.stderr, emitsDone);
       await expectLater(proc.stdout, emits('8123'));
@@ -545,10 +548,9 @@ void main() {
 Future<TestProcess> _run(
   String dartScript, {
   Map<String, String>? environment,
-}) =>
-    TestProcess.start(
-      Platform.resolvedExecutable,
-      [dartScript],
-      environment: environment,
-      includeParentEnvironment: false,
-    );
+}) => TestProcess.start(
+  Platform.resolvedExecutable,
+  [dartScript],
+  environment: environment,
+  includeParentEnvironment: false,
+);

@@ -75,14 +75,12 @@ void main() {
 
       await finishServerTest(
         proc,
-        requestOutput: emitsInOrder(
-          [
-            'print',
-            'something',
-            'here',
-            endsWith('GET     [200] /$requestedPath'),
-          ],
-        ),
+        requestOutput: emitsInOrder([
+          'print',
+          'something',
+          'here',
+          endsWith('GET     [200] /$requestedPath'),
+        ]),
       );
     });
 
@@ -123,9 +121,7 @@ void main() {
 
       await finishServerTest(
         proc,
-        requestOutput: emitsInOrder([
-          endsWith('GET     [400] /exception'),
-        ]),
+        requestOutput: emitsInOrder([endsWith('GET     [400] /exception')]),
       );
     });
 

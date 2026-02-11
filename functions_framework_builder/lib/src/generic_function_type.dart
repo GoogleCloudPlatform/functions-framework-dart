@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
@@ -72,15 +73,15 @@ class GenericFunctionType implements SupportedFunctionType {
 
   @override
   FactoryData? createReference(
-    LibraryElement library,
+    LibraryElement2 library,
     String targetName,
-    FunctionElement element,
+    TopLevelFunctionElement element,
   ) {
-    if (element.parameters.isEmpty) {
+    if (element.formalParameters.isEmpty) {
       return null;
     }
 
-    final firstParamType = element.parameters.first.type;
+    final firstParamType = element.formalParameters.first.type;
 
     final paramInfo = validJsonParamType(firstParamType);
 
@@ -106,7 +107,7 @@ class GenericFunctionType implements SupportedFunctionType {
           // TODO: add a test for this!
           throw InvalidGenerationSourceError(
             'The type `${paramInfo.paramType!.element.name}` is not exposed '
-            'by the function library `${library.source.uri}` so it cannot '
+            'by the function library `${library.uri}` so it cannot '
             'be used.',
           );
         }
@@ -117,7 +118,7 @@ class GenericFunctionType implements SupportedFunctionType {
         returnKind == JsonReturnKind.isVoid,
         paramInfo,
         escapeDartString(targetName),
-        '$functionsLibraryPrefix.${element.name}',
+        '$functionsLibraryPrefix.${element.name3}',
       );
     }
     return null;
@@ -151,7 +152,7 @@ class _GenericFactoryData implements FactoryData {
     final typeDisplayName = info.paramType == null
         ? jsonTypeDisplay
         : '$functionsLibraryPrefix.'
-            '${info.paramType!.toStringNonNullable()}';
+              '${info.paramType!.toStringNonNullable()}';
 
     final returnBlock = info.paramType == null
         ? 'return $_jsonParamName;'
@@ -168,7 +169,8 @@ class _GenericFactoryData implements FactoryData {
     }
     ''';
 
-    final body = '''
+    final body =
+        '''
   if ($_jsonParamName is $jsonTypeDisplay) {
     $returnBlock
   }
@@ -182,11 +184,11 @@ class _GenericFactoryData implements FactoryData {
     return _GenericFactoryData._(
       isVoid
           ? withContext
-              ? _voidWithContextConstructorName
-              : _voidConstructorName
+                ? _voidWithContextConstructorName
+                : _voidConstructorName
           : withContext
-              ? _withContextConstructorName
-              : _constructorName,
+          ? _withContextConstructorName
+          : _constructorName,
       target,
       function,
       typeDisplayName,
@@ -195,7 +197,8 @@ class _GenericFactoryData implements FactoryData {
   }
 
   @override
-  String get expression => '''
+  String get expression =>
+      '''
 $_endpointConstructorName($function, ($_jsonParamName) {
   $factoryBody
 },)

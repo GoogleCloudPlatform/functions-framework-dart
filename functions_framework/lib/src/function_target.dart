@@ -30,13 +30,11 @@ abstract class FunctionTarget {
 
   factory FunctionTarget.http(Handler function) = HttpFunctionTarget;
 
-  factory FunctionTarget.httpWithLogger(
-    HandlerWithLogger function,
-  ) = HttpWithLoggerFunctionTarget;
+  factory FunctionTarget.httpWithLogger(HandlerWithLogger function) =
+      HttpWithLoggerFunctionTarget;
 
-  factory FunctionTarget.cloudEvent(
-    CloudEventHandler function,
-  ) = CloudEventFunctionTarget;
+  factory FunctionTarget.cloudEvent(CloudEventHandler function) =
+      CloudEventFunctionTarget;
 
   factory FunctionTarget.cloudEventWithContext(
     CloudEventWithContextHandler function,

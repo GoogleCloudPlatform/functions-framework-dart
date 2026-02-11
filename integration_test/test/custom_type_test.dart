@@ -33,14 +33,8 @@ void main() {
     Object? extraPrintMatcher,
   }) async {
     expect(response.statusCode, 400);
-    expect(
-      response.headers,
-      containsTextPlainHeader,
-    );
-    expect(
-      response.body,
-      'Bad request. $errorMessage',
-    );
+    expect(response.headers, containsTextPlainHeader);
+    expect(response.body, 'Bad request. $errorMessage');
 
     await expectLater(
       testProcess.stderr,
@@ -50,7 +44,7 @@ void main() {
     await finishServerTest(
       testProcess,
       requestOutput: emitsInOrder([
-        if (extraPrintMatcher != null) extraPrintMatcher,
+        ?extraPrintMatcher,
         endsWith('POST    [400] /'),
       ]),
     );
@@ -61,9 +55,7 @@ void main() {
       final requestUrl = 'http://localhost:$autoPort/';
       final response = await post(
         requestUrl,
-        headers: {
-          'Content-Type': 'application/text',
-        },
+        headers: {'Content-Type': 'application/text'},
         body: '{"a":1}',
       );
       await expectInvalid(
@@ -121,12 +113,7 @@ void main() {
           headers: jsonContentType,
           body: jsonEncode(
             PubSub(
-              PubSubMessage(
-                'data',
-                'messageId',
-                DateTime.now(),
-                {},
-              ),
+              PubSubMessage('data', 'messageId', DateTime.now(), {}),
               subscription,
             ),
           ),
@@ -205,10 +192,7 @@ void main() {
 
         await finishServerTest(
           testProcess,
-          requestOutput: emitsInOrder([
-            'Keys: a',
-            endsWith('POST    [200] /'),
-          ]),
+          requestOutput: emitsInOrder(['Keys: a', endsWith('POST    [200] /')]),
         );
       });
 
@@ -233,10 +217,7 @@ void main() {
 
         await finishServerTest(
           testProcess,
-          requestOutput: emitsInOrder([
-            'Keys: ',
-            endsWith('POST    [200] /'),
-          ]),
+          requestOutput: emitsInOrder(['Keys: ', endsWith('POST    [200] /')]),
         );
       });
     });

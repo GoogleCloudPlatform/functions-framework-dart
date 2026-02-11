@@ -69,8 +69,7 @@ extension RequestExt on Request {
 
   Future<Object?> decodeJson() async {
     try {
-      final value = await (encoding ?? utf8)
-          .decoder
+      final value = await (encoding ?? utf8).decoder
           .bind(read())
           .transform(json.decoder)
           .single;
@@ -90,12 +89,16 @@ extension RequestExt on Request {
     final type = mediaTypeFromRequest(this);
     final supportedType = SupportedContentTypes.values.singleWhere(
       (element) => element.value == type.mimeType,
-      orElse: () => throw BadRequestException(
-        400,
-        'Unsupported encoding "$type". '
-        'Supported types: '
-        '${SupportedContentTypes.values.map((e) => '"${e.value}"').join(', ')}',
-      ),
+      orElse: () {
+        final supportedTypes = SupportedContentTypes.values
+            .map((e) => '"${e.value}"')
+            .join(', ');
+        throw BadRequestException(
+          400,
+          'Unsupported encoding "$type". '
+          'Supported types: $supportedTypes',
+        );
+      },
     );
 
     return (

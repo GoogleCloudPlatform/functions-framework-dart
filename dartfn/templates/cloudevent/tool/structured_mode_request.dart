@@ -5,9 +5,7 @@ import 'package:http/http.dart';
 FutureOr<void> main() async {
   const requestUrl = 'http://localhost:8080';
 
-  const headers = {
-    'content-type': 'application/json',
-  };
+  const headers = {'content-type': 'application/json'};
 
   const body = r'''
 {
@@ -29,7 +27,10 @@ FutureOr<void> main() async {
   }
 }''';
 
-  final response =
-      await post(Uri.parse(requestUrl), headers: headers, body: body);
+  final response = await post(
+    Uri.parse(requestUrl),
+    headers: headers,
+    body: body,
+  );
   print('response.statusCode: ${response.statusCode}');
 }

@@ -24,8 +24,10 @@ export 'api_types.dart';
 @CloudFunction()
 GreetingResponse function(GreetingRequest request, RequestContext context) {
   final name = request.name ?? 'World';
-  final response =
-      GreetingResponse(salutation: _randomSalutation(), name: name);
+  final response = GreetingResponse(
+    salutation: _randomSalutation(),
+    name: name,
+  );
   context.logger.info('greetingResponse: ${response.toJson()}');
   return response;
 }

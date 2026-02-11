@@ -3,7 +3,7 @@ publish_to: none
 
 resolution: workspace
 environment:
-  sdk: ^3.6.0
+  sdk: ^3.9.0
 
 dependencies:
   functions_framework: ^0.4.0
@@ -15,6 +15,6 @@ dev_dependencies:
   dart_flutter_team_lints: ^3.0.0
   functions_framework_builder: ^0.4.7
   http: ^1.0.0
-  json_serializable: ^6.6.0
+  json_serializable: ^6.10.0
   test: ^1.21.6
   test_process: ^2.0.0

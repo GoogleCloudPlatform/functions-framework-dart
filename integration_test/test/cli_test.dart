@@ -76,9 +76,7 @@ void main() {
       const port = 8888;
       final proc = await startServerTest(
         expectedListeningPort: port,
-        env: {
-          'PORT': port.toString(),
-        },
+        env: {'PORT': port.toString()},
       );
 
       final response = await get('http://localhost:$port');
@@ -91,9 +89,7 @@ void main() {
     test('bad FUNCTION_TARGET', () async {
       final proc = await startServerTest(
         shouldFail: true,
-        env: {
-          'FUNCTION_TARGET': 'bob',
-        },
+        env: {'FUNCTION_TARGET': 'bob'},
       );
 
       await expectLater(
@@ -109,9 +105,7 @@ void main() {
     test('bad FUNCTION_SIGNATURE_TYPE', () async {
       final proc = await startServerTest(
         shouldFail: true,
-        env: {
-          'FUNCTION_SIGNATURE_TYPE': 'bob',
-        },
+        env: {'FUNCTION_SIGNATURE_TYPE': 'bob'},
       );
 
       await expectLater(
@@ -128,9 +122,7 @@ void main() {
     test('bad PORT', () async {
       final proc = await startServerTest(
         shouldFail: true,
-        env: {
-          'PORT': 'bob',
-        },
+        env: {'PORT': 'bob'},
       );
 
       await expectLater(
@@ -149,9 +141,7 @@ void main() {
     test('unsupported option', () async {
       final proc = await startServerTest(
         shouldFail: true,
-        arguments: [
-          '--bob',
-        ],
+        arguments: ['--bob'],
       );
 
       await expectLater(
@@ -168,10 +158,7 @@ void main() {
     test('bad target', () async {
       final proc = await startServerTest(
         shouldFail: true,
-        arguments: [
-          '--target',
-          'bob',
-        ],
+        arguments: ['--target', 'bob'],
       );
 
       await expectLater(
@@ -230,10 +217,7 @@ void main() {
       ],
     );
 
-    await expectLater(
-      proc.stdout,
-      emitsInOrder([emitsDone]),
-    );
+    await expectLater(proc.stdout, emitsInOrder([emitsDone]));
     await expectLater(
       proc.stderr,
       emitsInOrder([

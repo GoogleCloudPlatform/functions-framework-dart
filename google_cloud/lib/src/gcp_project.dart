@@ -160,20 +160,15 @@ Future<String> projectIdFromMetadataServer() async {
 
     return response.body;
   } on SocketException catch (e) {
-    throw BadConfigurationException(
-      '''
+    throw BadConfigurationException('''
 Could not connect to $host.
 If not running on Google Cloud, one of these environment variables must be set
 to the target Google Project ID:
 ${gcpProjectIdEnvironmentVariables.join('\n')}
 
-Alternatively:
-- Set GOOGLE_APPLICATION_CREDENTIALS to point to a service account JSON file
-  that contains a "project_id" field
-- Configure gcloud CLI with: gcloud config set project PROJECT_ID
-''',
-      details: e.toString(),
-    );
+Alternatively, set GOOGLE_APPLICATION_CREDENTIALS to point to a service account
+JSON file that contains a "project_id" field.
+''', details: e.toString());
   }
 }
 

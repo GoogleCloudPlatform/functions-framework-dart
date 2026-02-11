@@ -23,8 +23,8 @@ import 'src/function_types.dart';
 void function(CloudEvent event, RequestContext context) {
   context.logger.info('event subject: ${event.subject}');
   context.logger.debug(jsonEncode(context.request.headers));
-  context.responseHeaders['x-data-runtime-types'] =
-      event.data.runtimeType.toString();
+  context.responseHeaders['x-data-runtime-types'] = event.data.runtimeType
+      .toString();
 
   final instance = DocumentEventData.fromBuffer(event.data as List<int>);
   stderr.writeln(jsonEncode(instance.toProto3Json()));

@@ -59,8 +59,9 @@ Future<void> printVersion(
     return context.console.write(version);
   }
 
-  context.console
-      .write('Functions Framework for Dart CLI ($name) version: $version');
+  context.console.write(
+    'Functions Framework for Dart CLI ($name) version: $version',
+  );
 
   if (!checkUpdates) return;
 
@@ -71,8 +72,9 @@ Future<void> printVersion(
     final latest = await checkPubForLaterVersion(name, version);
     if (latest != null) {
       context.console.write(
-          'Version $latest is available! To update to this version, run: '
-          '`pub global activate $name`.');
+        'Version $latest is available! To update to this version, run: '
+        '`pub global activate $name`.',
+      );
     }
   });
 }

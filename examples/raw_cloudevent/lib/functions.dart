@@ -21,7 +21,8 @@ const _encoder = JsonEncoder.withIndent(' ');
 
 @CloudFunction()
 void function(CloudEvent event, RequestContext context) {
-  context.logger
-      .info('[CloudEvent] source: ${event.source}, subject: ${event.subject}');
+  context.logger.info(
+    '[CloudEvent] source: ${event.source}, subject: ${event.subject}',
+  );
   stderr.writeln(_encoder.convert(event));
 }

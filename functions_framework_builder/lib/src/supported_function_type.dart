@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
@@ -34,8 +35,8 @@ class SupportedFunctionType {
     this.typedefName,
     this._type, {
     String? constructor,
-  })  : _constructor = constructor,
-        typeDescription = _type.toStringNonNullable();
+  }) : _constructor = constructor,
+       typeDescription = _type.toStringNonNullable();
 
   static Future<SupportedFunctionType> create(
     Resolver resolver,
@@ -64,15 +65,15 @@ class SupportedFunctionType {
   }
 
   FactoryData? createReference(
-    LibraryElement library,
+    LibraryElement2 library,
     String targetName,
-    FunctionElement element,
+    TopLevelFunctionElement element,
   ) {
-    if (element.library.typeSystem.isSubtypeOf(element.type, _type)) {
+    if (element.library2.typeSystem.isSubtypeOf(element.type, _type)) {
       return _TrivialFactoryData(
         escapeDartString(targetName),
         '$_constructor('
-        '$functionsLibraryPrefix.${element.name},)',
+        '$functionsLibraryPrefix.${element.name3},)',
       );
     }
     return null;

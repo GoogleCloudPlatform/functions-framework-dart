@@ -25,17 +25,12 @@ Future<void> main() async {
   final config = await Config.parse(env);
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => AppModel(config),
-      child: App(),
-    ),
+    ChangeNotifierProvider(create: (context) => AppModel(config), child: App()),
   );
 }
 
 class App extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        theme: ThemeData.dark(),
-        home: HomePage(),
-      );
+  Widget build(BuildContext context) =>
+      MaterialApp(theme: ThemeData.dark(), home: HomePage());
 }

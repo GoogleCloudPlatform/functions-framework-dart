@@ -62,8 +62,9 @@ FutureOr<int> main(List<String> args) async {
   // (3) display the response
   //
 
-  final greetingResponse =
-      GreetingResponse.fromJson(jsonDecode(res.body) as Map<String, dynamic>);
+  final greetingResponse = GreetingResponse.fromJson(
+    jsonDecode(res.body) as Map<String, dynamic>,
+  );
 
   print('response: ${sw.elapsedMilliseconds} ms');
   print(greetingResponse.toJson());
