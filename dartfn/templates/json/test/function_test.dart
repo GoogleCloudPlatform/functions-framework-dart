@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
-import 'package:__projectName__/functions.dart';
+import 'package:__json__/functions.dart';
 
 const defaultTimeout = Timeout(Duration(seconds: 3));
 

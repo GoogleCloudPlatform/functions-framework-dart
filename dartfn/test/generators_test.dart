@@ -31,4 +31,6 @@ void validate(Generator generator) {
   expect(generator.getInstallInstructions(), isNotNull);
   final pubspec = generator.getFile('pubspec.yaml');
   expect(pubspec.content, contains('__projectName__'));
+  final functions = generator.getFile('lib/functions.dart');
+  expect(functions.content, contains('__projectName__'));
 }

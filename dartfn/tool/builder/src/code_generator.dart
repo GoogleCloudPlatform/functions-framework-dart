@@ -85,7 +85,8 @@ Stream<String> _getLines(
       } else {
         throw StateError('Expected `${id.path}` to contain:\n$_lintFix');
       }
-    } else if (id.pathSegments.last == 'pubspec.yaml') {
+    } else if (id.path.endsWith('.dart') ||
+        id.pathSegments.last == 'pubspec.yaml') {
       var content = await reader.readAsString(id);
       content = content.replaceAll('__${name}__', '__projectName__');
       yield _base64encode(utf8.encode(content));
