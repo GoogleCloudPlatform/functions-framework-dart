@@ -21,6 +21,8 @@ Future<void> main(List<String> args) async {
 }
 
 FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
-  'function' => FunctionTarget.http(function_library.function),
-  _ => null,
-};
+      'function' => FunctionTarget.http(
+          function_library.function,
+        ),
+      _ => null
+    };

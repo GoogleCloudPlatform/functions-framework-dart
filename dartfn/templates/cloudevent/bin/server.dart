@@ -21,6 +21,8 @@ Future<void> main(List<String> args) async {
 }
 
 FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
-  'function' => FunctionTarget.cloudEventWithContext(function_library.function),
-  _ => null,
-};
+      'function' => FunctionTarget.cloudEventWithContext(
+          function_library.function,
+        ),
+      _ => null
+    };
