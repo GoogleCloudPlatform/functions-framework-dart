@@ -33,4 +33,8 @@ void validate(Generator generator) {
   expect(pubspec.content, contains('__projectName__'));
   final functions = generator.getFile('lib/functions.dart');
   expect(functions.content, contains('__projectName__'));
+  if (generator.id == 'json') {
+    final functionTest = generator.getFile('test/function_test.dart');
+    expect(functionTest.content, contains('__projectName__'));
+  }
 }
