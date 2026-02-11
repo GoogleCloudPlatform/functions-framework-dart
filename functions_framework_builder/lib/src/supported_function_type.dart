@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/element2.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
@@ -49,7 +48,7 @@ class SupportedFunctionType {
     );
 
     final handlerTypeAlias =
-        lib.exportNamespace.get(typeDefName) as TypeAliasElement;
+        lib.exportNamespace.get2(typeDefName) as TypeAliasElement;
 
     final functionType = handlerTypeAlias.instantiate(
       typeArguments: [],
@@ -65,15 +64,15 @@ class SupportedFunctionType {
   }
 
   FactoryData? createReference(
-    LibraryElement2 library,
+    LibraryElement library,
     String targetName,
     TopLevelFunctionElement element,
   ) {
-    if (element.library2.typeSystem.isSubtypeOf(element.type, _type)) {
+    if (element.library.typeSystem.isSubtypeOf(element.type, _type)) {
       return _TrivialFactoryData(
         escapeDartString(targetName),
         '$_constructor('
-        '$functionsLibraryPrefix.${element.name3},)',
+        '$functionsLibraryPrefix.${element.name},)',
       );
     }
     return null;
