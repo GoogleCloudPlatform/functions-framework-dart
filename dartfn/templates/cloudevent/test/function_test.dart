@@ -26,17 +26,14 @@ void main() {
  }
 }''';
 
-      final response = await _makeRequest(
-        body,
-        {
-          'Content-Type': 'application/json; charset=utf-8',
-          'ce-specversion': '1.0',
-          'ce-type': 'google.cloud.pubsub.topic.publish',
-          'ce-time': '2020-09-05T03:56:24Z',
-          'ce-id': '1234-1234-1234',
-          'ce-source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
-        },
-      );
+      final response = await _makeRequest(body, {
+        'Content-Type': 'application/json; charset=utf-8',
+        'ce-specversion': '1.0',
+        'ce-type': 'google.cloud.pubsub.topic.publish',
+        'ce-time': '2020-09-05T03:56:24Z',
+        'ce-id': '1234-1234-1234',
+        'ce-source': 'urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66',
+      });
       expect(response.statusCode, 200);
       expect(response.body, isEmpty);
 
@@ -100,16 +97,13 @@ void main() {
 
       final json = jsonDecode(stderrOutput) as Map<String, dynamic>;
 
-      expect(
-        json,
-        {
-          'message': {
-            ...jsonDecode(body) as Map<String, dynamic>,
-            'datacontenttype': 'application/json; charset=utf-8',
-          },
-          'severity': 'INFO',
+      expect(json, {
+        'message': {
+          ...jsonDecode(body) as Map<String, dynamic>,
+          'datacontenttype': 'application/json; charset=utf-8',
         },
-      );
+        'severity': 'INFO',
+      });
     });
   });
 }
@@ -117,20 +111,13 @@ void main() {
 Future<Response> _makeRequest(String body, Map<String, String> headers) async {
   final requestUrl = Uri.parse('http://localhost:$autoPort/');
 
-  final response = await post(
-    requestUrl,
-    body: body,
-    headers: headers,
-  );
+  final response = await post(requestUrl, body: body, headers: headers);
   return response;
 }
 
 Future<TestProcess> _hostCloudEventHandler() async {
   final proc = await startServerTest(
-    arguments: [
-      '--signature-type',
-      'cloudevent',
-    ],
+    arguments: ['--signature-type', 'cloudevent'],
     expectedListeningPort: 0,
   );
   return proc;
