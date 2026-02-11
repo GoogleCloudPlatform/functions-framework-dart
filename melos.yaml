@@ -1,13 +1,6 @@
-name: ffd_workspace     # Can be anything
-environment:
-  sdk: ^3.9.0
+name: ffd_workspace
 
-publish_to: none
-
-dev_dependencies:
-  dart_flutter_team_lints: ^3.2.0
-  melos: ^6.3.0
-workspace:
+packages:
   - dartfn
   - examples/fullstack/backend
   - examples/fullstack/frontend-cli
@@ -19,3 +12,7 @@ workspace:
   - functions_framework_builder
   - google_cloud
   - integration_test
+
+command:
+  bootstrap:
+    usePubspecOverrides: false
