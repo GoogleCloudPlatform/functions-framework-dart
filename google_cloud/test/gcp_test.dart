@@ -14,15 +14,13 @@
 
 import 'dart:io';
 
-import 'package:google_cloud/google_cloud.dart';
+import 'package:google_cloud/constants.dart';
 import 'package:test/test.dart';
 import 'package:test_process/test_process.dart';
 
 void main() {
   group('currentProjectId', () {
     const projectIdPrint = 'test/src/project_id_print.dart';
-
-    tearDown(clearProjectIdCache);
 
     test(
       'not environment',
@@ -77,7 +75,7 @@ void main() {
 
         final proc = await _run(
           projectIdPrint,
-          environment: {'GOOGLE_APPLICATION_CREDENTIALS': credFile.path},
+          environment: {credentialsPathEnvironmentVariable: credFile.path},
         );
 
         await expectLater(proc.stdout, emits('test-project-from-file'));
@@ -109,7 +107,7 @@ void main() {
             projectIdPrint,
             environment: {
               gcpProjectIdEnvironmentVariables.first: 'test-project-from-env',
-              'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+              credentialsPathEnvironmentVariable: credFile.path,
             },
           );
 
@@ -141,7 +139,7 @@ void main() {
 
           final proc = await _run(
             projectIdPrint,
-            environment: {'GOOGLE_APPLICATION_CREDENTIALS': credFile.path},
+            environment: {credentialsPathEnvironmentVariable: credFile.path},
           );
 
           final errorOut = await proc.stderrStream().toList();
@@ -166,7 +164,8 @@ void main() {
         final proc = await _run(
           projectIdPrint,
           environment: {
-            'GOOGLE_APPLICATION_CREDENTIALS': '/nonexistent/path/to/file.json',
+            credentialsPathEnvironmentVariable:
+                '/nonexistent/path/to/file.json',
           },
         );
 
@@ -195,7 +194,7 @@ void main() {
 
           final proc = await _run(
             projectIdPrint,
-            environment: {'GOOGLE_APPLICATION_CREDENTIALS': credFile.path},
+            environment: {credentialsPathEnvironmentVariable: credFile.path},
           );
 
           final errorOut = await proc.stderrStream().toList();
@@ -277,7 +276,7 @@ void main() {
           final proc = await _run(
             projectIdPrint,
             environment: {
-              'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
+              credentialsPathEnvironmentVariable: credFile.path,
               'PATH': tempDir.path,
             },
           );
@@ -482,7 +481,7 @@ void main() {
         // First call - should discover and cache
         final proc1 = await _run(
           'test/src/project_id_cache_print.dart',
-          environment: {'GOOGLE_APPLICATION_CREDENTIALS': credFile.path},
+          environment: {credentialsPathEnvironmentVariable: credFile.path},
         );
 
         await expectLater(
@@ -501,6 +500,20 @@ void main() {
     });
 
     // TODO: worth emulating the metadata server?
+  });
+
+  group('metadata', () {
+    test('gceMetadataHost respects environment', () async {
+      final proc = await _run(
+        'test/src/metadata_host_print.dart',
+        environment: {'GCE_METADATA_HOST': 'custom.metadata.internal'},
+      );
+
+      await expectLater(proc.stdout, emits('custom.metadata.internal'));
+      await expectLater(proc.stderr, emitsDone);
+
+      await proc.shouldExit(0);
+    });
   });
 
   group('listenPort', () {

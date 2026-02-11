@@ -14,7 +14,7 @@
 
 import 'package:shelf/shelf.dart';
 
-import 'logging.dart';
+import 'http_logging.dart';
 
 /// When thrown in a [Handler], configured with [badRequestMiddleware] or
 /// similar, causes a response with [statusCode] to be returned.

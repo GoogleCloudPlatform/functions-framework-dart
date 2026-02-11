@@ -14,6 +14,7 @@
 
 import 'dart:io';
 
+import 'package:google_cloud/constants.dart';
 import 'package:google_cloud/google_cloud.dart';
 
 Future<void> main() async {
@@ -22,7 +23,7 @@ Future<void> main() async {
   print('First call: $projectId1');
 
   // Modify the credentials file to a different project ID
-  final credPath = Platform.environment['GOOGLE_APPLICATION_CREDENTIALS'];
+  final credPath = Platform.environment[credentialsPathEnvironmentVariable];
   if (credPath != null) {
     final credFile = File(credPath);
     await credFile.writeAsString('{"project_id": "modified-project-id"}');

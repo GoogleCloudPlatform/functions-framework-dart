@@ -15,6 +15,7 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:google_cloud/constants.dart' as cloud_constants;
 import 'package:google_cloud/google_cloud.dart';
 
 const defaultFunctionType = FunctionType.http;
@@ -35,7 +36,7 @@ class FunctionConfig {
   final String target;
 
   FunctionConfig({
-    this.port = defaultListenPort,
+    this.port = cloud_constants.defaultListenPort,
     this.functionType = defaultFunctionType,
     this.target = defaultFunctionTarget,
   });
@@ -43,7 +44,7 @@ class FunctionConfig {
   // Required per spec:
   // https://github.com/GoogleCloudPlatform/functions-framework#specification-summary
   factory FunctionConfig.fromEnv() => FunctionConfig(
-    port: listenPort(),
+    port: listenPortFromEnvironment(),
     target:
         Platform.environment[environmentKeyFunctionTarget] ??
         defaultFunctionTarget,
@@ -99,7 +100,7 @@ Overrides the FUNCTION_SIGNATURE_TYPE environment variable.''',
         );
       }
     } else {
-      port = defaults?.port ?? defaultListenPort;
+      port = defaults?.port ?? cloud_constants.defaultListenPort;
     }
 
     final functionTypeOptionValue = options[_functionTypeOpt] as String?;

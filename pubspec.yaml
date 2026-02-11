@@ -8,6 +8,7 @@ dev_dependencies:
   dart_flutter_team_lints: ^3.2.0
   melos: ^7.0.0
 workspace:
+  - _google_cloud_e2e
   - examples/fullstack/backend
   - examples/fullstack/frontend-cli
   - examples/hello

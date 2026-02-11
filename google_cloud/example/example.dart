@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:google_cloud/constants.dart' as cloud_constants;
 import 'package:google_cloud/google_cloud.dart';
 import 'package:googleapis/firestore/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
@@ -33,16 +34,20 @@ class _Server {
     try {
       projectId = await projectIdFromMetadataServer();
       hosted = true;
-    } on BadConfigurationException {
-      projectId = projectIdFromEnvironment();
+    } on Exception {
+      projectId = projectIdFromEnvironmentVariables();
       hosted = false;
     }
 
     if (projectId == null) {
+      print(
+        'Possible project ID environment variables: '
+        '${cloud_constants.gcpProjectIdEnvironmentVariables.join(', ')}',
+      );
       throw BadConfigurationException('''
 Could not contact GCP metadata server or find the project-id in one of these
 environment variables:
-  ${gcpProjectIdEnvironmentVariables.join('\n  ')}''');
+  ${cloud_constants.gcpProjectIdEnvironmentVariables.join('\n  ')}''');
     }
 
     print('Current GCP project id: $projectId');

@@ -17,33 +17,30 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-import 'bad_configuration_exception.dart';
+import 'constants.dart';
+import 'metadata.dart';
 
-/// Cached project ID to avoid redundant discovery operations.
-String? _cachedProjectId;
-
-/// A convenience wrapper that first tries [projectIdFromEnvironment],
-/// then [projectIdFromCredentialsFile], then [projectIdFromGcloudConfig],
-/// and finally [projectIdFromMetadataServer]
+/// A convenience wrapper that tries multiple strategies to find the project id,
+/// prioritizing local development strategies over cloud discovery.
 ///
-/// The result is cached for the lifetime of the Dart process. Subsequent calls
-/// return the cached value without performing discovery again.
+/// The strategies are tried in the following order:
 ///
-/// Like [projectIdFromMetadataServer], if no value is found, a
-/// [BadConfigurationException] is thrown.
-Future<String> computeProjectId() async => _cachedProjectId ??=
-    projectIdFromEnvironment() ??
-    projectIdFromCredentialsFile() ??
-    await projectIdFromGcloudConfig() ??
-    await projectIdFromMetadataServer();
-
-/// Clears the cached project ID.
+/// * [projectIdFromEnvironmentVariables]
+/// * [projectIdFromCredentialsFile]
+/// * [projectIdFromGcloudConfig]
+/// * [projectIdFromMetadataServer]
 ///
-/// This is primarily useful for testing scenarios where the project ID
-/// might change between tests, or when you need to force re-discovery
-/// of the project ID.
-void clearProjectIdCache() {
-  _cachedProjectId = null;
+/// To understand the behavior of [refresh] and the caching behavior, see
+/// [projectIdFromMetadataServer].
+Future<String> computeProjectId({bool refresh = false}) async {
+  if (refresh) {
+    _cachedProjectId = null;
+  }
+  return _cachedProjectId ??=
+      projectIdFromEnvironmentVariables() ??
+      projectIdFromCredentialsFile() ??
+      await projectIdFromGcloudConfig() ??
+      await projectIdFromMetadataServer(refresh: refresh);
 }
 
 /// Returns the
@@ -54,10 +51,12 @@ void clearProjectIdCache() {
 /// The list is checked in order. This is useful for local development.
 ///
 /// If no matching variable is found, `null` is returned.
-String? projectIdFromEnvironment() {
-  for (var envKey in gcpProjectIdEnvironmentVariables) {
-    final value = Platform.environment[envKey];
-    if (value != null) return value;
+String? projectIdFromEnvironmentVariables() {
+  for (var key in gcpProjectIdEnvironmentVariables) {
+    final value = Platform.environment[key];
+    if (value != null && value.isNotEmpty) {
+      return value;
+    }
   }
 
   return null;
@@ -77,7 +76,7 @@ String? projectIdFromEnvironment() {
 /// If the environment variable is not set, the file doesn't exist, or the file
 /// is invalid JSON, `null` is returned.
 String? projectIdFromCredentialsFile() {
-  final path = Platform.environment['GOOGLE_APPLICATION_CREDENTIALS'];
+  final path = Platform.environment[credentialsPathEnvironmentVariable];
   if (path == null) return null;
 
   try {
@@ -117,74 +116,121 @@ Future<String?> projectIdFromGcloudConfig() async {
     final stdout = result.stdout;
     if (stdout is! String || stdout.isEmpty) return null;
 
-    final json = jsonDecode(stdout) as Map<String, dynamic>;
-    final configuration = json['configuration'] as Map<String, dynamic>?;
-    if (configuration == null) return null;
-
-    final properties = configuration['properties'] as Map<String, dynamic>?;
-    if (properties == null) return null;
-
-    final core = properties['core'] as Map<String, dynamic>?;
-    if (core == null) return null;
-
-    return core['project'] as String?;
+    return switch (jsonDecode(stdout)) {
+      {
+        'configuration': {
+          'properties': {'core': {'project': final String project}},
+        },
+      } =>
+        project,
+      _ => null,
+    };
   } catch (e) {
     // If gcloud is not installed or fails, return null
     return null;
   }
 }
 
+/// Cached project ID to avoid redundant discovery operations.
+String? _cachedProjectId;
+
+/// Cached service account email to avoid redundant discovery operations.
+String? _cachedServiceAccountEmail;
+
 /// Returns a [Future] that completes with the
 /// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
 /// for the current Google Cloud Project by checking
 /// [project metadata](https://cloud.google.com/compute/docs/metadata/default-metadata-values#project_metadata).
 ///
-/// If the metadata server cannot be contacted, a [BadConfigurationException] is
+/// {@template google_cloud.gcp_project.metadata_server_discovery}
+/// The result is cached for the lifetime of the Dart process. Subsequent calls
+/// return the cached value without performing discovery again.
+///
+/// If [client] is provided, it is used to make the request to the metadata
+/// server.
+///
+/// If [refresh] is `true`, the cache is cleared and the value is re-computed.
+///
+/// If the metadata server cannot be contacted, a [SocketException] is
 /// thrown.
-Future<String> projectIdFromMetadataServer() async {
-  const host = 'http://metadata.google.internal/';
-  final url = Uri.parse('$host/computeMetadata/v1/project/project-id');
-
-  try {
-    final response = await http.get(
-      url,
-      headers: {'Metadata-Flavor': 'Google'},
-    );
-
-    if (response.statusCode != 200) {
-      throw HttpException(
-        '${response.body} (${response.statusCode})',
-        uri: url,
-      );
-    }
-
-    return response.body;
-  } on SocketException catch (e) {
-    throw BadConfigurationException('''
-Could not connect to $host.
+///
+/// If the metadata server returns a non-200 status code, a [HttpException] is
+/// thrown.
+/// {@endtemplate}
+Future<String> projectIdFromMetadataServer({
+  http.Client? client,
+  bool refresh = false,
+}) async {
+  if (refresh) {
+    _cachedProjectId = null;
+  }
+  return _cachedProjectId ??= await _getMetadataValue(
+    'project/project-id',
+    client: client,
+    exceptionHelp:
+        '''
 If not running on Google Cloud, one of these environment variables must be set
 to the target Google Project ID:
 ${gcpProjectIdEnvironmentVariables.join('\n')}
 
-Alternatively, set GOOGLE_APPLICATION_CREDENTIALS to point to a service account
+Alternatively, set $credentialsPathEnvironmentVariable to point to a service account
 JSON file that contains a "project_id" field.
-''', details: e.toString());
-  }
+''',
+  );
 }
 
-/// A set of typical environment variables that are likely to represent the
-/// current Google Cloud project ID.
+/// A convenience wrapper that tries to retrieve the default service account
+/// email from the Metadata Server.
 ///
-/// For context, see:
-/// * https://cloud.google.com/functions/docs/env-var
-/// * https://cloud.google.com/compute/docs/gcloud-compute#default_project
-/// * https://github.com/GoogleContainerTools/gcp-auth-webhook/blob/08136ca171fe5713cc70ef822c911fbd3a1707f5/server.go#L38-L44
-///
-/// Note: these are ordered starting from the most current/canonical to least.
-/// (At least as could be determined at the time of writing.)
-const gcpProjectIdEnvironmentVariables = {
-  'GCP_PROJECT',
-  'GCLOUD_PROJECT',
-  'CLOUDSDK_CORE_PROJECT',
-  'GOOGLE_CLOUD_PROJECT',
-};
+/// {@macro google_cloud.gcp_project.metadata_server_discovery}
+Future<String> serviceAccountEmailFromMetadataServer({
+  http.Client? client,
+  bool refresh = false,
+}) async {
+  if (refresh) {
+    _cachedServiceAccountEmail = null;
+  }
+  return _cachedServiceAccountEmail ??= await _getMetadataValue(
+    'instance/service-accounts/default/email',
+    client: client,
+  );
+}
+
+Future<String> _getMetadataValue(
+  String path, {
+  http.Client? client,
+  String? exceptionHelp,
+}) async {
+  final url = gceMetadataUrl(path);
+
+  try {
+    final response = await (client == null
+        ? http.get(url, headers: metadataFlavorHeaders)
+        : client.get(url, headers: metadataFlavorHeaders));
+
+    if (response.statusCode != 200) {
+      var message = '${response.body} (${response.statusCode})';
+      if (exceptionHelp != null) {
+        message += '\n$exceptionHelp';
+      }
+      throw HttpException(message, uri: url);
+    }
+
+    return response.body.trim();
+  } on SocketException catch (e, stackTrace) {
+    var message = 'Could not connect to $gceMetadataHost.';
+    if (exceptionHelp != null) {
+      message += '\n$exceptionHelp';
+    }
+
+    Error.throwWithStackTrace(
+      SocketException(
+        message,
+        osError: e.osError,
+        address: e.address,
+        port: e.port,
+      ),
+      stackTrace,
+    );
+  }
+}
