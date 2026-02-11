@@ -22,7 +22,7 @@
 /// details, and `build.yaml` for how this builder is configured by default.
 library;
 
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:dart_style/dart_style.dart';
 
@@ -63,7 +63,7 @@ class _FunctionsFrameworkBuilder implements Builder {
       final targetReader = annotatedElement.annotation.read('target');
 
       final targetName = targetReader.isNull
-          ? element.name3!
+          ? element.name!
           : targetReader.stringValue;
 
       if (entries.containsKey(targetName)) {
@@ -138,18 +138,16 @@ ${cases.join('\n')}
   }
 }
 
-Iterable<AnnotatedElement> _fromLibrary(LibraryElement2 library) sync* {
+Iterable<AnnotatedElement> _fromLibrary(LibraryElement library) sync* {
   // Merging the `topLevelElements` picks up private elements and fields.
   // While neither is supported, it allows us to provide helpful errors if devs
   // are using the annotations incorrectly.
-  final mergedElements = <Element2>{
+  for (final element in {
     ...library.topLevelFunctions,
     ...library.topLevelVariables,
     ...library.classes,
     ...library.exportNamespace.definedNames2.values,
-  };
-
-  for (var element in mergedElements) {
+  }) {
     final annotations = _checker.annotationsOf(element).toList();
 
     if (annotations.isEmpty) {
