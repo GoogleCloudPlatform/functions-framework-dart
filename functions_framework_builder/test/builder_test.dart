@@ -14,14 +14,12 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'dart:isolate';
 
 import 'package:build/build.dart';
 import 'package:build_test/build_test.dart';
 import 'package:functions_framework_builder/builder.dart';
 import 'package:glob/glob.dart';
 import 'package:logging/logging.dart';
-import 'package:package_config/package_config.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -492,11 +490,7 @@ Response function2(Request request) => Response.ok('Hello, World!');
 
     final srcs = {'$_pkgName|lib/functions.dart': inputContent};
 
-    await testBuilder(
-      functionsFrameworkBuilder(),
-      srcs,
-      packageConfig: await _getTestPackageConfig(),
-    );
+    await testBuilder(functionsFrameworkBuilder(), srcs);
   });
 
   group('invalid function shapes are not allowed', () {
@@ -632,7 +626,6 @@ Future<void> _generateTest(
         fail(output);
       });
     },
-    packageConfig: await _getTestPackageConfig(),
     readerWriter: await _getReaderWriter(),
   );
 }
@@ -661,19 +654,6 @@ Future<TestReaderWriter> _getReaderWriter() async {
   }
 
   return readerWriter;
-}
-
-Future<PackageConfig> _getTestPackageConfig() async {
-  final current = await loadPackageConfigUri((await Isolate.packageConfig)!);
-  return PackageConfig([
-    ...current.packages,
-    Package(
-      _pkgName,
-      Uri.parse('file:///$_pkgName/'),
-      packageUriRoot: Uri.parse('lib/'),
-      languageVersion: LanguageVersion(3, 6),
-    ),
-  ]);
 }
 
 const _ignoredLogMessages = {
