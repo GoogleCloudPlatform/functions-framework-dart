@@ -24,7 +24,31 @@ scripts:
   build:all:
     description: Build all packages that depend on build_runner.
     run: |
-      melos exec --scope="functions_framework" -- dart run build_runner build --delete-conflicting-outputs
-      melos exec --scope="__*__" -- dart run build_runner build --delete-conflicting-outputs
-      melos exec --scope="dartfn" -- dart run build_runner build --delete-conflicting-outputs
-      melos exec --ignore="functions_framework,dartfn,__*__" --depends-on="build_runner" -- dart run build_runner build --delete-conflicting-outputs
+      melos run build:1:functions_framework
+      melos run build:2:templates
+      melos run build:3:dartfn
+      melos run build:4:leafs
+
+  build:1:functions_framework:
+    run: dart run build_runner build --delete-conflicting-outputs
+    packageFilters:
+      scope: functions_framework
+
+  build:2:templates:
+    run: dart run build_runner build --delete-conflicting-outputs
+    packageFilters:
+      scope: "__*__"
+
+  build:3:dartfn:
+    run: dart run build_runner build --delete-conflicting-outputs
+    packageFilters:
+      scope: dartfn
+
+  build:4:leafs:
+    run: dart run build_runner build --delete-conflicting-outputs
+    packageFilters:
+      ignore:
+        - functions_framework
+        - dartfn
+        - "__*__"
+      dependsOn: build_runner
