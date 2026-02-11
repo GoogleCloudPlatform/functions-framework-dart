@@ -19,3 +19,12 @@ packages:
 command:
   bootstrap:
     usePubspecOverrides: false
+
+scripts:
+  build:all:
+    description: Build all packages that depend on build_runner.
+    run: |
+      melos exec --scope="functions_framework" -- dart run build_runner build --delete-conflicting-outputs
+      melos exec --scope="__*__" -- dart run build_runner build --delete-conflicting-outputs
+      melos exec --scope="dartfn" -- dart run build_runner build --delete-conflicting-outputs
+      melos exec --ignore="functions_framework,dartfn,__*__" --depends-on="build_runner" -- dart run build_runner build --delete-conflicting-outputs
