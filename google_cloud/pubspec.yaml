@@ -1,7 +1,7 @@
 name: google_cloud
 description: >-
   Utilities for running Dart code correctly on the Google Cloud Platform.
-version: 0.2.1-wip
+version: 0.2.1-beta.1
 repository: https://github.com/GoogleCloudPlatform/functions-framework-dart/tree/main/google_cloud
 
 resolution: workspace
