@@ -8,10 +8,6 @@ dev_dependencies:
   dart_flutter_team_lints: ^3.2.0
   melos: ^7.0.0
 workspace:
-  - dartfn
-  - dartfn/templates/cloudevent
-  - dartfn/templates/helloworld
-  - dartfn/templates/json
   - examples/fullstack/backend
   - examples/fullstack/frontend-cli
   - examples/hello
@@ -34,8 +30,7 @@ melos:
       run: |
         melos run build:1:functions_framework
         melos run build:2:templates
-        melos run build:3:dartfn
-        melos run build:4:leafs
+        melos run build:3:leafs
 
     build:1:functions_framework:
       exec: dart run build_runner build --delete-conflicting-outputs
@@ -47,16 +42,10 @@ melos:
       packageFilters:
         scope: "__*__"
 
-    build:3:dartfn:
-      exec: dart run build_runner build --delete-conflicting-outputs
-      packageFilters:
-        scope: dartfn
-
-    build:4:leafs:
+    build:3:leafs:
       exec: dart run build_runner build --delete-conflicting-outputs
       packageFilters:
         ignore:
           - functions_framework
-          - dartfn
           - "__*__"
         dependsOn: build_runner

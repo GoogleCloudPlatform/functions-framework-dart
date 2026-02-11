@@ -16,16 +16,16 @@ permissions: read-all
 
 jobs:
   job_001:
-    name: "unit_test; linux; Dart 3.9.0; PKGS: dartfn, functions_framework_builder, google_cloud, integration_test; `dart test`"
+    name: "unit_test; linux; Dart 3.9.0; PKGS: functions_framework_builder, google_cloud, integration_test; `dart test`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.9.0;packages:dartfn-functions_framework_builder-google_cloud-integration_test;commands:test_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.9.0;packages:functions_framework_builder-google_cloud-integration_test;commands:test_0"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:3.9.0;packages:dartfn-functions_framework_builder-google_cloud-integration_test
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.9.0;packages:functions_framework_builder-google_cloud-integration_test
             os:ubuntu-latest;pub-cache-hosted;sdk:3.9.0
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -35,16 +35,7 @@ jobs:
           sdk: "3.9.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - id: dartfn_pub_upgrade
-        name: dartfn; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: dartfn
-      - name: dartfn; dart test
-        run: dart test
-        if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
-        working-directory: dartfn
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - id: functions_framework_builder_pub_upgrade
         name: functions_framework_builder; dart pub upgrade
         run: dart pub upgrade
@@ -77,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf
         with:
           path: "~/.pub-cache/hosted"
           key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.9.0;packages:google_cloud;commands:command"
@@ -92,7 +83,7 @@ jobs:
           sdk: "3.9.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade
@@ -103,16 +94,16 @@ jobs:
         if: "always() && steps.google_cloud_pub_upgrade.conclusion == 'success'"
         working-directory: google_cloud
   job_003:
-    name: "unit_test; linux; Dart dev; PKGS: dartfn, dartfn/templates/cloudevent, dartfn/templates/helloworld, dartfn/templates/json, examples/fullstack/backend, examples/hello, examples/json, examples/protobuf_firestore, examples/raw_cloudevent, functions_framework_builder, google_cloud, integration_test; `dart test`"
+    name: "unit_test; linux; Dart dev; PKGS: examples/fullstack/backend, examples/hello, examples/json, examples/protobuf_firestore, examples/raw_cloudevent, functions_framework_builder, google_cloud, integration_test; `dart test`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework_builder-google_cloud-integration_test;commands:test_0"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:examples/fullstack/backend-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework_builder-google_cloud-integration_test;commands:test_0"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-dartfn/templates/cloudevent-dartfn/templates/helloworld-dartfn/templates/json-examples/fullstack/backend-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework_builder-google_cloud-integration_test
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:examples/fullstack/backend-examples/hello-examples/json-examples/protobuf_firestore-examples/raw_cloudevent-functions_framework_builder-google_cloud-integration_test
             os:ubuntu-latest;pub-cache-hosted;sdk:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -122,43 +113,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - id: dartfn_pub_upgrade
-        name: dartfn; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: dartfn
-      - name: dartfn; dart test
-        run: dart test
-        if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
-        working-directory: dartfn
-      - id: dartfn_templates_cloudevent_pub_upgrade
-        name: dartfn/templates/cloudevent; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: dartfn/templates/cloudevent
-      - name: dartfn/templates/cloudevent; dart test
-        run: dart test
-        if: "always() && steps.dartfn_templates_cloudevent_pub_upgrade.conclusion == 'success'"
-        working-directory: dartfn/templates/cloudevent
-      - id: dartfn_templates_helloworld_pub_upgrade
-        name: dartfn/templates/helloworld; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: dartfn/templates/helloworld
-      - name: dartfn/templates/helloworld; dart test
-        run: dart test
-        if: "always() && steps.dartfn_templates_helloworld_pub_upgrade.conclusion == 'success'"
-        working-directory: dartfn/templates/helloworld
-      - id: dartfn_templates_json_pub_upgrade
-        name: dartfn/templates/json; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: dartfn/templates/json
-      - name: dartfn/templates/json; dart test
-        run: dart test
-        if: "always() && steps.dartfn_templates_json_pub_upgrade.conclusion == 'success'"
-        working-directory: dartfn/templates/json
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - id: examples_fullstack_backend_pub_upgrade
         name: examples/fullstack/backend; dart pub upgrade
         run: dart pub upgrade
@@ -232,16 +187,16 @@ jobs:
         if: "always() && steps.integration_test_pub_upgrade.conclusion == 'success'"
         working-directory: integration_test
   job_004:
-    name: "unit_test; linux; Dart dev; PKGS: dartfn, functions_framework, integration_test; `dart test --run-skipped -t presubmit-only`"
+    name: "unit_test; linux; Dart dev; PKGS: functions_framework, integration_test; `dart test --run-skipped -t presubmit-only`"
     runs-on: ubuntu-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf
         with:
           path: "~/.pub-cache/hosted"
-          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-functions_framework-integration_test;commands:test_1"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:functions_framework-integration_test;commands:test_1"
           restore-keys: |
-            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:dartfn-functions_framework-integration_test
+            os:ubuntu-latest;pub-cache-hosted;sdk:dev;packages:functions_framework-integration_test
             os:ubuntu-latest;pub-cache-hosted;sdk:dev
             os:ubuntu-latest;pub-cache-hosted
             os:ubuntu-latest
@@ -251,16 +206,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      - id: dartfn_pub_upgrade
-        name: dartfn; dart pub upgrade
-        run: dart pub upgrade
-        if: "always() && steps.checkout.conclusion == 'success'"
-        working-directory: dartfn
-      - name: "dartfn; dart test --run-skipped -t presubmit-only"
-        run: dart test --run-skipped -t presubmit-only
-        if: "always() && steps.dartfn_pub_upgrade.conclusion == 'success'"
-        working-directory: dartfn
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - id: functions_framework_pub_upgrade
         name: functions_framework; dart pub upgrade
         run: dart pub upgrade
@@ -284,7 +230,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf
         with:
           path: "~/.pub-cache/hosted"
           key: "os:macos-latest;pub-cache-hosted;sdk:3.9.0;packages:google_cloud;commands:test_0"
@@ -299,7 +245,7 @@ jobs:
           sdk: "3.9.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade
@@ -314,7 +260,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Cache Pub hosted dependencies
-        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf
         with:
           path: "~/.pub-cache/hosted"
           key: "os:macos-latest;pub-cache-hosted;sdk:dev;packages:google_cloud;commands:test_0"
@@ -329,7 +275,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade
@@ -349,7 +295,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - id: google_cloud_pub_upgrade
         name: google_cloud; dart pub upgrade
         run: dart pub upgrade

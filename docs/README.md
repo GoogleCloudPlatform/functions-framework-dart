@@ -8,11 +8,7 @@ and deploy lightweight, event-driven functions.
 
 [Introduction](01-introduction.md)  
 
-### Setting up
-
-[Install dartfn](quickstarts/00-install-dartfn.md)
-
-### Quickstarts
+## Quickstarts
 
 [Quickstart: Dart](quickstarts/01-quickstart-dart.md)  
 [Quickstart: Docker](quickstarts/02-quickstart-docker.md)  
