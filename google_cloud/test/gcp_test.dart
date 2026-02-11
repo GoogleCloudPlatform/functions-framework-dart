@@ -26,9 +26,7 @@ void main() {
 
     test(
       'not environment',
-      onPlatform: {
-        'windows': const Skip('Cannot validate tests on windows.'),
-      },
+      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
       () async {
         final proc = await _run(projectIdPrint);
 
@@ -484,9 +482,7 @@ void main() {
         // First call - should discover and cache
         final proc1 = await _run(
           'test/src/project_id_cache_print.dart',
-          environment: {
-            'GOOGLE_APPLICATION_CREDENTIALS': credFile.path,
-          },
+          environment: {'GOOGLE_APPLICATION_CREDENTIALS': credFile.path},
         );
 
         await expectLater(

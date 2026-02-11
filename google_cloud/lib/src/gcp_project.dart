@@ -31,11 +31,11 @@ String? _cachedProjectId;
 ///
 /// Like [projectIdFromMetadataServer], if no value is found, a
 /// [BadConfigurationException] is thrown.
-Future<String> computeProjectId() async =>
-    _cachedProjectId ??= projectIdFromEnvironment() ??
-        projectIdFromCredentialsFile() ??
-        await projectIdFromGcloudConfig() ??
-        await projectIdFromMetadataServer();
+Future<String> computeProjectId() async => _cachedProjectId ??=
+    projectIdFromEnvironment() ??
+    projectIdFromCredentialsFile() ??
+    await projectIdFromGcloudConfig() ??
+    await projectIdFromMetadataServer();
 
 /// Clears the cached project ID.
 ///
@@ -160,8 +160,7 @@ Future<String> projectIdFromMetadataServer() async {
 
     return response.body;
   } on SocketException catch (e) {
-    throw BadConfigurationException(
-      '''
+    throw BadConfigurationException('''
 Could not connect to $host.
 If not running on Google Cloud, one of these environment variables must be set
 to the target Google Project ID:
@@ -169,9 +168,7 @@ ${gcpProjectIdEnvironmentVariables.join('\n')}
 
 Alternatively, set GOOGLE_APPLICATION_CREDENTIALS to point to a service account
 JSON file that contains a "project_id" field.
-''',
-      details: e.toString(),
-    );
+''', details: e.toString());
   }
 }
 
