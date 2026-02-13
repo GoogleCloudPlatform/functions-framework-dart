@@ -14,6 +14,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:google_cloud/general.dart';
 import 'package:google_cloud/http_serving.dart';
@@ -146,6 +147,27 @@ void main() {
         contains('Bad request. Custom bad request'),
       );
     });
+
+    test('badRequestMiddleware logs to stderr', () async {
+      final stderrLines = <String>[];
+      final handler = const Pipeline()
+          .addMiddleware(createLoggingMiddleware())
+          .addHandler((request) {
+            throw BadRequestException(400, 'Custom bad request');
+          });
+
+      await IOOverrides.runZoned(() async {
+        final response = await handler(
+          Request('GET', Uri.parse('http://localhost/')),
+        );
+        expect(response.statusCode, 400);
+      }, stderr: () => _MockStdout(stderrLines));
+
+      expect(stderrLines, hasLength(1));
+      final lines = stderrLines.single.split('\n');
+      expect(lines.first, contains('Custom bad request (400)'));
+      expect(lines[1], contains('logging_test.dart'));
+    });
   });
 
   group('BadRequestException', () {
@@ -177,4 +199,21 @@ void main() {
 class _NonEncodable {
   @override
   String toString() => 'I am not encodable';
+}
+
+class _MockStdout implements Stdout {
+  final List<String> _lines;
+
+  _MockStdout(this._lines);
+
+  @override
+  bool get supportsAnsiEscapes => false;
+
+  @override
+  void writeln([Object? object = '']) {
+    _lines.add('$object');
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

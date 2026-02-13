@@ -93,12 +93,27 @@ void main() {
   }) {
     final map = jsonDecode(entry) as Map<String, dynamic>;
 
-    expect(map, {
-      'message': message,
-      'severity': severity.name,
-      'logging.googleapis.com/trace':
-          'projects/test_project_id/traces/$traceStart',
-    });
+    expect(map, containsPair('message', message));
+    expect(map, containsPair('severity', severity.name));
+    expect(
+      map,
+      containsPair(
+        'logging.googleapis.com/trace',
+        'projects/test_project_id/traces/$traceStart',
+      ),
+    );
+
+    if (severity >= LogSeverity.warning) {
+      expect(
+        map,
+        containsPair(
+          'logging.googleapis.com/sourceLocation',
+          isA<Map<String, dynamic>>(),
+        ),
+      );
+    } else {
+      expect(map, isNot(contains('logging.googleapis.com/sourceLocation')));
+    }
   }
 
   void validateCloudErrorOutput(
@@ -337,16 +352,49 @@ void main() {
     test('all levels in and out of zone', () async {
       await doGet('');
       final trace = 'projects/test_project_id/traces/$traceStart';
+
+      Matcher isLog(String message, String severity) {
+        final severityEnum = LogSeverity.values.firstWhere(
+          (e) => e.name == severity,
+        );
+        var matcher = allOf(
+          containsPair('message', message),
+          containsPair('severity', severity),
+          containsPair('logging.googleapis.com/trace', trace),
+        );
+
+        if (severityEnum >= LogSeverity.warning) {
+          matcher = allOf(
+            matcher,
+            containsPair(
+              'logging.googleapis.com/sourceLocation',
+              isA<Map<String, dynamic>>(),
+            ),
+          );
+        } else {
+          matcher = allOf(
+            matcher,
+            isNot(contains('logging.googleapis.com/sourceLocation')),
+          );
+        }
+
+        return isA<String>().having(
+          (e) => jsonDecode(e) as Map,
+          'json',
+          matcher,
+        );
+      }
+
       expectLines([
-        '{"message":"default","severity":"DEFAULT","logging.googleapis.com/trace":"$trace"}',
-        '{"message":"debug","severity":"DEBUG","logging.googleapis.com/trace":"$trace"}',
-        '{"message":"info","severity":"INFO","logging.googleapis.com/trace":"$trace"}',
-        '{"message":"notice","severity":"NOTICE","logging.googleapis.com/trace":"$trace"}',
-        '{"message":"warning","severity":"WARNING","logging.googleapis.com/trace":"$trace"}',
-        '{"message":"error","severity":"ERROR","logging.googleapis.com/trace":"$trace"}',
-        '{"message":"critical","severity":"CRITICAL","logging.googleapis.com/trace":"$trace"}',
-        '{"message":"alert","severity":"ALERT","logging.googleapis.com/trace":"$trace"}',
-        '{"message":"emergency","severity":"EMERGENCY","logging.googleapis.com/trace":"$trace"}',
+        isLog('default', 'DEFAULT'),
+        isLog('debug', 'DEBUG'),
+        isLog('info', 'INFO'),
+        isLog('notice', 'NOTICE'),
+        isLog('warning', 'WARNING'),
+        isLog('error', 'ERROR'),
+        isLog('critical', 'CRITICAL'),
+        isLog('alert', 'ALERT'),
+        isLog('emergency', 'EMERGENCY'),
       ]);
     });
   });

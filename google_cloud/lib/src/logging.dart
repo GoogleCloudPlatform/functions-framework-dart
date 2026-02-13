@@ -37,6 +37,14 @@ enum LogSeverity implements Comparable<LogSeverity> {
   @override
   int compareTo(LogSeverity other) => value.compareTo(other.value);
 
+  bool operator <(LogSeverity other) => value < other.value;
+
+  bool operator <=(LogSeverity other) => value <= other.value;
+
+  bool operator >(LogSeverity other) => value > other.value;
+
+  bool operator >=(LogSeverity other) => value >= other.value;
+
   @override
   String toString() => 'LogSeverity $name ($value)';
 
@@ -54,8 +62,7 @@ String structuredLogEntry(
   String? traceId,
   StackTrace? stackTrace,
 }) {
-  final chain = formatStackTrace(stackTrace);
-  final stackFrame = chain.traces.firstOrNull?.frames.firstOrNull;
+  final stackFrame = _debugFrame(severity, stackTrace: stackTrace);
 
   // https://cloud.google.com/logging/docs/agent/logging/configuration#special-fields
   Map<String, dynamic> createContent(Object innerMessage) => {
@@ -85,11 +92,30 @@ Map<String, dynamic> _sourceLocation(Frame frame) => {
   'function': frame.member,
 };
 
-/// Formats the given [stackTrace] as a [Chain] and folds core frames.
-///
-/// [stackTrace] is the optional stack trace to format. If not provided, the
-/// current stack trace is used.
+Frame? _debugFrame(LogSeverity severity, {StackTrace? stackTrace}) {
+  if (stackTrace == null) {
+    if (severity >= LogSeverity.warning) {
+      stackTrace = StackTrace.current;
+    } else {
+      return null;
+    }
+  }
+
+  final chain = formatStackTrace(stackTrace);
+  final stackFrame = chain.traces
+      .expand((t) => t.frames)
+      .firstWhere(
+        (f) => !_frameFolder(f),
+        orElse: () => chain.traces.first.frames.first,
+      );
+
+  return stackFrame;
+}
+
 @internal
 Chain formatStackTrace(StackTrace? stackTrace) =>
     (stackTrace == null ? Chain.current() : Chain.forTrace(stackTrace))
-        .foldFrames((f) => f.isCore, terse: true);
+        .foldFrames(_frameFolder, terse: true);
+
+bool _frameFolder(Frame frame) =>
+    frame.isCore || frame.package == 'google_cloud';

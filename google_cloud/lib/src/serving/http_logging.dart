@@ -25,6 +25,9 @@ import 'bad_request_exception.dart';
 
 export '../logging.dart';
 
+const _badRequestExceptionContextKey = 'google_cloud.bad_request_exception';
+const _badStackTraceContextKey = 'google_cloud.bad_stack_trace';
+
 /// Convenience [Middleware] that handles logging depending on [projectId].
 ///
 /// [projectId] is the optional Google Cloud Project ID used for trace
@@ -55,10 +58,10 @@ Handler _errorWriter(Handler innerHandler) => (request) async {
   final response = await innerHandler(request);
 
   final error =
-      response.context['bad_request_exception'] as BadRequestException?;
+      response.context[_badRequestExceptionContextKey] as BadRequestException?;
 
   if (error != null) {
-    final stack = response.context['bad_stack_trace'] as StackTrace?;
+    final stack = response.context[_badStackTraceContextKey] as StackTrace?;
     final output = [
       error,
       if (error.innerError != null)
@@ -79,7 +82,10 @@ Response _responseFromBadRequest(BadRequestException e, StackTrace stack) =>
     Response(
       e.statusCode,
       body: 'Bad request. ${e.message}',
-      context: {'bad_request_exception': e, 'bad_stack_trace': stack},
+      context: {
+        _badRequestExceptionContextKey: e,
+        _badStackTraceContextKey: stack,
+      },
     );
 
 /// Return [Middleware] that logs errors using Google Cloud structured logs and
