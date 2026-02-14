@@ -32,7 +32,7 @@ void main() {
 
         await expectLater(
           errorOut,
-          containsAll(gcpProjectIdEnvironmentVariables),
+          containsAll(projectIdEnvironmentVariableOptions),
         );
         await expectLater(proc.stdout, emitsDone);
 
@@ -44,7 +44,7 @@ void main() {
       final proc = await _run(
         projectIdPrint,
         environment: {
-          gcpProjectIdEnvironmentVariables.first: 'test-project-42',
+          projectIdEnvironmentVariableOptions.first: 'test-project-42',
         },
       );
 
@@ -106,7 +106,8 @@ void main() {
           final proc = await _run(
             projectIdPrint,
             environment: {
-              gcpProjectIdEnvironmentVariables.first: 'test-project-from-env',
+              projectIdEnvironmentVariableOptions.first:
+                  'test-project-from-env',
               credentialsPathEnvironmentVariable: credFile.path,
             },
           );
@@ -146,7 +147,7 @@ void main() {
 
           await expectLater(
             errorOut,
-            containsAll(gcpProjectIdEnvironmentVariables),
+            containsAll(projectIdEnvironmentVariableOptions),
           );
           await expectLater(proc.stdout, emitsDone);
 
@@ -173,7 +174,7 @@ void main() {
 
         await expectLater(
           errorOut,
-          containsAll(gcpProjectIdEnvironmentVariables),
+          containsAll(projectIdEnvironmentVariableOptions),
         );
         await expectLater(proc.stdout, emitsDone);
 
@@ -201,7 +202,7 @@ void main() {
 
           await expectLater(
             errorOut,
-            containsAll(gcpProjectIdEnvironmentVariables),
+            containsAll(projectIdEnvironmentVariableOptions),
           );
           await expectLater(proc.stdout, emitsDone);
 
@@ -304,7 +305,7 @@ void main() {
 
         await expectLater(
           errorOut,
-          containsAll(gcpProjectIdEnvironmentVariables),
+          containsAll(projectIdEnvironmentVariableOptions),
         );
         await expectLater(proc.stdout, emitsDone);
 
@@ -341,7 +342,7 @@ void main() {
 
           await expectLater(
             errorOut,
-            containsAll(gcpProjectIdEnvironmentVariables),
+            containsAll(projectIdEnvironmentVariableOptions),
           );
           await expectLater(proc.stdout, emitsDone);
 
@@ -379,7 +380,7 @@ void main() {
 
           await expectLater(
             errorOut,
-            containsAll(gcpProjectIdEnvironmentVariables),
+            containsAll(projectIdEnvironmentVariableOptions),
           );
           await expectLater(proc.stdout, emitsDone);
 
@@ -417,7 +418,7 @@ void main() {
 
           await expectLater(
             errorOut,
-            containsAll(gcpProjectIdEnvironmentVariables),
+            containsAll(projectIdEnvironmentVariableOptions),
           );
           await expectLater(proc.stdout, emitsDone);
 
@@ -455,7 +456,7 @@ void main() {
 
           await expectLater(
             errorOut,
-            containsAll(gcpProjectIdEnvironmentVariables),
+            containsAll(projectIdEnvironmentVariableOptions),
           );
           await expectLater(proc.stdout, emitsDone);
 

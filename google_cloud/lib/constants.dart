@@ -20,6 +20,7 @@ export 'src/constants.dart'
         cloudTraceContextHeader,
         credentialsPathEnvironmentVariable,
         defaultListenPort,
-        gcpProjectIdEnvironmentVariables,
         metadataFlavorHeaders,
-        portEnvironmentVariable;
+        portEnvironmentVariable,
+        projectIdEnvironmentVariable,
+        projectIdEnvironmentVariableOptions;

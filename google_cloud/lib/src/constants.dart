@@ -26,18 +26,21 @@ const credentialsPathEnvironmentVariable = 'GOOGLE_APPLICATION_CREDENTIALS';
 /// current Google Cloud project ID.
 ///
 /// For context, see:
+/// * https://github.com/googleapis/google-auth-library-nodejs/blob/main/src/auth/googleauth.ts
 /// * https://cloud.google.com/functions/docs/env-var
-/// * https://cloud.google.com/compute/docs/gcloud-compute#default_project
-/// * https://github.com/GoogleContainerTools/gcp-auth-webhook/blob/08136ca171fe5713cc70ef822c911fbd3a1707f5/server.go#L38-L44
 ///
 /// Note: these are ordered starting from the most current/canonical to least.
 /// (At least as could be determined at the time of writing.)
-const gcpProjectIdEnvironmentVariables = {
+const projectIdEnvironmentVariableOptions = {
+  projectIdEnvironmentVariable,
   'GCP_PROJECT',
   'GCLOUD_PROJECT',
   'CLOUDSDK_CORE_PROJECT',
-  'GOOGLE_CLOUD_PROJECT',
 };
+
+/// The standard environment variable for specifying the Google Cloud project
+/// ID.
+const projectIdEnvironmentVariable = 'GOOGLE_CLOUD_PROJECT';
 
 /// The default port a service should listen on if [portEnvironmentVariable] is
 /// not set.

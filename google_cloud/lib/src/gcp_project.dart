@@ -46,13 +46,13 @@ Future<String> computeProjectId({bool refresh = false}) async {
 /// Returns the
 /// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
 /// for the current Google Cloud Project by checking the environment variables
-/// in [gcpProjectIdEnvironmentVariables].
+/// in [projectIdEnvironmentVariableOptions].
 ///
 /// The list is checked in order. This is useful for local development.
 ///
 /// If no matching variable is found, `null` is returned.
 String? projectIdFromEnvironmentVariables() {
-  for (var key in gcpProjectIdEnvironmentVariables) {
+  for (var key in projectIdEnvironmentVariableOptions) {
     final value = Platform.environment[key];
     if (value != null && value.isNotEmpty) {
       return value;
@@ -171,7 +171,7 @@ Future<String> projectIdFromMetadataServer({
         '''
 If not running on Google Cloud, one of these environment variables must be set
 to the target Google Project ID:
-${gcpProjectIdEnvironmentVariables.join('\n')}
+${projectIdEnvironmentVariableOptions.join('\n')}
 
 Alternatively, set $credentialsPathEnvironmentVariable to point to a service account
 JSON file that contains a "project_id" field.
