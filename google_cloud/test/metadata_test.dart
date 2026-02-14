@@ -57,7 +57,7 @@ void main() {
       expect(projectId, 'test-project');
     });
 
-    test('non-200 response throws HttpException', () async {
+    test('non-200 response throws MetadataServerException', () async {
       final client = MockClient(
         (request) async => http.Response('Error message', 500),
       );
@@ -65,7 +65,7 @@ void main() {
       expect(
         () => projectIdFromMetadataServer(client: client, refresh: true),
         throwsA(
-          isA<HttpException>().having(
+          isA<MetadataServerException>().having(
             (e) => e.message,
             'message',
             contains('Error message (500)'),
@@ -74,22 +74,31 @@ void main() {
       );
     });
 
-    test('SocketException is wrapped with help', () async {
-      final client = MockClient((request) async {
-        throw const SocketException('Failed to connect');
-      });
+    test(
+      'SocketException is wrapped in MetadataServerException with help',
+      () async {
+        final client = MockClient((request) async {
+          throw const SocketException('Failed to connect');
+        });
 
-      expect(
-        () => projectIdFromMetadataServer(client: client, refresh: true),
-        throwsA(
-          isA<SocketException>().having(
-            (e) => e.message,
-            'message',
-            contains('Could not connect to metadata.google.internal'),
+        expect(
+          () => projectIdFromMetadataServer(client: client, refresh: true),
+          throwsA(
+            isA<MetadataServerException>()
+                .having(
+                  (e) => e.message,
+                  'message',
+                  contains('Could not connect to metadata.google.internal'),
+                )
+                .having(
+                  (e) => e.innerException,
+                  'innerException',
+                  isA<SocketException>(),
+                ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   });
 
   group('serviceAccountEmailFromMetadataServer', () {

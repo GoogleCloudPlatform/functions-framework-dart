@@ -151,11 +151,8 @@ String? _cachedServiceAccountEmail;
 ///
 /// If [refresh] is `true`, the cache is cleared and the value is re-computed.
 ///
-/// If the metadata server cannot be contacted, a [SocketException] is
-/// thrown.
-///
-/// If the metadata server returns a non-200 status code, a [HttpException] is
-/// thrown.
+/// If the metadata server cannot be contacted or returns a non-200 status code,
+/// a [MetadataServerException] is thrown.
 /// {@endtemplate}
 Future<String> projectIdFromMetadataServer({
   http.Client? client,
@@ -213,7 +210,7 @@ Future<String> _getMetadataValue(
       if (exceptionHelp != null) {
         message += '\n$exceptionHelp';
       }
-      throw HttpException(message, uri: url);
+      throw MetadataServerException._(message);
     }
 
     return response.body.trim();
@@ -223,14 +220,31 @@ Future<String> _getMetadataValue(
       message += '\n$exceptionHelp';
     }
 
-    Error.throwWithStackTrace(
-      SocketException(
-        message,
-        osError: e.osError,
-        address: e.address,
-        port: e.port,
-      ),
-      stackTrace,
+    throw MetadataServerException._(
+      message,
+      innerException: e,
+      innerStackTrace: stackTrace,
     );
   }
+}
+
+/// Exception thrown when accessing the GCE metadata server fails.
+final class MetadataServerException implements Exception {
+  /// The message explaining the error.
+  final String message;
+
+  /// The inner exception that caused this failure, if any.
+  final Object? innerException;
+
+  /// The stack trace of the inner exception, if any.
+  final StackTrace? innerStackTrace;
+
+  MetadataServerException._(
+    this.message, {
+    this.innerException,
+    this.innerStackTrace,
+  });
+
+  @override
+  String toString() => 'MetadataServerException: $message';
 }

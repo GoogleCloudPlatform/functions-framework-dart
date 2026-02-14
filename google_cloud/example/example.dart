@@ -34,7 +34,7 @@ class _Server {
     try {
       projectId = await projectIdFromMetadataServer();
       hosted = true;
-    } catch (_) {
+    } on MetadataServerException catch (_) {
       projectId = projectIdFromEnvironmentVariables();
       hosted = false;
     }
@@ -42,12 +42,12 @@ class _Server {
     if (projectId == null) {
       print(
         'Possible project ID environment variables: '
-        '${cloud_constants.gcpProjectIdEnvironmentVariables.join(', ')}',
+        '${cloud_constants.projectIdEnvironmentVariableOptions.join(', ')}',
       );
       throw BadConfigurationException('''
 Could not contact GCP metadata server or find the project-id in one of these
 environment variables:
-  ${cloud_constants.gcpProjectIdEnvironmentVariables.join('\n  ')}''');
+  ${cloud_constants.projectIdEnvironmentVariableOptions.join('\n  ')}''');
     }
 
     print('Current GCP project id: $projectId');

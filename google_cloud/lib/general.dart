@@ -18,6 +18,7 @@
 /// {@canonicalFor gcp_project.projectIdFromCredentialsFile}
 /// {@canonicalFor gcp_project.projectIdFromEnvironmentVariables}
 /// {@canonicalFor gcp_project.projectIdFromGcloudConfig}
+/// {@canonicalFor gcp_project.MetadataServerException}
 /// {@canonicalFor gcp_project.projectIdFromMetadataServer}
 /// {@canonicalFor gcp_project.serviceAccountEmailFromMetadataServer}
 /// {@canonicalFor logging.LogSeverity}
@@ -28,6 +29,7 @@ library;
 
 export 'src/gcp_project.dart'
     show
+        MetadataServerException,
         computeProjectId,
         projectIdFromCredentialsFile,
         projectIdFromEnvironmentVariables,
