@@ -20,7 +20,7 @@ import 'package:http/http.dart' as http;
 import 'constants.dart';
 import 'metadata.dart';
 
-/// A convenience wrapper that tries multiple strategies to find the project id,
+/// A convenience wrapper that tries multiple strategies to find the project ID,
 /// prioritizing local development strategies over cloud discovery.
 ///
 /// The strategies are tried in the following order:

@@ -14,6 +14,30 @@
 
 /// Features for serving HTTP requests on Google Cloud Platform.
 ///
+/// This library provides functions to run a `shelf` server that handles
+/// requests in a way that is compatible with Google Cloud environments like
+/// Cloud Run and Cloud Functions. It includes middleware for logging requests
+/// in the format expected by Google Cloud Logging.
+///
+/// ## Example
+///
+/// ```dart
+/// import 'package:google_cloud/google_cloud.dart';
+/// import 'package:shelf/shelf.dart';
+///
+/// Future<void> main() async {
+///   final handler = const Pipeline()
+///       .addMiddleware(createLoggingMiddleware())
+///       .addHandler(_helloWorldHandler);
+///
+///   await serveHandler(handler);
+/// }
+///
+/// Response _helloWorldHandler(Request request) {
+///   return Response.ok('Hello, World!');
+/// }
+/// ```
+///
 /// {@canonicalFor bad_configuration_exception.BadConfigurationException}
 /// {@canonicalFor bad_request_exception.BadRequestException}
 /// {@canonicalFor http_logging.RequestLogger}

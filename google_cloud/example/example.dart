@@ -34,7 +34,7 @@ class _Server {
     try {
       projectId = await projectIdFromMetadataServer();
       hosted = true;
-    } on Exception {
+    } catch (_) {
       projectId = projectIdFromEnvironmentVariables();
       hosted = false;
     }
