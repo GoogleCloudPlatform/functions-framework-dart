@@ -40,7 +40,28 @@ Future<String> computeProjectId({bool refresh = false}) async {
       projectIdFromEnvironmentVariables() ??
       projectIdFromCredentialsFile() ??
       await projectIdFromGcloudConfig() ??
-      await projectIdFromMetadataServer(refresh: refresh);
+      await () async {
+        try {
+          return await projectIdFromMetadataServer(refresh: refresh);
+        } on MetadataServerException catch (e) {
+          throw MetadataServerException._(
+            '''
+If not running on Google Cloud, one of these environment variables must be set
+to the target Google Project ID:
+${projectIdEnvironmentVariableOptions.join('\n')}
+
+Alternatively, set $credentialsPathEnvironmentVariable to point to a service account
+JSON file that contains a "project_id" field.
+
+If you are running locally, you can also set the default project in the Google
+Cloud SDK by running:
+`gcloud config set project <PROJECT_ID>`
+''',
+            innerException: e.innerException,
+            innerStackTrace: e.innerStackTrace,
+          );
+        }
+      }();
 }
 
 /// Returns the
@@ -94,14 +115,17 @@ String? projectIdFromCredentialsFile() {
 /// for the current Google Cloud Project by querying the gcloud CLI
 /// configuration.
 ///
+/// Note: this functions runs `gcloud config config-helper --format json` and
+/// parses the output.
+///
+/// If gcloud is not installed, not in PATH, or fails to execute, `null` is
+/// returned.
+///
 /// This is useful for local development when developers have authenticated
 /// using `gcloud auth application-default login` and set their project using
 /// `gcloud config set project PROJECT_ID`. The project ID is automatically
 /// discovered from the gcloud CLI without requiring additional environment
 /// variables.
-///
-/// If gcloud is not installed, not in PATH, or fails to execute, `null` is
-/// returned.
 Future<String?> projectIdFromGcloudConfig() async {
   try {
     final result = await Process.run('gcloud', [
@@ -164,15 +188,6 @@ Future<String> projectIdFromMetadataServer({
   return _cachedProjectId ??= await _getMetadataValue(
     'project/project-id',
     client: client,
-    exceptionHelp:
-        '''
-If not running on Google Cloud, one of these environment variables must be set
-to the target Google Project ID:
-${projectIdEnvironmentVariableOptions.join('\n')}
-
-Alternatively, set $credentialsPathEnvironmentVariable to point to a service account
-JSON file that contains a "project_id" field.
-''',
   );
 }
 
@@ -193,11 +208,7 @@ Future<String> serviceAccountEmailFromMetadataServer({
   );
 }
 
-Future<String> _getMetadataValue(
-  String path, {
-  http.Client? client,
-  String? exceptionHelp,
-}) async {
+Future<String> _getMetadataValue(String path, {http.Client? client}) async {
   final url = gceMetadataUrl(path);
 
   try {
@@ -206,22 +217,15 @@ Future<String> _getMetadataValue(
         : client.get(url, headers: metadataFlavorHeaders));
 
     if (response.statusCode != 200) {
-      var message = '${response.body} (${response.statusCode})';
-      if (exceptionHelp != null) {
-        message += '\n$exceptionHelp';
-      }
-      throw MetadataServerException._(message);
+      throw MetadataServerException._(
+        '${response.body} (${response.statusCode})',
+      );
     }
 
     return response.body.trim();
   } on SocketException catch (e, stackTrace) {
-    var message = 'Could not connect to $gceMetadataHost.';
-    if (exceptionHelp != null) {
-      message += '\n$exceptionHelp';
-    }
-
     throw MetadataServerException._(
-      message,
+      'Could not connect to $gceMetadataHost.',
       innerException: e,
       innerStackTrace: stackTrace,
     );
