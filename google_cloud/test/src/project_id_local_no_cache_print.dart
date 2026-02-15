@@ -18,7 +18,8 @@ import 'package:google_cloud/constants.dart';
 import 'package:google_cloud/google_cloud.dart';
 
 Future<void> main() async {
-  // First call - should read from credentials file
+  // First call - should read from credentials file.
+  // Note: Local discovery strategies are NOT cached.
   final projectId1 = await computeProjectId();
   print('First call: $projectId1');
 
@@ -29,15 +30,16 @@ Future<void> main() async {
     await credFile.writeAsString('{"project_id": "modified-project-id"}');
   }
 
-  // Second call - should return cached value (not read file again)
+  // Second call - should return new value because the cache was not accessed or
+  // set in the previous request
   final projectId2 = await computeProjectId();
   print('Second call: $projectId2');
 
-  // If caching works, both should be the same despite file modification
-  if (projectId1 == projectId2) {
-    print('CACHE_WORKS');
+  // If caching is removed for local strategies, they should be different
+  if (projectId1 != projectId2 && projectId2 == 'modified-project-id') {
+    print('NOT_CACHED');
   } else {
-    print('CACHE_FAILED');
-    exit(1);
+    print('CACHE_STILL_WORKS_OR_ERROR');
+    exitCode = 1;
   }
 }

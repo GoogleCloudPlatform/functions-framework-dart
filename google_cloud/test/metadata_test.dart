@@ -113,6 +113,7 @@ void main() {
             'project/project-id',
             client: client,
             timeout: const Duration(seconds: 10),
+            refresh: true,
           ),
           throwsA(
             isA<MetadataServerException>().having(

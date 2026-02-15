@@ -467,7 +467,7 @@ void main() {
       },
     );
 
-    test('computeProjectId caches and returns same value', () async {
+    test('computeProjectId does not cache local values', () async {
       final tempDir = await Directory.systemTemp.createTemp('gcp_test');
       try {
         final credFile = File(
@@ -475,28 +475,63 @@ void main() {
         );
         await credFile.writeAsString('''
 {
-  "project_id": "original-cached-project"
+  "project_id": "original-local-project"
 }
 ''');
 
-        // First call - should discover and cache
+        // First call - should discover original value
         final proc1 = await _run(
-          'test/src/project_id_cache_print.dart',
+          'test/src/project_id_local_no_cache_print.dart',
           environment: {credentialsPathEnvironmentVariable: credFile.path},
         );
 
         await expectLater(
           proc1.stdout,
           emitsInOrder([
-            'First call: original-cached-project',
-            'Second call: original-cached-project',
-            'CACHE_WORKS',
+            'First call: original-local-project',
+            'Second call: modified-project-id',
+            'NOT_CACHED',
           ]),
         );
         await expectLater(proc1.stderr, emitsDone);
         await proc1.shouldExit(0);
       } finally {
         await tempDir.delete(recursive: true);
+      }
+    });
+
+    test('computeProjectId caches metadata results', () async {
+      final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+      var callCount = 0;
+      server.listen((request) {
+        callCount++;
+        request.response
+          ..write('metadata-project-$callCount')
+          ..close();
+      });
+
+      try {
+        final proc = await _run(
+          'test/src/project_id_metadata_cache_print.dart',
+          environment: {
+            'GCE_METADATA_HOST': '${server.address.address}:${server.port}',
+            'PATH': '', // Prevent finding gcloud
+          },
+        );
+
+        await expectLater(
+          proc.stdout,
+          emitsInOrder([
+            'First call: metadata-project-1',
+            'Second call: metadata-project-1',
+            'CACHE_WORKS',
+          ]),
+        );
+        await expectLater(proc.stderr, emitsDone);
+        await proc.shouldExit(0);
+        expect(callCount, 1, reason: 'Metadata server should only be called once');
+      } finally {
+        await server.close();
       }
     });
 

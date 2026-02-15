@@ -32,22 +32,27 @@ import 'metadata.dart';
 /// * [projectIdFromGcloudConfig]
 /// * [projectIdFromMetadataServer]
 ///
+/// If [client] is provided, it is used to make the request to the metadata
+/// server if all other strategies fail.
+///
 /// To understand the behavior of [refresh] and the caching behavior, see
 /// [projectIdFromMetadataServer].
-Future<String> computeProjectId({bool refresh = false}) async {
-  if (refresh) {
-    _cachedComputeProjectId = null;
-  }
-  return _cachedComputeProjectId ??=
-      projectIdFromEnvironmentVariables() ??
-      projectIdFromCredentialsFile() ??
-      await projectIdFromGcloudConfig() ??
-      await () async {
-        try {
-          return await projectIdFromMetadataServer(refresh: refresh);
-        } on MetadataServerException catch (e) {
-          throw MetadataServerException._(
-            '''
+Future<String> computeProjectId({
+  http.Client? client,
+  bool refresh = false,
+}) async =>
+    projectIdFromEnvironmentVariables() ??
+    projectIdFromCredentialsFile() ??
+    await projectIdFromGcloudConfig() ??
+    await () async {
+      try {
+        return await projectIdFromMetadataServer(
+          client: client,
+          refresh: refresh,
+        );
+      } on MetadataServerException catch (e) {
+        throw MetadataServerException._(
+          '''
 If not running on Google Cloud, one of these environment variables must be set
 to the target Google Project ID:
 ${projectIdEnvironmentVariableOptions.join('\n')}
@@ -59,12 +64,11 @@ If you are running locally, you can also set the default project in the Google
 Cloud SDK by running:
 `gcloud config set project <PROJECT_ID>`
 ''',
-            innerException: e.innerException,
-            innerStackTrace: e.innerStackTrace,
-          );
-        }
-      }();
-}
+          innerException: e.innerException,
+          innerStackTrace: e.innerStackTrace,
+        );
+      }
+    }();
 
 /// Returns the
 /// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
@@ -157,14 +161,8 @@ Future<String?> projectIdFromGcloudConfig() async {
   }
 }
 
-/// Cached project ID from [computeProjectId].
-String? _cachedComputeProjectId;
-
-/// Cached project ID from [projectIdFromMetadataServer].
-String? _cachedMetadataProjectId;
-
-/// Cached service account email to avoid redundant discovery operations.
-String? _cachedServiceAccountEmail;
+/// Cached metadata values to avoid redundant discovery operations.
+final _metadataCache = <String, String>{};
 
 /// Returns a [Future] that completes with the
 /// [Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)
@@ -186,15 +184,8 @@ String? _cachedServiceAccountEmail;
 Future<String> projectIdFromMetadataServer({
   http.Client? client,
   bool refresh = false,
-}) async {
-  if (refresh) {
-    _cachedMetadataProjectId = null;
-  }
-  return _cachedMetadataProjectId ??= await getMetadataValue(
-    'project/project-id',
-    client: client,
-  );
-}
+}) async =>
+    getMetadataValue('project/project-id', client: client, refresh: refresh);
 
 /// A convenience wrapper that tries to retrieve the default service account
 /// email from the Metadata Server.
@@ -203,17 +194,12 @@ Future<String> projectIdFromMetadataServer({
 Future<String> serviceAccountEmailFromMetadataServer({
   http.Client? client,
   bool refresh = false,
-}) async {
-  if (refresh) {
-    _cachedServiceAccountEmail = null;
-  }
-  return _cachedServiceAccountEmail ??= await getMetadataValue(
-    'instance/service-accounts/default/email',
-    client: client,
-  );
-}
+}) async => getMetadataValue(
+  'instance/service-accounts/default/email',
+  client: client,
+  refresh: refresh,
+);
 
-@internal
 /// Retrieves a value from the GCE metadata server.
 ///
 /// If [client] is provided, it is used to make the request to the metadata
@@ -228,11 +214,17 @@ Future<String> serviceAccountEmailFromMetadataServer({
 ///
 /// [timeout] defaults to 1 second, which we set to a very low value to avoid
 /// waiting too long.
+@internal
 Future<String> getMetadataValue(
   String path, {
   http.Client? client,
   Duration timeout = const Duration(seconds: 1),
+  bool refresh = false,
 }) async {
+  if (!refresh) {
+    if (_metadataCache[path] case final value?) return value;
+  }
+
   final url = gceMetadataUrl(path);
 
   try {
@@ -274,7 +266,7 @@ Future<String> getMetadataValue(
       );
     }
 
-    return response.body.trim();
+    return _metadataCache[path] = response.body.trim();
   } on TimeoutException catch (e, stackTrace) {
     throw MetadataServerException._(
       'Metadata server check timed out.',
