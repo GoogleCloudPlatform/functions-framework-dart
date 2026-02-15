@@ -14,5 +14,5 @@
 import 'package:google_cloud/google_cloud.dart';
 
 void main() {
-  print(listenPort());
+  print(listenPortFromEnvironment());
 }

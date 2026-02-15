@@ -12,12 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// ignore_for_file: comment_references
+import 'dart:io';
 
-/// Utilities for running Dart code correctly on the Google Cloud Platform.
-///
-/// This library exports both [general] and [http_serving].
-library;
+import 'package:google_cloud/google_cloud.dart';
 
-export 'general.dart';
-export 'http_serving.dart';
+Future<void> main() async {
+  // First call - should read from metadata server and cache
+  final projectId1 = await computeProjectId();
+  print('First call: $projectId1');
+
+  // Second call - should return cached value (not hit "server" again)
+  final projectId2 = await computeProjectId();
+  print('Second call: $projectId2');
+
+  if (projectId1 == projectId2) {
+    print('CACHE_WORKS');
+  } else {
+    print('CACHE_FAILED');
+    exitCode = 1;
+  }
+}

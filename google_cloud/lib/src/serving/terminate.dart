@@ -35,7 +35,6 @@ Future<void> waitForTerminate() {
     if (subCopy != null) {
       sigIntSub = null;
       await subCopy.cancel();
-      sigIntSub = null;
       if (sigTermSub != null) {
         await sigTermSub!.cancel();
         sigTermSub = null;

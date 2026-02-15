@@ -88,7 +88,7 @@ Future<void> _serve(
   String? projectId;
   try {
     projectId = await projectIdFromMetadataServer();
-  } on BadConfigurationException {
+  } on Exception {
     // NOOP! - we aren't on Google Cloud, so use normal logging
   }
   final loggingMiddleware = createLoggingMiddleware(projectId: projectId);

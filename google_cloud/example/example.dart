@@ -27,22 +27,13 @@ class _Server {
   });
 
   static Future<_Server> create() async {
-    String? projectId;
-    bool hosted;
+    final projectId = await computeProjectId();
 
+    var hosted = true;
     try {
-      projectId = await projectIdFromMetadataServer();
-      hosted = true;
-    } on BadConfigurationException {
-      projectId = projectIdFromEnvironment();
+      await projectIdFromMetadataServer();
+    } on MetadataServerException catch (_) {
       hosted = false;
-    }
-
-    if (projectId == null) {
-      throw BadConfigurationException('''
-Could not contact GCP metadata server or find the project-id in one of these
-environment variables:
-  ${gcpProjectIdEnvironmentVariables.join('\n  ')}''');
     }
 
     print('Current GCP project id: $projectId');

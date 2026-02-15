@@ -18,17 +18,17 @@ import 'dart:io';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 
+import '../constants.dart';
 import 'bad_configuration_exception.dart';
-import 'constants.dart';
 import 'terminate.dart';
 
 /// Serves [handler] on [InternetAddress.anyIPv4] using the port returned by
-/// [listenPort].
+/// [listenPortFromEnvironment].
 ///
 /// The returned [Future] will complete using [waitForTerminate] after
 /// closing the server.
 Future<void> serveHandler(Handler handler) async {
-  final port = listenPort();
+  final port = listenPortFromEnvironment();
 
   final server = await serve(
     handler,
@@ -47,16 +47,17 @@ Future<void> serveHandler(Handler handler) async {
 ///
 /// See https://cloud.google.com/run/docs/reference/container-contract#port
 ///
-/// If [portEnvironmentKey] is set, but cannot be parsed,
+/// If [portEnvironmentVariable] is set, but cannot be parsed,
 /// a [BadConfigurationException] is thrown.
-int listenPort() {
-  if (Platform.environment.containsKey(portEnvironmentKey)) {
+int listenPortFromEnvironment() {
+  final portStr = Platform.environment[portEnvironmentVariable];
+  if (portStr != null) {
     try {
-      return int.parse(Platform.environment[portEnvironmentKey]!);
+      return int.parse(portStr);
     } on FormatException catch (e) {
       throw BadConfigurationException(
-        'Bad value for environment variable "$portEnvironmentKey" – '
-        '"${Platform.environment[portEnvironmentKey]}" – ${e.message}.',
+        'Bad value for environment variable "$portEnvironmentVariable" – '
+        '"$portStr" – ${e.message}.',
       );
     }
   }

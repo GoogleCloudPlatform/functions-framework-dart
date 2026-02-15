@@ -11,13 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+import 'package:google_cloud/general.dart';
 
-// ignore_for_file: comment_references
-
-/// Utilities for running Dart code correctly on the Google Cloud Platform.
-///
-/// This library exports both [general] and [http_serving].
-library;
-
-export 'general.dart';
-export 'http_serving.dart';
+void main() {
+  print(gceMetadataHost);
+}

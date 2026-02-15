@@ -12,12 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// ignore_for_file: comment_references
-
-/// Utilities for running Dart code correctly on the Google Cloud Platform.
-///
-/// This library exports both [general] and [http_serving].
+/// Constants for Google Cloud Platform integration.
 library;
 
-export 'general.dart';
-export 'http_serving.dart';
+export 'src/constants.dart'
+    show
+        cloudTraceContextHeader,
+        configurationEnvironmentVariable,
+        credentialsPathEnvironmentVariable,
+        defaultListenPort,
+        metadataFlavorHeaders,
+        portEnvironmentVariable,
+        projectIdEnvironmentVariable,
+        projectIdEnvironmentVariableOptions,
+        revisionEnvironmentVariable,
+        serviceEnvironmentVariable;
