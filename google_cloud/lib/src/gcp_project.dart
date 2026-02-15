@@ -204,6 +204,36 @@ Future<String> serviceAccountEmailFromMetadataServer({
 /// The [path] represents the specific metadata endpoint to query (e.g.,
 /// `project/project-id` or `instance/service-accounts/default/email`).
 ///
+/// The result is cached for the lifetime of the Dart process. Subsequent calls
+/// return the cached value without performing discovery again.
+///
+/// If [client] is provided, it is used to make the request to the metadata
+/// server.
+///
+/// If [refresh] is `true`, the cache is cleared and the value is re-computed.
+///
+/// If the metadata server cannot be contacted or returns a non-200 status code,
+/// a [MetadataServerException] is thrown.
+Future<String> getMetadataValue(
+  String path, {
+  http.Client? client,
+  Duration timeout = const Duration(seconds: 1),
+  bool refresh = false,
+}) async {
+  if (!refresh) {
+    if (_metadataCache[path] case final value?) return value;
+  }
+
+  final value = await fetchMetadataValue(
+    path,
+    client: client,
+    timeout: timeout,
+  );
+  return _metadataCache[path] = value;
+}
+
+/// Retrieves a value from the GCE metadata server without caching the result.
+///
 /// If [client] is provided, it is used to make the request to the metadata
 /// server.
 ///
@@ -216,17 +246,11 @@ Future<String> serviceAccountEmailFromMetadataServer({
 ///
 /// [timeout] defaults to 1 second, which we set to a very low value to avoid
 /// waiting too long.
-Future<String> getMetadataValue(
+Future<String> fetchMetadataValue(
   String path, {
   http.Client? client,
   Duration timeout = const Duration(seconds: 1),
-  bool refresh = false,
-  bool cache = true,
 }) async {
-  if (cache && !refresh) {
-    if (_metadataCache[path] case final value?) return value;
-  }
-
   final url = gceMetadataUrl(path);
 
   try {
@@ -268,7 +292,7 @@ Future<String> getMetadataValue(
       );
     }
 
-    return _metadataCache[path] = response.body.trim();
+    return response.body.trim();
   } on TimeoutException catch (e, stackTrace) {
     throw MetadataServerException._(
       'Metadata server check timed out.',
