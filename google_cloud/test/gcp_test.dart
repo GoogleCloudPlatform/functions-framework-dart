@@ -561,7 +561,7 @@ Future<TestProcess> _run(
 }
 
 /// A minimal set of environment variables required for basic system and
-/// networking functionality on Windows when [includeParentEnvironment] is set
+/// networking functionality on Windows when `includeParentEnvironment` is set
 /// to `false`.
 ///
 /// Without these, even loopback connections and basic file operations may fail.
