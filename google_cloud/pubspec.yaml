@@ -21,4 +21,5 @@ dev_dependencies:
   googleapis: ^16.0.0
   googleapis_auth: ^2.0.0
   test: ^1.27.0
+  test_descriptor: ^2.0.2
   test_process: ^2.0.3
