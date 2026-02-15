@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 import 'constants.dart';
 import 'metadata.dart';
@@ -185,7 +187,7 @@ Future<String> projectIdFromMetadataServer({
   if (refresh) {
     _cachedProjectId = null;
   }
-  return _cachedProjectId ??= await _getMetadataValue(
+  return _cachedProjectId ??= await getMetadataValue(
     'project/project-id',
     client: client,
   );
@@ -202,19 +204,66 @@ Future<String> serviceAccountEmailFromMetadataServer({
   if (refresh) {
     _cachedServiceAccountEmail = null;
   }
-  return _cachedServiceAccountEmail ??= await _getMetadataValue(
+  return _cachedServiceAccountEmail ??= await getMetadataValue(
     'instance/service-accounts/default/email',
     client: client,
   );
 }
 
-Future<String> _getMetadataValue(String path, {http.Client? client}) async {
+@internal
+/// Retrieves a value from the GCE metadata server.
+///
+/// If [client] is provided, it is used to make the request to the metadata
+/// server.
+///
+/// If the metadata server cannot be contacted or returns a non-200 status code,
+/// a [MetadataServerException] is thrown.
+///
+/// The request should complete almost immediately if the metadata server is
+/// available. If the metadata server is not available, the request will timeout
+/// after [timeout].
+///
+/// [timeout] defaults to 1 second, which we set to a very low value to avoid
+/// waiting too long.
+Future<String> getMetadataValue(
+  String path, {
+  http.Client? client,
+  Duration timeout = const Duration(seconds: 1),
+}) async {
   final url = gceMetadataUrl(path);
 
   try {
-    final response = await (client == null
-        ? http.get(url, headers: metadataFlavorHeaders)
-        : client.get(url, headers: metadataFlavorHeaders));
+    final abortTrigger = Completer<void>();
+    final request = http.AbortableRequest(
+      'GET',
+      url,
+      abortTrigger: abortTrigger.future,
+    )..headers.addAll(metadataFlavorHeaders);
+
+    final actualClient = client ?? http.Client();
+    http.Response response;
+    Timer? timeoutTimer;
+    try {
+      timeoutTimer = Timer(timeout, () {
+        if (!abortTrigger.isCompleted) {
+          abortTrigger.complete();
+        }
+      });
+
+      final responseStream = await actualClient.send(request);
+      response = await http.Response.fromStream(responseStream);
+      timeoutTimer.cancel();
+    } catch (e) {
+      timeoutTimer?.cancel();
+      if (abortTrigger.isCompleted) {
+        throw TimeoutException('Metadata server check timed out');
+      }
+      rethrow;
+    } finally {
+      if (client == null) {
+        actualClient.close();
+      }
+    }
 
     if (response.statusCode != 200) {
       throw MetadataServerException._(
@@ -223,9 +272,21 @@ Future<String> _getMetadataValue(String path, {http.Client? client}) async {
     }
 
     return response.body.trim();
+  } on TimeoutException catch (e, stackTrace) {
+    throw MetadataServerException._(
+      'Metadata server check timed out.',
+      innerException: e,
+      innerStackTrace: stackTrace,
+    );
   } on SocketException catch (e, stackTrace) {
     throw MetadataServerException._(
       'Could not connect to $gceMetadataHost.',
+      innerException: e,
+      innerStackTrace: stackTrace,
+    );
+  } on http.ClientException catch (e, stackTrace) {
+    throw MetadataServerException._(
+      'HTTP Client Exception when connecting to $gceMetadataHost.',
       innerException: e,
       innerStackTrace: stackTrace,
     );

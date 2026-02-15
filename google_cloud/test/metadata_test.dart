@@ -15,6 +15,7 @@
 import 'dart:io';
 
 import 'package:google_cloud/general.dart';
+import 'package:google_cloud/src/gcp_project.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -95,6 +96,30 @@ void main() {
                   'innerException',
                   isA<SocketException>(),
                 ),
+          ),
+        );
+      },
+    );
+
+    test(
+      'getMetadataValue throws underlying exception before timeout',
+      () async {
+        final client = MockClient((request) async {
+          throw const SocketException('Failed to connect');
+        });
+
+        expect(
+          () => getMetadataValue(
+            'project/project-id',
+            client: client,
+            timeout: const Duration(seconds: 10),
+          ),
+          throwsA(
+            isA<MetadataServerException>().having(
+              (e) => e.innerException,
+              'innerException',
+              isA<SocketException>(),
+            ),
           ),
         );
       },
