@@ -31,6 +31,7 @@ export 'src/gcp_project.dart'
     show
         MetadataServerException,
         computeProjectId,
+        getMetadataValue,
         projectIdFromCredentialsFile,
         projectIdFromEnvironmentVariables,
         projectIdFromGcloudConfig,

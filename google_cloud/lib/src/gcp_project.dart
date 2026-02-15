@@ -17,7 +17,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:meta/meta.dart';
 
 import 'constants.dart';
 import 'metadata.dart';
@@ -202,6 +201,9 @@ Future<String> serviceAccountEmailFromMetadataServer({
 
 /// Retrieves a value from the GCE metadata server.
 ///
+/// The [path] represents the specific metadata endpoint to query (e.g.,
+/// `project/project-id` or `instance/service-accounts/default/email`).
+///
 /// If [client] is provided, it is used to make the request to the metadata
 /// server.
 ///
@@ -214,14 +216,14 @@ Future<String> serviceAccountEmailFromMetadataServer({
 ///
 /// [timeout] defaults to 1 second, which we set to a very low value to avoid
 /// waiting too long.
-@internal
 Future<String> getMetadataValue(
   String path, {
   http.Client? client,
   Duration timeout = const Duration(seconds: 1),
   bool refresh = false,
+  bool cache = true,
 }) async {
-  if (!refresh) {
+  if (cache && !refresh) {
     if (_metadataCache[path] case final value?) return value;
   }
 
