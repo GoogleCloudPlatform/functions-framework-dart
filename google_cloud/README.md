@@ -20,6 +20,8 @@ This package is split into two main libraries:
   - Service account credentials file (`GOOGLE_APPLICATION_CREDENTIALS`).
   - `gcloud` CLI configuration.
   - Google Cloud [Metadata Server].
+- **Metadata API**: Flexible access to the [Metadata Server] with built-in
+  caching (`getMetadataValue`) or direct fetching (`fetchMetadataValue`).
 - **Identity Discovery**: Retrieve the default [service account email].
 - **Core Structured Logging**: Low-level utilities for creating [structured logs][structured logging]
   that integrate with Google Cloud Logging.
@@ -41,7 +43,7 @@ import 'package:google_cloud/general.dart';
 
 void main() async {
   // Discovers the project ID using all available strategies.
-  // The result is cached for the lifetime of the process.
+  // Discovery via the Metadata Server is cached for the lifetime of the process.
   final projectId = await computeProjectId();
   print('Running in project: $projectId');
 }

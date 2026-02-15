@@ -220,7 +220,9 @@ Future<String> getMetadataValue(
   Duration timeout = const Duration(seconds: 1),
   bool refresh = false,
 }) async {
-  if (!refresh) {
+  if (refresh) {
+    _metadataCache.remove(path);
+  } else {
     if (_metadataCache[path] case final value?) return value;
   }
 

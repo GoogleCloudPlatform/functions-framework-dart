@@ -12,10 +12,15 @@
 - Renamed `projectIdFromEnvironment()` to `projectIdFromEnvironmentVariables()`.
 - Renamed `portEnvironmentKey` to `portEnvironmentVariable`.
 - Renamed `listenPort()` to `listenPortFromEnvironment()`.
-- `computeProjectId()` and `projectIdFromMetadataServer()` now cache their
-  results.
-- `projectIdFromMetadataServer()` now throws `SocketException` or
-  `HttpException` instead of `BadConfigurationException` when discovery fails.
+- `computeProjectId()`, `projectIdFromMetadataServer()`, and
+  `serviceAccountEmailFromMetadataServer()` now leverage a unified process-wide
+  metadata cache.
+- **Breaking Change**: Local discovery strategies (environment variables,
+  credentials files, and `gcloud` config) are no longer cached.
+- **Breaking Change**: `projectIdFromMetadataServer()` and
+  `serviceAccountEmailFromMetadataServer()` now throw
+  `MetadataServerException` (which wraps `SocketException`, `TimeoutException`,
+  or `ClientException`) when discovery fails.
 - Constants are now exported via `package:google_cloud/constants.dart` and are
   no longer exported by `package:google_cloud/google_cloud.dart`.
 - Require Dart 3.9.
@@ -23,6 +28,8 @@
 
 ### New Features
 
+- Added `getMetadataValue()` (caching) and `fetchMetadataValue()` (non-caching)
+  to `package:google_cloud/general.dart`.
 - Added `projectIdFromCredentialsFile()` to automatically discover project ID
   from the credentials JSON file.
 - Added `projectIdFromGcloudConfig()` to automatically discover project ID from
@@ -36,9 +43,9 @@
 - Added `refresh` parameter to `computeProjectId()`,
   `projectIdFromMetadataServer()`, and `serviceAccountEmailFromMetadataServer()`
   to force re-discovery.
-- Added `client` parameter to `projectIdFromMetadataServer()` and
-  `serviceAccountEmailFromMetadataServer()` to allow providing a custom
-  `http.Client`.
+- Added `client` parameter to `computeProjectId()`,
+  `projectIdFromMetadataServer()`, and `serviceAccountEmailFromMetadataServer()`
+  to allow providing a custom `http.Client`.
 - Added `structuredLogEntry()` for low-level structured log creation.
 
 ## 0.2.0
