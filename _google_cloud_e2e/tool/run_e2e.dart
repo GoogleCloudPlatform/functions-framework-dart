@@ -7,27 +7,22 @@ import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 void main(List<String> args) async {
-  final parser =
-      ArgParser()
-        ..addFlag('deploy', defaultsTo: true, help: 'Deploy the service')
-        ..addFlag(
-          'test',
-          defaultsTo: true,
-          help: 'Run the tests (requires service to be deployed)',
-        )
-        ..addOption('project', help: 'Google Cloud Project ID')
-        ..addOption('service-name', help: 'Cloud Run Service Name')
-        ..addOption(
-          'region',
-          help: 'Cloud Run Region',
-          defaultsTo: 'us-central1',
-        )
-        ..addFlag(
-          'help',
-          abbr: 'h',
-          negatable: false,
-          help: 'Show this help message',
-        );
+  final parser = ArgParser()
+    ..addFlag('deploy', defaultsTo: true, help: 'Deploy the service')
+    ..addFlag(
+      'test',
+      defaultsTo: true,
+      help: 'Run the tests (requires service to be deployed)',
+    )
+    ..addOption('project', help: 'Google Cloud Project ID')
+    ..addOption('service-name', help: 'Cloud Run Service Name')
+    ..addOption('region', help: 'Cloud Run Region', defaultsTo: 'us-central1')
+    ..addFlag(
+      'help',
+      abbr: 'h',
+      negatable: false,
+      help: 'Show this help message',
+    );
 
   try {
     final results = parser.parse(args);
