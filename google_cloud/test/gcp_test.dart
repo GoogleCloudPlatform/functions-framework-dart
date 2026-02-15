@@ -547,20 +547,9 @@ void main() {
 Future<TestProcess> _run(
   String dartScript, {
   Map<String, String>? environment,
-}) {
-  final env = {
-    if (Platform.isWindows) ..._minimalWindowsEnvironment,
-    ...?environment,
-  };
-  return TestProcess.start(
-    Platform.resolvedExecutable,
-    [dartScript],
-    environment: env,
-    includeParentEnvironment: false,
-  );
-}
-
-Map<String, String> get _minimalWindowsEnvironment => {
-  for (var key in ['SystemRoot', 'SystemDrive', 'TEMP', 'TMP'])
-    key: ?Platform.environment[key],
-};
+}) => TestProcess.start(
+  Platform.resolvedExecutable,
+  [dartScript],
+  environment: environment,
+  includeParentEnvironment: false,
+);
