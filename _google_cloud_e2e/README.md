@@ -2,27 +2,23 @@
 
 End-to-end validation for the `google_cloud` package.
 
-## Deploying
+## Running E2E Tests
 
 1.  Authenticate with Google Cloud:
     ```bash
     gcloud auth login
     ```
 
-2.  Run the deploy script:
+2.  Run the E2E script:
     ```bash
-    ./tool/deploy_source.sh
+    dart tool/run_e2e.dart
     ```
-    (Ensure you have `GCP_PROJECT`, `SERVICE_NAME`, `GCP_REGION` set if you don't want defaults)
+    (Ensure you have `GCP_PROJECT`, `SERVICE_NAME`, `GCP_REGION` set in `.dart_tool/credentials.yaml` or as environment variables if you don't want defaults)
 
-## Running Validation
-
-Once deployed, set the `E2E_URL` environment variable and run the tests:
-
-```bash
-export E2E_URL=https://your-service-url.run.app
-dart test test/e2e_test.dart
-```
+    This script will:
+    - Build the server as a Linux executable.
+    - Deploy it to Cloud Run.
+    - Run the tests against the deployed URL.
 
 ## Running Locally
 
