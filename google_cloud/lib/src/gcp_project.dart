@@ -52,6 +52,8 @@ Future<String> computeProjectId({
       } on MetadataServerException catch (e) {
         throw MetadataServerException._(
           '''
+${e.message}
+
 If not running on Google Cloud, one of these environment variables must be set
 to the target Google Project ID:
 ${projectIdEnvironmentVariableOptions.join('\n')}
@@ -217,7 +219,7 @@ Future<String> serviceAccountEmailFromMetadataServer({
 Future<String> getMetadataValue(
   String path, {
   http.Client? client,
-  Duration timeout = const Duration(seconds: 1),
+  Duration timeout = const Duration(seconds: 3),
   bool refresh = false,
 }) async {
   if (refresh) {
@@ -251,7 +253,7 @@ Future<String> getMetadataValue(
 Future<String> fetchMetadataValue(
   String path, {
   http.Client? client,
-  Duration timeout = const Duration(seconds: 1),
+  Duration timeout = const Duration(seconds: 3),
 }) async {
   final url = gceMetadataUrl(path);
 
