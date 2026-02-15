@@ -53,3 +53,12 @@ const cloudTraceContextHeader = 'x-cloud-trace-context';
 /// Standard HTTP request headers expected by the
 /// [Metadata Server](https://cloud.google.com/compute/docs/metadata).
 const metadataFlavorHeaders = {'Metadata-Flavor': 'Google'};
+
+/// The name of the Cloud Run service being run.
+const serviceEnvironmentVariable = 'K_SERVICE';
+
+/// The name of the Cloud Run revision being run.
+const revisionEnvironmentVariable = 'K_REVISION';
+
+/// The name of the Cloud Run configuration being run.
+const configurationEnvironmentVariable = 'K_CONFIGURATION';

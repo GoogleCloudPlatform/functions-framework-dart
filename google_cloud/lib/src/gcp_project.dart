@@ -36,9 +36,9 @@ import 'metadata.dart';
 /// [projectIdFromMetadataServer].
 Future<String> computeProjectId({bool refresh = false}) async {
   if (refresh) {
-    _cachedProjectId = null;
+    _cachedComputeProjectId = null;
   }
-  return _cachedProjectId ??=
+  return _cachedComputeProjectId ??=
       projectIdFromEnvironmentVariables() ??
       projectIdFromCredentialsFile() ??
       await projectIdFromGcloudConfig() ??
@@ -157,8 +157,11 @@ Future<String?> projectIdFromGcloudConfig() async {
   }
 }
 
-/// Cached project ID to avoid redundant discovery operations.
-String? _cachedProjectId;
+/// Cached project ID from [computeProjectId].
+String? _cachedComputeProjectId;
+
+/// Cached project ID from [projectIdFromMetadataServer].
+String? _cachedMetadataProjectId;
 
 /// Cached service account email to avoid redundant discovery operations.
 String? _cachedServiceAccountEmail;
@@ -185,9 +188,9 @@ Future<String> projectIdFromMetadataServer({
   bool refresh = false,
 }) async {
   if (refresh) {
-    _cachedProjectId = null;
+    _cachedMetadataProjectId = null;
   }
-  return _cachedProjectId ??= await getMetadataValue(
+  return _cachedMetadataProjectId ??= await getMetadataValue(
     'project/project-id',
     client: client,
   );

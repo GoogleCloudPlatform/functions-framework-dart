@@ -44,5 +44,4 @@ Future<void> main() async {
       .addHandler(router.call);
 
   await serveHandler(handler);
-  await waitForTerminate();
 }

@@ -18,9 +18,12 @@ library;
 export 'src/constants.dart'
     show
         cloudTraceContextHeader,
+        configurationEnvironmentVariable,
         credentialsPathEnvironmentVariable,
         defaultListenPort,
         metadataFlavorHeaders,
         portEnvironmentVariable,
         projectIdEnvironmentVariable,
-        projectIdEnvironmentVariableOptions;
+        projectIdEnvironmentVariableOptions,
+        revisionEnvironmentVariable,
+        serviceEnvironmentVariable;

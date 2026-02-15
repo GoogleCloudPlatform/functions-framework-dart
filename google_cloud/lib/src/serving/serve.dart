@@ -49,12 +49,6 @@ Future<void> serveHandler(Handler handler) async {
 ///
 /// If [portEnvironmentVariable] is set, but cannot be parsed,
 /// a [BadConfigurationException] is thrown.
-/// Returns the number of the port allowing the function to accept requests.
-///
-/// This property returns the value of the environment variable defined by
-/// [portEnvironmentVariable], if it is set. If the environment variable is not
-/// set, or if it does not represent a valid integer value, this property
-/// returns the value of [defaultListenPort].
 int listenPortFromEnvironment() {
   final portStr = Platform.environment[portEnvironmentVariable];
   if (portStr != null) {
