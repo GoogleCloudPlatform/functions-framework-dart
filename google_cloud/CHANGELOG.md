@@ -1,3 +1,8 @@
+## 0.3.1-wip
+
+- Fix a bug where `projectIdFromGcloudConfig()` used the incorrect gcloud shell
+  command on Windows.
+
 ## 0.3.0
 
 ### BREAKING CHANGES

@@ -187,10 +187,20 @@ void main() {
       },
     );
 
-    test(
-      'gcloud config with project_id',
-      onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
-      () async {
+    test('gcloud config with project_id', () async {
+      if (Platform.isWindows) {
+        await d.file('gcloud.dart', '''
+void main() {
+  print('{"configuration": {"properties": {"core": {"project": "test-project-from-gcloud"}}}}');
+}
+''').create();
+        await d
+            .file(
+              'gcloud.cmd',
+              '@"${Platform.resolvedExecutable}" "${d.path('gcloud.dart')}"',
+            )
+            .create();
+      } else {
         await d.file('gcloud', '''
 #!${Platform.resolvedExecutable}
 void main() {
@@ -198,18 +208,15 @@ void main() {
 }
 ''').create();
         await Process.run('chmod', ['+x', d.path('gcloud')]);
+      }
 
-        final proc = await _run(
-          projectIdPrint,
-          environment: {'PATH': d.sandbox},
-        );
+      final proc = await _run(projectIdPrint, environment: {'PATH': d.sandbox});
 
-        await expectLater(proc.stdout, emits('test-project-from-gcloud'));
-        await expectLater(proc.stderr, emitsDone);
+      await expectLater(proc.stdout, emits('test-project-from-gcloud'));
+      await expectLater(proc.stderr, emitsDone);
 
-        await proc.shouldExit(0);
-      },
-    );
+      await proc.shouldExit(0);
+    });
 
     test(
       'credentials file takes precedence over gcloud config',

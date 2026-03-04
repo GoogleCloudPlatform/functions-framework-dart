@@ -134,8 +134,10 @@ String? projectIdFromCredentialsFile() {
 /// discovered from the gcloud CLI without requiring additional environment
 /// variables.
 Future<String?> projectIdFromGcloudConfig() async {
+  final gcloudCommand = Platform.isWindows ? 'gcloud.cmd' : 'gcloud';
+
   try {
-    final result = await Process.run('gcloud', [
+    final result = await Process.run(gcloudCommand, [
       'config',
       'config-helper',
       '--format',
