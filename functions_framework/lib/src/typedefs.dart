@@ -54,6 +54,6 @@ typedef JsonWithContextHandler<RequestType, ResponseType> =
 
 /// The shape of a basic handler that follows the
 /// [package:shelf](https://pub.dev/packages/shelf) [Handler] pattern while also
-/// providing a [RequestLogger].
+/// providing a [CloudLogger].
 typedef HandlerWithLogger =
-    FutureOr<Response> Function(Request request, RequestLogger logger);
+    FutureOr<Response> Function(Request request, CloudLogger logger);
