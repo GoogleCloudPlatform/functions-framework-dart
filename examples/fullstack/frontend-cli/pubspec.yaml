@@ -9,7 +9,7 @@ executables:
   greet:
 
 dependencies:
-  http: ^1.1.0
+  http: ^1.5.0
   io: ^1.0.3
   json_annotation: ^4.9.0
 
