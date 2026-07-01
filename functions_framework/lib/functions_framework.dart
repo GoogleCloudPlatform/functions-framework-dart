@@ -25,7 +25,7 @@
 library;
 
 export 'package:google_cloud/google_cloud.dart'
-    show BadRequestException, LogSeverity, RequestLogger;
+    show BadRequestException, CloudLogger, LogSeverity;
 
 export 'src/cloud_event.dart' show CloudEvent;
 export 'src/cloud_function.dart' show CloudFunction;

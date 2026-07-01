@@ -73,7 +73,7 @@ void main() {
     port = int.parse(split.last);
 
     count++;
-    traceStart = 'trace_start$count';
+    traceStart = count.toString().padLeft(32, '0');
 
     headers = {
       cloud_constants.cloudTraceContextHeader: '$traceStart/trace_end',
@@ -124,7 +124,6 @@ void main() {
     String severity = 'ERROR',
     bool containsLine = true,
   }) {
-    expect(map, hasLength(4));
     expect(map, containsPair('severity', severity));
     expect(map, containsPair('message', messageMatcher));
     expect(
@@ -354,29 +353,12 @@ void main() {
       final trace = 'projects/test_project_id/traces/$traceStart';
 
       Matcher isLog(String message, String severity) {
-        final severityEnum = LogSeverity.values.firstWhere(
-          (e) => e.name == severity,
-        );
-        var matcher = allOf(
+        final matcher = allOf(
           containsPair('message', message),
           containsPair('severity', severity),
           containsPair('logging.googleapis.com/trace', trace),
+          isNot(contains('logging.googleapis.com/sourceLocation')),
         );
-
-        if (severityEnum >= LogSeverity.warning) {
-          matcher = allOf(
-            matcher,
-            containsPair(
-              'logging.googleapis.com/sourceLocation',
-              isA<Map<String, dynamic>>(),
-            ),
-          );
-        } else {
-          matcher = allOf(
-            matcher,
-            isNot(contains('logging.googleapis.com/sourceLocation')),
-          );
-        }
 
         return isA<String>().having(
           (e) => jsonDecode(e) as Map,

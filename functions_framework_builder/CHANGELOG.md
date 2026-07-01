@@ -1,6 +1,7 @@
 ## 0.4.11-wip
 
 - Support the latest versions of `analyzer`, `dart_style` and `source_gen`.
+- Support `package:functions_framework` `0.5.0`.
 - Require Dart 3.9
 
 ## 0.4.10

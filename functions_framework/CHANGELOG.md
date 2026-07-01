@@ -1,6 +1,7 @@
-## 0.4.4-wip
+## 0.5.0-wip
 
-- Update to `package:google_cloud` `0.3.0-wip`.
+- **BREAKING** `RequestLogger` -> `CloudLogger`
+- Update to `package:google_cloud` `0.4.0`.
 - Fix project ID discovery to handle new exception types from `package:google_cloud`.
 - Require Dart 3.9
 
