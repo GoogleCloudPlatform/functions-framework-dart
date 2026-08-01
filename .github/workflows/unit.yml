@@ -35,7 +35,7 @@ jobs:
           sdk: "3.9.0"
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - id: functions_framework_builder_pub_upgrade
         name: functions_framework_builder; dart pub upgrade
         run: dart pub upgrade
@@ -74,7 +74,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - id: examples_fullstack_backend_pub_upgrade
         name: examples/fullstack/backend; dart pub upgrade
         run: dart pub upgrade
@@ -158,7 +158,7 @@ jobs:
           sdk: dev
       - id: checkout
         name: Checkout repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - id: functions_framework_pub_upgrade
         name: functions_framework; dart pub upgrade
         run: dart pub upgrade
