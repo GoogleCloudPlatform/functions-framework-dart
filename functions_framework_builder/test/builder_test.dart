@@ -299,6 +299,52 @@ $lines
       );
     });
 
+    test('simple return type with context', () async {
+      final newInputContent = inputContent
+          .replaceAll('void ', 'int ')
+          .replaceAll('<void>', '<int>')
+          .replaceAll(
+            '(JsonType request) ',
+            '(JsonType request, RequestContext context)',
+          )
+          .replaceAll('int? other', 'RequestContext context, int? other');
+
+      await _testItems(
+        newInputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) =>
+            """
+      '$e' => JsonWithContextFunctionTarget(
+          function_library.$e,
+          (json) {
+            if (json is Map<String, dynamic>) {
+              try {
+                return function_library.JsonType.fromJson(json);
+              } catch (e, stack) {
+                throw BadRequestException(
+                  400,
+                  'There was an error parsing the provided JSON data.',
+                  innerError: e,
+                  innerStack: stack,
+                );
+              }
+            }
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`Map<String, dynamic>`.',
+            );
+          },
+        ),""",
+      );
+    });
+
     test('complex return type', () async {
       final newInputContent = inputContent
           .replaceAll('void ', 'Map<String, List<JsonType>> ')
@@ -316,6 +362,52 @@ $lines
         (e) =>
             """
       '$e' => JsonFunctionTarget(
+          function_library.$e,
+          (json) {
+            if (json is Map<String, dynamic>) {
+              try {
+                return function_library.JsonType.fromJson(json);
+              } catch (e, stack) {
+                throw BadRequestException(
+                  400,
+                  'There was an error parsing the provided JSON data.',
+                  innerError: e,
+                  innerStack: stack,
+                );
+              }
+            }
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`Map<String, dynamic>`.',
+            );
+          },
+        ),""",
+      );
+    });
+
+    test('complex return type with context', () async {
+      final newInputContent = inputContent
+          .replaceAll('void ', 'Map<String, List<JsonType>> ')
+          .replaceAll('<void>', '<Map<String, List<JsonType>>>')
+          .replaceAll(
+            '(JsonType request) ',
+            '(JsonType request, RequestContext context)',
+          )
+          .replaceAll('int? other', 'RequestContext context, int? other');
+
+      await _testItems(
+        newInputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) =>
+            """
+      '$e' => JsonWithContextFunctionTarget(
           function_library.$e,
           (json) {
             if (json is Map<String, dynamic>) {
@@ -422,6 +514,73 @@ $lines
         (e) =>
             """
       '$e' => JsonFunctionTarget(
+          function_library.$e,
+          (json) {
+            if (json is num) {
+              return json;
+            }
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`num`.',
+            );
+          },
+        ),""",
+      );
+    });
+
+    test('simple return type with context', () async {
+      final newInputContent = inputContent
+          .replaceAll('void ', 'int ')
+          .replaceAll('<void>', '<int>')
+          .replaceAll('(num request)', '(num request, RequestContext context)')
+          .replaceAll('int? other', 'RequestContext context, int? other');
+      await _testItems(
+        newInputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) =>
+            """
+      '$e' => JsonWithContextFunctionTarget(
+          function_library.$e,
+          (json) {
+            if (json is num) {
+              return json;
+            }
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`num`.',
+            );
+          },
+        ),""",
+      );
+    });
+
+    test('complex return type with context', () async {
+      final newInputContent = inputContent
+          .replaceAll('void ', 'Map<String, List<bool>> ')
+          .replaceAll('<void>', '<Map<String, List<bool>>>')
+          .replaceAll('(num request)', '(num request, RequestContext context)')
+          .replaceAll('int? other', 'RequestContext context, int? other');
+
+      await _testItems(
+        newInputContent,
+        [
+          'syncFunction',
+          'asyncFunction',
+          'futureOrFunction',
+          'extraParam',
+          'optionalParam',
+        ],
+        (e) =>
+            """
+      '$e' => JsonWithContextFunctionTarget(
           function_library.$e,
           (json) {
             if (json is num) {

@@ -94,8 +94,10 @@ class GenericFunctionType implements SupportedFunctionType {
       return null;
     }
 
+    final unwrappedReturnType = unwrapFutureType(element.returnType);
+
     final functionType = _functionTypeAliasElement.instantiate(
-      typeArguments: [firstParamType, element.returnType],
+      typeArguments: [firstParamType, unwrappedReturnType],
       nullabilitySuffix: NullabilitySuffix.none,
     );
 

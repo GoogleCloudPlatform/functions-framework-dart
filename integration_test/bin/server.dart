@@ -63,6 +63,28 @@ FunctionTarget? _nameToFunctionTarget(String name) => switch (name) {
             );
           },
         ),
+      'asyncPubSubHandler' => JsonWithContextFunctionTarget.voidResult(
+          function_library.asyncPubSubHandler,
+          (json) {
+            if (json is Map<String, dynamic>) {
+              try {
+                return function_library.PubSub.fromJson(json);
+              } catch (e, stack) {
+                throw BadRequestException(
+                  400,
+                  'There was an error parsing the provided JSON data.',
+                  innerError: e,
+                  innerStack: stack,
+                );
+              }
+            }
+            throw BadRequestException(
+              400,
+              'The provided JSON is not the expected type '
+              '`Map<String, dynamic>`.',
+            );
+          },
+        ),
       'jsonHandler' => JsonWithContextFunctionTarget(
           function_library.jsonHandler,
           (json) {

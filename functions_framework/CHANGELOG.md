@@ -1,5 +1,8 @@
 ## 0.4.4-wip
 
+- Add `serveHandler` and `serveTarget` helper functions to
+  `package:functions_framework/serve.dart` to easily run a single `Handler` or
+  `FunctionTarget` on Cloud Run.
 - Update to `package:google_cloud` `0.3.0-wip`.
 - Fix project ID discovery to handle new exception types from `package:google_cloud`.
 - Require Dart 3.9

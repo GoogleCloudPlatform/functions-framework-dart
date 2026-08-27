@@ -28,15 +28,33 @@ import 'dart:io';
 import 'package:google_cloud/google_cloud.dart';
 import 'package:io/ansi.dart';
 import 'package:io/io.dart';
+import 'package:shelf/shelf.dart';
 
 import 'src/function_config.dart';
 import 'src/function_target.dart';
 import 'src/run.dart';
 
 export 'package:google_cloud/google_cloud.dart' show BadRequestException;
+export 'package:shelf/shelf.dart' show Handler;
 
 export 'src/function_target.dart'
     show FunctionTarget, JsonFunctionTarget, JsonWithContextFunctionTarget;
+
+/// Runs a single [Handler] with the standard Functions Framework
+/// configuration, GCP logging middleware, and graceful shutdown handling.
+///
+/// Port and target options are parsed from [args] and environment variables.
+Future<void> serveHandler(Handler handler, [List<String> args = const []]) =>
+    serve(args, (name) => FunctionTarget.http(handler));
+
+/// Runs a single [FunctionTarget] with the standard Functions Framework
+/// configuration, GCP logging middleware, and graceful shutdown handling.
+///
+/// Port and target options are parsed from [args] and environment variables.
+Future<void> serveTarget(
+  FunctionTarget target, [
+  List<String> args = const [],
+]) => serve(args, (name) => target);
 
 /// If there is an invalid configuration, [exitCode] will be set to a non-zero
 /// value and the returned [Future] will completes quickly.

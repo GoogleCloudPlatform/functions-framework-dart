@@ -25,6 +25,14 @@ void pubSubHandler(PubSub pubSub, RequestContext context) {
 }
 
 @CloudFunction()
+Future<void> asyncPubSubHandler(PubSub pubSub, RequestContext context) async {
+  print('subscription: ${pubSub.subscription}');
+  context.logger.info('subscription: ${pubSub.subscription}');
+  context.responseHeaders['subscription'] = pubSub.subscription;
+  context.responseHeaders['multi'] = ['item1', 'item2'];
+}
+
+@CloudFunction()
 FutureOr<bool> jsonHandler(
   Map<String, dynamic> request,
   RequestContext context,

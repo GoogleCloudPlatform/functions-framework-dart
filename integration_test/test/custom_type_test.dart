@@ -160,6 +160,70 @@ void main() {
     });
   });
 
+  group('asyncPubSubHandler handler', () {
+    setUp(() async {
+      testProcess = await startServerTest(
+        env: {'FUNCTION_TARGET': 'asyncPubSubHandler'},
+        expectedListeningPort: 0,
+      );
+    });
+
+    group('valid', () {
+      test('correct', () async {
+        const subscription = 'subABC123';
+        final requestUrl = 'http://localhost:$autoPort/';
+        final response = await post(
+          requestUrl,
+          headers: jsonContentType,
+          body: jsonEncode(
+            PubSub(
+              PubSubMessage('data', 'messageId', DateTime.now(), {}),
+              subscription,
+            ),
+          ),
+        );
+
+        expect(response.statusCode, 200);
+        expect(
+          response.headers,
+          allOf(
+            containsTextPlainHeader,
+            containsPair('subscription', subscription),
+            containsPair('multi', 'item1, item2'),
+          ),
+        );
+        expect(response.body, isEmpty);
+
+        await finishServerTest(
+          testProcess,
+          requestOutput: emitsInOrder([
+            'subscription: $subscription',
+            'INFO: subscription: $subscription',
+            endsWith('POST    [200] /'),
+          ]),
+        );
+      });
+    });
+
+    group('invalid', () {
+      testInvalid();
+
+      test('missing message', () async {
+        final requestUrl = 'http://localhost:$autoPort/';
+        final response = await post(
+          requestUrl,
+          headers: jsonContentType,
+          body: '{"a":1}',
+        );
+
+        await expectInvalid(
+          response,
+          'There was an error parsing the provided JSON data.',
+        );
+      });
+    });
+  });
+
   group('JSON handler', () {
     setUp(() async {
       testProcess = await startServerTest(

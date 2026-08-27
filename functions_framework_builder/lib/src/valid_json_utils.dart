@@ -75,18 +75,17 @@ JsonParamInfo? validJsonParamType(DartType type) {
   return null;
 }
 
+DartType unwrapFutureType(DartType type) {
+  if (type.isDartAsyncFuture || type.isDartAsyncFutureOr) {
+    return (type as InterfaceType).typeArguments.single;
+  }
+  return type;
+}
+
 enum JsonReturnKind { isVoid, notJson, other }
 
-JsonReturnKind validJsonReturnType(DartType type) {
-  if (type.isDartAsyncFuture || type.isDartAsyncFutureOr) {
-    // Unwrap the future value and run again!
-    return _validJsonReturnTypeCore(
-      (type as InterfaceType).typeArguments.single,
-    );
-  }
-
-  return _validJsonReturnTypeCore(type);
-}
+JsonReturnKind validJsonReturnType(DartType type) =>
+    _validJsonReturnTypeCore(unwrapFutureType(type));
 
 JsonReturnKind _validJsonReturnTypeCore(DartType type) {
   if (type is VoidType) {

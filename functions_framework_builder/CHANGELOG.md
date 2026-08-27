@@ -1,5 +1,7 @@
 ## 0.4.11-wip
 
+- Fix support for `@CloudFunction` handlers with `RequestContext` when using
+  `async` modifier or non-void return types.
 - Support the latest versions of `analyzer`, `dart_style` and `source_gen`.
 - Require Dart 3.9
 
